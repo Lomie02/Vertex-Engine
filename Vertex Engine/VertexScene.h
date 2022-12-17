@@ -1,7 +1,6 @@
 #pragma once
 #include "VertexRenderPackage.h"
 #include "AssetManager.h"
-#include "SceneManager.h"
 class VertexScene {
 
 public:
@@ -22,6 +21,4 @@ public:
 	char m_SceneName[15] = "MyScene";
 protected:
 	AssetManager m_Manager;
-	SceneManager* m_SceneManager;
-	GLFWwindow* m_Window;
 };
