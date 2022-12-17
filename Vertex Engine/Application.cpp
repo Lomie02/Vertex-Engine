@@ -116,7 +116,7 @@ void Application::StartUp()
 
 	FolderCreation();
 	SceneSetUp();
-
+	m_SceneManager->SetUpWindow(m_GameWindow);
 	// Load UI Textures
 	ResourceManager::LoadTexture("Builds/Textures/UI_Button.png", "UI_Button");
 

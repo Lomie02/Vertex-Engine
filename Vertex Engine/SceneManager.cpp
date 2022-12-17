@@ -12,7 +12,7 @@ void SceneManager::SetUpWindow(GLFWwindow* _window)
 {
 	for (int i = 0; i < m_SceneList.size(); i++)
 	{
-		//TODO: give all scenes the window & SceneManager
+		m_SceneList.at(i)->GiveWindow(_window);
 	}
 }
 
