@@ -15,8 +15,6 @@ public:
 
 	virtual void Rendering(Vertex2D* render) = 0;
 
-	//void GiveWindow(GLFWwindow* window) { m_Window = window; }
-	//void GiveSceneManager(SceneManager* scenes) { m_SceneManager = scenes; }
 	virtual AssetManager GetAssets() { return m_Manager; }
 	char m_SceneName[15] = "MyScene";
 protected:

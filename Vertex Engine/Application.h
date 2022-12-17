@@ -39,7 +39,7 @@ private:
 	void FolderCreation();
 	void SceneSetUp();
 
-	EditorMode m_Mode = PLAY;
+	EditorMode m_Mode = EDITOR;
 	GLFWwindow* m_GameWindow = nullptr;
 
 	bool m_IsRunning = false;

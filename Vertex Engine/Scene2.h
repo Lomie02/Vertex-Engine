@@ -22,6 +22,8 @@ public:
 	virtual void FixedUpdate(float delta);
 	virtual void Rendering(Vertex2D* renderer);
 
+	void GiveWindow(GLFWwindow* window) { m_Window = window; }
+	void GiveSceneManager(SceneManager* scenes) { m_SceneManager = scenes; }
 	AssetManager GetAssets() { return m_Manager; }
 
 private:

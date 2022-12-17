@@ -357,11 +357,11 @@ void Application::SceneSetUp()
 
 
 	//============================================================ Remove this & automate it in the scene manager! Temp for testing
-	//m_Scene->GiveWindow(m_GameWindow);
-	//m_SecondScene->GiveWindow(m_GameWindow);
-	//
-	//m_Scene->GiveSceneManager(m_SceneManager);
-	//m_SecondScene->GiveSceneManager(m_SceneManager);
+	m_Scene->GiveWindow(m_GameWindow);
+	m_SecondScene->GiveWindow(m_GameWindow);
+	
+	m_Scene->GiveSceneManager(m_SceneManager);
+	m_SecondScene->GiveSceneManager(m_SceneManager);
 
 	m_SceneManager->PrintActiveScene(); // Delete if you want
 }
