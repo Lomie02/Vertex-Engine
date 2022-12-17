@@ -12,8 +12,6 @@ void SceneManager::SetUpWindow(GLFWwindow* _window)
 {
 	for (int i = 0; i < m_SceneList.size(); i++)
 	{
-		m_SceneList.at(i)->GiveWindow(_window);
-		m_SceneList.at(i)->GiveSceneManager(this);
 	}
 }
 

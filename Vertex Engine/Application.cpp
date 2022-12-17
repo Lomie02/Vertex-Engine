@@ -244,7 +244,7 @@ void Application::Editor()
 	{
 		ImGui::BeginChild("Transform", ImVec2(0, 200), true);
 
-	ImGui::Checkbox("Active", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selected)->m_Active);
+		ImGui::Checkbox("Active", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selected)->m_Active);
 		ImGui::Text("Transform");
 		ImGui::InputFloat2("Position", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selected)->transform.position.x);
 		ImGui::InputFloat("Rotation", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selected)->transform.rotation);
@@ -357,11 +357,11 @@ void Application::SceneSetUp()
 
 
 	//============================================================ Remove this & automate it in the scene manager! Temp for testing
-	m_Scene->GiveWindow(m_GameWindow);
-	m_SecondScene->GiveWindow(m_GameWindow);
-
-	m_Scene->GiveSceneManager(m_SceneManager);
-	m_SecondScene->GiveSceneManager(m_SceneManager);
+	//m_Scene->GiveWindow(m_GameWindow);
+	//m_SecondScene->GiveWindow(m_GameWindow);
+	//
+	//m_Scene->GiveSceneManager(m_SceneManager);
+	//m_SecondScene->GiveSceneManager(m_SceneManager);
 
 	m_SceneManager->PrintActiveScene(); // Delete if you want
 }
