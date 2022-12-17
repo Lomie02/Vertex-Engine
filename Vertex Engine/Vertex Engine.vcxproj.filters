@@ -1,0 +1,228 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="GLAD">
+      <UniqueIdentifier>{6575dd3d-03dd-427c-bfdc-45def2e8105d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene Management">
+      <UniqueIdentifier>{2ab13091-b676-464b-ae9a-a66387edf621}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Renderers">
+      <UniqueIdentifier>{af2c713a-2edb-496a-8ed6-8763dc47e997}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{0c22c4ed-e40e-4f82-898d-728583116a24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObjects">
+      <UniqueIdentifier>{bb3c0068-84eb-43bf-8565-3ffb9849345c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Textures">
+      <UniqueIdentifier>{0669bed5-95bd-4a45-81d3-5aeca41bb44b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game Settings">
+      <UniqueIdentifier>{97ad65fb-9c38-450a-b853-3255c0194341}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI">
+      <UniqueIdentifier>{c19a20a6-1303-4f11-ae61-fee532e874d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="imgui">
+      <UniqueIdentifier>{cec9b40d-487a-4888-8a2c-3ae300ab5413}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scenes">
+      <UniqueIdentifier>{4981d1c9-0070-421e-9676-a286c1e688bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scenes\Scene 1">
+      <UniqueIdentifier>{c485d1eb-0592-4f34-ae88-7def067b83af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scenes\Scene 1\Scene Scripts">
+      <UniqueIdentifier>{f9a8915c-d8e2-4e7b-a38a-33e324deded1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scenes\Scene 2">
+      <UniqueIdentifier>{e3846c4c-af21-49d8-9491-7582f7c496dc}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="StartUp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="glad.c">
+      <Filter>GLAD</Filter>
+    </ClCompile>
+    <ClCompile Include="Application.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexScene.cpp">
+      <Filter>Scene Management</Filter>
+    </ClCompile>
+    <ClCompile Include="Vertex2D.cpp">
+      <Filter>Renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>Scene Management</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager.cpp">
+      <Filter>Shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>Shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture2D.cpp">
+      <Filter>Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="AssetManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexText2D.cpp">
+      <Filter>Renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\imgui\imgui.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\imgui\imgui_demo.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\imgui\imgui_draw.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\imgui\imgui_impl_opengl3.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\imgui\imgui_tables.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\imgui\imgui_widgets.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\imgui\imgui_impl_glfw.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="MyScene.cpp">
+      <Filter>Scenes\Scene 1</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene2.cpp">
+      <Filter>Scenes\Scene 2</Filter>
+    </ClCompile>
+    <ClCompile Include="Text.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="glad.h">
+      <Filter>GLAD</Filter>
+    </ClInclude>
+    <ClInclude Include="khrplatform.h">
+      <Filter>GLAD</Filter>
+    </ClInclude>
+    <ClInclude Include="Application.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexScene.h">
+      <Filter>Scene Management</Filter>
+    </ClInclude>
+    <ClInclude Include="Vertex2D.h">
+      <Filter>Renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>Scene Management</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager.h">
+      <Filter>Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture2D.h">
+      <Filter>Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="..\stb\stb_image.h">
+      <Filter>Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="GameSettings.h">
+      <Filter>Game Settings</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexText2D.h">
+      <Filter>Renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexRenderPackage.h">
+      <Filter>Renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\imgui\imconfig.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\imgui\imgui.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\imgui\imgui_impl_glfw.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\imgui\imgui_impl_opengl3.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\imgui\imgui_impl_opengl3_loader.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\imgui\imgui_internal.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\imgui\imstb_rectpack.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\imgui\imstb_textedit.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="MyScene.h">
+      <Filter>Scenes\Scene 1</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene2.h">
+      <Filter>Scenes\Scene 2</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Text.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexUIPackage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="GameObjects">
+      <UniqueIdentifier>{b606b719-3ec6-4a24-ad91-4cd64c5352c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="imgui">
+      <UniqueIdentifier>{79d1daa3-04b9-48c0-8ecc-7ad641852cbd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game Settings">
+      <UniqueIdentifier>{e9969a5e-39e2-4349-ab8d-fc54b6a732d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GLAD">
+      <UniqueIdentifier>{458803ab-d955-487f-a5e4-abdd893542dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scenes">
+      <UniqueIdentifier>{51160cb6-7e17-4a3b-b301-4bf47a85c7dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene Management">
+      <UniqueIdentifier>{4e85a16e-f683-46bb-a6e5-8ec9483b3e54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{cb88a63d-10b7-4d5f-9e74-d84cf5f47f12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Renderers">
+      <UniqueIdentifier>{ec773a06-fd82-42d4-b1f8-eecac865c481}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Textures">
+      <UniqueIdentifier>{65613ac4-39ca-4adc-8fe7-c941d0d13ca1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI">
+      <UniqueIdentifier>{cc460ee2-733a-4cb6-94f9-16f5fcfc6450}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
