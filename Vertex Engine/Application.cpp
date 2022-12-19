@@ -120,6 +120,11 @@ void Application::StartUp()
 	// Load UI Textures
 	ResourceManager::LoadTexture("Builds/Textures/UI_Button.png", "UI_Button");
 
+	if (FINAL_BUILD)
+	{
+		m_Mode = PLAY;
+	}
+
 	if (m_Mode == EDITOR || m_Mode == EDITOR_PLAY)
 	{
 		IMGUI_CHECKVERSION();
