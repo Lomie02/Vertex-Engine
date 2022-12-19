@@ -53,6 +53,8 @@ private:
 	MyScene* m_Scene;
 	Scene2* m_SecondScene;
 
+	bool m_EditorFullScreen = false;
+
 	int m_Size =0;
 	float m_fps = 0;
 	float m_frames = 0;
