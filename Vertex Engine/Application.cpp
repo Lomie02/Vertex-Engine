@@ -230,38 +230,35 @@ void Application::Editor()
 
 	ImGui::NewFrame();
 
-	if (!m_EditorFullScreen) {
+	ImGui::Begin("Inspector");
 
-		ImGui::Begin("Inspector");
+	//ImGui::Text(m_SceneManager->GetCurrentScene()->GetAssets().m_Objects.at(selected)->name);
+	if (m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.size() != 0)
+	{
+		ImGui::BeginChild("Transform", ImVec2(0, 200), true);
 
-		//ImGui::Text(m_SceneManager->GetCurrentScene()->GetAssets().m_Objects.at(selected)->name);
-		if (m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.size() != 0)
-		{
-			ImGui::BeginChild("Transform", ImVec2(0, 200), true);
-
-			ImGui::Checkbox("Active", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selected)->m_Active);
-			ImGui::Text("Transform");
-			ImGui::InputFloat2("Position", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selected)->transform.position.x);
-			ImGui::InputFloat("Rotation", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selected)->transform.rotation);
-			ImGui::InputFloat2("Size", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selected)->transform.size.x);
-			ImGui::EndChild();
-		}
-
-		if (m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Cameras.size() != 0)
-		{
-			ImGui::BeginChild("Camera Transform", ImVec2(0, 200), true);
-			ImGui::Text("Camera Transform");
-			ImGui::InputFloat2("Position", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Cameras.at(Cameraselected)->transform.position.x);
-			ImGui::InputFloat("Rotation", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Cameras.at(Cameraselected)->transform.rotation);
-			ImGui::Text(" ");
-			ImGui::Text("Camera Lens");
-			ImGui::InputFloat("Zoom", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Cameras.at(Cameraselected)->zoom);
-			ImGui::InputFloat("Far", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Cameras.at(Cameraselected)->far);
-			ImGui::InputFloat("Near", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Cameras.at(Cameraselected)->near);
-			ImGui::EndChild();
-		}
-		ImGui::End();
+		ImGui::Checkbox("Active", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selected)->m_Active);
+		ImGui::Text("Transform");
+		ImGui::InputFloat2("Position", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selected)->transform.position.x);
+		ImGui::InputFloat("Rotation", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selected)->transform.rotation);
+		ImGui::InputFloat2("Size", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selected)->transform.size.x);
+		ImGui::EndChild();
 	}
+
+	if (m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Cameras.size() != 0)
+	{
+		ImGui::BeginChild("Camera Transform", ImVec2(0, 200), true);
+		ImGui::Text("Camera Transform");
+		ImGui::InputFloat2("Position", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Cameras.at(Cameraselected)->transform.position.x);
+		ImGui::InputFloat("Rotation", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Cameras.at(Cameraselected)->transform.rotation);
+		ImGui::Text(" ");
+		ImGui::Text("Camera Lens");
+		ImGui::InputFloat("Zoom", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Cameras.at(Cameraselected)->zoom);
+		ImGui::InputFloat("Far", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Cameras.at(Cameraselected)->far);
+		ImGui::InputFloat("Near", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Cameras.at(Cameraselected)->near);
+		ImGui::EndChild();
+	}
+	ImGui::End();
 
 	ImGui::BeginMainMenuBar();
 	ImGui::Text(PROJECT_NAME);
@@ -325,7 +322,6 @@ void Application::Editor()
 			{
 				glViewport(299.973f, 349.968f, 1280, 720);
 				glEnable(GL_SCISSOR_TEST);
-
 				m_EditorFullScreen = true;
 			}
 		}
@@ -349,45 +345,41 @@ void Application::Editor()
 	ImGui::EndMainMenuBar();
 
 	//=====================================
-	if (!m_EditorFullScreen) {
+	ImGui::Begin("Assets");
 
-		ImGui::Begin("Assets");
+	ImGui::Text("Currently Editing: ");
+	ImGui::Text(m_SceneList[currentScene]);
+	ImGui::Text("Scene Objects");
 
-		ImGui::Text("Currently Editing: ");
-		ImGui::Text(m_SceneList[currentScene]);
-		ImGui::Text("Scene Objects");
+	ImGui::ListBox("Assets", &selected, m_Assets, m_SceneManager->GetCurrentScene()->GetAssets().m_Objects.size());
+	ImGui::ListBox("Cameras", &Cameraselected, m_Cameras, m_SceneManager->GetCurrentScene()->GetAssets().m_Cameras.size());
 
-		ImGui::ListBox("Assets", &selected, m_Assets, m_SceneManager->GetCurrentScene()->GetAssets().m_Objects.size());
-		ImGui::ListBox("Cameras", &Cameraselected, m_Cameras, m_SceneManager->GetCurrentScene()->GetAssets().m_Cameras.size());
+	ImGui::End();
 
-		ImGui::End();
-
-		if (glfwGetKey(m_GameWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS && m_Mode == EDITOR_PLAY)
-		{
-			m_Mode = EDITOR;
-		}
-
-		//=====================================
-
-
-		ImGui::Begin("Project Drawer");
-
-		ImGui::Text("Scenes");
-		ImGui::BeginChild("Scenes");
-
-		if (ImGui::ListBox("##Assets", &currentScene, m_SceneList, m_SceneManager->m_SceneList.size()) && m_Mode == EDITOR)
-		{
-			if (m_Mode == EDITOR)
-			{
-				selected = 0;
-				m_SceneManager->SetActiveScene(currentScene);
-			}
-		}
-
-		ImGui::EndChild();
-
-		ImGui::End();
+	if (glfwGetKey(m_GameWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS && m_Mode == EDITOR_PLAY)
+	{
+		m_Mode = EDITOR;
 	}
+
+	//=====================================
+
+	ImGui::Begin("Project Drawer");
+
+	ImGui::Text("Scenes");
+	ImGui::BeginChild("Scenes");
+
+	if (ImGui::ListBox("##Assets", &currentScene, m_SceneList, m_SceneManager->m_SceneList.size()) && m_Mode == EDITOR)
+	{
+		if (m_Mode == EDITOR)
+		{
+			selected = 0;
+			m_SceneManager->SetActiveScene(currentScene);
+		}
+	}
+
+	ImGui::EndChild();
+
+	ImGui::End();
 
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -397,7 +389,7 @@ void Application::RenderAll()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	m_SceneManager->RenderCurrentScene(m_Renderer);
-	if (m_Mode == EDITOR || m_Mode == EDITOR_PLAY || m_Mode == EDITOR_PAUSED)
+	if (m_Mode == EDITOR && !m_EditorFullScreen || m_Mode == EDITOR_PLAY && !m_EditorFullScreen || m_Mode == EDITOR_PAUSED && !m_EditorFullScreen)
 	{
 		Editor();
 	}
