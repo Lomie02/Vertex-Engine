@@ -285,11 +285,14 @@ void Application::Editor()
 			m_Mode = EDITOR_PLAY;
 		}
 	}
-	if (ImGui::Button("STOP") && m_Mode == EDITOR_PLAY)
+	if (ImGui::Button("STOP"))
 	{
-		m_Mode = EDITOR;
-		m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->Start();
-		UpdateEditorMode();
+		if (m_Mode == EDITOR_PLAY || m_Mode == EDITOR_PAUSED) {
+
+			m_Mode = EDITOR;
+			m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->Start();
+			UpdateEditorMode();
+		}
 	}
 
 
