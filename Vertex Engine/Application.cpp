@@ -268,6 +268,11 @@ void Application::Editor()
 		ShowHelp = true;
 	}
 
+	for (int i = 0; i < 68; i++) //Space out the play buttons
+	{
+		ImGui::Spacing();
+	}
+
 	if (ImGui::ArrowButton("Play", ImGuiDir_Right) && m_Mode == EDITOR)
 	{
 		m_Mode = EDITOR_PLAY;
@@ -339,11 +344,13 @@ void Application::Editor()
 
 	ImGui::Text("Scenes To Edit");
 
-	if (ImGui::ListBox("##Assets", &currentScene, m_SceneList, m_SceneManager->m_SceneList.size()))
+	if (ImGui::ListBox("##Assets", &currentScene, m_SceneList, m_SceneManager->m_SceneList.size()) && m_Mode == EDITOR)
 	{
-		selected = 0;
-		m_SceneManager->SetActiveScene(currentScene);
-		m_SceneManager->PrintActiveScene();
+		if (m_Mode == EDITOR)
+		{
+			selected = 0;
+			m_SceneManager->SetActiveScene(currentScene);
+		}
 	}
 
 	ImGui::End();
