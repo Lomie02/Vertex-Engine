@@ -24,12 +24,12 @@ Scene2::~Scene2()
 
 void Scene2::Awake()
 {
-	m_Object2 = new GameObject("Balls");
+	m_Object2 = new GameObject("Object");
 
 	m_Object2->texture = ResourceManager::GetTexture("boy1");
 	m_Manager.Register(m_Object2);
 
-	m_MainCamera = new Camera("Balls");
+	m_MainCamera = new Camera("Camera 1");
 
 	m_MainCamera->transform.position.x = 0;
 	m_MainCamera->transform.position.y = 0;

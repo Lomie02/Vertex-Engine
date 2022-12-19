@@ -350,7 +350,7 @@ void Application::SceneSetUp()
 	m_SceneManager->SetActiveScene(0); // Sets the current scene to the first in the list.
 
 	m_Scene = new MyScene("Scene 1");
-	m_SecondScene = new Scene2("Retarded");
+	m_SecondScene = new Scene2("Scene 2");
 
 	m_SceneManager->AddScene(m_Scene);
 	m_SceneManager->AddScene(m_SecondScene);
