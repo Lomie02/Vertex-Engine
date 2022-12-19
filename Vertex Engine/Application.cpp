@@ -135,15 +135,7 @@ void Application::StartUp()
 		glScissor(299.973f, 349.968f, 1280, 720);
 		glEnable(GL_SCISSOR_TEST);
 
-		ImGuiStyle* style = &ImGui::GetStyle(); 
-		style->Colors[ImGuiCol_WindowBg] = ImVec4(EDITOR_BACKGROUND);
-		style->Colors[ImGuiCol_MenuBarBg] = ImVec4(EDITOR_MENU);
-		style->Colors[ImGuiCol_TitleBg] = ImVec4(EDITOR_TABS);
-
-		style->Colors[ImGuiCol_TitleBgActive] = ImVec4(EDITOR_TABS_SELECT);
-		style->Colors[ImGuiCol_Tab] = ImVec4(EDITOR_TABS_SELECT);
-		style->Colors[ImGuiCol_Button] = ImVec4(EDITOR_MENU);
-		style->Colors[ImGuiCol_ButtonHovered] = ImVec4(EDITOR_BUTTONS_SELECT);
+		UpdateEditorMode();
 		std::cout << "Vertex Message: Editor Succeded." << std::endl;
 	}
 	std::cout << "Vertex Message: Start Up Succeded." << std::endl;
@@ -159,11 +151,6 @@ void Application::Start()
 
 void Application::Update()
 {
-	if (glfwGetKey(m_GameWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-	{
-		ShutDown();
-	}
-
 	if (m_Mode == PLAY || m_Mode == EDITOR_PLAY) {
 
 		double currTime = (float)glfwGetTime();
@@ -178,8 +165,8 @@ void Application::Update()
 			m_frames = 0;
 			m_fpsInterval -= 1.0f;
 		}
-	}
 		m_SceneManager->UpdateScenes(m_deltaTime);
+	}
 }
 
 void Application::Editor()
@@ -270,6 +257,24 @@ void Application::Editor()
 	ImGui::Button("Save Current");
 	ImGui::Button("Project Settings");
 
+	if (ImGui::ArrowButton("Play", ImGuiDir_Right) && m_Mode == EDITOR)
+	{
+		m_Mode = EDITOR_PLAY;
+		m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->Start();
+		UpdateEditorMode();
+	}
+	if (ImGui::Button("||") && m_Mode == EDITOR_PLAY)
+	{
+		//TODO: Pause editor
+	}
+	if (ImGui::Button("STOP") && m_Mode == EDITOR_PLAY)
+	{
+		m_Mode = EDITOR;
+		m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->Start();
+		UpdateEditorMode();
+	}
+
+
 	if (ImGui::Button("Help"))
 	{
 		ShowHelp = true;
@@ -305,6 +310,10 @@ void Application::Editor()
 
 	ImGui::End();
 
+	if (glfwGetKey(m_GameWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS && m_Mode == EDITOR_PLAY)
+	{
+		m_Mode = EDITOR;
+	}
 
 	//=====================================
 
@@ -359,11 +368,42 @@ void Application::SceneSetUp()
 	//============================================================ Remove this & automate it in the scene manager! Temp for testing
 	m_Scene->GiveWindow(m_GameWindow);
 	m_SecondScene->GiveWindow(m_GameWindow);
-	
+
 	m_Scene->GiveSceneManager(m_SceneManager);
 	m_SecondScene->GiveSceneManager(m_SceneManager);
 
 	m_SceneManager->PrintActiveScene(); // Delete if you want
+}
+
+void Application::UpdateEditorMode()
+{
+	if (m_Mode == EDITOR)
+	{
+		ImGuiStyle* style = &ImGui::GetStyle();
+		style->Colors[ImGuiCol_WindowBg] = ImVec4(EDITOR_BACKGROUND);
+		style->Colors[ImGuiCol_MenuBarBg] = ImVec4(EDITOR_MENU);
+		style->Colors[ImGuiCol_TitleBg] = ImVec4(EDITOR_TABS);
+
+		style->Colors[ImGuiCol_TitleBgActive] = ImVec4(EDITOR_TABS_SELECT);
+		style->Colors[ImGuiCol_Tab] = ImVec4(EDITOR_TABS_SELECT);
+		style->Colors[ImGuiCol_Button] = ImVec4(EDITOR_MENU);
+		style->Colors[ImGuiCol_ButtonHovered] = ImVec4(EDITOR_BUTTONS_SELECT);
+		std::cout << "Editor Mode" << std::endl;
+
+	}
+	else if(m_Mode == EDITOR_PLAY)
+	{
+		ImGuiStyle* style1 = &ImGui::GetStyle();
+		style1->Colors[ImGuiCol_WindowBg] = ImVec4(PLAY_MODE_COLOUR);
+		style1->Colors[ImGuiCol_MenuBarBg] = ImVec4(PLAY_MODE_COLOUR);
+		style1->Colors[ImGuiCol_TitleBg] = ImVec4(PLAY_MODE_COLOUR);
+
+		style1->Colors[ImGuiCol_TitleBgActive] = ImVec4(PLAY_MODE_COLOUR);
+		style1->Colors[ImGuiCol_Tab] = ImVec4(PLAY_MODE_COLOUR);
+		style1->Colors[ImGuiCol_Button] = ImVec4(PLAY_MODE_COLOUR);
+		style1->Colors[ImGuiCol_ButtonHovered] = ImVec4(PLAY_MODE_COLOUR);
+		std::cout << "Play Mode" << std::endl;
+	}
 }
 
 void Application::ShutDown()

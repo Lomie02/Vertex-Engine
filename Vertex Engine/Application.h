@@ -38,6 +38,7 @@ private:
 
 	void FolderCreation();
 	void SceneSetUp();
+	void UpdateEditorMode();
 
 	EditorMode m_Mode = EDITOR;
 	GLFWwindow* m_GameWindow = nullptr;

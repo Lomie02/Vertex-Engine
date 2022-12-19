@@ -53,3 +53,4 @@
 #define EDITOR_TABS_SELECT 0.1f, 0.1f, 0.3f, 1.0f
 
 #define EDITOR_BUTTONS_SELECT 0.5f, 0.0f, 0.0f, 0.1f
+#define PLAY_MODE_COLOUR 0.5f, 0.0f, 0.0f, 1.0f
