@@ -143,6 +143,7 @@ void Application::StartUp()
 		UpdateEditorMode();
 		std::cout << "Vertex Message: Editor Succeded." << std::endl;
 	}
+	
 	std::cout << "Vertex Message: Start Up Succeded." << std::endl;
 
 	glClearColor(BACKGROUND_COLOUR);
@@ -258,9 +259,14 @@ void Application::Editor()
 		ImGui::EndChild();
 	}
 	ImGui::BeginMainMenuBar();
-	ImGui::Text("Vertex Engine");
+	ImGui::Text(PROJECT_NAME);
 	ImGui::Button("Save Current");
 	ImGui::Button("Project Settings");
+
+	if (ImGui::Button("Help"))
+	{
+		ShowHelp = true;
+	}
 
 	if (ImGui::ArrowButton("Play", ImGuiDir_Right) && m_Mode == EDITOR)
 	{
@@ -268,9 +274,16 @@ void Application::Editor()
 		m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->Start();
 		UpdateEditorMode();
 	}
-	if (ImGui::Button("||") && m_Mode == EDITOR_PLAY)
+	if (ImGui::Button("||"))
 	{
-		//TODO: Pause editor
+		if (m_Mode == EDITOR_PLAY)
+		{
+			m_Mode = EDITOR_PAUSED;
+		}
+		else if(m_Mode == EDITOR_PAUSED)
+		{
+			m_Mode = EDITOR_PLAY;
+		}
 	}
 	if (ImGui::Button("STOP") && m_Mode == EDITOR_PLAY)
 	{
@@ -280,10 +293,6 @@ void Application::Editor()
 	}
 
 
-	if (ImGui::Button("Help"))
-	{
-		ShowHelp = true;
-	}
 
 	if (ShowHelp)
 	{
@@ -344,7 +353,7 @@ void Application::RenderAll()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	m_SceneManager->RenderCurrentScene(m_Renderer);
-	if (m_Mode == EDITOR || m_Mode == EDITOR_PLAY)
+	if (m_Mode == EDITOR || m_Mode == EDITOR_PLAY || m_Mode == EDITOR_PAUSED)
 	{
 		Editor();
 	}

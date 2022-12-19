@@ -2,7 +2,7 @@
 // ============================================== 
 //	GENERAL
 // ============================================== 
-#define PROJECT_NAME "Harleys my daddy"
+#define PROJECT_NAME "My Game"
 #define PROJECT_RESOLUTION 1920, 1080
 #define PROJECT_DEVELOPER "Your Name"
 #define PROJECT_COMPANY "Your Company"

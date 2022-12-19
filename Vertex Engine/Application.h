@@ -12,6 +12,7 @@ enum EditorMode {
 	EDITOR = 0,
 	PLAY,
 	EDITOR_PLAY,
+	EDITOR_PAUSED,
 };
 
 class Application
