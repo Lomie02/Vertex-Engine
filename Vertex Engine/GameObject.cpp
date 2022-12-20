@@ -26,6 +26,7 @@ GameObject::GameObject(const char* _Name, bool active)
 GameObject::GameObject(const char* _Name)
 {
 	name = _Name;
+	m_Active = true;
 	transform.localPosition.y = 0;
 	transform.localPosition.x = 0;
 

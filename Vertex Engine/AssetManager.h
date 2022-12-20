@@ -33,7 +33,7 @@ public:
 private:
 	GLFWwindow* m_Window;
 	Transform mouse;
-	float m_TimeStep = 1.0f;
+	float m_TimeStep = 0.01f;
 	glm::vec2 m_WorldGravity = glm::vec2(0, -1);
 
 	std::vector<RigidBody*> m_PhysicsObjects;

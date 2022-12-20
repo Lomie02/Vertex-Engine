@@ -46,7 +46,6 @@ private:
 
 	bool m_IsRunning = false;
 
-	float m_TimeStep = 1.0f;
 	VertexText2D* Text;
 	Vertex2D* m_Renderer;
 	SceneManager* m_SceneManager;
@@ -55,11 +54,15 @@ private:
 	Scene2* m_SecondScene;
 
 	bool m_EditorFullScreen = false;
-
 	int m_Size =0;
+
+	//Time
 	float m_fps = 0;
 	float m_frames = 0;
 	float m_deltaTime = 0;
 	float m_fpsInterval = 0;
 	float m_prevTime;
+
+	//Physics
+	float m_TimeStep = 0.01f;
 };

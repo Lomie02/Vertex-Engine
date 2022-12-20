@@ -155,6 +155,18 @@ void AssetManager::ConfigureRenderSystems(Vertex2D* render)
 		}
 	}
 
+	if (m_PhysicsObjects.size() > 0)
+	{
+		for (int i = 0; i < m_PhysicsObjects.size(); i++)
+		{
+			if (m_PhysicsObjects.at(i)->m_Active == true)
+			{
+				render->DrawSprite(m_PhysicsObjects.at(i)->texture, m_PhysicsObjects.at(i)->transform.position, m_PhysicsObjects.at(i)->transform.size, m_PhysicsObjects.at(i)->transform.rotation, m_Cameras.at(m_ActiveCamera)->GetProjection());
+				m_PhysicsObjects.at(i)->ConfigureSystems();
+			}
+		}
+	}
+
 	if (m_UiObjects.size() > 0)
 	{
 		for (int i = 0; i < m_UiObjects.size(); i++)
@@ -179,6 +191,7 @@ void AssetManager::ConfigureRenderSystems(Vertex2D* render)
 			}
 		}
 	}
+
 }
 
 void AssetManager::ConfigurePhysics(float fixedDelta)
@@ -187,9 +200,12 @@ void AssetManager::ConfigurePhysics(float fixedDelta)
 	{
 		for (int i = 0; i < m_PhysicsObjects.size(); i++)
 		{
-			m_PhysicsObjects.at(i)->transform.position += m_PhysicsObjects.at(i)->m_Velocity * fixedDelta;
-
-			m_PhysicsObjects.at(i)->ApplyForce(m_WorldGravity * m_PhysicsObjects.at(i)->GetMass() * fixedDelta);
+			if (m_PhysicsObjects.at(i)->m_Active)
+			{
+				m_PhysicsObjects.at(i)->transform.position += m_PhysicsObjects.at(i)->m_Velocity * fixedDelta;
+				m_PhysicsObjects.at(i)->ApplyForce(m_WorldGravity * m_PhysicsObjects.at(i)->GetMass() * fixedDelta);
+				std::cout << "Physics: " << m_PhysicsObjects.at(i)->name << " Pos " << m_PhysicsObjects.at(i)->transform.position.x << " | " << m_PhysicsObjects.at(i)->transform.position.y << std::endl;
+			}
 		}
 	}
 }

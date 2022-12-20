@@ -76,6 +76,11 @@ void MyScene::Start()
 	m_Object2->transform.position.y = 20;
 	m_Object2->transform.position.x = 20;
 
+	m_Body->transform.position.x = 0;
+	m_Body->transform.position.y = 0;
+
+	m_Body->transform.size = glm::vec2(2,-2);
+
 	m_Object2->transform.size = glm::vec2(2, -1);
 
 	m_Button->transform.size.x = 2;
@@ -83,11 +88,10 @@ void MyScene::Start()
 
 	m_Button->text = "Ya boy";
 
-	m_Button->SetParent(m_MainCamera);
 	m_MainCamera->transform.position.x = 0;
 	m_MainCamera->transform.position.y = 0;
 
-	glClearColor(1,0,0,0);
+	glClearColor(0.2f,0.2f,0.2f,0);
 }
 
 void MyScene::Update(float delta)
