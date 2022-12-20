@@ -9,6 +9,7 @@
 #include "Camera.h"
 #include "Button.h"
 
+#include "RigidBody.h"
 class MyScene : public VertexScene
 {
 public:
@@ -32,6 +33,8 @@ private:
 
 	Texture2D Dont;
 	Texture2D Dont2;
+
+	RigidBody* m_Body;
 
 	Button* m_Button;
 	VertexText2D* m_TextRenderer;

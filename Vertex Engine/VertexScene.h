@@ -11,7 +11,7 @@ public:
 	virtual void Update(float delta) = 0;
 
 	virtual void LateUpdate(float delta) = 0;
-	virtual void FixedUpdate(float delta) = 0;
+	virtual void FixedUpdate(float fixedDelta) = 0;
 
 	virtual void Rendering(Vertex2D* render) = 0;
 

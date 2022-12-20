@@ -6,6 +6,10 @@ RigidBody::RigidBody(const char* _Name) : GameObject(_Name)
 	m_Velocity = glm::vec2(0, -1);
 }
 
+RigidBody::~RigidBody()
+{
+}
+
 void RigidBody::ApplyForce(glm::vec2 _force)
 {
 	m_Velocity += _force / m_Mass;

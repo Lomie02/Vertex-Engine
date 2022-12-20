@@ -9,6 +9,11 @@ void AssetManager::Register(GameObject* _object)
 	m_PreviousLocations.push_back(&_object->transform);
 }
 
+void AssetManager::Register(RigidBody* _object)
+{
+	m_PhysicsObjects.push_back(_object);
+}
+
 void AssetManager::RegisterUi(GameObject* _object)
 {
 	m_UiObjects.push_back(_object);
@@ -172,6 +177,19 @@ void AssetManager::ConfigureRenderSystems(Vertex2D* render)
 				render->DrawSprite(m_UiButtonObjects.at(i)->texture, m_UiButtonObjects.at(i)->transform.position, m_UiButtonObjects.at(i)->transform.size, m_UiButtonObjects.at(i)->transform.rotation, m_Cameras.at(m_ActiveCamera)->GetProjection());
 				m_UiButtonObjects.at(i)->UpdateButton();
 			}
+		}
+	}
+}
+
+void AssetManager::ConfigurePhysics(float fixedDelta)
+{
+	if (m_PhysicsObjects.size() > 0)
+	{
+		for (int i = 0; i < m_PhysicsObjects.size(); i++)
+		{
+			m_PhysicsObjects.at(i)->transform.position += m_PhysicsObjects.at(i)->m_Velocity * fixedDelta;
+
+			m_PhysicsObjects.at(i)->ApplyForce(m_WorldGravity * m_PhysicsObjects.at(i)->GetMass() * fixedDelta);
 		}
 	}
 }

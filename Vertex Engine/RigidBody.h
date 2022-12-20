@@ -4,7 +4,7 @@
 class RigidBody : public GameObject
 {
 public:
-	RigidBody(const char* _Name) : GameObject(_Name) {}
+	RigidBody(const char* _Name);
 	~RigidBody();
 
 	void ApplyForce(glm::vec2 _force);
@@ -18,9 +18,9 @@ public:
 
 	float GetMass() { return m_Mass; }
 	float GetOrientation() { return m_Orientation; }
+	glm::vec2 m_Velocity;
 
 protected:
-	glm::vec2 m_Velocity;
 	float m_Mass;
 	float m_Orientation;
 };

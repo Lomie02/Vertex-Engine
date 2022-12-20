@@ -23,6 +23,9 @@ MyScene::~MyScene()
 
 	delete m_TextRenderer;
 	m_TextRenderer = nullptr;
+
+	delete m_Body;
+	m_Body = nullptr;
 }
 
 void MyScene::Awake()
@@ -55,6 +58,10 @@ void MyScene::Awake()
 	m_Object2->SetCollider(AABB);
 
 	m_Manager.RegisterUi(m_Button);
+	m_Body = new RigidBody("Yep");
+
+	m_Body->texture = ResourceManager::GetTexture("boy1");
+	m_Manager.Register(m_Body);
 }
 
 void MyScene::Start()
@@ -127,6 +134,10 @@ void MyScene::LateUpdate(float delta)
 
 void MyScene::FixedUpdate(float fixedDelta)
 {
+
+
+
+	m_Manager.ConfigurePhysics(fixedDelta);
 }
 
 void MyScene::Rendering(Vertex2D* render)

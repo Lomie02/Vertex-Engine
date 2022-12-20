@@ -4,11 +4,14 @@
 #include "VertexRenderPackage.h"
 #include "VertexUIPackage.h"
 #include "Camera.h"
+
+#include "RigidBody.h"
 class AssetManager
 {
 public:
 	AssetManager() { m_ActiveCamera = 0; };
 	void Register(GameObject* _object);
+	void Register(RigidBody* _object);
 	void RegisterUi(GameObject* _object);
 	void RegisterUi(Button* _object);
 	void Register(Camera *camera);
@@ -19,7 +22,7 @@ public:
 	bool CollisionCheck();
 	void ConfigureSystems();
 	void ConfigureRenderSystems(Vertex2D* render);
-
+	void ConfigurePhysics(float fixedDelta);
 	void LogEvents();
 	void SetActiveCamera(int _index);
 
@@ -31,7 +34,9 @@ private:
 	GLFWwindow* m_Window;
 	Transform mouse;
 	float m_TimeStep = 1.0f;
+	glm::vec2 m_WorldGravity = glm::vec2(0, -1);
 
+	std::vector<RigidBody*> m_PhysicsObjects;
 	std::vector<Transform*> m_PreviousLocations;
 	std::vector<Button*> m_UiButtonObjects;
 	std::vector<Text*> m_UiTextObjects;

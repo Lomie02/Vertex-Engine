@@ -52,6 +52,9 @@
     <Filter Include="Scenes\Scene 2">
       <UniqueIdentifier>{e3846c4c-af21-49d8-9491-7582f7c496dc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Physics">
+      <UniqueIdentifier>{fdcdf32d-a9eb-4a8e-8d01-de39ca7bf57c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="StartUp.cpp">
@@ -128,6 +131,9 @@
     </ClCompile>
     <ClCompile Include="Text.cpp">
       <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="RigidBody.cpp">
+      <Filter>Physics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -223,6 +229,9 @@
     </ClInclude>
     <ClInclude Include="VertexUIPackage.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RigidBody.h">
+      <Filter>Physics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

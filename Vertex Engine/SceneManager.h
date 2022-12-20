@@ -14,6 +14,7 @@ public:
 	 void SetUpWindow(GLFWwindow* _window);
 	 void AddScene(VertexScene* _scene);
 	 void UpdateScenes(float delta);
+	 void UpdateFixedScenes(float fixedDelta);
 	 void SetActiveScene(int _scene) { m_ActiveScene = _scene; StartUpScenes(); }
 
 	 void SetActiveScene(const char _scene[]);
