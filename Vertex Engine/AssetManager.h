@@ -30,6 +30,7 @@ public:
 private:
 	GLFWwindow* m_Window;
 	Transform mouse;
+	float m_TimeStep = 1.0f;
 
 	std::vector<Transform*> m_PreviousLocations;
 	std::vector<Button*> m_UiButtonObjects;

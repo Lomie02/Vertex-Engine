@@ -51,7 +51,7 @@ void Scene2::LateUpdate(float delta)
 	m_Manager.ConfigureSystems();
 }
 
-void Scene2::FixedUpdate(float delta)
+void Scene2::FixedUpdate(float fixedDelta)
 {
 }
 

@@ -25,9 +25,13 @@ void SceneManager::UpdateScenes(float delta)
 	if (m_SceneList.size() >= 1) {
 
 		m_SceneList[m_ActiveScene]->Update(delta);
-		m_SceneList[m_ActiveScene]->FixedUpdate(delta);
 		m_SceneList[m_ActiveScene]->LateUpdate(delta);
 	}
+}
+
+void SceneManager::UpdateFixedScenes(float fixedDelta)
+{
+	m_SceneList[m_ActiveScene]->FixedUpdate(fixedDelta);
 }
 
 void SceneManager::SetActiveScene(const char _scene[])

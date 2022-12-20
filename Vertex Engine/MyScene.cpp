@@ -125,7 +125,7 @@ void MyScene::LateUpdate(float delta)
 	m_Manager.CollisionCheck();
 }
 
-void MyScene::FixedUpdate(float delta)
+void MyScene::FixedUpdate(float fixedDelta)
 {
 }
 

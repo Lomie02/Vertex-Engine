@@ -19,7 +19,7 @@ public:
 	virtual void Start();
 	virtual void Update(float delta);
 	virtual void LateUpdate(float delta);
-	virtual void FixedUpdate(float delta);
+	virtual void FixedUpdate(float fixedDelta);
 	virtual void Rendering(Vertex2D* renderer);
 
 	void GiveWindow(GLFWwindow* window) { m_Window = window; }

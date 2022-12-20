@@ -46,6 +46,7 @@ private:
 
 	bool m_IsRunning = false;
 
+	float m_TimeStep = 1.0f;
 	VertexText2D* Text;
 	Vertex2D* m_Renderer;
 	SceneManager* m_SceneManager;

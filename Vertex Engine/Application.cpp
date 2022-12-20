@@ -171,7 +171,17 @@ void Application::Update()
 			m_frames = 0;
 			m_fpsInterval -= 1.0f;
 		}
+
 		m_SceneManager->UpdateScenes(m_deltaTime);
+
+		static float fixedDelta = 0.0f;
+		fixedDelta += m_deltaTime;
+
+		while (fixedDelta >= m_TimeStep)
+		{
+			m_SceneManager->UpdateFixedScenes(m_TimeStep);
+			fixedDelta -= m_TimeStep;
+		}
 	}
 }
 
@@ -414,15 +424,12 @@ void Application::SceneSetUp()
 	m_SceneManager->AddScene(m_Scene);
 	m_SceneManager->AddScene(m_SecondScene);
 
-
 	//============================================================ Remove this & automate it in the scene manager! Temp for testing
 	m_Scene->GiveWindow(m_GameWindow);
 	m_SecondScene->GiveWindow(m_GameWindow);
 
 	m_Scene->GiveSceneManager(m_SceneManager);
 	m_SecondScene->GiveSceneManager(m_SceneManager);
-
-	m_SceneManager->PrintActiveScene(); // Delete if you want
 }
 
 void Application::UpdateEditorMode()
@@ -438,7 +445,6 @@ void Application::UpdateEditorMode()
 		style->Colors[ImGuiCol_Tab] = ImVec4(EDITOR_TABS_SELECT);
 		style->Colors[ImGuiCol_Button] = ImVec4(EDITOR_MENU);
 		style->Colors[ImGuiCol_ButtonHovered] = ImVec4(EDITOR_BUTTONS_SELECT);
-		std::cout << "Editor Mode" << std::endl;
 
 	}
 	else if (m_Mode == EDITOR_PLAY)
@@ -452,7 +458,6 @@ void Application::UpdateEditorMode()
 		style1->Colors[ImGuiCol_Tab] = ImVec4(PLAY_MODE_COLOUR);
 		style1->Colors[ImGuiCol_Button] = ImVec4(PLAY_MODE_COLOUR);
 		style1->Colors[ImGuiCol_ButtonHovered] = ImVec4(PLAY_MODE_COLOUR);
-		std::cout << "Play Mode" << std::endl;
 	}
 }
 
