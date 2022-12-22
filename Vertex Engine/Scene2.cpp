@@ -26,7 +26,7 @@ void Scene2::Awake()
 {
 	m_Object2 = new GameObject("Object");
 
-	m_Object2->texture = ResourceManager::GetTexture("boy1");
+	m_Object2->material.baseTexture = ResourceManager::GetTexture("boy1");
 	m_Manager.Register(m_Object2);
 
 	m_MainCamera = new Camera("Camera 1");

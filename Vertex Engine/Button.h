@@ -9,14 +9,14 @@ public:
 	Button() : GameObject()
 	{ 
 		m_Text = new VertexText2D(1920,1080);
-		texture = ResourceManager::GetTexture("UI_Button");
+		material.baseTexture = ResourceManager::GetTexture("UI_Button");
 		m_Text->Load("Builds/fonts/arial.ttf", 2);
 		UpdateButton();
 	}
 	Button(const char* Name) : GameObject(Name)
 	{ 
 		m_Text = new VertexText2D(1920, 1080); 
-		texture = ResourceManager::GetTexture("UI_Button");
+		material.baseTexture = ResourceManager::GetTexture("UI_Button");
 		m_Text->Load("Builds/fonts/arial.ttf", 2);
 		UpdateButton();
 	}
@@ -24,14 +24,14 @@ public:
 	{
 
 		m_Text = new VertexText2D(1920, 1080);
-		texture = ResourceManager::GetTexture("UI_Button");
+		material.baseTexture = ResourceManager::GetTexture("UI_Button");
 		m_Text->Load("Builds/fonts/arial.ttf", 2);
 		text = _text;
 		UpdateButton();
 	}
 	Button(const char* Name, bool active) : GameObject(Name, active)
 	{ 
-		texture = ResourceManager::GetTexture("UI_Button");
+		material.baseTexture = ResourceManager::GetTexture("UI_Button");
 		m_Text = new VertexText2D(1920, 1080); 
 		m_Text->Load("Builds/fonts/arial.ttf", size);
 		UpdateButton();

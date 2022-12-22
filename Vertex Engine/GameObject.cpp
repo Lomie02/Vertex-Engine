@@ -8,6 +8,7 @@ GameObject::GameObject()
 	transform.localPosition.y = 0;
 	transform.localPosition.x = 0;
 
+	material = Material("Mat");
 	transform.size.x = 1;
 	transform.size.y = -1;
 }

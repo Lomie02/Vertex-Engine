@@ -3,6 +3,7 @@
 #include <string>
 #include "Texture2D.h"
 #include <list>
+#include "Material.h"
 enum Collider {
 	NONE = 0,
 	AABB,
@@ -18,7 +19,7 @@ public:
 	void SetActive(bool _active) { m_Active = _active; }
 	bool GetActive() { return m_Active; }
 
-	Texture2D texture;
+	Material material;
 	Transform transform;
 
 	const char* name = "GameObject";
@@ -32,6 +33,7 @@ public:
 	void ConfigureSystems();
 	void SetCollider(Collider _type) { m_ColliderType = _type; }
 	Collider GetCollider() { return m_ColliderType; }
+
 private:
 	Collider m_ColliderType = NONE;
 	GameObject* m_Parent;

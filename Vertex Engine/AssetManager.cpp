@@ -148,7 +148,7 @@ void AssetManager::ConfigureRenderSystems(Vertex2D* render)
 		{
 			if (m_Objects.at(i)->m_Active == true)
 			{
-				render->DrawSprite(m_Objects.at(i)->texture, m_Objects.at(i)->transform.position, m_Objects.at(i)->transform.size, m_Objects.at(i)->transform.rotation, m_Cameras.at(m_ActiveCamera)->GetProjection());
+				render->DrawSprite(m_Objects.at(i)->material, m_Objects.at(i)->transform.position, m_Objects.at(i)->transform.size, m_Objects.at(i)->transform.rotation, m_Cameras.at(m_ActiveCamera)->GetProjection());
 				m_Cameras.at(m_ActiveCamera)->ConfigureSystems();
 				m_Objects.at(i)->ConfigureSystems();
 			}
@@ -161,7 +161,7 @@ void AssetManager::ConfigureRenderSystems(Vertex2D* render)
 		{
 			if (m_PhysicsObjects.at(i)->m_Active == true)
 			{
-				render->DrawSprite(m_PhysicsObjects.at(i)->texture, m_PhysicsObjects.at(i)->transform.position, m_PhysicsObjects.at(i)->transform.size, m_PhysicsObjects.at(i)->transform.rotation, m_Cameras.at(m_ActiveCamera)->GetProjection());
+				render->DrawSprite(m_PhysicsObjects.at(i)->material, m_PhysicsObjects.at(i)->transform.position, m_PhysicsObjects.at(i)->transform.size, m_PhysicsObjects.at(i)->transform.rotation, m_Cameras.at(m_ActiveCamera)->GetProjection());
 				m_PhysicsObjects.at(i)->ConfigureSystems();
 			}
 		}
@@ -174,7 +174,7 @@ void AssetManager::ConfigureRenderSystems(Vertex2D* render)
 			if (m_UiObjects.at(i)->m_Active == true)
 			{
 				m_UiObjects.at(i)->ConfigureSystems();
-				render->DrawSprite(m_UiObjects.at(i)->texture, m_UiObjects.at(i)->transform.position, m_UiObjects.at(i)->transform.size, m_UiObjects.at(i)->transform.rotation, m_Cameras.at(m_ActiveCamera)->GetProjection());
+				render->DrawSprite(m_UiObjects.at(i)->material, m_UiObjects.at(i)->transform.position, m_UiObjects.at(i)->transform.size, m_UiObjects.at(i)->transform.rotation, m_Cameras.at(m_ActiveCamera)->GetProjection());
 			}
 		}
 	}
@@ -186,7 +186,7 @@ void AssetManager::ConfigureRenderSystems(Vertex2D* render)
 			if (m_UiButtonObjects.at(i)->m_Active == true)
 			{
 				m_UiButtonObjects.at(i)->ConfigureSystems();
-				render->DrawSprite(m_UiButtonObjects.at(i)->texture, m_UiButtonObjects.at(i)->transform.position, m_UiButtonObjects.at(i)->transform.size, m_UiButtonObjects.at(i)->transform.rotation, m_Cameras.at(m_ActiveCamera)->GetProjection());
+				render->DrawSprite(m_UiButtonObjects.at(i)->material, m_UiButtonObjects.at(i)->transform.position, m_UiButtonObjects.at(i)->transform.size, m_UiButtonObjects.at(i)->transform.rotation, m_Cameras.at(m_ActiveCamera)->GetProjection());
 				m_UiButtonObjects.at(i)->UpdateButton();
 			}
 		}
@@ -204,7 +204,7 @@ void AssetManager::ConfigurePhysics(float fixedDelta)
 			{
 				m_PhysicsObjects.at(i)->transform.position += m_PhysicsObjects.at(i)->m_Velocity * fixedDelta;
 				m_PhysicsObjects.at(i)->ApplyForce(m_WorldGravity * m_PhysicsObjects.at(i)->GetMass() * fixedDelta);
-				std::cout << "Physics: " << m_PhysicsObjects.at(i)->name << " Pos " << m_PhysicsObjects.at(i)->transform.position.x << " | " << m_PhysicsObjects.at(i)->transform.position.y << std::endl;
+				//std::cout << "Physics: " << m_PhysicsObjects.at(i)->name << " Pos " << m_PhysicsObjects.at(i)->transform.position.x << " | " << m_PhysicsObjects.at(i)->transform.position.y << std::endl;
 			}
 		}
 	}

@@ -45,9 +45,9 @@ void MyScene::Awake()
 
 	m_Button->SetActive(true);
 
-	m_Object->texture = ResourceManager::GetTexture("Vertex");
-	m_Object2->texture = ResourceManager::GetTexture("boy1");
-	
+	m_Object->material.baseTexture = ResourceManager::GetTexture("Vertex");
+	m_Object2->material.baseTexture = ResourceManager::GetTexture("boy1");
+	m_Object2->material.colour = glm::vec3(1, 0, 0);
 	m_Manager.Register(m_Object);
 	m_Manager.Register(m_Object2);
 	
@@ -60,7 +60,8 @@ void MyScene::Awake()
 	m_Manager.RegisterUi(m_Button);
 	m_Body = new RigidBody("Yep");
 
-	m_Body->texture = ResourceManager::GetTexture("boy1");
+	m_Body->material.baseTexture = ResourceManager::GetTexture("boy1");
+	m_Body->material.colour = glm::vec3(1,0,1);
 	m_Manager.Register(m_Body);
 }
 

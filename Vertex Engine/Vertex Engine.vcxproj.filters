@@ -135,6 +135,9 @@
     <ClCompile Include="RigidBody.cpp">
       <Filter>Physics</Filter>
     </ClCompile>
+    <ClCompile Include="Material.cpp">
+      <Filter>GameObjects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="glad.h">
@@ -232,6 +235,9 @@
     </ClInclude>
     <ClInclude Include="RigidBody.h">
       <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>GameObjects</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
