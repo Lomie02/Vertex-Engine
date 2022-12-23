@@ -33,12 +33,7 @@ int Clip::Length()
 
 glm::vec2 Clip::GetFrame(int _index)
 {
-	if (_index >= 0 && _index <= m_Frames.size())
-	{
-		return m_Frames.at(_index);
-	}
-
-	return m_Frames.at(0);
+	return m_Frames.at(_index);
 }
 
 void Clip::PLaySpeed(float _speed)

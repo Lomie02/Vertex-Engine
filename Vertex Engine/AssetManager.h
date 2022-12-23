@@ -4,6 +4,7 @@
 #include "VertexRenderPackage.h"
 #include "VertexUIPackage.h"
 #include "Camera.h"
+#include "Animator.h"
 
 #include "RigidBody.h"
 class AssetManager
@@ -12,6 +13,7 @@ public:
 	AssetManager() { m_ActiveCamera = 0; };
 	void Register(GameObject* _object);
 	void Register(RigidBody* _object);
+	void Register(Animator* _object);
 	void RegisterUi(GameObject* _object);
 	void RegisterUi(Button* _object);
 	void Register(Camera *camera);
@@ -29,6 +31,7 @@ public:
 	std::vector<GameObject*> m_Objects;
 	std::vector<GameObject*> m_UiObjects;
 	std::vector<Camera*> m_Cameras;
+	std::vector<Animator*> m_Animators;
 
 private:
 	GLFWwindow* m_Window;

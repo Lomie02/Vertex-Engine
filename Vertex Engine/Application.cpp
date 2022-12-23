@@ -286,6 +286,12 @@ void Application::Editor()
 		ImGui::Spacing();
 	}
 
+	if (glfwGetKey(m_GameWindow, GLFW_KEY_F) == GLFW_PRESS)
+	{
+		m_SceneManager->GetCurrentScene()->GetAssets().m_Cameras.at(0)->transform.position = m_SceneManager->GetCurrentScene()->GetAssets().m_Objects.at(selected)->transform.position;
+	}
+
+
 	if (ImGui::ArrowButton("Play", ImGuiDir_Right) && m_Mode == EDITOR)
 	{
 		m_Mode = EDITOR_PLAY;
@@ -337,6 +343,19 @@ void Application::Editor()
 		}
 	}
 
+	if (ImGui::ArrowButton("PlayAnimation", ImGuiDir_Right) && m_Mode == EDITOR_PLAY)
+	{
+		m_SceneManager->GetCurrentScene()->GetAssets().m_Animators.at(0)->Play();
+	}
+
+	if (ImGui::Button("KeyFrame") && m_Mode == EDITOR_PLAY)
+	{
+		m_SceneManager->GetCurrentScene()->GetAssets().m_Animators.at(0)->AddKeyFrame();
+	}
+	if (ImGui::Button("Stop") && m_Mode == EDITOR_PLAY)
+	{
+		m_SceneManager->GetCurrentScene()->GetAssets().m_Animators.at(0)->Stop();
+	}
 
 	if (ShowHelp)
 	{

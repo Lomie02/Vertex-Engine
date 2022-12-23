@@ -14,6 +14,11 @@ void AssetManager::Register(RigidBody* _object)
 	m_PhysicsObjects.push_back(_object);
 }
 
+void AssetManager::Register(Animator* _object)
+{
+	m_Animators.push_back(_object);
+}
+
 void AssetManager::RegisterUi(GameObject* _object)
 {
 	m_UiObjects.push_back(_object);

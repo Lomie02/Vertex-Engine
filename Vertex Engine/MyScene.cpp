@@ -66,6 +66,7 @@ void MyScene::Awake()
 	m_Manager.Register(m_Body);
 
 	m_Anim->SetMaster(m_Object2);
+	m_Manager.Register(m_Anim);
 }
 
 void MyScene::Start()
