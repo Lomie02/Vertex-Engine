@@ -55,6 +55,9 @@
     <Filter Include="Physics">
       <UniqueIdentifier>{fdcdf32d-a9eb-4a8e-8d01-de39ca7bf57c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Animation">
+      <UniqueIdentifier>{2ef594b3-b9d4-40eb-a947-c3b2355c0384}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="StartUp.cpp">
@@ -137,6 +140,12 @@
     </ClCompile>
     <ClCompile Include="Material.cpp">
       <Filter>GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Clip.cpp">
+      <Filter>Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Animator.cpp">
+      <Filter>Animation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -238,6 +247,12 @@
     </ClInclude>
     <ClInclude Include="Material.h">
       <Filter>GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Clip.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Animator.h">
+      <Filter>Animation</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

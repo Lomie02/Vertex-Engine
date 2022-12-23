@@ -12,6 +12,7 @@ enum Wrapper
 
 class Animator
 {
+public:
 	Animator();
 	~Animator();
 
@@ -20,13 +21,15 @@ class Animator
 	void Pause();
 	void Stop();
 
+	void AddKeyFrame();
 	void WrapMode(Wrapper _wrap);
 	Wrapper GetWrapMode();
 
 	void ConfigureSystems(float deltaTime);
 
 private:
-	int m_CurrentFrame;
+
+	int m_CurrentFrame = 0;
 	Wrapper m_WrapMode;
 	bool m_Loop;
 	GameObject* m_Master;

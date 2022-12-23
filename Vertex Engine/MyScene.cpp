@@ -2,7 +2,6 @@
 #include <iostream>
 #include "ResourceManager.h"
 #include "SceneManager.h"
-#include "gtx/compatibility.hpp"
 
 #define GRID_SIZE 800
 
@@ -30,6 +29,8 @@ MyScene::~MyScene()
 
 void MyScene::Awake()
 {
+
+	m_Anim = new Animator();
 	m_TextRenderer = new VertexText2D(1920, 1080);
 	m_TextRenderer->Load("Builds/fonts/arial.ttf", 24);
 	m_Button = new Button("Play");
@@ -39,7 +40,7 @@ void MyScene::Awake()
 	ResourceManager::LoadTexture("Builds/Textures/Huggy.png", "boy1");
 
 	m_Object = new GameObject("Huggy", true);
-	m_Object2 = new GameObject("Home", true);
+	m_Object2 = new GameObject("Animation", true);
 
 	m_MainCamera = new Camera();
 
@@ -63,6 +64,8 @@ void MyScene::Awake()
 	m_Body->material.baseTexture = ResourceManager::GetTexture("boy1");
 	m_Body->material.colour = glm::vec3(1,0,1);
 	m_Manager.Register(m_Body);
+
+	m_Anim->SetMaster(m_Object2);
 }
 
 void MyScene::Start()
@@ -124,11 +127,23 @@ void MyScene::Update(float delta)
 		m_MainCamera->zoom += 1 * delta;
 	}
 	
+	if (glfwGetKey(m_Window, GLFW_KEY_P) == GLFW_PRESS)
+	{
+		m_Anim->Play();
+	}
+
+	if (glfwGetKey(m_Window, GLFW_KEY_O) == GLFW_PRESS)
+	{
+		m_Anim->AddKeyFrame();
+	}
+
 	
 	if (glfwGetKey(m_Window, GLFW_KEY_E) == GLFW_PRESS)
 	{
 		m_MainCamera->zoom -= 1 * delta;
 	}
+
+	m_Anim->ConfigureSystems(delta);
 }
 
 void MyScene::LateUpdate(float delta)
