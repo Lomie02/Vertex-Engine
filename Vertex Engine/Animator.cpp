@@ -34,6 +34,7 @@ void Animator::Stop()
 	{
 		m_IsPlaying = false;
 		m_CurrentFrame = 0;
+		m_Master->transform.position = m_AnimationClip.GetFrame(0);
 		std::cout << "Stop ANimation" << std::endl;
 	}
 }
@@ -63,23 +64,22 @@ void Animator::ConfigureSystems(float deltaTime)
 			{
 				Stop();
 			}
-			m_CurrentFrame++;
 			
 			if (m_Master->transform.position.x == m_AnimationClip.GetFrame(m_CurrentFrame).x) 
 			{
-				m_Master->transform.position.x = m_AnimationClip.GetFrame(m_CurrentFrame).x + 1;
+				m_Master->transform.position.x = m_AnimationClip.GetFrame(m_CurrentFrame).x + 0.5f;
 			}
 			if (m_Master->transform.position.y == m_AnimationClip.GetFrame(m_CurrentFrame).y) 
 			{
-				m_Master->transform.position.y = m_AnimationClip.GetFrame(m_CurrentFrame).y + 1;
+				m_Master->transform.position.y = m_AnimationClip.GetFrame(m_CurrentFrame).y + 0.5f;
 			}
+			m_CurrentFrame++;
 			std::cout << "Next Frame" << std::endl;
-
 		}
 		else
 		{
 			m_Master->transform.position = glm::lerp(m_Master->transform.position, m_AnimationClip.GetFrame(m_CurrentFrame), m_AnimationClip.GetPlaySpeed() * deltaTime);
-
+			std::cout << "Update Frame" << std::endl;
 		}
 	}
 }

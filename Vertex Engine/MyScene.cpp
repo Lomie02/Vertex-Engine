@@ -148,7 +148,6 @@ void MyScene::Update(float delta)
 		m_MainCamera->zoom -= 1 * delta;
 	}
 
-	m_Anim->ConfigureSystems(delta);
 }
 
 void MyScene::LateUpdate(float delta)
@@ -159,9 +158,7 @@ void MyScene::LateUpdate(float delta)
 
 void MyScene::FixedUpdate(float fixedDelta)
 {
-
-
-
+	m_Anim->ConfigureSystems(fixedDelta);
 	m_Manager.ConfigurePhysics(fixedDelta);
 }
 
