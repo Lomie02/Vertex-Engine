@@ -16,6 +16,7 @@ void Clip::ClearCLip()
 void Clip::AddKeyframe(glm::vec2 _frame)
 {
 	m_Frames.push_back(_frame);
+	std::cout << "KeyFrame Added: " << _frame.x << " " << _frame.y << std::endl;
 }
 
 void Clip::RemoveKeyframe(int keyframe, glm::vec2 _frame)

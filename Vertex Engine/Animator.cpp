@@ -17,6 +17,8 @@ void Animator::SetMaster(GameObject* _master)
 void Animator::Play()
 {
 	m_IsPlaying = true;
+	m_Master->transform.position = m_AnimationClip.GetFrame(0);
+	std::cout << "Play Animation" << std::endl;
 }
 
 void Animator::Pause()
@@ -27,6 +29,8 @@ void Animator::Pause()
 void Animator::Stop()
 {
 	m_IsPlaying = false;
+	m_CurrentFrame = 0;
+	std::cout << "Stop ANimation" << std::endl;
 }
 
 void Animator::AddKeyFrame()
@@ -54,22 +58,13 @@ void Animator::ConfigureSystems(float deltaTime)
 		}
 		else
 		{
-			if (m_CurrentFrame <= m_AnimationClip.Length() && m_WrapMode == Default)
+			if (m_CurrentFrame > m_AnimationClip.Length())
 			{
-				m_CurrentFrame++;
-			}
-			else {
-				m_IsPlaying = false;
-				m_CurrentFrame = 0;
+				Stop();
 			}
 
-			if (m_CurrentFrame <= m_AnimationClip.Length() && m_WrapMode == Loop)
-			{
-				m_CurrentFrame++;
-			}
-			else {
-				m_CurrentFrame = 0;
-			}
+			m_CurrentFrame++;
+			std::cout << "Next Frame" << std::endl;
 		}
 	}
 }

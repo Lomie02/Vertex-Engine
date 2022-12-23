@@ -137,6 +137,10 @@ void MyScene::Update(float delta)
 		m_Anim->AddKeyFrame();
 	}
 
+	if (glfwGetKey(m_Window, GLFW_KEY_I) == GLFW_PRESS)
+	{
+		m_Anim->Stop();
+	}
 	
 	if (glfwGetKey(m_Window, GLFW_KEY_E) == GLFW_PRESS)
 	{
