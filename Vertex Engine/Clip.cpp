@@ -8,17 +8,36 @@ Clip::~Clip()
 {
 }
 
-void Clip::AddKeyframe()
+void Clip::ClearCLip()
 {
+	m_Frames.clear();
 }
 
-void Clip::RemoveKeyframe()
+void Clip::AddKeyframe(glm::vec2 _frame)
 {
+	m_Frames.push_back(_frame);
+}
+
+void Clip::RemoveKeyframe(int keyframe, glm::vec2 _frame)
+{
+	//TODO: add remove clips
 }
 
 int Clip::Length()
 {
-	return 0;
+	m_ClipLength = m_Frames.size();
+
+	return m_ClipLength;
+}
+
+glm::vec2 Clip::GetFrame(int _index)
+{
+	if (_index >= 0 && _index <= m_Frames.size())
+	{
+		return m_Frames.at(_index);
+	}
+
+	return m_Frames.at(0);
 }
 
 void Clip::PLaySpeed(float _speed)
