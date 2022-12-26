@@ -36,6 +36,7 @@ private:
 	friend class Clip;
 	Clip m_AnimationClip;
 
+	bool m_ReadyFrame = true;
 	bool m_IsPlaying;
 
 };
