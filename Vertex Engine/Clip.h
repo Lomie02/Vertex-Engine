@@ -9,6 +9,7 @@ enum Wrapper
 	Default = 0,
 	Loop,
 	RepeatOnce,
+	PingPong,
 };
 
 class Clip
@@ -18,7 +19,7 @@ public:
 	Clip(std::string _name) { name = _name; }
 	~Clip();
 
-	void ClearCLip();
+	void ClearClip();
 
 	void AddKeyframe(glm::vec2 _frame);
 	void RemoveKeyframe(int keyframe, glm::vec2 _frame);
