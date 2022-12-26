@@ -60,6 +60,11 @@ void Application::StartUp()
 
 	strcat(name, other);
 
+	if (FINAL_BUILD)
+	{
+		m_Mode = PLAY;
+	}
+
 	if (m_Mode == PLAY)
 	{
 
@@ -119,10 +124,6 @@ void Application::StartUp()
 	// Load UI Textures
 	ResourceManager::LoadTexture("Builds/Textures/UI_Button.png", "UI_Button");
 
-	if (FINAL_BUILD)
-	{
-		m_Mode = PLAY;
-	}
 
 	if (m_Mode == EDITOR)
 	{
