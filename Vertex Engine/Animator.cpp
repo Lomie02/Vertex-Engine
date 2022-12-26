@@ -98,13 +98,28 @@ void Animator::ConfigureSystems(float deltaTime)
 			else if (m_CurrentFrame >= m_AnimationClip.at(m_CurrentClip).Length() && m_AnimationClip.at(m_CurrentClip).GetWrapMode() == Loop)
 			{
 				m_CurrentFrame = 0;
-				m_Master->transform.position = m_AnimationClip.at(m_CurrentClip).GetFrame(0);
+				if (m_Master->GetParent() == nullptr)
+				{
+					m_Master->transform.position = m_AnimationClip.at(m_CurrentClip).GetFrame(0);
+				}
+				else
+				{
+					m_Master->transform.localPosition = m_AnimationClip.at(m_CurrentClip).GetFrame(0);
+				}
 			}
 			else if (m_CurrentFrame >= m_AnimationClip.at(m_CurrentClip).Length() && m_AnimationClip.at(m_CurrentClip).GetWrapMode() == PingPong)
 			{
 				m_Reverse = true;
 				m_CurrentFrame = m_AnimationClip.at(m_CurrentClip).Length() - 1;
-				m_Master->transform.position = m_AnimationClip.at(m_CurrentClip).GetFrame(m_AnimationClip.at(m_CurrentClip).Length() - 1);
+
+				if (m_Master->GetParent() == nullptr)
+				{
+					m_Master->transform.position = m_AnimationClip.at(m_CurrentClip).GetFrame(m_AnimationClip.at(m_CurrentClip).Length() - 1);
+				}
+				else
+				{
+					m_Master->transform.localPosition = m_AnimationClip.at(m_CurrentClip).GetFrame(m_AnimationClip.at(m_CurrentClip).Length() - 1);
+				}
 			}
 
 		}
@@ -112,25 +127,46 @@ void Animator::ConfigureSystems(float deltaTime)
 		{
 			if (m_CurrentFrame < m_AnimationClip.at(m_CurrentClip).Length() && !m_Reverse)
 			{
-				m_Master->transform.position = glm::lerp(m_Master->transform.position, m_AnimationClip.at(m_CurrentClip).GetFrame(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * deltaTime);
+				if (m_Master->GetParent() == nullptr)
+				{
+					m_Master->transform.position = glm::lerp(m_Master->transform.position, m_AnimationClip.at(m_CurrentClip).GetFrame(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * deltaTime);
 
-				float distanceToFrame = glm::distance(m_Master->transform.position, m_AnimationClip.at(m_CurrentClip).GetFrame(m_CurrentFrame));
+					float distanceToFrame = glm::distance(m_Master->transform.position, m_AnimationClip.at(m_CurrentClip).GetFrame(m_CurrentFrame));
 
-				if (distanceToFrame < 0.5f) {
-					m_ReadyFrame = false;
+					if (distanceToFrame < 0.5f) {
+						m_ReadyFrame = false;
+					}
+				}
+				else {
+					m_Master->transform.localPosition = glm::lerp(m_Master->transform.localPosition, m_AnimationClip.at(m_CurrentClip).GetFrame(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * deltaTime);
+					float distanceToFrame = glm::distance(m_Master->transform.localPosition, m_AnimationClip.at(m_CurrentClip).GetFrame(m_CurrentFrame));
+
+					if (distanceToFrame < 0.5f) {
+						m_ReadyFrame = false;
+					}
 				}
 			}
 			if (m_Reverse && m_CurrentFrame >= 0)
 			{
-				m_Master->transform.position = glm::lerp(m_Master->transform.position, m_AnimationClip.at(m_CurrentClip).GetFrame(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * deltaTime);
+				if (m_Master->GetParent() == nullptr)
+				{
+					m_Master->transform.position = glm::lerp(m_Master->transform.position, m_AnimationClip.at(m_CurrentClip).GetFrame(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * deltaTime);
+					float distanceToFrame = glm::distance(m_Master->transform.position, m_AnimationClip.at(m_CurrentClip).GetFrame(m_CurrentFrame));
 
-				float distanceToFrame = glm::distance(m_Master->transform.position, m_AnimationClip.at(m_CurrentClip).GetFrame(m_CurrentFrame));
+					if (distanceToFrame < 0.5f) {
+						m_ReadyFrame = false;
+					}
+				}
+				else {
+					m_Master->transform.localPosition = glm::lerp(m_Master->transform.localPosition, m_AnimationClip.at(m_CurrentClip).GetFrame(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * deltaTime);
+					float distanceToFrame = glm::distance(m_Master->transform.localPosition, m_AnimationClip.at(m_CurrentClip).GetFrame(m_CurrentFrame));
 
-				if (distanceToFrame < 0.5f) {
-					m_ReadyFrame = false;
+					if (distanceToFrame < 0.5f) {
+						m_ReadyFrame = false;
+					}
 				}
 			}
-			else 
+			else
 			{
 				Stop();
 			}

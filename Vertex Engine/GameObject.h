@@ -28,6 +28,7 @@ public:
 	void SetParent(GameObject* _object);
 	void RemoveParent();
 
+	GameObject* GetParent() { return m_Parent; }
 	void SetChild(GameObject* _child);
 	void RemoveChild();
 	void ConfigureSystems();
