@@ -83,7 +83,6 @@ void Animator::ConfigureSystems(float deltaTime)
 					m_ReadyFrame = false;
 				}
 			}
-
 		}
 	}
 }

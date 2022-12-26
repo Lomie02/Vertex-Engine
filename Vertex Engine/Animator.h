@@ -3,13 +3,6 @@
 #include "GameObject.h"
 #include "gtx/compatibility.hpp"
 
-enum Wrapper
-{
-	Default = 0,
-	Loop,
-	RepeatOnce,
-};
-
 class Animator
 {
 public:
@@ -30,7 +23,6 @@ public:
 private:
 
 	int m_CurrentFrame = 0;
-	Wrapper m_WrapMode;
 	bool m_Loop;
 	GameObject* m_Master;
 	friend class Clip;
