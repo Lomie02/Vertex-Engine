@@ -4,6 +4,10 @@ Vertex Engine is a custom C++ Game Engine developed using OpenGL
  Features Coming Soon:
  
  VERTEX ENGINE 2D:
+
+next to come:
+• Animators will track rotation & scale.
+• Sprite Animators
  
  1. AABB to Circle, Circle to Circle Collision support
  2. Scene Manager window automation
