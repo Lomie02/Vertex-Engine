@@ -22,6 +22,7 @@ void Animator::Play()
 	if (!m_IsPlaying) {
 		m_IsPlaying = true;
 		m_Master->transform.position = m_AnimationClip.at(m_CurrentClip).GetFrame(0);
+		m_Master->transform.size = m_AnimationClip.at(m_CurrentClip).GetFrameSize(0);
 		std::cout << "Play Animation" << std::endl;
 	}
 }
@@ -38,6 +39,7 @@ void Animator::Stop()
 		m_IsPlaying = false;
 		m_CurrentFrame = 0;
 		m_Master->transform.position = m_AnimationClip.at(m_CurrentClip).GetFrame(0);
+		m_Master->transform.size = m_AnimationClip.at(m_CurrentClip).GetFrameSize(0);
 		std::cout << "Stop ANimation" << std::endl;
 	}
 }
@@ -130,6 +132,7 @@ void Animator::ConfigureSystems(float deltaTime)
 				if (m_Master->GetParent() == nullptr)
 				{
 					m_Master->transform.position = glm::lerp(m_Master->transform.position, m_AnimationClip.at(m_CurrentClip).GetFrame(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * deltaTime);
+					m_Master->transform.size = glm::lerp(m_Master->transform.size, m_AnimationClip.at(m_CurrentClip).GetFrameSize(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * deltaTime);
 
 					float distanceToFrame = glm::distance(m_Master->transform.position, m_AnimationClip.at(m_CurrentClip).GetFrame(m_CurrentFrame));
 
@@ -139,6 +142,7 @@ void Animator::ConfigureSystems(float deltaTime)
 				}
 				else {
 					m_Master->transform.localPosition = glm::lerp(m_Master->transform.localPosition, m_AnimationClip.at(m_CurrentClip).GetFrame(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * deltaTime);
+					m_Master->transform.size = glm::lerp(m_Master->transform.size, m_AnimationClip.at(m_CurrentClip).GetFrameSize(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * deltaTime);
 					float distanceToFrame = glm::distance(m_Master->transform.localPosition, m_AnimationClip.at(m_CurrentClip).GetFrame(m_CurrentFrame));
 
 					if (distanceToFrame < 0.5f) {
@@ -151,6 +155,7 @@ void Animator::ConfigureSystems(float deltaTime)
 				if (m_Master->GetParent() == nullptr)
 				{
 					m_Master->transform.position = glm::lerp(m_Master->transform.position, m_AnimationClip.at(m_CurrentClip).GetFrame(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * deltaTime);
+					m_Master->transform.size = glm::lerp(m_Master->transform.size, m_AnimationClip.at(m_CurrentClip).GetFrameSize(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * deltaTime);
 					float distanceToFrame = glm::distance(m_Master->transform.position, m_AnimationClip.at(m_CurrentClip).GetFrame(m_CurrentFrame));
 
 					if (distanceToFrame < 0.5f) {
@@ -159,6 +164,7 @@ void Animator::ConfigureSystems(float deltaTime)
 				}
 				else {
 					m_Master->transform.localPosition = glm::lerp(m_Master->transform.localPosition, m_AnimationClip.at(m_CurrentClip).GetFrame(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * deltaTime);
+					m_Master->transform.size = glm::lerp(m_Master->transform.size, m_AnimationClip.at(m_CurrentClip).GetFrameSize(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * deltaTime);
 					float distanceToFrame = glm::distance(m_Master->transform.localPosition, m_AnimationClip.at(m_CurrentClip).GetFrame(m_CurrentFrame));
 
 					if (distanceToFrame < 0.5f) {
