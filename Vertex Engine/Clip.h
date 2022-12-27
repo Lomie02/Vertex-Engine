@@ -33,11 +33,14 @@ public:
 	Wrapper GetWrapMode() { return m_WrapMode; }
 	glm::vec2 GetFrame(int _index);
 	glm::vec2 GetFrameSize(int _index);
+	float GetFrameRot(int _index);
 protected:
 
 	Wrapper m_WrapMode;
 	std::vector<glm::vec2> m_Frames;
 	std::vector<glm::vec2> m_FramesSizes;
+	std::vector<float> m_FramesRotations;
+
 	float m_PlaySpeed = 1;
 	int m_ClipLength = 0;
 	std::string name = "clip";

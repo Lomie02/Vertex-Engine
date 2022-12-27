@@ -19,6 +19,7 @@ void Clip::AddKeyframe(Transform _frame)
 {
 	m_Frames.push_back(_frame.position);
 	m_FramesSizes.push_back(_frame.size);
+	m_FramesRotations.push_back(_frame.rotation);
 }
 
 void Clip::RemoveKeyframe(int keyframe, glm::vec2 _frame)
@@ -41,6 +42,11 @@ glm::vec2 Clip::GetFrame(int _index)
 glm::vec2 Clip::GetFrameSize(int _index)
 {
 	return m_FramesSizes.at(_index);
+}
+
+float Clip::GetFrameRot(int _index)
+{
+	return m_FramesRotations.at(_index);
 }
 
 void Clip::PLaySpeed(float _speed)

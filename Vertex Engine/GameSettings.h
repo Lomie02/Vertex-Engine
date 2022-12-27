@@ -17,7 +17,7 @@
 //	SCREEN
 // ============================================== 
 #define FULLSCREEN false //Doesnt affect the Editor!
-#define VSYNC false
+#define VSYNC true
 #define TARGET_FPS 60
 #define TARGET_DELTATIME 1
 #define BACKGROUND_COLOUR 0.1f, 0.1f, 0.1f, 0.1f
