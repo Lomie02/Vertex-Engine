@@ -44,7 +44,7 @@ void Animator::Stop()
 
 void Animator::AddKeyFrame()
 {
-	m_AnimationClip.at(m_CurrentClip).AddKeyframe(m_Master->transform.position);
+	m_AnimationClip.at(m_CurrentClip).AddKeyframe(m_Master->transform);
 }
 
 void Animator::WrapMode(Wrapper _wrap)
@@ -165,10 +165,6 @@ void Animator::ConfigureSystems(float deltaTime)
 						m_ReadyFrame = false;
 					}
 				}
-			}
-			else
-			{
-				Stop();
 			}
 		}
 	}

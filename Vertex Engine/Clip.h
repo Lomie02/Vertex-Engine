@@ -4,6 +4,8 @@
 #include <string.h>
 #include <iostream>
 #include "glm.hpp"
+
+#include "Transform.h"
 enum Wrapper
 {
 	Default = 0,
@@ -21,7 +23,7 @@ public:
 
 	void ClearClip();
 
-	void AddKeyframe(glm::vec2 _frame);
+	void AddKeyframe(Transform _frame);
 	void RemoveKeyframe(int keyframe, glm::vec2 _frame);
 	void PLaySpeed(float _speed);
 	float GetPlaySpeed() { return m_PlaySpeed; }
@@ -30,10 +32,12 @@ public:
 	void SetWrapMode(Wrapper _wrap) { m_WrapMode = _wrap; }
 	Wrapper GetWrapMode() { return m_WrapMode; }
 	glm::vec2 GetFrame(int _index);
+	glm::vec2 GetFrameSize(int _index);
 protected:
 
 	Wrapper m_WrapMode;
 	std::vector<glm::vec2> m_Frames;
+	std::vector<glm::vec2> m_FramesSizes;
 	float m_PlaySpeed = 1;
 	int m_ClipLength = 0;
 	std::string name = "clip";
