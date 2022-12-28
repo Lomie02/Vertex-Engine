@@ -105,7 +105,6 @@ Texture2D ResourceManager::loadTextureFromFile(const char* file)
     unsigned char* data = stbi_load(file, &width, &height, &nrChannels, 0);
 
     // now generate texture
-    texture.Generate(width, height, data);
 
     if (nrChannels == 3) {
         texture.Internal_Format = GL_RGB;
@@ -114,11 +113,8 @@ Texture2D ResourceManager::loadTextureFromFile(const char* file)
     }
     else if (nrChannels == 4) 
     {
-        texture.Internal_Format = GL_RGB;
-        texture.Image_Format = GL_RGB;
-
-        //texture.Internal_Format = GL_RGBA;
-        //texture.Image_Format = GL_RGBA;
+        texture.Internal_Format = GL_RGBA;
+        texture.Image_Format = GL_RGBA;
         std::cout << "VERTEX ERROR: Transparent " << file << std::endl;
     }
     else {
@@ -126,6 +122,8 @@ Texture2D ResourceManager::loadTextureFromFile(const char* file)
         std::cout << "VERTEX ERROR: Texture failed to load: " << file << std::endl;
     }
 
+    texture.Generate(width, height, data);
+    
     stbi_image_free(data);
     // and finally free image data
     return texture;

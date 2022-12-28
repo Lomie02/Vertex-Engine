@@ -36,7 +36,7 @@ void MyScene::Awake()
 	m_Button = new Button("Play");
 	m_Button->text = "Play";
 
-	ResourceManager::LoadTexture("Builds/Textures/VertexLogo.png", "Vertex");
+	ResourceManager::LoadTexture("Builds/Textures/PowerIcon.png", "Vertex");
 	ResourceManager::LoadTexture("Builds/Textures/Huggy.png", "boy1");
 
 	m_Object = new GameObject("Huggy", true);
@@ -128,26 +128,10 @@ void MyScene::Update(float delta)
 		m_MainCamera->zoom += 1 * delta;
 	}
 	
-	if (glfwGetKey(m_Window, GLFW_KEY_P) == GLFW_PRESS)
-	{
-		m_Anim->Play();
-	}
-
-	if (glfwGetKey(m_Window, GLFW_KEY_O) == GLFW_PRESS)
-	{
-		m_Anim->AddKeyFrame();
-	}
-
-	if (glfwGetKey(m_Window, GLFW_KEY_I) == GLFW_PRESS)
-	{
-		m_Anim->Stop();
-	}
-	
 	if (glfwGetKey(m_Window, GLFW_KEY_E) == GLFW_PRESS)
 	{
 		m_MainCamera->zoom -= 1 * delta;
 	}
-
 }
 
 void MyScene::LateUpdate(float delta)

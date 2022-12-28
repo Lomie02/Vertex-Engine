@@ -13,6 +13,8 @@ Vertex2D::~Vertex2D()
 
 void Vertex2D::DrawSprite(Material& material, glm::vec2 position, glm::vec2 size, float rotate, glm::mat4 per)
 {
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	this->m_Shader = material.shader;
 
 	this->m_Shader.Use();
@@ -33,6 +35,7 @@ void Vertex2D::DrawSprite(Material& material, glm::vec2 position, glm::vec2 size
 	glBindVertexArray(this->m_quadVAO);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 	glBindVertexArray(0);
+	glDisable(GL_BLEND);
 }
 
 void Vertex2D::SetUpData()
