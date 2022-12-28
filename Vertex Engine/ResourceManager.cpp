@@ -97,25 +97,21 @@ Shader ResourceManager::loadShaderFromFile(const char* vShaderFile, const char* 
 
 Texture2D ResourceManager::loadTextureFromFile(const char* file)
 {
-    // create texture object
     Texture2D texture;
     
-    // load image
     int width, height, nrChannels;
     unsigned char* data = stbi_load(file, &width, &height, &nrChannels, 0);
 
-    // now generate texture
 
-    if (nrChannels == 3) {
+    if (nrChannels == 3)
+    {
         texture.Internal_Format = GL_RGB;
         texture.Image_Format = GL_RGB;
-        std::cout << "VERTEX ERROR: NOT transparent " << file << std::endl;
     }
     else if (nrChannels == 4) 
     {
         texture.Internal_Format = GL_RGBA;
         texture.Image_Format = GL_RGBA;
-        std::cout << "VERTEX ERROR: Transparent " << file << std::endl;
     }
     else {
         
@@ -125,6 +121,5 @@ Texture2D ResourceManager::loadTextureFromFile(const char* file)
     texture.Generate(width, height, data);
     
     stbi_image_free(data);
-    // and finally free image data
     return texture;
 }

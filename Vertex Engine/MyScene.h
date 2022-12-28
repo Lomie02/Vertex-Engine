@@ -43,6 +43,7 @@ private:
 	VertexText2D* m_TextRenderer;
 	GameObject* m_Object;
 	GameObject* m_Object2;
+	GameObject* m_Canvas;
 
 	float counter;
 	Camera* m_MainCamera;

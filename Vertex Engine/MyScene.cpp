@@ -38,9 +38,11 @@ void MyScene::Awake()
 
 	ResourceManager::LoadTexture("Builds/Textures/PowerIcon.png", "Vertex");
 	ResourceManager::LoadTexture("Builds/Textures/Huggy.png", "boy1");
+	ResourceManager::LoadTexture("Builds/Textures/UI_Canvas.png", "Canvas");
 
 	m_Object = new GameObject("Huggy", true);
 	m_Object2 = new GameObject("Animation", true);
+	m_Canvas = new GameObject("Canvas", true);
 
 	m_MainCamera = new Camera();
 
@@ -48,6 +50,8 @@ void MyScene::Awake()
 
 	m_Object->material.baseTexture = ResourceManager::GetTexture("Vertex");
 	m_Object2->material.baseTexture = ResourceManager::GetTexture("boy1");
+	m_Canvas->material.baseTexture = ResourceManager::GetTexture("Canvas");
+
 	m_Object2->material.colour = glm::vec3(1, 0, 0);
 	m_Manager.Register(m_Object);
 	m_Manager.Register(m_Object2);
@@ -65,8 +69,11 @@ void MyScene::Awake()
 	m_Body->material.colour = glm::vec3(1,0,1);
 	m_Manager.Register(m_Body);
 
+	m_Canvas->transform.size = glm::vec2(1280, 720);
+
 	m_Anim->SetMaster(m_Object2);
 	m_Manager.Register(m_Anim);
+	m_Manager.Register(m_Canvas);
 }
 
 void MyScene::Start()
