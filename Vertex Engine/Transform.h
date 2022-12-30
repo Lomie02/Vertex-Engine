@@ -8,6 +8,10 @@ public:
 	glm::vec2 localPosition;
 	float rotation;
 	glm::vec2 size;
+
+	void SetSize(float x, float y);
+	glm::vec2 GetSize() {return size;}
+
 	void SetScale(float _scale);
 	void Reset();
 private:
