@@ -7,6 +7,11 @@
 #include <string>
 #include "ext.hpp"
 
+enum LensMode {
+	Ortho = 0,
+	Perspective,
+};
+
 class Camera : public GameObject
 {
 public:
@@ -27,13 +32,13 @@ public:
 
 	float far = 1.0f;
 	float near = -1.0f;
-	float zoom = 2.0f;
+	float zoom = 10.0f;
 private:
 
 	glm::mat4 m_ProjectionMat;
 	glm::mat4 m_ViewMat;
 	glm::mat4 m_ViewProjection;
-
+	LensMode m_LensMode = Ortho;
 
 };
 

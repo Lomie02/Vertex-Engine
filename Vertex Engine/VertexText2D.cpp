@@ -12,8 +12,6 @@ VertexText2D::VertexText2D(unsigned int width, unsigned int height)
 	this->TextShader = ResourceManager::LoadShader("Builds/Shaders/text2d.vs", "Builds/Shaders/text2d.frag", nullptr, "Text");
 	this->TextShader.SetInteger("text", 0);
 
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
@@ -92,6 +90,7 @@ void VertexText2D::Text2D(std::string text, float x, float y, float scale, glm::
     this->TextShader.Use();
     this->TextShader.SetVector3f("textColor", color);
     glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     glActiveTexture(GL_TEXTURE0);
     glBindVertexArray(this->VAO);

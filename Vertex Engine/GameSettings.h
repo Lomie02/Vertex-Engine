@@ -11,7 +11,7 @@
 #define ENGINE_EDITION "Vertex Engine 2D"
 
 // Change to true if your game is finished & the game will be put into play mode by itself.
-#define FINAL_BUILD false
+#define FINAL_BUILD true
 
 // ============================================== 
 //	SCREEN

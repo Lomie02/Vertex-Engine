@@ -2,6 +2,8 @@
 #include <iostream>
 #include "ResourceManager.h"
 #include <Windows.h>
+#include "glm.hpp"
+#include "glad.h"
 
 void AssetManager::Register(GameObject* _object)
 {
@@ -109,38 +111,39 @@ void AssetManager::ConfigureSystems()
 
 		if (m_UiButtonObjects.size() > 0)
 		{
-			//if (glfwGetMouseButton(m_Window, GLFW_MOUSE_BUTTON_1) == GLFW_PRESS)
-			//{
-			//	for (int i = 0; i < m_UiButtonObjects.size(); i++)
-			//	{
-			//		
-			//		double Xpos;
-			//		double Ypos;
-			//
-			//		glfwGetCursorPos(m_Window, &Xpos, &Ypos);
-			//
-			//		float ConPosX = (Xpos / 2.0f);
-			//		float ConPosY = (Ypos / 2.0f);
-			//		
-			//		std::cout << "X: " << ConPosX / 2 << std::endl;
-			//		std::cout << "Y: " << ConPosY / 2 << std::endl;
-			//
-			//		mouse.position.x = ConPosX;
-			//		mouse.position.y = ConPosY;
-			//
-			//		bool colX = m_UiButtonObjects.at(i)->transform.position.x + m_UiButtonObjects.at(i)->transform.size.x <= mouse.position.x
-			//			&& mouse.position.x >= m_UiButtonObjects.at(i)->transform.position.x + m_UiButtonObjects.at(i)->transform.size.x;
-			//
-			//		bool colY = m_UiButtonObjects.at(i)->transform.position.y - m_UiButtonObjects.at(i)->transform.size.y >= mouse.position.y
-			//			&& mouse.position.y >= m_UiButtonObjects.at(i)->transform.position.y - m_UiButtonObjects.at(i)->transform.size.y;
-			//
-			//		if (colX && colY)
-			//		{
-			//			std::cout << "Pressed Button" << std::endl;
-			//			//m_UiButtonObjects.at(i)->Pressed();
-			//		}
-			//	}
-			//}
+			if (glfwGetMouseButton(m_Window, GLFW_MOUSE_BUTTON_1) == GLFW_PRESS)
+			{
+				for (int i = 0; i < m_UiButtonObjects.size(); i++)
+				{
+					glEnable(GL_DEPTH);
+
+					double Xpos;
+					double Ypos;
+
+					glfwGetCursorPos(m_Window, &Xpos, &Ypos);
+
+					mouse.position = glm::unProject(glm::vec3(Xpos,Ypos,0), glm::mat4(1.0f), m_Cameras.at(m_ActiveCamera)->GetProjection(), glm::vec4(0, 0, 1920, 1080));
+
+					std::cout << "Mouse X: " << mouse.position.x << " Mouse Y: " << mouse.position.y << std::endl;
+					std::cout << "Button X: " << m_UiButtonObjects.at(i)->transform.position.x << " Button Y " << m_UiButtonObjects.at(i)->transform.position.y << std::endl;
+
+					//============================================================================
+
+					bool colX = m_UiButtonObjects.at(i)->transform.position.x + m_UiButtonObjects.at(i)->transform.size.x >= mouse.position.x
+						&& mouse.position.x + 0.5f >= m_UiButtonObjects.at(i)->transform.position.x;
+
+					bool colY = m_UiButtonObjects.at(i)->transform.position.y + m_UiButtonObjects.at(i)->transform.size.y >= mouse.position.y
+						&& mouse.position.y + 0.5f >= m_UiButtonObjects.at(i)->transform.position.y;
+					
+					//============================================================================
+
+					if (colX && colY)
+					{
+						std::cout << "Pressed Button" << std::endl;
+						//m_UiButtonObjects.at(i)->Pressed();
+					}
+				}
+			}
 		}
 	}
 }

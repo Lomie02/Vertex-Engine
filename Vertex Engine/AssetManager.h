@@ -45,4 +45,11 @@ private:
 	std::vector<Text*> m_UiTextObjects;
 	int m_ActiveCamera;
 	bool m_ShutDownManager = false;
+
+	float lastX = 1920;
+	float lastY = 1080;
+
+	float yaw = 0;
+	float pitch = 0;
+
 };

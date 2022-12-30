@@ -47,6 +47,7 @@ void MyScene::Awake()
 	m_MainCamera = new Camera();
 
 	m_Button->SetActive(true);
+	m_Button->transform.size = glm::vec2(100,100);
 
 	m_Object->material.baseTexture = ResourceManager::GetTexture("Vertex");
 	m_Object2->material.baseTexture = ResourceManager::GetTexture("boy1");
@@ -63,24 +64,25 @@ void MyScene::Awake()
 	m_Object2->SetCollider(AABB);
 
 	m_Manager.RegisterUi(m_Button);
+	m_Button->material.baseTexture = ResourceManager::GetTexture("boy1");
 	m_Body = new RigidBody("Yep");
 
 	m_Body->material.baseTexture = ResourceManager::GetTexture("boy1");
 	m_Body->material.colour = glm::vec3(1,0,1);
-	m_Manager.Register(m_Body);
+	//m_Manager.Register(m_Body);
 
 	m_Canvas->transform.size = glm::vec2(1280, 720);
 
 	m_Anim->SetMaster(m_Object2);
 	m_Manager.Register(m_Anim);
-	m_Manager.Register(m_Canvas);
+	//m_Manager.Register(m_Canvas);
 }
 
 void MyScene::Start()
 {
 
 	m_Manager.GiveWindow(m_Window);
-	m_Object->transform.size = glm::vec2(1,-1);
+	m_Object->transform.size = glm::vec2(1,1);
 
 	m_Object->transform.position.x = 0;
 	m_Object->transform.position.y = 0;
@@ -91,12 +93,12 @@ void MyScene::Start()
 	m_Body->transform.position.x = 0;
 	m_Body->transform.position.y = 0;
 
-	m_Body->transform.size = glm::vec2(2,-2);
+	m_Body->transform.size = glm::vec2(2,2);
 
-	m_Object2->transform.size = glm::vec2(2, -1);
+	m_Object2->transform.size = glm::vec2(2, 1);
 
 	m_Button->transform.size.x = 2;
-	m_Button->transform.size.y = -1;
+	m_Button->transform.size.y = 1;
 
 	m_Button->text = "Ya boy";
 
