@@ -200,7 +200,6 @@ void AssetManager::ConfigureRenderSystems(Vertex2D* render)
 			}
 		}
 	}
-
 }
 
 void AssetManager::ConfigurePhysics(float fixedDelta)

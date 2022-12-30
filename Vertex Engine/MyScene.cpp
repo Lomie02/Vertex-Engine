@@ -145,7 +145,6 @@ void MyScene::Update(float delta)
 	if (m_Button->Pressed())
 	{
 		std::cout << "PRESSED BUTTON" << std::endl;
-
 		m_Button->CloseEvent();
 	}
 }
