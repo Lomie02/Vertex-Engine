@@ -5,6 +5,8 @@
 #include "glm.hpp"
 #include "glad.h"
 
+#include "GameSettings.h"
+
 void AssetManager::Register(GameObject* _object)
 {
 	m_Objects.push_back(_object);
@@ -122,7 +124,7 @@ void AssetManager::ConfigureSystems()
 
 					glfwGetCursorPos(m_Window, &Xpos, &Ypos);
 
-					mouse.position = glm::unProject(glm::vec3(Xpos,Ypos,0), glm::mat4(1.0f), m_Cameras.at(m_ActiveCamera)->GetProjection(), glm::vec4(0, 0, 1920, 1080));
+					mouse.position = glm::unProject(glm::vec3(Xpos,Ypos,0), glm::mat4(1.0f), m_Cameras.at(m_ActiveCamera)->GetProjection(), glm::vec4(0, 0, PROJECT_RESOLUTION));
 
 					std::cout << "Mouse X: " << mouse.position.x << " Mouse Y: " << mouse.position.y << std::endl;
 					std::cout << "Button X: " << m_UiButtonObjects.at(i)->transform.position.x << " Button Y " << m_UiButtonObjects.at(i)->transform.position.y << std::endl;
@@ -130,17 +132,16 @@ void AssetManager::ConfigureSystems()
 					//============================================================================
 
 					bool colX = m_UiButtonObjects.at(i)->transform.position.x + m_UiButtonObjects.at(i)->transform.size.x >= mouse.position.x
-						&& mouse.position.x + 0.5f >= m_UiButtonObjects.at(i)->transform.position.x;
+						&& mouse.position.x + 0.2f >= m_UiButtonObjects.at(i)->transform.position.x;
 
 					bool colY = m_UiButtonObjects.at(i)->transform.position.y + m_UiButtonObjects.at(i)->transform.size.y >= mouse.position.y
-						&& mouse.position.y + 0.5f >= m_UiButtonObjects.at(i)->transform.position.y;
+						&& mouse.position.y + 0.2f >= m_UiButtonObjects.at(i)->transform.position.y;
 					
 					//============================================================================
 
 					if (colX && colY)
 					{
-						std::cout << "Pressed Button" << std::endl;
-						//m_UiButtonObjects.at(i)->Pressed();
+						m_UiButtonObjects.at(i)->PressEvent();
 					}
 				}
 			}

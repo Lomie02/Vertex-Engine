@@ -41,6 +41,9 @@ public:
 
 	bool Pressed() { return m_WasPressed; }
 	void UpdateButton();
+
+	void PressEvent() { m_WasPressed = true; };
+	void CloseEvent() { m_WasPressed = false; };
 	std::string text = "Button";
 	float size = 2;
 	glm::vec3 colour = glm::vec3(1, 0, 0);

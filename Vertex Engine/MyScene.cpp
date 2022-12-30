@@ -141,6 +141,13 @@ void MyScene::Update(float delta)
 	{
 		m_MainCamera->zoom -= 1 * delta;
 	}
+
+	if (m_Button->Pressed())
+	{
+		std::cout << "PRESSED BUTTON" << std::endl;
+
+		m_Button->CloseEvent();
+	}
 }
 
 void MyScene::LateUpdate(float delta)
