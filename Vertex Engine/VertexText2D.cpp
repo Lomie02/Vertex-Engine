@@ -91,6 +91,8 @@ void VertexText2D::Text2D(std::string text, float x, float y, float scale, glm::
     // activate corresponding render state	
     this->TextShader.Use();
     this->TextShader.SetVector3f("textColor", color);
+    glEnable(GL_BLEND);
+
     glActiveTexture(GL_TEXTURE0);
     glBindVertexArray(this->VAO);
 
@@ -129,4 +131,5 @@ void VertexText2D::Text2D(std::string text, float x, float y, float scale, glm::
     }
     glBindVertexArray(0);
     glBindTexture(GL_TEXTURE_2D, 0);
+    glDisable(GL_BLEND);
 }
