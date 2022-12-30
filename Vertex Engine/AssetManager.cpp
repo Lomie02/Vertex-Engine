@@ -126,8 +126,8 @@ void AssetManager::ConfigureSystems()
 
 					mouse.position = glm::unProject(glm::vec3(Xpos,Ypos,0), glm::mat4(1.0f), m_Cameras.at(m_ActiveCamera)->GetProjection(), glm::vec4(0, 0, PROJECT_RESOLUTION));
 
-					std::cout << "Mouse X: " << mouse.position.x << " Mouse Y: " << mouse.position.y << std::endl;
-					std::cout << "Button X: " << m_UiButtonObjects.at(i)->transform.position.x << " Button Y " << m_UiButtonObjects.at(i)->transform.position.y << std::endl;
+					//std::cout << "Mouse X: " << mouse.position.x << " Mouse Y: " << mouse.position.y << std::endl;
+					//std::cout << "Button X: " << m_UiButtonObjects.at(i)->transform.position.x << " Button Y " << m_UiButtonObjects.at(i)->transform.position.y << std::endl;
 
 					//============================================================================
 

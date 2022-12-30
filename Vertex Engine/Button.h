@@ -10,14 +10,14 @@ public:
 	{ 
 		m_Text = new VertexText2D(1920,1080);
 		material.baseTexture = ResourceManager::GetTexture("UI_Button");
-		m_Text->Load("Builds/fonts/arial.ttf", 2);
+		m_Text->Load("Builds/fonts/arial.ttf", size);
 		UpdateButton();
 	}
 	Button(const char* Name) : GameObject(Name)
 	{ 
 		m_Text = new VertexText2D(1920, 1080); 
 		material.baseTexture = ResourceManager::GetTexture("UI_Button");
-		m_Text->Load("Builds/fonts/arial.ttf", 2);
+		m_Text->Load("Builds/fonts/arial.ttf", size);
 		UpdateButton();
 	}
 	Button(const char* Name, std::string _text) : GameObject(Name)
@@ -25,7 +25,7 @@ public:
 
 		m_Text = new VertexText2D(1920, 1080);
 		material.baseTexture = ResourceManager::GetTexture("UI_Button");
-		m_Text->Load("Builds/fonts/arial.ttf", 2);
+		m_Text->Load("Builds/fonts/arial.ttf", size);
 		text = _text;
 		UpdateButton();
 	}
@@ -45,8 +45,10 @@ public:
 	void PressEvent() { m_WasPressed = true; };
 	void CloseEvent() { m_WasPressed = false; };
 	std::string text = "Button";
-	float size = 2;
+	float size = 0.1f;
 	glm::vec3 colour = glm::vec3(1, 0, 0);
+
+	VertexText2D* GetVertexText() { return m_Text; }
 
 private:
 	bool m_WasPressed = false;

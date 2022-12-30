@@ -8,5 +8,5 @@ Button::~Button()
 
 void Button::UpdateButton()
 {
-	m_Text->Text2D(text, transform.position.x, transform.position.y, size, colour);
+	m_Text->Text2D("Button", transform.position.x, transform.position.y, size, colour);
 }
