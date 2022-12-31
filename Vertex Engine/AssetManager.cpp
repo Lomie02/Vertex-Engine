@@ -146,7 +146,7 @@ void AssetManager::ConfigureRenderSystems(Vertex2D* render)
 		{
 			if (m_Objects.at(i)->m_Active == true)
 			{
-				render->DrawSprite(m_Objects.at(i)->material, m_Objects.at(i)->transform.position, m_Objects.at(i)->transform.size, m_Objects.at(i)->transform.rotation, m_Cameras.at(m_ActiveCamera)->GetProjection());
+				render->DrawSprite(m_Objects.at(i)->material, m_Objects.at(i)->transform.position, m_Objects.at(i)->transform.size, m_Objects.at(i)->transform.rotation, m_Objects.at(i)->transform.scale, m_Cameras.at(m_ActiveCamera)->GetProjection());
 				m_Cameras.at(m_ActiveCamera)->ConfigureSystems();
 				m_Objects.at(i)->ConfigureSystems();
 			}
@@ -159,7 +159,7 @@ void AssetManager::ConfigureRenderSystems(Vertex2D* render)
 		{
 			if (m_PhysicsObjects.at(i)->m_Active == true)
 			{
-				render->DrawSprite(m_PhysicsObjects.at(i)->material, m_PhysicsObjects.at(i)->transform.position, m_PhysicsObjects.at(i)->transform.size, m_PhysicsObjects.at(i)->transform.rotation, m_Cameras.at(m_ActiveCamera)->GetProjection());
+				render->DrawSprite(m_PhysicsObjects.at(i)->material, m_PhysicsObjects.at(i)->transform.position, m_PhysicsObjects.at(i)->transform.size, m_PhysicsObjects.at(i)->transform.rotation,m_PhysicsObjects.at(i)->transform.scale, m_Cameras.at(m_ActiveCamera)->GetProjection());
 				m_PhysicsObjects.at(i)->ConfigureSystems();
 			}
 		}
@@ -172,7 +172,7 @@ void AssetManager::ConfigureRenderSystems(Vertex2D* render)
 			if (m_UiObjects.at(i)->m_Active == true)
 			{
 				m_UiObjects.at(i)->ConfigureSystems();
-				render->DrawSprite(m_UiObjects.at(i)->material, m_UiObjects.at(i)->transform.position, m_UiObjects.at(i)->transform.size, m_UiObjects.at(i)->transform.rotation, m_Cameras.at(m_ActiveCamera)->GetProjection());
+				render->DrawSprite(m_UiObjects.at(i)->material, m_UiObjects.at(i)->transform.position, m_UiObjects.at(i)->transform.size, m_UiObjects.at(i)->transform.rotation,m_UiObjects.at(i)->transform.scale, m_Cameras.at(m_ActiveCamera)->GetProjection());
 			}
 		}
 	}
@@ -184,7 +184,7 @@ void AssetManager::ConfigureRenderSystems(Vertex2D* render)
 			if (m_UiButtonObjects.at(i)->m_Active == true)
 			{
 				m_UiButtonObjects.at(i)->ConfigureSystems();
-				render->DrawSprite(m_UiButtonObjects.at(i)->material, m_UiButtonObjects.at(i)->transform.position, m_UiButtonObjects.at(i)->transform.size, m_UiButtonObjects.at(i)->transform.rotation, m_Cameras.at(m_ActiveCamera)->GetProjection());
+				render->DrawSprite(m_UiButtonObjects.at(i)->material, m_UiButtonObjects.at(i)->transform.position, m_UiButtonObjects.at(i)->transform.size, m_UiButtonObjects.at(i)->transform.rotation, m_UiButtonObjects.at(i)->transform.scale, m_Cameras.at(m_ActiveCamera)->GetProjection());
 				m_UiButtonObjects.at(i)->UpdateButton();
 			}
 		}
@@ -270,7 +270,6 @@ bool AssetManager::Raycast2D(glm::vec2 _pos, glm::vec2 _dir, GameObject& _out, f
 	}*/
 
 	//std::cout << "Dir: " << _dir.x << " | " << _dir.y << std::endl;
-
 
 	for (int j = 0; j < length; j++)
 	{

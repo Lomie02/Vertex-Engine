@@ -6,12 +6,6 @@ void Transform::SetSize(float x, float y)
 	size.y = y * scale;
 }
 
-void Transform::SetScale(float _scale)
-{
-	size.x = _scale;
-	size.y = -_scale;
-}
-
 void Transform::Reset()
 {
 	position.x = 0;

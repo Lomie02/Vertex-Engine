@@ -254,10 +254,8 @@ void Application::Editor()
 		ImGui::Text("Transform");
 		ImGui::InputFloat2("Position", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selected)->transform.position.x);
 		ImGui::InputFloat("Rotation", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selected)->transform.rotation);
-		if(ImGui::InputFloat("Scale", &ScaleAmount))
-		{
-			m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selected)->transform.SetScale(ScaleAmount);
-		}
+		ImGui::InputFloat("Scale", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selected)->transform.scale);
+		
 		ImGui::InputFloat2("Size", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selected)->transform.size.x);
 		ImGui::EndChild();
 

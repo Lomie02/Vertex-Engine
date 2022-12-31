@@ -11,7 +11,7 @@ Vertex2D::~Vertex2D()
 	glDeleteVertexArrays(1, &this->m_quadVAO);
 }
 
-void Vertex2D::DrawSprite(Material& material, glm::vec2 position, glm::vec2 size, float rotate, glm::mat4 per)
+void Vertex2D::DrawSprite(Material& material, glm::vec2 position, glm::vec2 size, float rotate, float scale, glm::mat4 per)
 {
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -26,7 +26,7 @@ void Vertex2D::DrawSprite(Material& material, glm::vec2 position, glm::vec2 size
 	model = glm::rotate(model, glm::radians(rotate), glm::vec3(0.0f, 0.0f, 1.0f));
 	model = glm::translate(model, glm::vec3(-0.5f * size.x, -0.5f * -size.y, 0.0f));
 
-	model = glm::scale(model, glm::vec3(size.x,-size.y, 1.0f));
+	model = glm::scale(model, glm::vec3(size.x * scale ,-size.y * scale, 1.0f));
 	this->m_Shader.SetMatrix4("model", model);
 	this->m_Shader.SetMatrix4("pro", per);
 	this->m_Shader.SetVector3f("spriteColor", material.colour);

@@ -64,7 +64,6 @@ void MyScene::Awake()
 	m_Object2->SetCollider(AABB);
 
 	m_Manager.RegisterUi(m_Button);
-	m_Button->material.baseTexture = ResourceManager::GetTexture("boy1");
 	m_Body = new RigidBody("Yep");
 
 	m_Body->material.baseTexture = ResourceManager::GetTexture("boy1");
@@ -72,10 +71,9 @@ void MyScene::Awake()
 	//m_Manager.Register(m_Body);
 
 	m_Canvas->transform.size = glm::vec2(1280, 720);
-
 	m_Anim->SetMaster(m_Object2);
 	m_Manager.Register(m_Anim);
-	//m_Manager.Register(m_Canvas);
+	m_Manager.Register(m_Canvas);
 }
 
 void MyScene::Start()

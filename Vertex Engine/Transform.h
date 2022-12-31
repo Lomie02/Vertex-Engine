@@ -12,9 +12,8 @@ public:
 	void SetSize(float x, float y);
 	glm::vec2 GetSize() {return size;}
 
-	void SetScale(float _scale);
+	float scale = 1.0f;
 	void Reset();
 private:
 
-	float scale;
 };
