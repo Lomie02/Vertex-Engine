@@ -99,6 +99,7 @@ bool AssetManager::OnTrigger(GameObject* A, GameObject* B)
 
 void AssetManager::ConfigureSystems()
 {
+	ConfigureMouse();
 	if (!m_ShutDownManager) {
 
 		if (m_Cameras.size() > 0)
@@ -117,18 +118,6 @@ void AssetManager::ConfigureSystems()
 			{
 				for (int i = 0; i < m_UiButtonObjects.size(); i++)
 				{
-					glEnable(GL_DEPTH);
-
-					double Xpos;
-					double Ypos;
-
-					glfwGetCursorPos(m_Window, &Xpos, &Ypos);
-
-					mouse.position = glm::unProject(glm::vec3(Xpos,Ypos,0), glm::mat4(1.0f), m_Cameras.at(m_ActiveCamera)->GetProjection(), glm::vec4(0, 0, PROJECT_RESOLUTION));
-
-					//std::cout << "Mouse X: " << mouse.position.x << " Mouse Y: " << mouse.position.y << std::endl;
-					//std::cout << "Button X: " << m_UiButtonObjects.at(i)->transform.position.x << " Button Y " << m_UiButtonObjects.at(i)->transform.position.y << std::endl;
-
 					//============================================================================
 
 					bool colX = m_UiButtonObjects.at(i)->transform.position.x + m_UiButtonObjects.at(i)->transform.size.x >= mouse.position.x
@@ -136,7 +125,7 @@ void AssetManager::ConfigureSystems()
 
 					bool colY = m_UiButtonObjects.at(i)->transform.position.y + m_UiButtonObjects.at(i)->transform.size.y >= mouse.position.y
 						&& mouse.position.y + 0.2f >= m_UiButtonObjects.at(i)->transform.position.y;
-					
+
 					//============================================================================
 
 					if (colX && colY)
@@ -229,12 +218,71 @@ void AssetManager::SetActiveCamera(int _index)
 
 bool AssetManager::MousePick(GameObject* _target)
 {
+	if (m_Objects.size() > 0)
+	{
+		for (int i = 0; i < m_Objects.size(); i++)
+		{
+			if (_target->name == m_Objects.at(i)->name)
+			{
+
+				//============================================================================
+
+				bool colX = m_UiButtonObjects.at(i)->transform.position.x + m_UiButtonObjects.at(i)->transform.size.x >= mouse.position.x
+					&& mouse.position.x + 0.2f >= m_UiButtonObjects.at(i)->transform.position.x;
+
+				bool colY = m_UiButtonObjects.at(i)->transform.position.y + m_UiButtonObjects.at(i)->transform.size.y >= mouse.position.y
+					&& mouse.position.y + 0.2f >= m_UiButtonObjects.at(i)->transform.position.y;
+
+				//============================================================================
+
+				if (colX && colY)
+				{
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 	return false;
 }
 
 bool AssetManager::Raycast2D(glm::vec2 _pos, glm::vec2 _dir, GameObject* _out, float length)
 {
+	GameObject Ray;
+	Ray.transform.position = _pos;
+
+	glm::vec2 Direction = Ray.transform.position + _dir;
+	Direction = glm::normalize(Direction);
+
+	for (int i = 0; i < length; i++)
+	{
+		Ray.transform.position += Direction;
+
+		bool colX = m_Objects.at(i)->transform.position.x + m_Objects.at(i)->transform.size.x >= mouse.position.x
+			&& mouse.position.x + 0.2f >= m_Objects.at(i)->transform.position.x;
+
+		bool colY = m_Objects.at(i)->transform.position.y + m_Objects.at(i)->transform.size.y >= mouse.position.y
+			&& mouse.position.y + 0.2f >= m_Objects.at(i)->transform.position.y;
+
+
+		if (colX && colY)
+		{
+			_out = m_Objects.at(i);
+			return true;
+		}
+	}
+
 	return false;
+}
+
+void AssetManager::ConfigureMouse()
+{
+	double Xpos;
+	double Ypos;
+
+	glfwGetCursorPos(m_Window, &Xpos, &Ypos);
+
+	mouse.position = glm::unProject(glm::vec3(Xpos, Ypos, 0), glm::mat4(1.0f), m_Cameras.at(m_ActiveCamera)->GetProjection(), glm::vec4(0, 0, PROJECT_RESOLUTION));
 }
 
 void AssetManager::LogEvents()
