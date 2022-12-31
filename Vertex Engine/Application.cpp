@@ -103,6 +103,24 @@ void Application::StartUp()
 
 	m_SceneManager = new SceneManager();
 
+	char other1[] = PROJECT_ICON;
+
+	char name1[30] = "Builds/Textures/Icons/";
+
+	strcat(name, other);
+
+	Texture2D data;
+	ResourceManager::LoadTexture(name1, "vertex_icon");
+
+	data = ResourceManager::GetTexture("vertex_icon");
+
+	GLFWimage Icons[1];
+	Icons[0].height = data.Height;
+	Icons[0].width = data.Width;
+	Icons[0].pixels = data.data;
+
+	glfwSetWindowIcon(m_GameWindow, 1, Icons);
+
 	if (VSYNC)
 	{
 		glfwSwapInterval(true ? 1 : 0);

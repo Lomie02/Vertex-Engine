@@ -22,7 +22,7 @@ void Texture2D::Generate(unsigned int width, unsigned int height, unsigned char*
 {
     this->Width = width;
     this->Height = height;
-
+    this->data = data;
     // create Texture
     glBindTexture(GL_TEXTURE_2D, this->ID);
     glTexImage2D(GL_TEXTURE_2D, 0, this->Internal_Format, width, height, 0, this->Image_Format, GL_UNSIGNED_BYTE, data);
