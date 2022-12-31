@@ -33,6 +33,8 @@ public:
 	std::vector<Camera*> m_Cameras;
 	std::vector<Animator*> m_Animators;
 
+	bool MousePick(GameObject* _target);
+	bool Raycast2D(glm::vec2 _pos, glm::vec2 _dir ,GameObject* _out = nullptr, float length = 100.0f );
 private:
 	GLFWwindow* m_Window;
 	Transform mouse;
