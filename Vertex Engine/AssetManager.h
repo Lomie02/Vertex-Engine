@@ -34,7 +34,9 @@ public:
 	std::vector<Animator*> m_Animators;
 
 	bool MousePick(GameObject* _target);
-	bool Raycast2D(glm::vec2 _pos, glm::vec2 _dir ,GameObject* _out = nullptr, float length = 100.0f );
+	bool Raycast2D(glm::vec2 _pos, glm::vec2 _dir, GameObject& _out, float length = 100.0f);
+
+	glm::vec2 GetMousePosition() { ConfigureMouse(); return mouse.position; }
 private:
 	void ConfigureMouse();
 

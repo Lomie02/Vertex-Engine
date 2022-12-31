@@ -11,7 +11,7 @@ MyScene::MyScene() : VertexScene("DEFAULT_SCENE_VERTEX")
 }
 
 MyScene::MyScene(const char _name[]) : VertexScene(_name)
-{	
+{
 	Awake();
 }
 
@@ -47,7 +47,7 @@ void MyScene::Awake()
 	m_MainCamera = new Camera();
 
 	m_Button->SetActive(true);
-	m_Button->transform.size = glm::vec2(100,100);
+	m_Button->transform.size = glm::vec2(100, 100);
 
 	m_Object->material.baseTexture = ResourceManager::GetTexture("Vertex");
 	m_Object2->material.baseTexture = ResourceManager::GetTexture("boy1");
@@ -56,7 +56,7 @@ void MyScene::Awake()
 	m_Object2->material.colour = glm::vec3(1, 0, 0);
 	m_Manager.Register(m_Object);
 	m_Manager.Register(m_Object2);
-	
+
 	m_Manager.Register(m_MainCamera);
 	m_MainCamera->transform.rotation = 0;
 
@@ -68,7 +68,7 @@ void MyScene::Awake()
 	m_Body = new RigidBody("Yep");
 
 	m_Body->material.baseTexture = ResourceManager::GetTexture("boy1");
-	m_Body->material.colour = glm::vec3(1,0,1);
+	m_Body->material.colour = glm::vec3(1, 0, 1);
 	//m_Manager.Register(m_Body);
 
 	m_Canvas->transform.size = glm::vec2(1280, 720);
@@ -82,7 +82,7 @@ void MyScene::Start()
 {
 
 	m_Manager.GiveWindow(m_Window);
-	m_Object->transform.size = glm::vec2(1,1);
+	m_Object->transform.size = glm::vec2(1, 1);
 
 	m_Object->transform.position.x = 0;
 	m_Object->transform.position.y = 0;
@@ -93,7 +93,7 @@ void MyScene::Start()
 	m_Body->transform.position.x = 0;
 	m_Body->transform.position.y = 0;
 
-	m_Body->transform.size = glm::vec2(2,2);
+	m_Body->transform.size = glm::vec2(2, 2);
 
 	m_Object2->transform.size = glm::vec2(2, 1);
 
@@ -105,7 +105,7 @@ void MyScene::Start()
 	m_MainCamera->transform.position.x = 0;
 	m_MainCamera->transform.position.y = 0;
 
-	glClearColor(0.2f,0.2f,0.2f,0);
+	glClearColor(0.2f, 0.2f, 0.2f, 0);
 }
 
 void MyScene::Update(float delta)
@@ -116,30 +116,40 @@ void MyScene::Update(float delta)
 	{
 		m_MainCamera->transform.position.y += 5 * delta;
 	}
-	
+
 	if (glfwGetKey(m_Window, GLFW_KEY_S) == GLFW_PRESS)
 	{
 		m_MainCamera->transform.position.y -= 5 * delta;
 	}
-	
+
 	if (glfwGetKey(m_Window, GLFW_KEY_A) == GLFW_PRESS)
 	{
 		m_MainCamera->transform.position.x -= 5 * delta;
 	}
-	
+
 	if (glfwGetKey(m_Window, GLFW_KEY_D) == GLFW_PRESS)
 	{
 		m_MainCamera->transform.position.x += 5 * delta;
 	}
-	
+
 	if (glfwGetKey(m_Window, GLFW_KEY_Q) == GLFW_PRESS)
 	{
 		m_MainCamera->zoom += 1 * delta;
 	}
-	
+
 	if (glfwGetKey(m_Window, GLFW_KEY_E) == GLFW_PRESS)
 	{
 		m_MainCamera->zoom -= 1 * delta;
+	}
+
+	if (glfwGetKey(m_Window, GLFW_KEY_SPACE) == GLFW_PRESS)
+	{
+		GameObject cast;
+
+		if (m_Manager.Raycast2D(m_Manager.GetMousePosition(), glm::vec2(0,1), cast, 5.0f))
+		{
+			std::cout << cast.name << std::endl;
+		}
 	}
 
 	if (m_Button->Pressed())
@@ -164,5 +174,5 @@ void MyScene::FixedUpdate(float fixedDelta)
 void MyScene::Rendering(Vertex2D* render)
 {
 	m_Manager.ConfigureRenderSystems(render);
-	m_TextRenderer->Text2D("Vertex Engine", 200,200, 1,glm::vec3(0,0,1));
+	m_TextRenderer->Text2D("Vertex Engine", 200, 200, 1, glm::vec3(0, 0, 1));
 }

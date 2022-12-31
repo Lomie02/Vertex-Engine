@@ -99,7 +99,6 @@ bool AssetManager::OnTrigger(GameObject* A, GameObject* B)
 
 void AssetManager::ConfigureSystems()
 {
-	ConfigureMouse();
 	if (!m_ShutDownManager) {
 
 		if (m_Cameras.size() > 0)
@@ -119,6 +118,7 @@ void AssetManager::ConfigureSystems()
 				for (int i = 0; i < m_UiButtonObjects.size(); i++)
 				{
 					//============================================================================
+					ConfigureMouse();
 
 					bool colX = m_UiButtonObjects.at(i)->transform.position.x + m_UiButtonObjects.at(i)->transform.size.x >= mouse.position.x
 						&& mouse.position.x + 0.2f >= m_UiButtonObjects.at(i)->transform.position.x;
@@ -226,6 +226,7 @@ bool AssetManager::MousePick(GameObject* _target)
 			{
 
 				//============================================================================
+				ConfigureMouse();
 
 				bool colX = m_UiButtonObjects.at(i)->transform.position.x + m_UiButtonObjects.at(i)->transform.size.x >= mouse.position.x
 					&& mouse.position.x + 0.2f >= m_UiButtonObjects.at(i)->transform.position.x;
@@ -246,31 +247,59 @@ bool AssetManager::MousePick(GameObject* _target)
 	return false;
 }
 
-bool AssetManager::Raycast2D(glm::vec2 _pos, glm::vec2 _dir, GameObject* _out, float length)
+bool AssetManager::Raycast2D(glm::vec2 _pos, glm::vec2 _dir, GameObject& _out, float length)
 {
-	GameObject Ray;
-	Ray.transform.position = _pos;
+	GameObject* Ray = new GameObject();
 
-	glm::vec2 Direction = Ray.transform.position + _dir;
-	Direction = glm::normalize(Direction);
+	Ray->transform.position = _pos;
 
-	for (int i = 0; i < length; i++)
+	/*if (_dir.x <= -1) {
+		_dir.x = -1;
+	}
+	else if (_dir.x >= 1) {
+
+		_dir.x = 1;
+	}
+
+	if (_dir.y <= -1) {
+		_dir.y = -1;
+	}
+	else if (_dir.y >= 1) {
+
+		_dir.y = 1;
+	}*/
+
+	//std::cout << "Dir: " << _dir.x << " | " << _dir.y << std::endl;
+
+
+	for (int j = 0; j < length; j++)
 	{
-		Ray.transform.position += Direction;
+		Ray->transform.position += _dir;
 
-		bool colX = m_Objects.at(i)->transform.position.x + m_Objects.at(i)->transform.size.x >= mouse.position.x
-			&& mouse.position.x + 0.2f >= m_Objects.at(i)->transform.position.x;
+		//std::cout << "Raycast Position: " << Ray.transform.position.x << " | " << Ray.transform.position.y << std::endl;
 
-		bool colY = m_Objects.at(i)->transform.position.y + m_Objects.at(i)->transform.size.y >= mouse.position.y
-			&& mouse.position.y + 0.2f >= m_Objects.at(i)->transform.position.y;
-
-
-		if (colX && colY)
+		for (int i = 0; i < m_Objects.size(); i++)
 		{
-			_out = m_Objects.at(i);
-			return true;
+			bool colX = m_Objects.at(i)->transform.position.x + m_Objects.at(i)->transform.size.x >= Ray->transform.position.x
+				&& Ray->transform.position.x + 0.2f >= m_Objects.at(i)->transform.position.x;
+
+			bool colY = m_Objects.at(i)->transform.position.y + m_Objects.at(i)->transform.size.y >= Ray->transform.position.y
+				&& Ray->transform.position.y + 0.2f >= m_Objects.at(i)->transform.position.y;
+
+			if (colX && colY)
+			{
+				delete Ray;
+				Ray = nullptr;
+
+				_out = *m_Objects.at(i);
+
+				return true;
+			}
 		}
 	}
+
+	delete Ray;
+	Ray = nullptr;
 
 	return false;
 }
