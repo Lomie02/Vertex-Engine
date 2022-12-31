@@ -333,7 +333,7 @@ void Application::Editor()
 		ImGui::Spacing();
 	}
 
-	if (ImGui::Button("Toggle Fullscreen."))
+	/*if (ImGui::Button("Toggle Fullscreen."))
 	{
 		if (m_Mode == EDITOR_PLAY) {
 
@@ -350,7 +350,7 @@ void Application::Editor()
 				m_EditorFullScreen = true;
 			}
 		}
-	}
+	}*/
 
 	if (ImGui::ArrowButton("PlayAnimation", ImGuiDir_Right) && m_Mode == EDITOR_PLAY)
 	{
