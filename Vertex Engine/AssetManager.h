@@ -37,9 +37,11 @@ public:
 	bool Raycast2D(glm::vec2 _pos, glm::vec2 _dir, GameObject& _out, float length = 100.0f);
 
 	glm::vec2 GetMousePosition() { ConfigureMouse(); return mouse.position; }
+
+	void ConfigSetup();
+	void ExecuteAll();
 private:
 	void ConfigureMouse();
-
 	GLFWwindow* m_Window;
 	Transform mouse;
 	float m_TimeStep = 0.01f;

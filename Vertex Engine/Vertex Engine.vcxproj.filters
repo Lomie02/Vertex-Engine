@@ -147,6 +147,9 @@
     <ClCompile Include="Animator.cpp">
       <Filter>Animation</Filter>
     </ClCompile>
+    <ClCompile Include="VertexPrefs.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="glad.h">
@@ -253,6 +256,9 @@
     </ClInclude>
     <ClInclude Include="Animator.h">
       <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexPrefs.h">
+      <Filter>Resource Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

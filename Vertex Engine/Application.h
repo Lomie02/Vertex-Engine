@@ -8,6 +8,12 @@
 
 #define SIZE m_Size
 
+enum EditorWindow {
+	Main = 0,
+	Animation,
+	HudEditor,
+};
+
 enum EditorMode {
 	EDITOR = 0,
 	PLAY,
@@ -25,7 +31,6 @@ public:
 	void Start();
 
 	void Update();
-	void Editor();
 
 	GLFWwindow* GetWindow() { return m_GameWindow; }
 
@@ -37,10 +42,16 @@ public:
 
 private:
 
+	void EditorMain();
+	void EditorAnimation();
+	void EditorHud();
+	// Editors
+
 	void FolderCreation();
 	void SceneSetUp();
 	void UpdateEditorMode();
 
+	EditorWindow m_WindowMode = Main;
 	EditorMode m_Mode = EDITOR;
 	GLFWwindow* m_GameWindow = nullptr;
 

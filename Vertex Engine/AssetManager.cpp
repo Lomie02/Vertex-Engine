@@ -6,6 +6,7 @@
 #include "glad.h"
 
 #include "GameSettings.h"
+#include "VertexPrefs.h"
 
 void AssetManager::Register(GameObject* _object)
 {
@@ -301,6 +302,18 @@ bool AssetManager::Raycast2D(glm::vec2 _pos, glm::vec2 _dir, GameObject& _out, f
 	Ray = nullptr;
 
 	return false;
+}
+
+void AssetManager::ConfigSetup()
+{
+	VertexPrefs::GetFile("vertex_scene_data_01.txt", m_Objects);
+	VertexPrefs::GetFile("vertex_scene_data_ui_01.txt", m_UiObjects);
+}
+
+void AssetManager::ExecuteAll()
+{
+	VertexPrefs::SaveFile("vertex_scene_data_01.txt", m_Objects);
+	VertexPrefs::SaveFile("vertex_scene_data_ui_01.txt", m_UiObjects);
 }
 
 void AssetManager::ConfigureMouse()

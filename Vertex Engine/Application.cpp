@@ -67,7 +67,6 @@ void Application::StartUp()
 
 	if (m_Mode == PLAY)
 	{
-
 		if (FULLSCREEN) {
 			GLFWmonitor* monitor;
 			monitor = glfwGetPrimaryMonitor();
@@ -186,7 +185,7 @@ void Application::Update()
 	}
 }
 
-void Application::Editor()
+void Application::EditorMain()
 {
 	static bool ShowHelp;
 	static const char* m_SceneList[MAX_SCENES];
@@ -255,7 +254,7 @@ void Application::Editor()
 		ImGui::InputFloat2("Position", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selected)->transform.position.x);
 		ImGui::InputFloat("Rotation", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selected)->transform.rotation);
 		ImGui::InputFloat("Scale", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selected)->transform.scale);
-		
+
 		ImGui::InputFloat2("Size", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selected)->transform.size.x);
 		ImGui::EndChild();
 
@@ -331,25 +330,6 @@ void Application::Editor()
 		ImGui::Spacing();
 	}
 
-	/*if (ImGui::Button("Toggle Fullscreen."))
-	{
-		if (m_Mode == EDITOR_PLAY) {
-
-			if (m_EditorFullScreen)
-			{
-				glViewport(0.0f, 0.0f, PROJECT_RESOLUTION);
-				glDisable(GL_SCISSOR_TEST);
-				m_EditorFullScreen = false;
-			}
-			else
-			{
-				glViewport(299.973f, 349.968f, 1280, 720);
-				glEnable(GL_SCISSOR_TEST);
-				m_EditorFullScreen = true;
-			}
-		}
-	}*/
-
 	if (ImGui::ArrowButton("PlayAnimation", ImGuiDir_Right) && m_Mode == EDITOR_PLAY)
 	{
 		m_SceneManager->GetCurrentScene()->GetAssets().m_Animators.at(0)->Play();
@@ -421,13 +401,34 @@ void Application::Editor()
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
+void Application::EditorAnimation()
+{
+}
+
+void Application::EditorHud()
+{
+}
+
 void Application::RenderAll()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	m_SceneManager->RenderCurrentScene(m_Renderer);
 	if (m_Mode == EDITOR && !m_EditorFullScreen || m_Mode == EDITOR_PLAY && !m_EditorFullScreen || m_Mode == EDITOR_PAUSED && !m_EditorFullScreen)
 	{
-		Editor();
+		switch (m_WindowMode)
+		{
+		case Main:
+			EditorMain();
+			break;
+
+		case Animation:
+			EditorAnimation();
+			break;
+
+		case HudEditor:
+			EditorHud();
+			break;
+		}
 	}
 
 	glfwSwapBuffers(m_GameWindow);
@@ -495,7 +496,8 @@ void Application::ShutDown()
 		ImGui_ImplGlfw_Shutdown();
 		ImGui::DestroyContext();
 	}
-	glfwTerminate();
+
+	m_SceneManager->GetCurrentScene()->GetAssets().ExecuteAll();
 }
 
 void Application::FolderCreation()

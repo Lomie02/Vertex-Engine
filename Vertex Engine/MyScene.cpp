@@ -79,6 +79,7 @@ void MyScene::Awake()
 void MyScene::Start()
 {
 
+
 	m_Manager.GiveWindow(m_Window);
 	m_Object->transform.size = glm::vec2(1, 1);
 
@@ -104,6 +105,7 @@ void MyScene::Start()
 	m_MainCamera->transform.position.y = 0;
 
 	glClearColor(0.2f, 0.2f, 0.2f, 0);
+	//m_Manager.ConfigSetup();
 }
 
 void MyScene::Update(float delta)
