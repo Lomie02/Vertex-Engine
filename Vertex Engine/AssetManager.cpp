@@ -212,7 +212,6 @@ void AssetManager::ConfigurePhysics(float fixedDelta)
 			{
 				m_PhysicsObjects.at(i)->transform.position += m_PhysicsObjects.at(i)->m_Velocity * fixedDelta;
 				m_PhysicsObjects.at(i)->ApplyForce(m_WorldGravity * m_PhysicsObjects.at(i)->GetMass() * fixedDelta);
-				//std::cout << "Physics: " << m_PhysicsObjects.at(i)->name << " Pos " << m_PhysicsObjects.at(i)->transform.position.x << " | " << m_PhysicsObjects.at(i)->transform.position.y << std::endl;
 			}
 		}
 	}
@@ -226,6 +225,16 @@ void AssetManager::Register(Camera* camera)
 void AssetManager::SetActiveCamera(int _index)
 {
 	m_ActiveCamera = _index;
+}
+
+bool AssetManager::MousePick(GameObject* _target)
+{
+	return false;
+}
+
+bool AssetManager::Raycast2D(glm::vec2 _pos, glm::vec2 _dir, GameObject* _out, float length)
+{
+	return false;
 }
 
 void AssetManager::LogEvents()

@@ -36,6 +36,8 @@ public:
 	bool MousePick(GameObject* _target);
 	bool Raycast2D(glm::vec2 _pos, glm::vec2 _dir ,GameObject* _out = nullptr, float length = 100.0f );
 private:
+	void ConfigureMouse();
+
 	GLFWwindow* m_Window;
 	Transform mouse;
 	float m_TimeStep = 0.01f;
