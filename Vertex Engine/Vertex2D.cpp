@@ -39,6 +39,22 @@ void Vertex2D::DrawSprite(Material& material, glm::vec2 position, glm::vec2 size
 	glDisable(GL_BLEND);
 }
 
+void Vertex2D::DrawLine(glm::vec2 _start, glm::vec2 _end, Material& _mat)
+{
+
+	_start.x = 2 * _start.x / 1920 - 1;
+	_start.y = 2 * _start.y / 1080 - 1;
+
+	_end.x = 2 * _end.x / 1920 - 1;
+	_end.y = 2 * _end.y / 1080 - 1;
+
+	glBegin(GL_LINES);
+	glColor3f(_mat.colour.r,_mat.colour.g, _mat.colour.b);
+	glVertex2f(_start.x, _start.y);
+	glVertex2f(_end.x, _end.y);
+	glEnd();
+}
+
 void Vertex2D::SetUpData()
 {
 	unsigned int VBO;

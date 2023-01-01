@@ -14,6 +14,8 @@
 #include "imgui.h"
 #include <direct.h>
 
+#include "stb_image.h"
+
 #define GL_SILENCE_DEPRECATION
 #pragma warning(disable : 4996);
 
@@ -103,21 +105,30 @@ void Application::StartUp()
 
 	m_SceneManager = new SceneManager();
 
-	char other1[] = PROJECT_ICON;
+	char other1[20] = PROJECT_ICON;
+	char name1[100] = "Builds/Textures/Icons/";
 
-	char name1[30] = "Builds/Textures/Icons/";
-
-	strcat(name, other);
-
+	strcat(name1, other1);
 	Texture2D data;
-	ResourceManager::LoadTexture(name1, "vertex_icon");
 
-	data = ResourceManager::GetTexture("vertex_icon");
+	int width;
+	int height;
+	int channels;
+	unsigned char* picture;
+
+	if (m_Mode == PLAY)
+	{
+		picture = stbi_load(name1, &width, &height, &channels, 4);
+	}
+	else {
+
+		picture = stbi_load("Engine/Icons/vertex_logo.png", &width, &height, &channels, 4);
+	}
 
 	GLFWimage Icons[1];
-	Icons[0].height = data.Height;
-	Icons[0].width = data.Width;
-	Icons[0].pixels = data.data;
+	Icons[0].height = height;
+	Icons[0].width = width;
+	Icons[0].pixels = picture;
 
 	glfwSetWindowIcon(m_GameWindow, 1, Icons);
 
@@ -162,9 +173,9 @@ void Application::StartUp()
 		std::cout << "Vertex Message: Editor Succeded." << std::endl;
 	}
 
-	std::cout << "Vertex Message: Start Up Succeded." << std::endl;
 
 	glClearColor(BACKGROUND_COLOUR);
+	std::cout << "Vertex Message: Start Up Succeded." << std::endl;
 }
 
 void Application::Start()
