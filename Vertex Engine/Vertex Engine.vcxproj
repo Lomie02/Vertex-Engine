@@ -149,7 +149,8 @@
       <AdditionalIncludeDirectories>$(SolutionDir)GLFW; $(SolutionDir)glm;$(SolutionDir)stb;$(SolutionDir)imgui;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>
+      </SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>

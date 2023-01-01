@@ -113,6 +113,7 @@ void Application::StartUp()
 
 	int width;
 	int height;
+
 	int channels;
 	unsigned char* picture;
 
