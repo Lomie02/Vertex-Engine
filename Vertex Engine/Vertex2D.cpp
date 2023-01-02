@@ -1,5 +1,4 @@
 #include "Vertex2D.h"
-
 Vertex2D::Vertex2D(Shader& shader)
 {
 	this->m_Shader = shader;
@@ -13,7 +12,7 @@ Vertex2D::~Vertex2D()
 
 void Vertex2D::DrawSprite(Material& material, glm::vec2 position, glm::vec2 size, float rotate, float scale, glm::mat4 per)
 {
-	glEnable(GL_BLEND);
+	glEnable(GL_BLEND || GL_2D);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	this->m_Shader = material.shader;
@@ -26,7 +25,7 @@ void Vertex2D::DrawSprite(Material& material, glm::vec2 position, glm::vec2 size
 	model = glm::rotate(model, glm::radians(rotate), glm::vec3(0.0f, 0.0f, 1.0f));
 	model = glm::translate(model, glm::vec3(-0.5f * size.x, -0.5f * -size.y, 0.0f));
 
-	model = glm::scale(model, glm::vec3(size.x * scale ,-size.y * scale, 1.0f));
+	model = glm::scale(model, glm::vec3(size.x * scale, -size.y * scale, 1.0f));
 	this->m_Shader.SetMatrix4("model", model);
 	this->m_Shader.SetMatrix4("pro", per);
 	this->m_Shader.SetVector3f("spriteColor", material.colour);
@@ -36,23 +35,18 @@ void Vertex2D::DrawSprite(Material& material, glm::vec2 position, glm::vec2 size
 	glBindVertexArray(this->m_quadVAO);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 	glBindVertexArray(0);
-	glDisable(GL_BLEND);
+	glDisable(GL_BLEND || GL_2D);
 }
 
 void Vertex2D::DrawLine(glm::vec2 _start, glm::vec2 _end, Material& _mat)
 {
+	float Lines[] =
+	{
+		_start.x, _start.y,  _end.x, _end.y,
+	};
 
-	_start.x = 2 * _start.x / 1920 - 1;
-	_start.y = 2 * _start.y / 1080 - 1;
-
-	_end.x = 2 * _end.x / 1920 - 1;
-	_end.y = 2 * _end.y / 1080 - 1;
-
-	glBegin(GL_LINES);
-	glColor3f(_mat.colour.r,_mat.colour.g, _mat.colour.b);
-	glVertex2f(_start.x, _start.y);
-	glVertex2f(_end.x, _end.y);
-	glEnd();
+	glVertexPointer(2, GL_FLOAT,0, Lines);
+	glDrawArrays(GL_LINES,0,2);
 }
 
 void Vertex2D::SetUpData()

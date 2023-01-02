@@ -4,6 +4,10 @@
 // ============================================== 
 #define PROJECT_NAME "My Game"
 #define PROJECT_RESOLUTION 1920, 1080
+
+#define PROJECT_ASPECT_WIDTH 1920
+#define PROJECT_ASPECT_HEIGHT 1080
+
 #define PROJECT_DEVELOPER "Your Name"
 #define PROJECT_COMPANY "Your Company"
 
