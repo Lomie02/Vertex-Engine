@@ -74,7 +74,7 @@ bool AssetManager::OnTrigger(GameObject* A, GameObject* B)
 	Collider type1 = A->GetCollider();
 	Collider type2 = B->GetCollider();
 
-	if (!m_ShutDownManager && type1 != NONE && type1 != NONE) {
+	if (type1 != NONE && type1 != NONE) {
 
 		Transform prev = A->transform;
 		bool colX = A->transform.position.x + A->transform.size.x >= B->transform.position.x
@@ -145,7 +145,9 @@ void AssetManager::ConfigureRenderSystems(Vertex2D* render)
 	{
 		for (int i = 0; i < m_Objects.size(); i++)
 		{
-			if (m_Objects.at(i)->m_Active == true)
+			float WithinDistance = glm::distance(m_Objects.at(i)->transform.position, m_Cameras.at(m_ActiveCamera)->transform.position);
+
+			if (m_Objects.at(i)->m_Active == true && WithinDistance < CAMERA_DISTANCE_RENDER_LIMIT)
 			{
 				render->DrawSprite(m_Objects.at(i)->material, m_Objects.at(i)->transform.position, m_Objects.at(i)->transform.size, m_Objects.at(i)->transform.rotation, m_Objects.at(i)->transform.scale, m_Cameras.at(m_ActiveCamera)->GetProjection());
 				m_Cameras.at(m_ActiveCamera)->ConfigureSystems();
@@ -158,7 +160,8 @@ void AssetManager::ConfigureRenderSystems(Vertex2D* render)
 	{
 		for (int i = 0; i < m_PhysicsObjects.size(); i++)
 		{
-			if (m_PhysicsObjects.at(i)->m_Active == true)
+			float WithinDistance = glm::distance(m_PhysicsObjects.at(i)->transform.position, m_Cameras.at(m_ActiveCamera)->transform.position);
+			if (m_PhysicsObjects.at(i)->m_Active == true && WithinDistance < CAMERA_DISTANCE_RENDER_LIMIT)
 			{
 				render->DrawSprite(m_PhysicsObjects.at(i)->material, m_PhysicsObjects.at(i)->transform.position, m_PhysicsObjects.at(i)->transform.size, m_PhysicsObjects.at(i)->transform.rotation,m_PhysicsObjects.at(i)->transform.scale, m_Cameras.at(m_ActiveCamera)->GetProjection());
 				m_PhysicsObjects.at(i)->ConfigureSystems();
@@ -170,7 +173,8 @@ void AssetManager::ConfigureRenderSystems(Vertex2D* render)
 	{
 		for (int i = 0; i < m_UiObjects.size(); i++)
 		{
-			if (m_UiObjects.at(i)->m_Active == true)
+			float WithinDistance = glm::distance(m_UiObjects.at(i)->transform.position, m_Cameras.at(m_ActiveCamera)->transform.position);
+			if (m_UiObjects.at(i)->m_Active == true && WithinDistance < CAMERA_DISTANCE_RENDER_LIMIT)
 			{
 				m_UiObjects.at(i)->ConfigureSystems();
 				render->DrawSprite(m_UiObjects.at(i)->material, m_UiObjects.at(i)->transform.position, m_UiObjects.at(i)->transform.size, m_UiObjects.at(i)->transform.rotation,m_UiObjects.at(i)->transform.scale, m_Cameras.at(m_ActiveCamera)->GetProjection());
@@ -182,7 +186,8 @@ void AssetManager::ConfigureRenderSystems(Vertex2D* render)
 	{
 		for (int i = 0; i < m_UiButtonObjects.size(); i++)
 		{
-			if (m_UiButtonObjects.at(i)->m_Active == true)
+			float WithinDistance = glm::distance(m_UiButtonObjects.at(i)->transform.position, m_Cameras.at(m_ActiveCamera)->transform.position);
+			if (m_UiButtonObjects.at(i)->m_Active == true && WithinDistance < CAMERA_DISTANCE_RENDER_LIMIT)
 			{
 				m_UiButtonObjects.at(i)->ConfigureSystems();
 				render->DrawSprite(m_UiButtonObjects.at(i)->material, m_UiButtonObjects.at(i)->transform.position, m_UiButtonObjects.at(i)->transform.size, m_UiButtonObjects.at(i)->transform.rotation, m_UiButtonObjects.at(i)->transform.scale, m_Cameras.at(m_ActiveCamera)->GetProjection());

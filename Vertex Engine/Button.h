@@ -3,19 +3,20 @@
 #include <string>
 #include "VertexRenderPackage.h"
 #include "ResourceManager.h"
+#include "GameSettings.h"
 class Button : public GameObject
 {
 public:
 	Button() : GameObject()
 	{ 
-		m_Text = new VertexText2D(1920,1080);
+		m_Text = new VertexText2D(PROJECT_RESOLUTION);
 		material.baseTexture = ResourceManager::GetTexture("UI_Button");
 		m_Text->Load("Builds/fonts/arial.ttf", size);
 		UpdateButton();
 	}
 	Button(const char* Name) : GameObject(Name)
 	{ 
-		m_Text = new VertexText2D(1920, 1080); 
+		m_Text = new VertexText2D(PROJECT_RESOLUTION); 
 		material.baseTexture = ResourceManager::GetTexture("UI_Button");
 		m_Text->Load("Builds/fonts/arial.ttf", size);
 		UpdateButton();
@@ -23,7 +24,7 @@ public:
 	Button(const char* Name, std::string _text) : GameObject(Name)
 	{
 
-		m_Text = new VertexText2D(1920, 1080);
+		m_Text = new VertexText2D(PROJECT_RESOLUTION);
 		material.baseTexture = ResourceManager::GetTexture("UI_Button");
 		m_Text->Load("Builds/fonts/arial.ttf", size);
 		text = _text;
@@ -32,7 +33,7 @@ public:
 	Button(const char* Name, bool active) : GameObject(Name, active)
 	{ 
 		material.baseTexture = ResourceManager::GetTexture("UI_Button");
-		m_Text = new VertexText2D(1920, 1080); 
+		m_Text = new VertexText2D(PROJECT_RESOLUTION);
 		m_Text->Load("Builds/fonts/arial.ttf", size);
 		UpdateButton();
 	}
