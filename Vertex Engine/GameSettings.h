@@ -70,4 +70,4 @@
 // Asset Managers Settings
 // =============================================
 
-#define CAMERA_DISTANCE_RENDER_LIMIT 20.0f
+#define CAMERA_DISTANCE_RENDER_LIMIT 10.0f

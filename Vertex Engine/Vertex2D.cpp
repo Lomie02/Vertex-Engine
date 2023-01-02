@@ -52,16 +52,33 @@ void Vertex2D::DrawLine(glm::vec2 _start, glm::vec2 _end, Material& _mat)
 void Vertex2D::SetUpData()
 {
 	unsigned int VBO;
-	float vertices[] = {
-		// pos      // tex
-	0.0f, 1.0f,		 0.0f, 1.0f,
-	1.0f, 0.0f,		 1.0f, 0.0f,
-	0.0f, 0.0f,		 0.0f, 0.0f,
 
-	0.0f, 1.0f,		 0.0f, 1.0f,
-	1.0f, 1.0f,	     1.0f, 1.0f,
-	1.0f, 0.0f,		 1.0f, 0.0f
-	};
+	m_Vertices.push_back(glm::vec2(0.0f, 1.0f));
+	m_Vertices.push_back(glm::vec2(0.0f, 1.0f));
+
+	m_Vertices.push_back(glm::vec2(1.0f, 0.0f));
+	m_Vertices.push_back(glm::vec2(1.0f, 0.0f));
+
+	m_Vertices.push_back(glm::vec2(0.0f, 0.0f));
+	m_Vertices.push_back(glm::vec2(0.0f, 0.0f));
+
+	m_Vertices.push_back(glm::vec2(0.0f, 1.0f));
+	m_Vertices.push_back(glm::vec2(0.0f, 1.0f));
+
+	m_Vertices.push_back(glm::vec2(1.0f, 1.0f));
+	m_Vertices.push_back(glm::vec2(1.0f, 1.0f));
+
+	m_Vertices.push_back(glm::vec2(1.0f, 0.0f));
+	m_Vertices.push_back(glm::vec2(1.0f, 0.0f));
+
+	float vertices[24];
+	int m_CurrentVertice = 0;
+	for (int i = 0; i < 24; i += 2)
+	{
+		vertices[i] = m_Vertices.at(m_CurrentVertice).x;
+		vertices[i + 1] = m_Vertices.at(m_CurrentVertice).y;
+		m_CurrentVertice++;
+	}
 
 	glGenVertexArrays(1, &this->m_quadVAO);
 	glGenBuffers(1, &VBO);

@@ -70,6 +70,7 @@ void MyScene::Awake()
 	m_Body->material.colour = glm::vec3(1, 0, 1);
 	//m_Manager.Register(m_Body);
 
+	m_MainCamera->SetParent(m_Object);
 	m_Canvas->transform.size = glm::vec2(1280, 720);
 	m_Anim->SetMaster(m_Object2);
 	m_Manager.Register(m_Anim);
@@ -78,7 +79,6 @@ void MyScene::Awake()
 
 void MyScene::Start()
 {
-
 
 	m_Manager.GiveWindow(m_Window);
 	m_Object->transform.size = glm::vec2(1, 1);
@@ -114,22 +114,22 @@ void MyScene::Update(float delta)
 
 	if (glfwGetKey(m_Window, GLFW_KEY_W) == GLFW_PRESS)
 	{
-		m_MainCamera->transform.position.y += 5 * delta;
+		m_Object->transform.position.y += 5 * delta;
 	}
 
 	if (glfwGetKey(m_Window, GLFW_KEY_S) == GLFW_PRESS)
 	{
-		m_MainCamera->transform.position.y -= 5 * delta;
+		m_Object->transform.position.y -= 5 * delta;
 	}
 
 	if (glfwGetKey(m_Window, GLFW_KEY_A) == GLFW_PRESS)
 	{
-		m_MainCamera->transform.position.x -= 5 * delta;
+		m_Object->transform.position.x -= 5 * delta;
 	}
 
 	if (glfwGetKey(m_Window, GLFW_KEY_D) == GLFW_PRESS)
 	{
-		m_MainCamera->transform.position.x += 5 * delta;
+		m_Object->transform.position.x += 5 * delta;
 	}
 
 	if (glfwGetKey(m_Window, GLFW_KEY_Q) == GLFW_PRESS)
@@ -141,6 +141,7 @@ void MyScene::Update(float delta)
 	{
 		m_MainCamera->zoom -= 1 * delta;
 	}
+
 
 	if (glfwGetKey(m_Window, GLFW_KEY_SPACE) == GLFW_PRESS)
 	{
@@ -162,7 +163,7 @@ void MyScene::Update(float delta)
 void MyScene::LateUpdate(float delta)
 {
 	m_Manager.ConfigureSystems();
-	m_Manager.CollisionCheck();
+	//m_Manager.CollisionCheck();
 }
 
 void MyScene::FixedUpdate(float fixedDelta)

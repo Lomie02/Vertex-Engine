@@ -260,5 +260,8 @@
     <ClInclude Include="VertexPrefs.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
+    <ClInclude Include="Collider.h">
+      <Filter>GameObjects</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -206,6 +206,7 @@
     <ClInclude Include="Button.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Clip.h" />
+    <ClInclude Include="Collider.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameSettings.h" />
     <ClInclude Include="glad.h" />

@@ -51,10 +51,10 @@ bool AssetManager::CollisionCheck()
 			if (i != j && type1 == AABB && type2 == AABB)
 			{
 				bool colX = m_Objects.at(i)->transform.position.x + m_Objects.at(i)->transform.size.x >= m_Objects.at(j)->transform.position.x
-					&& m_Objects.at(j)->transform.position.x + m_Objects.at(j)->transform.size.x >= m_Objects.at(i)->transform.position.x;
+					&& m_Objects.at(j)->transform.position.x + m_Objects.at(j)->transform.size.x >= m_UiButtonObjects.at(i)->transform.position.x;
 
-				bool colY = m_Objects.at(i)->transform.position.y - m_Objects.at(i)->transform.size.y >= m_Objects.at(j)->transform.position.y
-					&& m_Objects.at(j)->transform.position.y - m_Objects.at(j)->transform.size.y >= m_Objects.at(i)->transform.position.y;
+				bool colY = m_Objects.at(i)->transform.position.y + m_Objects.at(i)->transform.size.y >= m_Objects.at(j)->transform.position.y
+					&& m_Objects.at(j)->transform.position.y + m_Objects.at(j)->transform.size.y >= m_Objects.at(i)->transform.position.y;
 
 				if (colX && colY)
 				{

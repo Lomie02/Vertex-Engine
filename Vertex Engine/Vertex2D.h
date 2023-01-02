@@ -3,7 +3,7 @@
 #include "Shader.h"
 #include "Texture2D.h"
 #include <map>
-
+#include <vector>
 #include "Material.h"
 struct Letters {
 	unsigned int TextureID;
@@ -29,7 +29,10 @@ public:
 	void DrawLine(glm::vec2 _start, glm::vec2 _end, Material& _mat);
 
 	Shader m_TextShader;
+	std::vector<glm::vec2> GetVertices() { return m_Vertices; }
 private:
+
+	std::vector<glm::vec2> m_Vertices;
 	Shader m_Shader;
 	unsigned int m_quadVAO;
 

@@ -4,7 +4,7 @@
 #include "Texture2D.h"
 #include <list>
 #include "Material.h"
-enum Collider {
+enum Collider { //TODO: remove
 	NONE = 0,
 	AABB,
 	CIRCLE,
@@ -36,7 +36,7 @@ public:
 	Collider GetCollider() { return m_ColliderType; }
 
 private:
-	Collider m_ColliderType = NONE;
+	Collider m_ColliderType = NONE; //TODO: Change this to be the Collider struct instead.
 	GameObject* m_Parent;
 	std::list<GameObject*> m_Children;
 };
