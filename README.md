@@ -10,12 +10,12 @@ next to come:
  • Editor Logger
  • Circle Collision
  
- 1. AABB to Circle, Circle to Circle Collision support (Almost Complete)
+ 1. SAT collision detection to replace AABB 
  2. Scene Manager window automation 
  3. Physics Engine Simulations (Almost Complete)
  4. Vertex Canvas (UI Editor)
  5. OpenAL Intergration
- 6. 3rd Editor Mode (Toggle Editor while Playing)
+ 6. Complete
  7. Particle System
  8. (WIP) Editor Logger (Allow the Editor to write to disk objects new locations)
  9. Vertex2D Sprite Batch Support
