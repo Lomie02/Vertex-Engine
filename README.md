@@ -10,6 +10,9 @@ next to come:
  • Editor Logger
  • Circle Collision
  
+
+Major Features To Come:
+
  1. SAT collision detection to replace AABB 
  2. Scene Manager window automation 
  3. Physics Engine Simulations (Almost Complete)
@@ -23,5 +26,32 @@ next to come:
  11. PlayerController Component
  12. 2D Light Support
  13. AI Agent Comonent (Subject To Change)
+ 14. GameObject component systems
+ 15. Scene Manager singleton conversion.
+ 16. Component Base class
+ 17. AssetManager to update componenets on a game object
  
- VERTEX ENGINE 3D:
+Asset Manager Changes To Come:
+
+ 1. Update components.
+ 2. Scripts can be added as components.
+ 3. Will Update gameobjects that are registered.
+ 4. GameObjects can be un-registered
+
+GameObjects Changes To Come:
+
+ 1. AddGameObject Function
+ 2. RemoveGameObject Function
+ 3. GetComponent Function
+ 4. FindObject Function (subject to change)
+ 5. Tags
+
+Editor Changes To Come:
+
+ 1. Gizmos
+ 2. Transform Gizmos
+ 3. Click Select
+ 4. Selection Outline
+ 5. Scale Gizmos
+ 6. Rotation Gizmos (subject to change)
+ 
