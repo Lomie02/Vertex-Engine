@@ -69,25 +69,27 @@ bool AssetManager::CollisionCheck()
 	}
 	return false;*/
 
-	for (int i = 0; i < m_Objects.size(); i++) {
+	for (int k = 0; k < m_Objects.size(); k++) {
 
-		Collider* c1 = m_Objects.at(i)->GetCollider();
+		Collider* c1 = m_Objects.at(k)->GetCollider();
 
 		for (int j = 0; j < m_Objects.size(); j++) {
 
-			if ( i != j) {
-
 				Collider* c2 = m_Objects.at(j)->GetCollider();
+
+			if ( k != j) {
 
 				bool ret = true;
 
 				int c1_faces = c1->m_Vertices.size();
 				int c2_faces = c2->m_Vertices.size();
 
+
 				for (int i = 0; i < c1_faces; i++)
 				{
 					float fx = c1->m_Vertices[i].x - c1->m_Vertices[(i + 1) % c1_faces].x;
 					float fy = c1->m_Vertices[i].y - c1->m_Vertices[(i + 1) % c1_faces].y;
+
 
 					float ax = -fy, ay = fx;
 
@@ -117,7 +119,7 @@ bool AssetManager::CollisionCheck()
 
 					if (ret == true)
 					{
-						std::cout << "Hit Something" << std::endl;
+						std::cout << "Yep" << std::endl;
 					}
 
 					return ret;

@@ -30,8 +30,9 @@ public:
 
 	Shader m_TextShader;
 	std::vector<glm::vec2> GetVertices() { return m_Vertices; }
+	glm::mat4 GetMatrixModel() { return m_ModelMatrix; }
 private:
-
+	glm::mat4 m_ModelMatrix;
 	std::vector<glm::vec2> m_Vertices;
 	Shader m_Shader;
 	unsigned int m_quadVAO;
