@@ -5,6 +5,7 @@ GameObject::GameObject()
 	name = "GameObject";
 	m_Active = true;
 
+	m_Collider = new Collider();
 	transform.localPosition.y = 0;
 	transform.localPosition.x = 0;
 
@@ -22,6 +23,7 @@ GameObject::GameObject(const char* _Name, bool active)
 
 	transform.size.x = 1;
 	transform.size.y = -1;
+	m_Collider = new Collider();
 }
 
 GameObject::GameObject(const char* _Name)
@@ -31,6 +33,7 @@ GameObject::GameObject(const char* _Name)
 	transform.localPosition.y = 0;
 	transform.localPosition.x = 0;
 
+	m_Collider = new Collider();
 	transform.size.x = 1;
 	transform.size.y = -1;
 }

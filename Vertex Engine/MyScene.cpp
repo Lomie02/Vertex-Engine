@@ -60,21 +60,17 @@ void MyScene::Awake()
 	m_Manager.Register(m_MainCamera);
 	m_MainCamera->transform.rotation = 0;
 
-	m_Object->SetCollider(AABB);
-	m_Object2->SetCollider(AABB);
-
-	m_Manager.RegisterUi(m_Button);
+	//m_Manager.RegisterUi(m_Button);
 	m_Body = new RigidBody("Yep");
 
 	m_Body->material.baseTexture = ResourceManager::GetTexture("boy1");
 	m_Body->material.colour = glm::vec3(1, 0, 1);
 	//m_Manager.Register(m_Body);
 
-	m_MainCamera->SetParent(m_Object);
 	m_Canvas->transform.size = glm::vec2(1280, 720);
-	m_Anim->SetMaster(m_Object2);
-	m_Manager.Register(m_Anim);
-	m_Manager.Register(m_Canvas);
+	//m_Anim->SetMaster(m_Object2);
+	//m_Manager.Register(m_Anim);
+	//m_Manager.Register(m_Canvas);
 }
 
 void MyScene::Start()
@@ -114,22 +110,22 @@ void MyScene::Update(float delta)
 
 	if (glfwGetKey(m_Window, GLFW_KEY_W) == GLFW_PRESS)
 	{
-		m_Object->transform.position.y += 5 * delta;
+		m_MainCamera->transform.position.y += 5 * delta;
 	}
 
 	if (glfwGetKey(m_Window, GLFW_KEY_S) == GLFW_PRESS)
 	{
-		m_Object->transform.position.y -= 5 * delta;
+		m_MainCamera->transform.position.y -= 5 * delta;
 	}
 
 	if (glfwGetKey(m_Window, GLFW_KEY_A) == GLFW_PRESS)
 	{
-		m_Object->transform.position.x -= 5 * delta;
+		m_MainCamera->transform.position.x -= 5 * delta;
 	}
 
 	if (glfwGetKey(m_Window, GLFW_KEY_D) == GLFW_PRESS)
 	{
-		m_Object->transform.position.x += 5 * delta;
+		m_MainCamera->transform.position.x += 5 * delta;
 	}
 
 	if (glfwGetKey(m_Window, GLFW_KEY_Q) == GLFW_PRESS)
@@ -163,7 +159,7 @@ void MyScene::Update(float delta)
 void MyScene::LateUpdate(float delta)
 {
 	m_Manager.ConfigureSystems();
-	//m_Manager.CollisionCheck();
+	m_Manager.CollisionCheck();
 }
 
 void MyScene::FixedUpdate(float fixedDelta)

@@ -8,6 +8,8 @@
 #include "GameSettings.h"
 #include "VertexPrefs.h"
 
+#include "Collider.h"
+
 void AssetManager::Register(GameObject* _object)
 {
 	m_Objects.push_back(_object);
@@ -36,7 +38,7 @@ void AssetManager::RegisterUi(Button* _object)
 
 bool AssetManager::CollisionCheck()
 {
-	Collider type1;
+	/*Collider type1;
 	Collider type2;
 	if (m_Objects.size() < 1) {
 		return false;
@@ -65,16 +67,73 @@ bool AssetManager::CollisionCheck()
 			}
 		}
 	}
+	return false;*/
+
+	for (int i = 0; i < m_Objects.size(); i++) {
+
+		Collider* c1 = m_Objects.at(i)->GetCollider();
+
+		for (int j = 0; j < m_Objects.size(); j++) {
+
+			if ( i != j) {
+
+				Collider* c2 = m_Objects.at(j)->GetCollider();
+
+				bool ret = true;
+
+				int c1_faces = c1->m_Vertices.size();
+				int c2_faces = c2->m_Vertices.size();
+
+				for (int i = 0; i < c1_faces; i++)
+				{
+					float fx = c1->m_Vertices[i].x - c1->m_Vertices[(i + 1) % c1_faces].x;
+					float fy = c1->m_Vertices[i].y - c1->m_Vertices[(i + 1) % c1_faces].y;
+
+					float ax = -fy, ay = fx;
+
+					float len_v = sqrt(ax * ax + ay * ay);
+					ax /= len_v;
+					ay /= len_v;
+
+					float c1_min = FLT_MAX, c1_max = -FLT_MAX;
+					float c2_min = FLT_MAX, c2_max = -FLT_MAX;
+
+					for (int j = 0; j < c1_faces; j++)
+					{
+						float c1_proj = (ax * (c1->m_Vertices[j].x + c1->tX) + ay * (c1->m_Vertices[j].y + c1->tY)) / (ax * ax + ay * ay);
+						c1_min = min(c1_proj, c1_min);
+						c1_max = max(c1_proj, c1_max);
+					}
+
+					for (int j = 0; j < c2_faces; j++)
+					{
+						float c2_proj = (ax * (c2->m_Vertices[j].x + c2->tX) + ay * (c2->m_Vertices[j].y + c2->tY)) / (ax * ax + ay * ay);
+						c2_min = min(c2_proj, c2_min);
+						c2_max = max(c2_proj, c2_max);
+					}
+
+					if (!(c1_max >= c2_min && c1_min <= c2_max))
+						ret = false;
+
+					if (ret == true)
+					{
+						std::cout << "Hit Something" << std::endl;
+					}
+
+					return ret;
+				}
+			}
+		}
+	}
 	return false;
 }
 
-//When the 2 object touch function returns true or false.
 bool AssetManager::OnTrigger(GameObject* A, GameObject* B)
 {
-	Collider type1 = A->GetCollider();
-	Collider type2 = B->GetCollider();
+	//Collider type1 = A->GetCollider();
+	//Collider type2 = B->GetCollider();
 
-	if (type1 != NONE && type1 != NONE) {
+	/*if (type1 != NONE && type1 != NONE) {
 
 		Transform prev = A->transform;
 		bool colX = A->transform.position.x + A->transform.size.x >= B->transform.position.x
@@ -95,7 +154,9 @@ bool AssetManager::OnTrigger(GameObject* A, GameObject* B)
 	else
 	{
 		return false;
-	}
+
+	}*/
+	return false;
 }
 
 void AssetManager::ConfigureSystems()
@@ -104,7 +165,7 @@ void AssetManager::ConfigureSystems()
 
 		if (m_Cameras.size() > 0)
 		{
-			//ResourceManager::GetShader("sprite").SetMatrix4("pro", m_Cameras.at(m_ActiveCamera)->GetProjection());
+			ResourceManager::GetShader("sprite").SetMatrix4("pro", m_Cameras.at(m_ActiveCamera)->GetProjection());
 			ResourceManager::GetShader("Text").SetMatrix4("projection", m_Cameras.at(m_ActiveCamera)->GetProjection());
 		}
 		else {
@@ -264,7 +325,7 @@ bool AssetManager::Raycast2D(glm::vec2 _pos, glm::vec2 _dir, GameObject& _out, f
 
 	Ray->transform.position = _pos;
 
-	/*if (_dir.x <= -1) {
+	if (_dir.x <= -1) {
 		_dir.x = -1;
 	}
 	else if (_dir.x >= 1) {
@@ -278,15 +339,15 @@ bool AssetManager::Raycast2D(glm::vec2 _pos, glm::vec2 _dir, GameObject& _out, f
 	else if (_dir.y >= 1) {
 
 		_dir.y = 1;
-	}*/
+	}
 
-	//std::cout << "Dir: " << _dir.x << " | " << _dir.y << std::endl;
+	std::cout << "Dir: " << _dir.x << " | " << _dir.y << std::endl;
 
 	for (int j = 0; j < length; j++)
 	{
 		Ray->transform.position += _dir;
 
-		//std::cout << "Raycast Position: " << Ray.transform.position.x << " | " << Ray.transform.position.y << std::endl;
+		std::cout << "Raycast Position: " << Ray->transform.position.x << " | " << Ray->transform.position.y << std::endl;
 
 		for (int i = 0; i < m_Objects.size(); i++)
 		{

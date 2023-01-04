@@ -150,6 +150,9 @@
     <ClCompile Include="VertexPrefs.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
+    <ClCompile Include="Collider.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="glad.h">
@@ -261,7 +264,7 @@
       <Filter>Resource Files</Filter>
     </ClInclude>
     <ClInclude Include="Collider.h">
-      <Filter>GameObjects</Filter>
+      <Filter>Physics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

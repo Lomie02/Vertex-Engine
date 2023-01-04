@@ -1,21 +1,26 @@
 #pragma once
-
+#include <vector>
+#include "glm.hpp"
 enum ColliderType {
-	Box = 0,
+	AABB = 0,
 	Circle,
+	Convex,
 };
 
-struct Collider {
+class Collider
+{
 
 public:
 	Collider();
 	Collider(ColliderType _collisionType);
 
-	void SetSize(float _size);
+	void TranslateSpace(float x, float y);
 
+	float tX;
+	float tY;
 
+	ColliderType GetType() { return m_CollisionType; }
+	std::vector<glm::vec2> m_Vertices;
 private:
-	void ConfigureSprite();
-	float m_ColliderSize;
-
+	ColliderType m_CollisionType = AABB;
 };
