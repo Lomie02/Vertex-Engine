@@ -7,6 +7,7 @@
 #include "Animator.h"
 
 #include "RigidBody.h"
+
 class AssetManager
 {
 public:
@@ -40,6 +41,8 @@ public:
 
 	void ConfigSetup();
 	void ExecuteAll();
+	void UnRegister(GameObject* _target);
+		
 private:
 	void ConfigureMouse();
 	GLFWwindow* m_Window;

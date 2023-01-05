@@ -171,10 +171,10 @@ bool AssetManager::CollisionCheck()
 
 bool AssetManager::OnTrigger(GameObject* A, GameObject* B)
 {
-	//Collider type1 = A->GetCollider();
-	//Collider type2 = B->GetCollider();
+	Collider* type1 = A->GetCollider();
+	Collider* type2 = B->GetCollider();
 
-	/*if (type1 != NONE && type1 != NONE) {
+	if (type1->GetType() == AABB && type1->GetType() == AABB) {
 
 		Transform prev = A->transform;
 		bool colX = A->transform.position.x + A->transform.size.x >= B->transform.position.x
@@ -187,16 +187,19 @@ bool AssetManager::OnTrigger(GameObject* A, GameObject* B)
 		{
 			return colX && colY;
 		}
-		else
-		{
-			return false;
-		}
-	}
-	else
-	{
 		return false;
+	}
+	else if (type1->GetType() == Circle && type1->GetType() == Circle)
+	{
+		float distance = glm::distance(A->transform.position, B->transform.position);
+		float radius = type1->ColliderSizeCircle() + type2->ColliderSizeCircle();
+		if (distance < radius)
+		{
+			return true;
+		}
 
-	}*/
+		return false;
+	}
 	return false;
 }
 
@@ -426,6 +429,23 @@ void AssetManager::ExecuteAll()
 {
 	VertexPrefs::SaveFile("vertex_scene_data_01.txt", m_Objects);
 	VertexPrefs::SaveFile("vertex_scene_data_ui_01.txt", m_UiObjects);
+}
+
+void AssetManager::UnRegister(GameObject* _target)
+{
+	if (_target == nullptr) {
+		std::cout << "VERTEX WARNING: " << "Failed to UnRegister GameObject." << std::endl;
+	}
+	else
+	{
+		for (int i = 0; i < m_Objects.size(); i++)
+		{
+			if (m_Objects.at(i) == _target)
+			{
+				m_Objects.erase(m_Objects.begin() + i);
+			}
+		}
+	}
 }
 
 void AssetManager::ConfigureMouse()
