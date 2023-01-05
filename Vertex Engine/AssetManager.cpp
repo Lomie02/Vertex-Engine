@@ -463,10 +463,13 @@ void AssetManager::Gizmos(Vertex2D* render)
 				NewPosition.position.x = (m_Cameras.at(i)->transform.position.x - HalfSpaceX);
 				NewPosition.position.y = (m_Cameras.at(i)->transform.position.y - HalfSpaceY);
 
-				render->DrawSprite(m_CameraGizmo, NewPosition.position, glm::vec2(1,0.5f), 0, 1, m_Cameras.at(m_ActiveCamera)->GetProjection());
+				render->DrawSprite(m_CameraGizmo, NewPosition.position, glm::vec2(136, 98), 0, 0.01f, m_Cameras.at(m_ActiveCamera)->GetProjection());
 			}
 		}
 	}
+
+	render->DrawSprite(m_CenterGizmo,glm::vec2(0,0), glm::vec2(50, 50), 0, 0.01f, m_Cameras.at(m_ActiveCamera)->GetProjection());
+
 }
 
 void AssetManager::ConfigureMouse()

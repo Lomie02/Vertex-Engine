@@ -126,7 +126,10 @@ void Application::StartUp()
 		picture = stbi_load("Engine/Icons/vertex_logo.png", &width, &height, &channels, 4);
 	}
 
+	// Load Gizmo Textures
 	ResourceManager::LoadTexture("Engine/Gizmos/Unnamed.png", "Gizmo_Camera");
+	ResourceManager::LoadTexture("Engine/Gizmos/gizmo_centre.png", "Gizmo_Center");
+	ResourceManager::LoadTexture("Engine/Gizmos/gizmo_cords.png", "Gizmo_Cords");
 
 	GLFWimage Icons[1];
 	Icons[0].height = height;

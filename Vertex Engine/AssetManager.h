@@ -11,7 +11,12 @@
 class AssetManager
 {
 public:
-	AssetManager() { m_ActiveCamera = 0; m_CameraGizmo.baseTexture = ResourceManager::GetTexture("Gizmo_Camera"); };
+	AssetManager() 
+	{ m_ActiveCamera = 0; 
+	m_CameraGizmo.baseTexture = ResourceManager::GetTexture("Gizmo_Camera");
+	m_TransformGizmoX.baseTexture = ResourceManager::GetTexture("Gizmo_Cords");
+	m_CenterGizmo.baseTexture = ResourceManager::GetTexture("Gizmo_Center");
+	};
 	void Register(GameObject* _object);
 	void Register(RigidBody* _object);
 	void Register(Animator* _object);
@@ -53,7 +58,7 @@ private:
 
 	Material m_CameraGizmo;
 	Material m_TransformGizmoX;
-	Material m_TransformGizmoY;
+	Material m_CenterGizmo;
 
 	std::vector<RigidBody*> m_PhysicsObjects;
 	std::vector<Transform*> m_PreviousLocations;
