@@ -448,6 +448,27 @@ void AssetManager::UnRegister(GameObject* _target)
 	}
 }
 
+void AssetManager::Gizmos(Vertex2D* render)
+{
+	if (m_Cameras.size() > 0)
+	{
+		for (int i = 0; i < m_Cameras.size(); i++)
+		{
+			if (m_Cameras.at(i)->m_Active == true && i != m_ActiveCamera)
+			{
+				float HalfSpaceX = m_Cameras.at(i)->transform.size.x / 2;
+				float HalfSpaceY = m_Cameras.at(i)->transform.size.y / 2;
+
+				Transform NewPosition;
+				NewPosition.position.x = (m_Cameras.at(i)->transform.position.x - HalfSpaceX);
+				NewPosition.position.y = (m_Cameras.at(i)->transform.position.y - HalfSpaceY);
+
+				render->DrawSprite(m_CameraGizmo, NewPosition.position, glm::vec2(1,0.5f), 0, 1, m_Cameras.at(m_ActiveCamera)->GetProjection());
+			}
+		}
+	}
+}
+
 void AssetManager::ConfigureMouse()
 {
 	double Xpos;

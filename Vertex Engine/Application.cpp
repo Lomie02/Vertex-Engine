@@ -126,6 +126,8 @@ void Application::StartUp()
 		picture = stbi_load("Engine/Icons/vertex_logo.png", &width, &height, &channels, 4);
 	}
 
+	ResourceManager::LoadTexture("Engine/Gizmos/Unnamed.png", "Gizmo_Camera");
+
 	GLFWimage Icons[1];
 	Icons[0].height = height;
 	Icons[0].width = width;
@@ -443,6 +445,12 @@ void Application::RenderAll()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	m_SceneManager->RenderCurrentScene(m_Renderer);
+
+	if (m_Mode != PLAY)
+	{
+		m_SceneManager->GetCurrentScene()->GetAssets().Gizmos(m_Renderer);
+	}
+
 	if (m_Mode == EDITOR && !m_EditorFullScreen || m_Mode == EDITOR_PLAY && !m_EditorFullScreen || m_Mode == EDITOR_PAUSED && !m_EditorFullScreen)
 	{
 		switch (m_WindowMode)

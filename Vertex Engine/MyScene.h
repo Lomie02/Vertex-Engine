@@ -47,5 +47,6 @@ private:
 
 	float counter;
 	Camera* m_MainCamera;
+	Camera* m_DummyCamera;
 };
 

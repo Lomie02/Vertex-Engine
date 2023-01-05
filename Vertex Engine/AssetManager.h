@@ -11,7 +11,7 @@
 class AssetManager
 {
 public:
-	AssetManager() { m_ActiveCamera = 0; };
+	AssetManager() { m_ActiveCamera = 0; m_CameraGizmo.baseTexture = ResourceManager::GetTexture("Gizmo_Camera"); };
 	void Register(GameObject* _object);
 	void Register(RigidBody* _object);
 	void Register(Animator* _object);
@@ -42,6 +42,7 @@ public:
 	void ConfigSetup();
 	void ExecuteAll();
 	void UnRegister(GameObject* _target);
+	void Gizmos(Vertex2D* render);
 		
 private:
 	void ConfigureMouse();
@@ -49,6 +50,10 @@ private:
 	Transform mouse;
 	float m_TimeStep = 0.01f;
 	glm::vec2 m_WorldGravity = glm::vec2(0, -1);
+
+	Material m_CameraGizmo;
+	Material m_TransformGizmoX;
+	Material m_TransformGizmoY;
 
 	std::vector<RigidBody*> m_PhysicsObjects;
 	std::vector<Transform*> m_PreviousLocations;

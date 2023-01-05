@@ -23,6 +23,9 @@ MyScene::~MyScene()
 	delete m_TextRenderer;
 	m_TextRenderer = nullptr;
 
+	delete m_DummyCamera;
+	m_DummyCamera = nullptr;
+
 	delete m_Body;
 	m_Body = nullptr;
 }
@@ -45,6 +48,7 @@ void MyScene::Awake()
 	m_Canvas = new GameObject("Canvas", true);
 
 	m_MainCamera = new Camera();
+	m_DummyCamera = new Camera("Boy Camera");
 
 	m_Button->SetActive(true);
 	m_Button->transform.size = glm::vec2(100, 100);
@@ -58,6 +62,8 @@ void MyScene::Awake()
 	m_Manager.Register(m_Object2);
 
 	m_Manager.Register(m_MainCamera);
+	m_Manager.Register(m_DummyCamera);
+
 	m_MainCamera->transform.rotation = 0;
 
 	//m_Manager.RegisterUi(m_Button);
@@ -159,7 +165,7 @@ void MyScene::Update(float delta)
 void MyScene::LateUpdate(float delta)
 {
 	m_Manager.ConfigureSystems();
-	m_Manager.CollisionCheck();
+	//m_Manager.CollisionCheck();
 }
 
 void MyScene::FixedUpdate(float fixedDelta)
