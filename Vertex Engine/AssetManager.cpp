@@ -75,54 +75,93 @@ bool AssetManager::CollisionCheck()
 
 		for (int j = 0; j < m_Objects.size(); j++) {
 
-				Collider* c2 = m_Objects.at(j)->GetCollider();
+			Collider* c2 = m_Objects.at(j)->GetCollider();
 
-			if ( k != j) {
+			if (k != j) {
 
-				bool ret = true;
+				if (m_Objects.at(k)->GetCollider()->GetType() == Convex && m_Objects.at(j)->GetCollider()->GetType() == Convex) {
 
-				int c1_faces = c1->m_Vertices.size();
-				int c2_faces = c2->m_Vertices.size();
+					bool ret = true;
+
+					int c1_faces = c1->m_Vertices.size();
+					int c2_faces = c2->m_Vertices.size();
 
 
-				for (int i = 0; i < c1_faces; i++)
+					for (int i = 0; i < c1_faces; i++)
+					{
+						c1->m_Vertices.at(i).y = m_Objects.at(i)->transform.position.y;
+						c1->m_Vertices.at(i).y = -cos(90);
+						float fx = c1->m_Vertices[i].x - c1->m_Vertices[(i + 1) % c1_faces].x;
+						float fy = c1->m_Vertices[i].y - c1->m_Vertices[(i + 1) % c1_faces].y;
+
+
+						float ax = -fy, ay = fx;
+
+						float len_v = sqrt(ax * ax + ay * ay);
+						ax /= len_v;
+						ay /= len_v;
+
+						float c1_min = FLT_MAX, c1_max = -FLT_MAX;
+						float c2_min = FLT_MAX, c2_max = -FLT_MAX;
+
+						for (int j = 0; j < c1_faces; j++)
+						{
+							float c1_proj = (ax * (c1->m_Vertices[j].x + c1->tX) + ay * (c1->m_Vertices[j].y + c1->tY)) / (ax * ax + ay * ay);
+							c1_min = min(c1_proj, c1_min);
+							c1_max = max(c1_proj, c1_max);
+						}
+
+						for (int j = 0; j < c2_faces; j++)
+						{
+							float c2_proj = (ax * (c2->m_Vertices[j].x + c2->tX) + ay * (c2->m_Vertices[j].y + c2->tY)) / (ax * ax + ay * ay);
+							c2_min = min(c2_proj, c2_min);
+							c2_max = max(c2_proj, c2_max);
+						}
+
+						if (!(c1_max >= c2_min && c1_min <= c2_max))
+							ret = false;
+
+						if (ret == true)
+						{
+							m_Objects.at(k)->transform.position = m_PreviousLocations.at(k)->position;
+							m_Objects.at(j)->transform.position = m_PreviousLocations.at(j)->position;
+						}
+
+						return ret;
+					}
+				}
+				else if (m_Objects.at(k)->GetCollider()->GetType() == AABB && m_Objects.at(j)->GetCollider()->GetType() == AABB)
 				{
-					float fx = c1->m_Vertices[i].x - c1->m_Vertices[(i + 1) % c1_faces].x;
-					float fy = c1->m_Vertices[i].y - c1->m_Vertices[(i + 1) % c1_faces].y;
+					bool colX = m_Objects.at(k)->transform.position.x + m_Objects.at(k)->transform.size.x >= m_Objects.at(j)->transform.position.x
+						&& m_Objects.at(j)->transform.position.x + m_Objects.at(j)->transform.size.x >= m_UiButtonObjects.at(k)->transform.position.x;
 
+					bool colY = m_Objects.at(k)->transform.position.y + m_Objects.at(k)->transform.size.y >= m_Objects.at(j)->transform.position.y
+						&& m_Objects.at(j)->transform.position.y + m_Objects.at(j)->transform.size.y >= m_Objects.at(k)->transform.position.y;
 
-					float ax = -fy, ay = fx;
-
-					float len_v = sqrt(ax * ax + ay * ay);
-					ax /= len_v;
-					ay /= len_v;
-
-					float c1_min = FLT_MAX, c1_max = -FLT_MAX;
-					float c2_min = FLT_MAX, c2_max = -FLT_MAX;
-
-					for (int j = 0; j < c1_faces; j++)
+					if (colX && colY)
 					{
-						float c1_proj = (ax * (c1->m_Vertices[j].x + c1->tX) + ay * (c1->m_Vertices[j].y + c1->tY)) / (ax * ax + ay * ay);
-						c1_min = min(c1_proj, c1_min);
-						c1_max = max(c1_proj, c1_max);
+						m_Objects.at(k)->transform.position = m_PreviousLocations.at(k)->PreviousPosition;
+						m_Objects.at(j)->transform.position = m_PreviousLocations.at(j)->PreviousPosition;
+						return colX && colY;
 					}
-
-					for (int j = 0; j < c2_faces; j++)
+				}
+				else if (m_Objects.at(k)->GetCollider()->GetType() == Circle && m_Objects.at(k)->GetCollider()->GetType() == Circle)
+				{
+					float distance = glm::distance(m_Objects.at(k)->transform.position, m_Objects.at(j)->transform.position);
+					float radius = m_Objects.at(k)->GetCollider()->ColliderSizeCircle() + m_Objects.at(j)->GetCollider()->ColliderSizeCircle();
+					if (distance < radius)
 					{
-						float c2_proj = (ax * (c2->m_Vertices[j].x + c2->tX) + ay * (c2->m_Vertices[j].y + c2->tY)) / (ax * ax + ay * ay);
-						c2_min = min(c2_proj, c2_min);
-						c2_max = max(c2_proj, c2_max);
+						m_Objects.at(k)->transform.position = m_PreviousLocations.at(k)->position;
+						m_Objects.at(j)->transform.position = m_PreviousLocations.at(j)->position;
 					}
+				}
+				else if (m_Objects.at(k)->GetCollider()->GetType() == AABB && m_Objects.at(k)->GetCollider()->GetType() == Circle) {
 
-					if (!(c1_max >= c2_min && c1_min <= c2_max))
-						ret = false;
-
-					if (ret == true)
-					{
-						std::cout << "Yep" << std::endl;
-					}
-
-					return ret;
+					//TODO: Add AABB to Circle
+				}
+				else
+				{
+					return false;
 				}
 			}
 		}
@@ -226,7 +265,7 @@ void AssetManager::ConfigureRenderSystems(Vertex2D* render)
 			float WithinDistance = glm::distance(m_PhysicsObjects.at(i)->transform.position, m_Cameras.at(m_ActiveCamera)->transform.position);
 			if (m_PhysicsObjects.at(i)->m_Active == true && WithinDistance < CAMERA_DISTANCE_RENDER_LIMIT)
 			{
-				render->DrawSprite(m_PhysicsObjects.at(i)->material, m_PhysicsObjects.at(i)->transform.position, m_PhysicsObjects.at(i)->transform.size, m_PhysicsObjects.at(i)->transform.rotation,m_PhysicsObjects.at(i)->transform.scale, m_Cameras.at(m_ActiveCamera)->GetProjection());
+				render->DrawSprite(m_PhysicsObjects.at(i)->material, m_PhysicsObjects.at(i)->transform.position, m_PhysicsObjects.at(i)->transform.size, m_PhysicsObjects.at(i)->transform.rotation, m_PhysicsObjects.at(i)->transform.scale, m_Cameras.at(m_ActiveCamera)->GetProjection());
 				m_PhysicsObjects.at(i)->ConfigureSystems();
 			}
 		}
@@ -240,7 +279,7 @@ void AssetManager::ConfigureRenderSystems(Vertex2D* render)
 			if (m_UiObjects.at(i)->m_Active == true && WithinDistance < CAMERA_DISTANCE_RENDER_LIMIT)
 			{
 				m_UiObjects.at(i)->ConfigureSystems();
-				render->DrawSprite(m_UiObjects.at(i)->material, m_UiObjects.at(i)->transform.position, m_UiObjects.at(i)->transform.size, m_UiObjects.at(i)->transform.rotation,m_UiObjects.at(i)->transform.scale, m_Cameras.at(m_ActiveCamera)->GetProjection());
+				render->DrawSprite(m_UiObjects.at(i)->material, m_UiObjects.at(i)->transform.position, m_UiObjects.at(i)->transform.size, m_UiObjects.at(i)->transform.rotation, m_UiObjects.at(i)->transform.scale, m_Cameras.at(m_ActiveCamera)->GetProjection());
 			}
 		}
 	}
