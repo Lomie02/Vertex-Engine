@@ -58,6 +58,8 @@ void MyScene::Awake()
 	m_Canvas->material.baseTexture = ResourceManager::GetTexture("Canvas");
 
 	m_Object2->material.colour = glm::vec3(1, 0, 0);
+
+	m_MainCamera->SetLens(Perspective);
 	m_Manager.Register(m_Object);
 	m_Manager.Register(m_Object2);
 
