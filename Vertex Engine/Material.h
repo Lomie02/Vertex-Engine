@@ -5,6 +5,11 @@
 #include <string.h>
 #include "ResourceManager.h"
 
+enum Surface {
+	Opaque = 0,
+	Transparent,
+};
+
 class Material
 {
 public:
@@ -19,5 +24,6 @@ public:
 	glm::vec4 colour;
 	Texture2D baseTexture;
 
+	Surface surface = Opaque;
 	std::string name;
 };

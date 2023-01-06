@@ -58,7 +58,7 @@ void MyScene::Awake()
 	m_Canvas->material.baseTexture = ResourceManager::GetTexture("Canvas");
 
 	m_Object2->material.colour = glm::vec4(1, 0, 0,0.5f);
-
+	m_Object->material.surface = Transparent;
 	m_Manager.Register(m_Object);
 	m_Manager.Register(m_Object2);
 

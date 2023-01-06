@@ -13,14 +13,26 @@ Vertex2D::~Vertex2D()
 void Vertex2D::DrawSprite(Material& material, glm::vec2 position, glm::vec2 size, float rotate, float scale, glm::mat4 per)
 {
 	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_CULL_FACE);
+
+	//glEnable(GL_DEPTH_TEST);
+	if (material.surface == Transparent)
+	{
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	}
+	else
+	{
+		//glDepthFunc(GL_EQUAL);
+	}
+
 
 	this->m_Shader = material.shader;
 
 	this->m_Shader.Use();
 	glm::mat4 model = glm::mat4(1.0f);
 
-	model = glm::translate(model, glm::vec3(position, 0.0f));
+	model = glm::translate(model, glm::vec3(position,0));
 	model = glm::translate(model, glm::vec3(0.5f * size.x, 0.5f * -size.y, 0.0f));
 	model = glm::rotate(model, glm::radians(rotate), glm::vec3(0.0f, 0.0f, 1.0f));
 	model = glm::translate(model, glm::vec3(-0.5f * size.x, -0.5f * -size.y, 0.0f));
@@ -36,7 +48,61 @@ void Vertex2D::DrawSprite(Material& material, glm::vec2 position, glm::vec2 size
 	glBindVertexArray(this->m_quadVAO);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 	glBindVertexArray(0);
+
+	if (material.surface == Opaque)
+	{
+		glDisable(GL_DEPTH_TEST);
+	}
 	glDisable(GL_BLEND);
+	glDisable(GL_CULL_FACE);
+}
+
+void Vertex2D::DrawSprite(Material& material, glm::vec3 position, glm::vec2 size, float rotate, float scale, glm::mat4 per)
+{
+	glEnable(GL_BLEND);
+	glEnable(GL_CULL_FACE);
+
+	//glEnable(GL_DEPTH_TEST);
+
+	if (material.surface == Transparent)
+	{
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	}
+	else
+	{
+		//glDepthFunc(GL_EQUAL);
+	}
+
+	this->m_Shader = material.shader;
+
+	this->m_Shader.Use();
+	glm::mat4 model = glm::mat4(1.0f);
+
+	model = glm::translate(model, position);
+	model = glm::translate(model, glm::vec3(0.5f * size.x, 0.5f * -size.y, 0.0f));
+	model = glm::rotate(model, glm::radians(rotate), glm::vec3(0.0f, 0.0f, 1.0f));
+	model = glm::translate(model, glm::vec3(-0.5f * size.x, -0.5f * -size.y, 0.0f));
+
+	model = glm::scale(model, glm::vec3(size.x * scale, -size.y * scale, 1.0f));
+	this->m_Shader.SetMatrix4("model", model);
+	this->m_Shader.SetMatrix4("pro", per);
+	this->m_Shader.SetVector4f("Colour", material.colour);
+
+	glActiveTexture(GL_TEXTURE0);
+	material.baseTexture.Bind();
+
+	glBindVertexArray(this->m_quadVAO);
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+	glBindVertexArray(0);
+
+	if (material.surface == Opaque)
+	{
+		glDisable(GL_DEPTH_TEST);
+	}
+	glDisable(GL_BLEND);
+	glDisable(GL_CULL_FACE);
+
 }
 
 void Vertex2D::DrawLine(glm::vec2 _start, glm::vec2 _end, Material& _mat)

@@ -458,7 +458,7 @@ void AssetManager::Gizmos(Vertex2D* render)
 				NewPosition.position.x = (m_Cameras.at(i)->transform.position.x - HalfSpaceX);
 				NewPosition.position.y = (m_Cameras.at(i)->transform.position.y - HalfSpaceY);
 
-				render->DrawSprite(m_CameraGizmo, NewPosition.position, glm::vec2(136, 98), 0, 0.01f, m_Cameras.at(m_ActiveCamera)->GetProjection());
+				render->DrawSprite(m_CameraGizmo, glm::vec3(NewPosition.position, -5.0f), glm::vec2(136, 98), 0, 0.01f, m_Cameras.at(m_ActiveCamera)->GetProjection());
 			}
 		}
 	}

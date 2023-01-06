@@ -32,7 +32,7 @@ public:
 	void SetFieldOfView(float _fov);
 	float GetFieldOfView() { return m_FieldofView; };
 
-	float far = 1.0f;
+	float far = 50.0f;
 	float near = -1.0f;
 	float zoom = 10.0f;
 private:
