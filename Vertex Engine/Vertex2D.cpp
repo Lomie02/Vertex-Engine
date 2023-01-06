@@ -28,7 +28,8 @@ void Vertex2D::DrawSprite(Material& material, glm::vec2 position, glm::vec2 size
 	model = glm::scale(model, glm::vec3(size.x * scale, -size.y * scale, 1.0f));
 	this->m_Shader.SetMatrix4("model", model);
 	this->m_Shader.SetMatrix4("pro", per);
-	this->m_Shader.SetVector3f("spriteColor", material.colour);
+	this->m_Shader.SetVector4f("Colour", material.colour);
+
 	glActiveTexture(GL_TEXTURE0);
 	material.baseTexture.Bind();
 

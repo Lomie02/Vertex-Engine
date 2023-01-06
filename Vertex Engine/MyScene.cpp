@@ -57,9 +57,8 @@ void MyScene::Awake()
 	m_Object2->material.baseTexture = ResourceManager::GetTexture("boy1");
 	m_Canvas->material.baseTexture = ResourceManager::GetTexture("Canvas");
 
-	m_Object2->material.colour = glm::vec3(1, 0, 0);
+	m_Object2->material.colour = glm::vec4(1, 0, 0,0.5f);
 
-	m_MainCamera->SetLens(Perspective);
 	m_Manager.Register(m_Object);
 	m_Manager.Register(m_Object2);
 
@@ -72,7 +71,7 @@ void MyScene::Awake()
 	m_Body = new RigidBody("Yep");
 
 	m_Body->material.baseTexture = ResourceManager::GetTexture("boy1");
-	m_Body->material.colour = glm::vec3(1, 0, 1);
+	m_Body->material.colour.r = 1;
 	//m_Manager.Register(m_Body);
 
 	m_Canvas->transform.size = glm::vec2(1280, 720);

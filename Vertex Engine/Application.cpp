@@ -157,6 +157,7 @@ void Application::StartUp()
 	m_SceneManager->SetUpWindow(m_GameWindow);
 	// Load UI Textures
 	ResourceManager::LoadTexture("Builds/Textures/UI_Button.png", "UI_Button");
+	ResourceManager::LoadTexture("Builds/Textures/UI_Button.png", "UI_Button");
 
 
 	if (m_Mode == EDITOR)

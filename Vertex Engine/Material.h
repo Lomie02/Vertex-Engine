@@ -16,7 +16,7 @@ public:
 	void GetShader(Shader& _shader);
 
 	Shader shader;
-	glm::vec3 colour;
+	glm::vec4 colour;
 	Texture2D baseTexture;
 
 	std::string name;

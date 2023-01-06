@@ -300,11 +300,6 @@ void AssetManager::ConfigureRenderSystems(Vertex2D* render)
 			}
 		}
 	}
-
-	Material Material;
-	Material.colour = glm::vec3(1, 0, 0);
-
-	render->DrawLine(glm::vec2(0, -8), glm::vec2(0, 5), Material);
 }
 
 void AssetManager::ConfigurePhysics(float fixedDelta)
