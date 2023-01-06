@@ -13,7 +13,7 @@ next to come:
 
 Major Features To Come:
 
- 1. SAT collision detection to replace AABB 
+ 1. complete
  2. Scene Manager window automation 
  3. Physics Engine Simulations (Almost Complete)
  4. Vertex Canvas (UI Editor)
@@ -36,7 +36,7 @@ Asset Manager Changes To Come:
  1. Update components.
  2. Scripts can be added as components.
  3. Will Update gameobjects that are registered.
- 4. GameObjects can be un-registered
+ 4. GameObjects can be un-registered (complete)
 
 GameObjects Changes To Come:
 
@@ -48,7 +48,7 @@ GameObjects Changes To Come:
 
 Editor Changes To Come:
 
- 1. Gizmos
+ 1. Gizmos (almost complete)
  2. Transform Gizmos
  3. Click Select
  4. Selection Outline
