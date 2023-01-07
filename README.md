@@ -26,9 +26,9 @@ Major Features To Come:
  11. PlayerController Component
  12. 2D Light Support
  13. AI Agent Comonent (Subject To Change)
- 14. GameObject component systems
+ 14. Complete
  15. Scene Manager singleton conversion.
- 16. Component Base class
+ 16. Complete
  17. AssetManager to update componenets on a game object
  
 Asset Manager Changes To Come:
@@ -40,9 +40,9 @@ Asset Manager Changes To Come:
 
 GameObjects Changes To Come:
 
- 1. AddGameObject Function
- 2. RemoveGameObject Function
- 3. GetComponent Function
+ 1. AddGameObject Function (Complete)
+ 2. RemoveGameObject Function 
+ 3. GetComponent Function (almost)
  4. FindObject Function (subject to change)
  5. Tags
 
