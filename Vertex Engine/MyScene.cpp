@@ -59,6 +59,14 @@ void MyScene::Awake()
 
 	m_Object2->material.colour = glm::vec4(1, 0, 0,0.5f);
 	m_Object->material.surface = Transparent;
+
+	m_MyComponent = new TestComponent();
+
+	m_Object2->AddComponent(m_MyComponent);
+
+	m_Object2->GetComponent<TestComponent>().Start();
+
+
 	m_Manager.Register(m_Object);
 	m_Manager.Register(m_Object2);
 
@@ -109,6 +117,7 @@ void MyScene::Start()
 
 	glClearColor(0.2f, 0.2f, 0.2f, 0);
 	//m_Manager.ConfigSetup();
+
 }
 
 void MyScene::Update(float delta)

@@ -90,7 +90,6 @@ bool AssetManager::CollisionCheck()
 					for (int i = 0; i < c1_faces; i++)
 					{
 						c1->m_Vertices.at(i).y = m_Objects.at(i)->transform.position.y;
-						c1->m_Vertices.at(i).y = -cos(90);
 						float fx = c1->m_Vertices[i].x - c1->m_Vertices[(i + 1) % c1_faces].x;
 						float fy = c1->m_Vertices[i].y - c1->m_Vertices[(i + 1) % c1_faces].y;
 
@@ -155,7 +154,7 @@ bool AssetManager::CollisionCheck()
 						m_Objects.at(j)->transform.position = m_PreviousLocations.at(j)->position;
 					}
 				}
-				else if (m_Objects.at(k)->GetCollider()->GetType() == AABB && m_Objects.at(k)->GetCollider()->GetType() == Circle) {
+				else if (m_Objects.at(k)->GetCollider()->GetType() == AABB && m_Objects.at(j)->GetCollider()->GetType() == Circle) {
 
 					//TODO: Add AABB to Circle
 				}
@@ -315,6 +314,8 @@ void AssetManager::ConfigurePhysics(float fixedDelta)
 			}
 		}
 	}
+
+	UpdateComponents(fixedDelta);
 }
 
 void AssetManager::Register(Camera* camera)
@@ -463,8 +464,27 @@ void AssetManager::Gizmos(Vertex2D* render)
 		}
 	}
 
-	render->DrawSprite(m_CenterGizmo,glm::vec2(0,0), glm::vec2(50, 50), 0, 0.01f, m_Cameras.at(m_ActiveCamera)->GetProjection());
+	render->DrawSprite(m_CenterGizmo, glm::vec2(0, 0), glm::vec2(50, 50), 0, 0.01f, m_Cameras.at(m_ActiveCamera)->GetProjection());
 
+}
+
+void AssetManager::UpdateComponents(float delta)
+{
+	for (int i = 0; i < m_Objects.size(); i++)
+	{
+		if (m_Objects.at(i)->ComponentCount() > 0) 
+		{
+			std::vector<VertexComponent*> components;
+			components = m_Objects.at(i)->ComponentList();
+
+			for (auto comp : components)
+			{
+				comp->Update(delta);
+				comp->FixedUpdate(delta);
+				comp->LateUpdate(delta);
+			}
+		}
+	}
 }
 
 void AssetManager::ConfigureMouse()

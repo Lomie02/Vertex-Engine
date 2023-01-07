@@ -24,6 +24,7 @@ GameObject::GameObject(const char* _Name, bool active)
 	material = Material("Mat");
 	transform.size.x = 1;
 	transform.size.y = -1;
+	 
 	m_Collider = new Collider();
 }
 
@@ -79,4 +80,15 @@ void GameObject::ConfigureSystems()
 	{
 		transform.position = m_Parent->transform.position + transform.localPosition;
 	}
+}
+
+void GameObject::AddComponent(VertexComponent* _comp)
+{
+	m_Components.push_back(_comp);
+}
+
+void GameObject::RemoveComponent(VertexComponent* _comp)
+{
+
+
 }

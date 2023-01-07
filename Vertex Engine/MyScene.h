@@ -12,6 +12,8 @@
 #include "RigidBody.h"
 #include "Animator.h"
 
+#include "TestComponent.h"
+
 class MyScene : public VertexScene
 {
 public:
@@ -30,6 +32,7 @@ public:
 	AssetManager GetAssets() { return m_Manager; }
 private:
 
+	TestComponent* m_MyComponent;
 	SceneManager* m_SceneManager;
 	GLFWwindow* m_Window;
 

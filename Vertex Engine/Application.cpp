@@ -319,7 +319,7 @@ void Application::EditorMain()
 		//==================================== Colour
 
 		ImGui::Text("Colour");
-		ImGui::InputFloat4("##Colour", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selected)->material.colour.r);
+		ImGui::DragFloat4("##Colour", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selected)->material.colour.r,0.05f ,0.0f ,1.0f);
 
 		ImGui::Spacing();
 		ImGui::Spacing();

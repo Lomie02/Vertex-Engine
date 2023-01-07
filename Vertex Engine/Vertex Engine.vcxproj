@@ -183,10 +183,12 @@
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="StartUp.cpp" />
+    <ClCompile Include="TestComponent.cpp" />
     <ClCompile Include="Text.cpp" />
     <ClCompile Include="Texture2D.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Vertex2D.cpp" />
+    <ClCompile Include="VertexComponent.cpp" />
     <ClCompile Include="VertexPrefs.cpp" />
     <ClCompile Include="VertexScene.cpp" />
     <ClCompile Include="VertexText2D.cpp" />
@@ -220,10 +222,12 @@
     <ClInclude Include="Scene2.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="TestComponent.h" />
     <ClInclude Include="Text.h" />
     <ClInclude Include="Texture2D.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Vertex2D.h" />
+    <ClInclude Include="VertexComponent.h" />
     <ClInclude Include="VertexPrefs.h" />
     <ClInclude Include="VertexRenderPackage.h" />
     <ClInclude Include="VertexScene.h" />

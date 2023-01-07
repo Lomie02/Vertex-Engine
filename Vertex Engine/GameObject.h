@@ -5,7 +5,8 @@
 #include <list>
 #include "Material.h"
 #include "Collider.h"
-
+#include "VertexComponent.h"
+#include <iostream>
 class GameObject
 {
 public:
@@ -30,7 +31,31 @@ public:
 	void ConfigureSystems();
 	Collider* GetCollider() { return m_Collider; }
 
+	void AddComponent(VertexComponent* _comp);
+
+	template<typename T>
+	T GetComponent()
+	{
+		for (int i = 0; i < m_Components.size(); i++)
+		{
+			for (auto cop : m_Components)
+			{
+				bool state = std::is_same<T, cop>::value;
+				if (state)
+				{
+					return m_Components.at(i);
+				}
+			}
+		}
+		return nullptr;
+	}
+
+	void RemoveComponent(VertexComponent* _comp);
+
+	int ComponentCount() { return m_Components.size(); }
+	std::vector<VertexComponent*> ComponentList() { return m_Components; }
 private:
+	std::vector<VertexComponent*> m_Components;
 	Collider* m_Collider;
 	GameObject* m_Parent;
 	std::list<GameObject*> m_Children;
