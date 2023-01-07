@@ -21,7 +21,7 @@ public:
 	void GetShader(Shader& _shader);
 
 	Shader shader;
-	glm::vec4 colour;
+	glm::vec4 colour = glm::vec4(1,0,0,1);
 	Texture2D baseTexture;
 
 	Surface surface = Opaque;

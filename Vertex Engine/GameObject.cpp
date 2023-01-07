@@ -21,6 +21,7 @@ GameObject::GameObject(const char* _Name, bool active)
 	transform.localPosition.y = 0;
 	transform.localPosition.x = 0;
 
+	material = Material("Mat");
 	transform.size.x = 1;
 	transform.size.y = -1;
 	m_Collider = new Collider();
@@ -33,6 +34,7 @@ GameObject::GameObject(const char* _Name)
 	transform.localPosition.y = 0;
 	transform.localPosition.x = 0;
 
+	material = Material("Mat");
 	m_Collider = new Collider();
 	transform.size.x = 1;
 	transform.size.y = -1;

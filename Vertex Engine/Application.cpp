@@ -173,7 +173,6 @@ void Application::StartUp()
 		ImGui::StyleColorsDark();
 
 		glViewport(299.973f, 349.968f, 1280, 720);
-		glScissor(299.973f, 349.968f, 1280, 720);
 		glEnable(GL_SCISSOR_TEST);
 
 		UpdateEditorMode();
@@ -283,17 +282,48 @@ void Application::EditorMain()
 	//ImGui::Text(m_SceneManager->GetCurrentScene()->GetAssets().m_Objects.at(selected)->name);
 	if (m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.size() != 0)
 	{
-		ImGui::BeginChild("Transform", ImVec2(0, 200), true);
-
-		ImGui::Checkbox("Active", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selected)->m_Active);
 		ImGui::Text("Transform");
-		ImGui::InputFloat2("Position", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selected)->transform.position.x);
+		ImGui::SameLine();
+		ImGui::Spacing();
+		ImGui::SameLine();
+		ImGui::Spacing();
+		ImGui::SameLine();
+		ImGui::Checkbox("Active", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selected)->m_Active);
+
+
+		//===================================== Position
+		ImGui::Text("Position");
+		ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(200, 0, 0, 255));
+		ImGui::Button("X"); ImGui::SameLine();
+		ImGui::PopStyleColor();
+
+		ImGui::InputFloat("##Xpos", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selected)->transform.position.x, 0.0f, 0.0f, "%.1f");
+
+		ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(0, 200, 0, 255));
+		ImGui::Button("Y");
+		ImGui::PopStyleColor();
+
+		ImGui::SameLine(); ImGui::InputFloat("##Ypos", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selected)->transform.position.y);
+
+		ImGui::Spacing();
+		ImGui::Spacing();
+		//===================================== Rotation
 		ImGui::InputFloat("Rotation", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selected)->transform.rotation);
+
+		//===================================== Scale
 		ImGui::InputFloat("Scale", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selected)->transform.scale);
-
 		ImGui::InputFloat2("Size", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selected)->transform.size.x);
-		ImGui::EndChild();
 
+		ImGui::Spacing();
+		ImGui::Spacing();
+		//==================================== Colour
+
+		ImGui::Text("Colour");
+		ImGui::InputFloat4("##Colour", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selected)->material.colour.r);
+
+		ImGui::Spacing();
+		ImGui::Spacing();
+		ImGui::Spacing();
 
 	}
 
@@ -301,7 +331,25 @@ void Application::EditorMain()
 	{
 		ImGui::BeginChild("Camera Transform", ImVec2(0, 200), true);
 		ImGui::Text("Camera Transform");
-		ImGui::InputFloat2("Position", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Cameras.at(Cameraselected)->transform.position.x);
+
+		//==============================================
+		ImGui::Text("Position");
+		ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(200, 0, 0, 255));
+		ImGui::Button("X"); ImGui::SameLine();
+		ImGui::PopStyleColor();
+
+		ImGui::InputFloat("##Xpos", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Cameras.at(Cameraselected)->transform.position.x, 0.0f, 0.0f, "%.1f");
+
+		ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(0, 200, 0, 255));
+		ImGui::Button("Y");
+		ImGui::PopStyleColor();
+
+		ImGui::SameLine(); ImGui::InputFloat("##Ypos", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Cameras.at(Cameraselected)->transform.position.y);
+
+		ImGui::Spacing();
+		ImGui::Spacing();
+
+		//==============================================
 		ImGui::InputFloat("Rotation", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Cameras.at(Cameraselected)->transform.rotation);
 		ImGui::Text(" ");
 		ImGui::Text("Camera Lens");
@@ -315,8 +363,14 @@ void Application::EditorMain()
 	ImGui::BeginMainMenuBar();
 	ImGui::Text(PROJECT_NAME);
 	ImGui::Spacing();
-	ImGui::Button("Save Current");
-	ImGui::Button("Project Settings");
+
+	ImGui::Button("Main Window");
+	ImGui::Spacing();
+
+	ImGui::Button("Animation Window");
+	ImGui::Spacing();
+
+	ImGui::Button("Vertex Canvas");
 
 	if (ImGui::Button("Help"))
 	{
