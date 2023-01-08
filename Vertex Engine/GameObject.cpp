@@ -87,8 +87,26 @@ void GameObject::AddComponent(VertexComponent* _comp)
 	m_Components.push_back(_comp);
 }
 
+bool GameObject::GetComponent(VertexComponent& _target)
+{
+	for (int i = 0; i < m_Components.size(); i++) {
+		if (typeid(_target) == typeid(m_Components.at(i))) 
+		{
+			_target = *m_Components.at(i);
+			return true;
+		}
+	}
+
+	return false;
+}
+
 void GameObject::RemoveComponent(VertexComponent* _comp)
 {
-
-
+	for (int i = 0; i < m_Components.size(); i++)
+	{
+		if (_comp == m_Components.at(i))
+		{
+			m_Components.erase(m_Components.begin() + i);
+		}
+	}
 }

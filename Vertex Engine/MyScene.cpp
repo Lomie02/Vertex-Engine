@@ -57,15 +57,19 @@ void MyScene::Awake()
 	m_Object2->material.baseTexture = ResourceManager::GetTexture("boy1");
 	m_Canvas->material.baseTexture = ResourceManager::GetTexture("Canvas");
 
-	m_Object2->material.colour = glm::vec4(1, 0, 0,0.5f);
+	m_Object2->material.colour = glm::vec4(1, 0, 0, 0.5f);
 	m_Object->material.surface = Transparent;
 
 	m_MyComponent = new TestComponent();
 
 	m_Object2->AddComponent(m_MyComponent);
 
-	m_Object2->GetComponent<TestComponent>().Start();
+	TestComponent dont;
 
+	if(m_Object2->GetComponent(dont));
+	{
+		dont.Start();
+	}
 
 	m_Manager.Register(m_Object);
 	m_Manager.Register(m_Object2);
@@ -159,7 +163,7 @@ void MyScene::Update(float delta)
 	{
 		GameObject cast;
 
-		if (m_Manager.Raycast2D(m_Manager.GetMousePosition(), glm::vec2(0,1), cast, 5.0f))
+		if (m_Manager.Raycast2D(m_Manager.GetMousePosition(), glm::vec2(0, 1), cast, 5.0f))
 		{
 			std::cout << cast.name << std::endl;
 		}

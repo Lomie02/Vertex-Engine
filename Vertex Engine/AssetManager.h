@@ -50,6 +50,8 @@ public:
 	void UnRegister(GameObject* _target);
 	void Gizmos(Vertex2D* render);
 
+
+
 private:
 	void UpdateComponents(float delta);
 	void ConfigureMouse();

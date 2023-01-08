@@ -468,6 +468,20 @@ void AssetManager::Gizmos(Vertex2D* render)
 
 }
 
+GameObject* AssetManager::FindObjectWithTag(std::string _tag)
+{
+
+	for (int i = 0; i < m_Objects.size(); i++)
+	{
+		if (m_Objects.at(i)->Tag == _tag)
+		{
+			return m_Objects.at(i);
+		}
+	}
+
+	return nullptr;
+}
+
 void AssetManager::UpdateComponents(float delta)
 {
 	for (int i = 0; i < m_Objects.size(); i++)

@@ -33,27 +33,13 @@ public:
 
 	void AddComponent(VertexComponent* _comp);
 
-	template<typename T>
-	T GetComponent()
-	{
-		for (int i = 0; i < m_Components.size(); i++)
-		{
-			for (auto cop : m_Components)
-			{
-				bool state = std::is_same<T, cop>::value;
-				if (state)
-				{
-					return m_Components.at(i);
-				}
-			}
-		}
-		return nullptr;
-	}
-
+	bool GetComponent(VertexComponent& _target);
 	void RemoveComponent(VertexComponent* _comp);
 
 	int ComponentCount() { return m_Components.size(); }
 	std::vector<VertexComponent*> ComponentList() { return m_Components; }
+
+	std::string Tag = "Untagged";
 private:
 	std::vector<VertexComponent*> m_Components;
 	Collider* m_Collider;
