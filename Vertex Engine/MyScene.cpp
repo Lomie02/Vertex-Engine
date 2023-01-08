@@ -57,6 +57,8 @@ void MyScene::Awake()
 	m_Object2->material.baseTexture = ResourceManager::GetTexture("boy1");
 	m_Canvas->material.baseTexture = ResourceManager::GetTexture("Canvas");
 
+	m_Button->material.baseTexture = ResourceManager::GetTexture("UI_Button");
+
 	m_Object2->material.colour = glm::vec4(1, 0, 0, 0.5f);
 	m_Object->material.surface = Transparent;
 
@@ -80,7 +82,7 @@ void MyScene::Awake()
 
 	m_MainCamera->transform.rotation = 0;
 
-	//m_Manager.RegisterUi(m_Button);
+	m_Manager.RegisterUi(m_Button);
 	m_Body = new RigidBody("Yep");
 
 	m_Body->material.baseTexture = ResourceManager::GetTexture("boy1");

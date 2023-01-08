@@ -11,14 +11,14 @@ public:
 	{ 
 		m_Text = new VertexText2D(PROJECT_RESOLUTION);
 		material.baseTexture = ResourceManager::GetTexture("UI_Button");
-		m_Text->Load("Builds/fonts/arial.ttf", size);
+		m_Text->Load("Builds/fonts/arial.ttf", 24);
 		UpdateButton();
 	}
 	Button(const char* Name) : GameObject(Name)
 	{ 
 		m_Text = new VertexText2D(PROJECT_RESOLUTION); 
 		material.baseTexture = ResourceManager::GetTexture("UI_Button");
-		m_Text->Load("Builds/fonts/arial.ttf", size);
+		m_Text->Load("Builds/fonts/arial.ttf", 24);
 		UpdateButton();
 	}
 	Button(const char* Name, std::string _text) : GameObject(Name)
@@ -26,7 +26,7 @@ public:
 
 		m_Text = new VertexText2D(PROJECT_RESOLUTION);
 		material.baseTexture = ResourceManager::GetTexture("UI_Button");
-		m_Text->Load("Builds/fonts/arial.ttf", size);
+		m_Text->Load("Builds/fonts/arial.ttf", 24);
 		text = _text;
 		UpdateButton();
 	}
@@ -34,7 +34,7 @@ public:
 	{ 
 		material.baseTexture = ResourceManager::GetTexture("UI_Button");
 		m_Text = new VertexText2D(PROJECT_RESOLUTION);
-		m_Text->Load("Builds/fonts/arial.ttf", size);
+		m_Text->Load("Builds/fonts/arial.ttf", 24);
 		UpdateButton();
 	}
 
@@ -46,8 +46,8 @@ public:
 	void PressEvent() { m_WasPressed = true; };
 	void CloseEvent() { m_WasPressed = false; };
 	std::string text = "Button";
-	float size = 0.1f;
-	glm::vec3 colour = glm::vec3(1, 0, 0);
+	float size = 1.0f;
+	glm::vec3 colour = glm::vec3(1, 1, 0);
 
 	VertexText2D* GetVertexText() { return m_Text; }
 

@@ -6,8 +6,7 @@ class Text : public GameObject
 public:
 	Text();
 	~Text();
-
-
+	std::string text = "Button";
 private:
 
 };
