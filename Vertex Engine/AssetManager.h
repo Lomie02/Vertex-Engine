@@ -50,7 +50,7 @@ public:
 	void UnRegister(GameObject* _target);
 	void Gizmos(Vertex2D* render);
 
-
+	GameObject* FindObjectWithTag(std::string _tag);
 
 private:
 	void UpdateComponents(float delta);
