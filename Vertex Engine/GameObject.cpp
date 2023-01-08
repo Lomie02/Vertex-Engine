@@ -118,7 +118,6 @@ void GameObject::RemoveComponent(VertexComponent* _comp)
 	{
 		if (_comp == m_Components.at(i))
 		{
-			m_Components.at(i)->RemovePartner();
 			m_Components.erase(m_Components.begin() + i);
 		}
 	}

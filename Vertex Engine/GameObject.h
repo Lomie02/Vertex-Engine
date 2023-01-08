@@ -50,6 +50,6 @@ private:
 	std::vector<VertexComponent*> m_Components;
 	Collider* m_Collider;
 	GameObject* m_Parent;
-	std::list<GameObject*> m_Children;
+	std::vector<GameObject*> m_Children;
 };
 

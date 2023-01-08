@@ -20,12 +20,3 @@ void VertexComponent::LateUpdate(float delta)
 {
 }
 
-void VertexComponent::AssignPartner(GameObject* _partner)
-{
-	Partner = _partner;
-}
-
-void VertexComponent::RemovePartner()
-{
-	Partner = nullptr;
-}
