@@ -64,15 +64,16 @@ void MyScene::Awake()
 
 	m_Object2->AddComponent(m_MyComponent);
 
+	m_Manager.Register(m_Object2);
+	m_Manager.Register(m_Object);
+	m_MyComponent->name = "My Componenet";
+
 	TestComponent dont;
 
 	if(m_Object2->GetComponent(dont));
 	{
-		dont.Start();
+		std::cout << dont.name << std::endl;
 	}
-
-	m_Manager.Register(m_Object);
-	m_Manager.Register(m_Object2);
 
 	m_Manager.Register(m_MainCamera);
 	m_Manager.Register(m_DummyCamera);

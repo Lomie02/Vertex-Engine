@@ -24,7 +24,7 @@ GameObject::GameObject(const char* _Name, bool active)
 	material = Material("Mat");
 	transform.size.x = 1;
 	transform.size.y = -1;
-	 
+
 	m_Collider = new Collider();
 }
 
@@ -45,7 +45,12 @@ void GameObject::SetParent(GameObject* _object)
 {
 	if (m_Parent != nullptr)
 	{
-		m_Parent->m_Children.remove(this);
+		for (int i = 0; i < m_Parent->m_Children.size(); i++) {
+			if (m_Parent->m_Children.at(i) == this)
+			{
+				m_Parent->m_Children.erase(m_Parent->m_Children.begin() + i);
+			}
+		}
 	}
 
 	m_Parent = _object;
@@ -60,7 +65,12 @@ void GameObject::RemoveParent()
 {
 	if (m_Parent != nullptr)
 	{
-		m_Parent->m_Children.remove(this);
+		for (int i = 0; i < m_Parent->m_Children.size(); i++) {
+			if (m_Parent->m_Children.at(i) == this)
+			{
+				m_Parent->m_Children.erase(m_Parent->m_Children.begin() + i);
+			}
+		}
 	}
 }
 
@@ -79,6 +89,8 @@ void GameObject::ConfigureSystems()
 	if (m_Parent != nullptr)
 	{
 		transform.position = m_Parent->transform.position + transform.localPosition;
+		transform.rotation = m_Parent->transform.rotation + transform.localRotation;
+		transform.scale = m_Parent->transform.scale / transform.localScale;
 	}
 }
 
@@ -90,7 +102,7 @@ void GameObject::AddComponent(VertexComponent* _comp)
 bool GameObject::GetComponent(VertexComponent& _target)
 {
 	for (int i = 0; i < m_Components.size(); i++) {
-		if (typeid(_target) == typeid(m_Components.at(i))) 
+		if (typeid(_target) == typeid(m_Components.at(i)))
 		{
 			_target = *m_Components.at(i);
 			return true;
@@ -106,7 +118,40 @@ void GameObject::RemoveComponent(VertexComponent* _comp)
 	{
 		if (_comp == m_Components.at(i))
 		{
+			m_Components.at(i)->RemovePartner();
 			m_Components.erase(m_Components.begin() + i);
 		}
 	}
+}
+
+bool GameObject::GetComponentInParent(VertexComponent& _target)
+{
+	for (int i = 0; i < m_Parent->m_Components.size(); i++) {
+		if (typeid(_target) == typeid(m_Parent->m_Components.at(i)))
+		{
+			_target = *m_Parent->m_Components.at(i);
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool GameObject::GetComponentInChildren(VertexComponent& _target)
+{
+	for (int k = 0; k < m_Children.size(); k++) {
+
+		for (int i = 0; i < m_Children.at(k)->m_Components.size(); i++) {
+			if (typeid(_target) == typeid(m_Parent->m_Components.at(i)))
+			{
+				_target = *m_Children.at(k)->m_Components.at(i);
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+void GameObject::ConfigurePartners()
+{
 }

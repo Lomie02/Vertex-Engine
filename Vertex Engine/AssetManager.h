@@ -51,6 +51,7 @@ public:
 	void Gizmos(Vertex2D* render);
 
 	GameObject* FindObjectWithTag(std::string _tag);
+	std::vector<GameObject*> FindObjecstWithTag(std::string _tag);
 
 private:
 	void UpdateComponents(float delta);

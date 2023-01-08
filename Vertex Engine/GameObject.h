@@ -37,10 +37,16 @@ public:
 	void RemoveComponent(VertexComponent* _comp);
 
 	int ComponentCount() { return m_Components.size(); }
-	std::vector<VertexComponent*> ComponentList() { return m_Components; }
+	bool GetComponentInParent(VertexComponent& _target);
+	bool GetComponentInChildren(VertexComponent& _target);
+	
 
+	std::vector<VertexComponent*> ComponentList() { return m_Components; }
 	std::string Tag = "Untagged";
+
 private:
+	void ConfigurePartners();
+
 	std::vector<VertexComponent*> m_Components;
 	Collider* m_Collider;
 	GameObject* m_Parent;

@@ -482,6 +482,21 @@ GameObject* AssetManager::FindObjectWithTag(std::string _tag)
 	return nullptr;
 }
 
+std::vector<GameObject*> AssetManager::FindObjecstWithTag(std::string _tag)
+{
+	std::vector<GameObject*> TaggedObjects;
+
+	for (int i = 0; i < m_Objects.size(); i++)
+	{
+		if (m_Objects.at(i)->Tag == _tag)
+		{
+			TaggedObjects.push_back(m_Objects.at(i));
+		}
+	}
+
+	return TaggedObjects;
+}
+
 void AssetManager::UpdateComponents(float delta)
 {
 	for (int i = 0; i < m_Objects.size(); i++)
