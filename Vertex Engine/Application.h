@@ -6,6 +6,9 @@
 #include "SceneManager.h"
 #include "VertexText2D.h"
 
+#include "MyFirstScene.h"
+
+
 #define SIZE m_Size
 
 enum EditorWindow {
@@ -60,6 +63,8 @@ private:
 	VertexText2D* Text;
 	Vertex2D* m_Renderer;
 	SceneManager* m_SceneManager;
+
+	MyFirstScene* m_MyScene;
 
 	MyScene* m_Scene;
 	Scene2* m_SecondScene;

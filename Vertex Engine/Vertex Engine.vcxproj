@@ -176,6 +176,7 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="Material.cpp" />
+    <ClCompile Include="MyFirstScene.cpp" />
     <ClCompile Include="MyScene.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="RigidBody.cpp" />
@@ -216,6 +217,7 @@
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="khrplatform.h" />
     <ClInclude Include="Material.h" />
+    <ClInclude Include="MyFirstScene.h" />
     <ClInclude Include="MyScene.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="RigidBody.h" />

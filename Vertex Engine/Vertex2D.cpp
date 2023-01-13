@@ -15,16 +15,12 @@ void Vertex2D::DrawSprite(Material& material, glm::vec2 position, glm::vec2 size
 	glEnable(GL_BLEND);
 	glEnable(GL_CULL_FACE);
 
-	//glEnable(GL_DEPTH_TEST);
+	glEnable(GL_DEPTH_TEST);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	if (material.surface == Transparent)
 	{
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
 	}
-	else
-	{
-		//glDepthFunc(GL_EQUAL);
-	}
+	//glDepthFunc(GL_EQUAL);
 
 
 	this->m_Shader = material.shader;
@@ -32,7 +28,7 @@ void Vertex2D::DrawSprite(Material& material, glm::vec2 position, glm::vec2 size
 	this->m_Shader.Use();
 	glm::mat4 model = glm::mat4(1.0f);
 
-	model = glm::translate(model, glm::vec3(position,0));
+	model = glm::translate(model, glm::vec3(position, 0));
 	model = glm::translate(model, glm::vec3(0.5f * size.x, 0.5f * -size.y, 0.0f));
 	model = glm::rotate(model, glm::radians(rotate), glm::vec3(0.0f, 0.0f, 1.0f));
 	model = glm::translate(model, glm::vec3(-0.5f * size.x, -0.5f * -size.y, 0.0f));
@@ -49,10 +45,7 @@ void Vertex2D::DrawSprite(Material& material, glm::vec2 position, glm::vec2 size
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 	glBindVertexArray(0);
 
-	if (material.surface == Opaque)
-	{
-		glDisable(GL_DEPTH_TEST);
-	}
+	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_BLEND);
 	glDisable(GL_CULL_FACE);
 }
@@ -62,24 +55,16 @@ void Vertex2D::DrawSprite(Material& material, glm::vec3 position, glm::vec2 size
 	glEnable(GL_BLEND);
 	glEnable(GL_CULL_FACE);
 
-	//glEnable(GL_DEPTH_TEST);
-
-	if (material.surface == Transparent)
-	{
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-	}
-	else
-	{
-		//glDepthFunc(GL_EQUAL);
-	}
+	glEnable(GL_DEPTH_TEST);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	//glDepthFunc(GL_EQUAL);
 
 	this->m_Shader = material.shader;
 
 	this->m_Shader.Use();
 	glm::mat4 model = glm::mat4(1.0f);
 
-	model = glm::translate(model, position);
+	model = glm::translate(model, glm::vec3(position));
 	model = glm::translate(model, glm::vec3(0.5f * size.x, 0.5f * -size.y, 0.0f));
 	model = glm::rotate(model, glm::radians(rotate), glm::vec3(0.0f, 0.0f, 1.0f));
 	model = glm::translate(model, glm::vec3(-0.5f * size.x, -0.5f * -size.y, 0.0f));
@@ -96,13 +81,9 @@ void Vertex2D::DrawSprite(Material& material, glm::vec3 position, glm::vec2 size
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 	glBindVertexArray(0);
 
-	if (material.surface == Opaque)
-	{
-		glDisable(GL_DEPTH_TEST);
-	}
+	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_BLEND);
 	glDisable(GL_CULL_FACE);
-
 }
 
 void Vertex2D::DrawLine(glm::vec2 _start, glm::vec2 _end, Material& _mat)
@@ -112,8 +93,8 @@ void Vertex2D::DrawLine(glm::vec2 _start, glm::vec2 _end, Material& _mat)
 		_start.x, _start.y,  _end.x, _end.y,
 	};
 
-	glVertexPointer(2, GL_FLOAT,0, Lines);
-	glDrawArrays(GL_LINES,0,2);
+	glVertexPointer(2, GL_FLOAT, 0, Lines);
+	glDrawArrays(GL_LINES, 0, 2);
 }
 
 void Vertex2D::SetUpData()

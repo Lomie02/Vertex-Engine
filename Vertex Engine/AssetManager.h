@@ -52,6 +52,9 @@ public:
 
 	GameObject* FindObjectWithTag(std::string _tag);
 	std::vector<GameObject*> FindObjecstWithTag(std::string _tag);
+	std::vector<GameObject*> FindObjecstWithComponent(VertexComponent& _ref);
+	GameObject* FindObjectWithComponent(VertexComponent& _ref);
+	GameObject* FindComponent(VertexComponent& _ref);
 
 private:
 	void UpdateComponents(float delta);

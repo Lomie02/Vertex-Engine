@@ -182,7 +182,7 @@ void MyScene::Update(float delta)
 void MyScene::LateUpdate(float delta)
 {
 	m_Manager.ConfigureSystems();
-	//m_Manager.CollisionCheck();
+	m_Manager.CollisionCheck();
 }
 
 void MyScene::FixedUpdate(float fixedDelta)
@@ -194,5 +194,4 @@ void MyScene::FixedUpdate(float fixedDelta)
 void MyScene::Rendering(Vertex2D* render)
 {
 	m_Manager.ConfigureRenderSystems(render);
-	m_TextRenderer->Text2D("Vertex Engine", 200, 200, 1, glm::vec3(0, 0, 1));
 }

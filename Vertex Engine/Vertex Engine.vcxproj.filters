@@ -61,6 +61,9 @@
     <Filter Include="Components">
       <UniqueIdentifier>{560fabd4-3f43-4762-9f34-f300331fba97}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scenes\Scene 3">
+      <UniqueIdentifier>{f1d50b3a-5a3b-4e07-9bb3-97548b9d311d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="StartUp.cpp">
@@ -161,6 +164,9 @@
     </ClCompile>
     <ClCompile Include="TestComponent.cpp">
       <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="MyFirstScene.cpp">
+      <Filter>Scenes\Scene 3</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -280,6 +286,9 @@
     </ClInclude>
     <ClInclude Include="TestComponent.h">
       <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="MyFirstScene.h">
+      <Filter>Scenes\Scene 3</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

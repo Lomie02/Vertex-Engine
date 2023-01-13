@@ -251,7 +251,22 @@ void AssetManager::ConfigureRenderSystems(Vertex2D* render)
 		{
 			float WithinDistance = glm::distance(m_Objects.at(i)->transform.position, m_Cameras.at(m_ActiveCamera)->transform.position);
 
-			if (m_Objects.at(i)->m_Active == true && WithinDistance < CAMERA_DISTANCE_RENDER_LIMIT)
+			if (m_Objects.at(i)->m_Active == true && WithinDistance < CAMERA_DISTANCE_RENDER_LIMIT && m_Objects.at(i)->material.surface == Opaque)
+			{
+				render->DrawSprite(m_Objects.at(i)->material, m_Objects.at(i)->transform.position, m_Objects.at(i)->transform.size, m_Objects.at(i)->transform.rotation, m_Objects.at(i)->transform.scale, m_Cameras.at(m_ActiveCamera)->GetProjection());
+				m_Cameras.at(m_ActiveCamera)->ConfigureSystems();
+				m_Objects.at(i)->ConfigureSystems();
+			}
+		}
+	}
+
+	if (m_Objects.size() > 0)
+	{
+		for (int i = 0; i < m_Objects.size(); i++)
+		{
+			float WithinDistance = glm::distance(m_Objects.at(i)->transform.position, m_Cameras.at(m_ActiveCamera)->transform.position);
+
+			if (m_Objects.at(i)->m_Active == true && WithinDistance < CAMERA_DISTANCE_RENDER_LIMIT && m_Objects.at(i)->material.surface == Transparent)
 			{
 				render->DrawSprite(m_Objects.at(i)->material, m_Objects.at(i)->transform.position, m_Objects.at(i)->transform.size, m_Objects.at(i)->transform.rotation, m_Objects.at(i)->transform.scale, m_Cameras.at(m_ActiveCamera)->GetProjection());
 				m_Cameras.at(m_ActiveCamera)->ConfigureSystems();
@@ -497,11 +512,33 @@ std::vector<GameObject*> AssetManager::FindObjecstWithTag(std::string _tag)
 	return TaggedObjects;
 }
 
+std::vector<GameObject*> AssetManager::FindObjecstWithComponent(VertexComponent& _ref)
+{
+	return std::vector<GameObject*>();
+}
+
+GameObject* AssetManager::FindObjectWithComponent(VertexComponent& _ref)
+{
+	for (int i = 0; i < m_Objects.size(); i++)
+	{
+		std::vector<VertexComponent*> comps = m_Objects.at(i)->ComponentList();
+		for (int k = 0; k < comps.size(); k++) {
+
+			if (typeid(_ref) == typeid(comps.at(k)))
+			{
+				return m_Objects.at(i);
+			}
+		}
+	}
+
+	return nullptr;
+}
+
 void AssetManager::UpdateComponents(float delta)
 {
 	for (int i = 0; i < m_Objects.size(); i++)
 	{
-		if (m_Objects.at(i)->ComponentCount() > 0) 
+		if (m_Objects.at(i)->ComponentCount() > 0)
 		{
 			std::vector<VertexComponent*> components;
 			components = m_Objects.at(i)->ComponentList();
