@@ -20,8 +20,8 @@ MyScene::~MyScene()
 	delete m_Object;
 	delete m_Object2;
 
-	delete m_TextRenderer;
-	m_TextRenderer = nullptr;
+	delete m_MyText;
+	m_MyText = nullptr;
 
 	delete m_DummyCamera;
 	m_DummyCamera = nullptr;
@@ -34,10 +34,13 @@ void MyScene::Awake()
 {
 
 	m_Anim = new Animator();
-	m_TextRenderer = new VertexText2D(1920, 1080);
-	m_TextRenderer->Load("Builds/fonts/arial.ttf", 24);
 	m_Button = new Button("Play");
 	m_Button->text = "Play";
+
+	m_MyText = new Text();
+	m_Manager.Register(m_MyText);
+
+	m_MyText->text = "Yo Ass";
 
 	ResourceManager::LoadTexture("Builds/Textures/PowerIcon.png", "Vertex");
 	ResourceManager::LoadTexture("Builds/Textures/Huggy.png", "boy1");
@@ -82,7 +85,7 @@ void MyScene::Awake()
 
 	m_MainCamera->transform.rotation = 0;
 
-	m_Manager.RegisterUi(m_Button);
+	m_Manager.Register(m_Button);
 	m_Body = new RigidBody("Yep");
 
 	m_Body->material.baseTexture = ResourceManager::GetTexture("boy1");
@@ -119,8 +122,11 @@ void MyScene::Start()
 
 	m_Button->text = "Ya boy";
 
-	m_MainCamera->transform.position.x = 0;
-	m_MainCamera->transform.position.y = 0;
+	m_MainCamera->transform.position.x = 10;
+	m_MainCamera->transform.position.y = 10;
+
+	m_MyText->transform.position.x = 10;
+	m_MyText->transform.position.y = 10;
 
 	glClearColor(0.2f, 0.2f, 0.2f, 0);
 	//m_Manager.ConfigSetup();

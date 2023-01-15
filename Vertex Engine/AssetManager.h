@@ -21,9 +21,9 @@ public:
 	void Register(GameObject* _object);
 	void Register(RigidBody* _object);
 	void Register(Animator* _object);
-	void RegisterUi(GameObject* _object);
-	void RegisterUi(Button* _object);
+	void Register(Button* _object);
 	void Register(Camera* camera);
+	void Register(Text* _text);
 
 	void GiveWindow(GLFWwindow* _window) { m_Window = _window; };
 	bool OnTrigger(GameObject* A, GameObject* B);

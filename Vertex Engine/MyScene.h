@@ -13,6 +13,7 @@
 #include "Animator.h"
 
 #include "TestComponent.h"
+#include "Text.h"
 
 class MyScene : public VertexScene
 {
@@ -42,8 +43,9 @@ private:
 
 	RigidBody* m_Body;
 
+	Text* m_MyText;
+
 	Button* m_Button;
-	VertexText2D* m_TextRenderer;
 	GameObject* m_Object;
 	GameObject* m_Object2;
 	GameObject* m_Canvas;

@@ -47,7 +47,6 @@ public:
 	void CloseEvent() { m_WasPressed = false; };
 	std::string text = "Button";
 	float size = 1.0f;
-	glm::vec3 colour = glm::vec3(1, 1, 0);
 
 	VertexText2D* GetVertexText() { return m_Text; }
 

@@ -9,10 +9,9 @@
 
 VertexText2D::VertexText2D(unsigned int width, unsigned int height)
 {
-	this->TextShader = ResourceManager::LoadShader("Builds/Shaders/text2d.vs", "Builds/Shaders/text2d.frag", nullptr, "Text");
-	this->TextShader.SetInteger("text", 0);
-
-
+	this->TextShader = ResourceManager::LoadShader("Builds/Shaders/text2d.vs", "Builds/Shaders/text2d.frag", nullptr, "VertexText");
+    this->TextShader.SetInteger("text", 0);
+	
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
     glBindVertexArray(VAO);
@@ -84,11 +83,12 @@ void VertexText2D::Load(std::string font, unsigned int fontSize)
     FT_Done_FreeType(ft);
 }
 
-void VertexText2D::Text2D(std::string text, float x, float y, float scale, glm::vec3 color)
+void VertexText2D::Text2D(std::string text, float x, float y, float scale, glm::vec4 color, glm::mat4 _camera)
 {
     // activate corresponding render state	
     this->TextShader.Use();
-    this->TextShader.SetVector3f("textColor", color);
+    this->TextShader.SetMatrix4("projection", _camera, true);
+    this->TextShader.SetVector4f("textColor", color);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -102,7 +102,7 @@ void VertexText2D::Text2D(std::string text, float x, float y, float scale, glm::
         Character ch = Characters[*c];
 
         float xpos = x + ch.Bearing.x * scale;
-        float ypos = y + (this->Characters['H'].Bearing.y + ch.Bearing.y) * scale;
+        float ypos = y - (this->Characters['H'].Bearing.y - ch.Bearing.y) * scale;
 
         float w = ch.Size.x * scale;
         float h = ch.Size.y * scale;

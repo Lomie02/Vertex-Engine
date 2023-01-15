@@ -26,12 +26,7 @@ void AssetManager::Register(Animator* _object)
 	m_Animators.push_back(_object);
 }
 
-void AssetManager::RegisterUi(GameObject* _object)
-{
-	m_UiObjects.push_back(_object);
-}
-
-void AssetManager::RegisterUi(Button* _object)
+void AssetManager::Register(Button* _object)
 {
 	m_UiButtonObjects.push_back(_object);
 }
@@ -209,7 +204,7 @@ void AssetManager::ConfigureSystems()
 		if (m_Cameras.size() > 0)
 		{
 			ResourceManager::GetShader("sprite").SetMatrix4("pro", m_Cameras.at(m_ActiveCamera)->GetProjection());
-			ResourceManager::GetShader("Text").SetMatrix4("projection", m_Cameras.at(m_ActiveCamera)->GetProjection());
+			//ResourceManager::GetShader("VertexText").SetMatrix4("projection", m_Cameras.at(m_ActiveCamera)->GetProjection(), true);
 		}
 		else {
 			m_ShutDownManager = true;
@@ -301,6 +296,8 @@ void AssetManager::ConfigureRenderSystems(Vertex2D* render)
 		}
 	}
 
+	//============================================== Render UI Last
+
 	if (m_UiButtonObjects.size() > 0)
 	{
 		for (int i = 0; i < m_UiButtonObjects.size(); i++)
@@ -314,6 +311,18 @@ void AssetManager::ConfigureRenderSystems(Vertex2D* render)
 			}
 		}
 	}
+
+	if (m_UiTextObjects.size() > 0)
+	{
+		for (int i = 0; i < m_UiTextObjects.size(); i++)
+		{
+			if (m_UiTextObjects.at(i)->m_Active)
+			{
+				m_UiTextObjects.at(i)->ConfigureRenderSystems(m_Cameras.at(m_ActiveCamera)->GetProjection());
+			}
+		}
+	}
+
 }
 
 void AssetManager::ConfigurePhysics(float fixedDelta)
@@ -336,6 +345,11 @@ void AssetManager::ConfigurePhysics(float fixedDelta)
 void AssetManager::Register(Camera* camera)
 {
 	m_Cameras.push_back(camera);
+}
+
+void AssetManager::Register(Text* _text)
+{
+	m_UiTextObjects.push_back(_text);
 }
 
 void AssetManager::SetActiveCamera(int _index)
