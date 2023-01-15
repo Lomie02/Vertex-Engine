@@ -4,9 +4,9 @@
 
 Text::Text() : GameObject("Text_1")
 {
-	m_Text = new VertexText2D(1920,1080);
+	m_Text = new VertexText2D(PROJECT_RESOLUTION);
 	material.colour = glm::vec4(0, 1, 0, 1);
-	transform.scale = 1.0f;
+	transform.scale = 0.1f;
 	ConfigureSystems();
 }
 
@@ -19,12 +19,10 @@ Text::~Text()
 void Text::ConfigureRenderSystems(glm::mat4 _camera)
 {
 	m_Text->Text2D(text,transform.position.x, transform.position.y, transform.scale, material.colour,_camera);
-	std::cout << "Render Text" << std::endl;
 }
 
 void Text::ConfigureSystems()
 {
 
-	m_Text->Load("Builds/fonts/arial.ttf", 24);
-	std::cout << "Booted" << std::endl;
+	m_Text->Load(m_FontPath + m_FontName, m_FontSize);
 }
