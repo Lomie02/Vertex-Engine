@@ -4,54 +4,56 @@
 #include "VertexRenderPackage.h"
 #include "ResourceManager.h"
 #include "GameSettings.h"
+
+#include "Text.h"
 class Button : public GameObject
 {
 public:
 	Button() : GameObject()
 	{ 
-		m_Text = new VertexText2D(PROJECT_RESOLUTION);
-		material.baseTexture = ResourceManager::GetTexture("UI_Button");
-		m_Text->Load("Builds/fonts/arial.ttf", 24);
-		UpdateButton();
+		m_Text = new Text();
+		m_Text->SetParent(this);
+
+		BeginSetUp();
 	}
 	Button(const char* Name) : GameObject(Name)
 	{ 
-		m_Text = new VertexText2D(PROJECT_RESOLUTION); 
-		material.baseTexture = ResourceManager::GetTexture("UI_Button");
-		m_Text->Load("Builds/fonts/arial.ttf", 24);
-		UpdateButton();
+		m_Text = new Text();
+		m_Text->SetParent(this);
+
+		BeginSetUp();
 	}
 	Button(const char* Name, std::string _text) : GameObject(Name)
 	{
+		m_Text = new Text();
+		m_Text->SetParent(this);
 
-		m_Text = new VertexText2D(PROJECT_RESOLUTION);
-		material.baseTexture = ResourceManager::GetTexture("UI_Button");
-		m_Text->Load("Builds/fonts/arial.ttf", 24);
-		text = _text;
-		UpdateButton();
+		BeginSetUp();
 	}
 	Button(const char* Name, bool active) : GameObject(Name, active)
 	{ 
-		material.baseTexture = ResourceManager::GetTexture("UI_Button");
-		m_Text = new VertexText2D(PROJECT_RESOLUTION);
-		m_Text->Load("Builds/fonts/arial.ttf", 24);
-		UpdateButton();
+		m_Text = new Text();
+		m_Text->SetParent(this);
+
+		BeginSetUp();
 	}
 
 	~Button();
 
 	bool Pressed() { return m_WasPressed; }
-	void UpdateButton();
 
 	void PressEvent() { m_WasPressed = true; };
 	void CloseEvent() { m_WasPressed = false; };
+	
+	void ConfigureCustoms(glm::mat4 _camera);
+	
 	std::string text = "Button";
 	float size = 1.0f;
 
-	VertexText2D* GetVertexText() { return m_Text; }
-
+	Text* m_Text;
 private:
+
+	void BeginSetUp();
 	bool m_WasPressed = false;
-	VertexText2D* m_Text;
 };
 

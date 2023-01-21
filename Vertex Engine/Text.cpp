@@ -6,7 +6,7 @@ Text::Text() : GameObject("Text_1")
 {
 	m_Text = new VertexText2D(PROJECT_RESOLUTION);
 	material.colour = glm::vec4(0, 1, 0, 1);
-	transform.scale = 0.1f;
+	transform.scale = 0.03f;
 	ConfigureSystems();
 }
 

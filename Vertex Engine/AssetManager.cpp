@@ -307,7 +307,7 @@ void AssetManager::ConfigureRenderSystems(Vertex2D* render)
 			{
 				m_UiButtonObjects.at(i)->ConfigureSystems();
 				render->DrawSprite(m_UiButtonObjects.at(i)->material, m_UiButtonObjects.at(i)->transform.position, m_UiButtonObjects.at(i)->transform.size, m_UiButtonObjects.at(i)->transform.rotation, m_UiButtonObjects.at(i)->transform.scale, m_Cameras.at(m_ActiveCamera)->GetProjection());
-				m_UiButtonObjects.at(i)->UpdateButton();
+				m_UiButtonObjects.at(i)->ConfigureCustoms(m_Cameras.at(m_ActiveCamera)->GetProjection());
 			}
 		}
 	}
