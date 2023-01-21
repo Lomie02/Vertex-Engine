@@ -18,7 +18,10 @@ MyScene::MyScene(const char _name[]) : VertexScene(_name)
 MyScene::~MyScene()
 {
 	delete m_Object;
+	m_Object = nullptr;
+
 	delete m_Object2;
+	m_Object2 = nullptr;
 
 	delete m_MyText;
 	m_MyText = nullptr;
@@ -28,12 +31,13 @@ MyScene::~MyScene()
 
 	delete m_Body;
 	m_Body = nullptr;
+
+	delete m_Button;
+	m_Button = nullptr;
 }
 
 void MyScene::Awake()
 {
-
-	m_Anim = new Animator();
 	m_Button = new Button("Play");
 	m_Button->text = "Play";
 
@@ -54,7 +58,9 @@ void MyScene::Awake()
 	m_DummyCamera = new Camera("Boy Camera");
 
 	m_Button->SetActive(true);
-	m_Button->transform.size = glm::vec2(100, 100);
+	m_Button->transform.position.x = 10;
+
+	m_Button->transform.size = glm::vec2(100, -100);
 
 	m_Object->material.baseTexture = ResourceManager::GetTexture("Vertex");
 	m_Object2->material.baseTexture = ResourceManager::GetTexture("boy1");
@@ -94,13 +100,13 @@ void MyScene::Awake()
 
 	m_Canvas->transform.size = glm::vec2(1280, 720);
 	//m_Anim->SetMaster(m_Object2);
-	//m_Manager.Register(m_Anim);
 	//m_Manager.Register(m_Canvas);
 }
 
 void MyScene::Start()
 {
 
+	m_Button->material.colour = glm::vec4(1,1,1,1);
 	m_Manager.GiveWindow(m_Window);
 	m_Object->transform.size = glm::vec2(1, 1);
 
@@ -117,8 +123,8 @@ void MyScene::Start()
 
 	m_Object2->transform.size = glm::vec2(2, 1);
 
-	m_Button->transform.size.x = 2;
-	m_Button->transform.size.y = 1;
+	m_Button->transform.size.x = 3;
+	m_Button->transform.size.y = 2;
 
 	m_Button->text = "Ya boy";
 
@@ -167,7 +173,6 @@ void MyScene::Update(float delta)
 		m_MainCamera->zoom -= 1 * delta;
 	}
 
-
 	if (glfwGetKey(m_Window, GLFW_KEY_SPACE) == GLFW_PRESS)
 	{
 		GameObject cast;
@@ -193,7 +198,6 @@ void MyScene::LateUpdate(float delta)
 
 void MyScene::FixedUpdate(float fixedDelta)
 {
-	m_Anim->ConfigureSystems(fixedDelta);
 	m_Manager.ConfigurePhysics(fixedDelta);
 }
 

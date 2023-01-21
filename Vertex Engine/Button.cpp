@@ -17,6 +17,4 @@ void Button::ConfigureCustoms(glm::mat4 _camera)
 void Button::BeginSetUp()
 {
 	m_Text->text = "Play";
-	m_Text->transform.localPosition.x += 5;
-	m_Text->transform.localPosition.y -= 5;
 }

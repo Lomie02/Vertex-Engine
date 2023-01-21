@@ -410,13 +410,9 @@ bool AssetManager::Raycast2D(glm::vec2 _pos, glm::vec2 _dir, GameObject& _out, f
 		_dir.y = 1;
 	}
 
-	std::cout << "Dir: " << _dir.x << " | " << _dir.y << std::endl;
-
 	for (int j = 0; j < length; j++)
 	{
 		Ray->transform.position += _dir;
-
-		std::cout << "Raycast Position: " << Ray->transform.position.x << " | " << Ray->transform.position.y << std::endl;
 
 		for (int i = 0; i < m_Objects.size(); i++)
 		{

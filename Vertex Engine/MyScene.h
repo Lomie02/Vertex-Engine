@@ -37,7 +37,6 @@ private:
 	SceneManager* m_SceneManager;
 	GLFWwindow* m_Window;
 
-	Animator* m_Anim;
 	Texture2D Dont;
 	Texture2D Dont2;
 
