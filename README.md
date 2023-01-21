@@ -6,9 +6,9 @@ Vertex Engine is a custom C++ Game Engine developed using OpenGL
  VERTEX ENGINE 2D:
 
 next to come:
- • Editor Windows
- • Editor Logger
- • Circle Collision
+ • VertexSound
+ • Button Improvements 
+ • VertexUI
  
 
 Major Features To Come:
@@ -29,22 +29,7 @@ Major Features To Come:
  14. Complete
  15. Scene Manager singleton conversion.
  16. Complete
- 17. AssetManager to update componenets on a game object
- 
-Asset Manager Changes To Come:
-
- 1. Update components.
- 2. Scripts can be added as components.
- 3. Will Update gameobjects that are registered.
- 4. GameObjects can be un-registered (complete)
-
-GameObjects Changes To Come:
-
- 1. AddGameObject Function (Complete)
- 2. RemoveGameObject Function 
- 3. GetComponent Function (almost)
- 4. FindObject Function (subject to change)
- 5. Tags
+ 17. Fix Collsion
 
 Editor Changes To Come:
 
