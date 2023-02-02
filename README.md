@@ -9,7 +9,27 @@ next to come:
  • VertexSound
  • Button Improvements 
  • VertexUI
- 
+ • Tension 2D (New renderer)
+ • Complete overhaul of how renderering is set up
+
+Tension2D Features:
+
+ • Layers will be introduced in the Tension2D renderer
+ • Gameobjects will need to render their own children in the Tension2D renderer 
+ • Gameobjects will update their children instead of the asset manager
+ • Render Textures introduced
+ • 2D Lighting 
+ • Depth testing
+ • Improved transparency renderering 
+
+
+
+Changes to come:
+ • Materials will be changed to components & will be removed from base gameobjects
+ • Renderers can be selected in the application header (Vertex2D & Tension2D)
+ • Application will contain a Settings system that will set renderers & unique settings 
+ for the AssetManager instead of having to change it manually in each manager
+
 
 Major Features To Come:
 
