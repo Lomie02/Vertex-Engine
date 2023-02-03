@@ -34,6 +34,8 @@ Application::~Application()
 	delete m_Scene;
 	m_Scene = nullptr;
 
+	delete m_Settings;
+	m_Settings = nullptr;
 
 	//========================== Delete your scenes here!
 	/*
@@ -146,6 +148,8 @@ void Application::StartUp()
 		glfwSwapInterval(false ? 1 : 0);
 	}
 
+	m_Settings = new BootUpContainer();
+
 	m_fps = 0;
 	m_frames = 0;
 	m_deltaTime = 0;
@@ -157,6 +161,14 @@ void Application::StartUp()
 	m_SceneManager->SetUpWindow(m_GameWindow);
 	// Load UI Textures
 	ResourceManager::LoadTexture("Builds/Textures/UI_Button.png", "UI_Button");
+
+	if (m_UsingRenderer == Vertex_2D)
+	{
+		m_Settings->m_UseDefaultRenderer = true;
+	}
+	else {
+		m_Settings->m_UseDefaultRenderer = false;
+	}
 
 
 	if (m_Mode == EDITOR)
@@ -178,9 +190,14 @@ void Application::StartUp()
 		std::cout << "Vertex Message: Editor Succeded." << std::endl;
 	}
 
+	for(int i = 0; i < m_SceneManager->m_SceneList.size(); i++)
+	{
+		m_SceneManager->m_SceneList.at(i)->GetAssets().BootUpAll(m_Settings);
+	}
+
+		std::cout << "Vertex Message: Start Up Succeded." << std::endl;
 
 	glClearColor(BACKGROUND_COLOUR);
-	std::cout << "Vertex Message: Start Up Succeded." << std::endl;
 }
 
 void Application::Start()
@@ -552,6 +569,11 @@ void Application::SceneSetUp()
 
 	m_Scene->GiveSceneManager(m_SceneManager);
 	m_SecondScene->GiveSceneManager(m_SceneManager);
+
+	for (int i = 0; i < m_SceneManager->m_SceneList.size(); i++)
+	{
+		m_SceneManager->m_SceneList.at(i)->GetAssets().ConfigSetup();
+	}
 }
 
 void Application::UpdateEditorMode()
@@ -606,6 +628,7 @@ void Application::FolderCreation()
 	success = mkdir("Builds/Shaders");
 	success = mkdir("Builds/Audio");
 	success = mkdir("Builds/Data");
+	success = mkdir("Builds/Data/0x021_0KAW");
 
 	std::cout << "Vertex Message: Completed file creation." << std::endl;
 }

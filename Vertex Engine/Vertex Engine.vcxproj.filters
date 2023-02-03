@@ -296,6 +296,12 @@
     <ClInclude Include="resource1.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="AdvancedSettings.h">
+      <Filter>Game Settings</Filter>
+    </ClInclude>
+    <ClInclude Include="BootUpContainer.h">
+      <Filter>Game Settings</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Vertex Engine 2D.rc">

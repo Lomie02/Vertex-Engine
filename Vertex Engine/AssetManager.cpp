@@ -10,6 +10,19 @@
 
 #include "Collider.h"
 
+void AssetManager::BootUpAll(BootUpContainer* _settings)
+{
+	if (_settings != nullptr) {
+		if (_settings->m_UseDefaultRenderer == true)
+		{
+			m_RendererToUse = Vertex_2D;
+		}
+		else {
+			m_RendererToUse = Tension_2D;
+		}
+	}
+}
+
 void AssetManager::Register(GameObject* _object)
 {
 	m_Objects.push_back(_object);
@@ -33,6 +46,8 @@ void AssetManager::Register(Button* _object)
 
 bool AssetManager::CollisionCheck()
 {
+
+
 	/*Collider type1;
 	Collider type2;
 	if (m_Objects.size() < 1) {
@@ -68,7 +83,7 @@ bool AssetManager::CollisionCheck()
 
 		Collider* c1 = m_Objects.at(k)->GetCollider();
 
-		for (int j = 0; j < m_Objects.size(); j++) {
+		for (int j = 1; j < m_Objects.size(); j++) {
 
 			Collider* c2 = m_Objects.at(j)->GetCollider();
 
@@ -440,16 +455,29 @@ bool AssetManager::Raycast2D(glm::vec2 _pos, glm::vec2 _dir, GameObject& _out, f
 	return false;
 }
 
+void AssetManager::TensionRendering()
+{
+
+}
+
+void AssetManager::TensionLayerSort()
+{
+}
+
 void AssetManager::ConfigSetup()
 {
-	VertexPrefs::GetFile("vertex_scene_data_01.txt", m_Objects);
-	VertexPrefs::GetFile("vertex_scene_data_ui_01.txt", m_UiObjects);
+	for (int i = 0; i < m_Objects.size(); i++)
+	{
+		m_Objects.at(i)->transform.position = VertexPrefs::GetTransform(m_Objects.at(i)->name).position;
+	}
 }
 
 void AssetManager::ExecuteAll()
 {
-	VertexPrefs::SaveFile("vertex_scene_data_01.txt", m_Objects);
-	VertexPrefs::SaveFile("vertex_scene_data_ui_01.txt", m_UiObjects);
+	for (int i = 0; i < m_Objects.size(); i++)
+	{
+		VertexPrefs::SaveTransform(m_Objects.at(i));
+	}
 }
 
 void AssetManager::UnRegister(GameObject* _target)

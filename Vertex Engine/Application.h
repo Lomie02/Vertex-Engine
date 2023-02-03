@@ -3,11 +3,13 @@
 #include "MyScene.h"
 #include "Scene2.h"
 #include "Vertex2D.h"
+
 #include "SceneManager.h"
 #include "VertexText2D.h"
+#include "AdvancedSettings.h"
+#include "BootUpContainer.h"
 
 #include "MyFirstScene.h"
-
 
 #define SIZE m_Size
 
@@ -79,6 +81,11 @@ private:
 	float m_fpsInterval = 0;
 	float m_prevTime;
 
+	BootUpContainer* m_Settings;
+
 	//Physics
 	float m_TimeStep = 0.01f;
+
+	// The renderer that the engine will use.
+	Renderer m_UsingRenderer = Vertex_2D;
 };

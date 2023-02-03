@@ -44,7 +44,7 @@ void MyScene::Awake()
 	m_MyText = new Text();
 	m_Manager.Register(m_MyText);
 
-	m_MyText->text = "Yo Ass";
+	m_MyText->text = "Vertex Engine";
 
 	ResourceManager::LoadTexture("Builds/Textures/PowerIcon.png", "Vertex");
 	ResourceManager::LoadTexture("Builds/Textures/Huggy.png", "boy1");
@@ -113,8 +113,8 @@ void MyScene::Start()
 	m_Object->transform.position.x = 0;
 	m_Object->transform.position.y = 0;
 
-	m_Object2->transform.position.y = 20;
-	m_Object2->transform.position.x = 20;
+	//m_Object2->transform.position.y = 20;
+	//m_Object2->transform.position.x = 20;
 
 	m_Body->transform.position.x = 0;
 	m_Body->transform.position.y = 0;
@@ -135,7 +135,6 @@ void MyScene::Start()
 	m_MyText->transform.position.y = 10;
 
 	glClearColor(0.2f, 0.2f, 0.2f, 0);
-	//m_Manager.ConfigSetup();
 
 }
 

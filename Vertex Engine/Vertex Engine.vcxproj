@@ -204,9 +204,11 @@
     <ClInclude Include="..\imgui\imstb_rectpack.h" />
     <ClInclude Include="..\imgui\imstb_textedit.h" />
     <ClInclude Include="..\stb\stb_image.h" />
+    <ClInclude Include="AdvancedSettings.h" />
     <ClInclude Include="Animator.h" />
     <ClInclude Include="Application.h" />
     <ClInclude Include="AssetManager.h" />
+    <ClInclude Include="BootUpContainer.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Clip.h" />

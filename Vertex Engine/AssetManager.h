@@ -5,12 +5,19 @@
 #include "VertexUIPackage.h"
 #include "Camera.h"
 #include "Animator.h"
+#include "BootUpContainer.h"
 
 #include "RigidBody.h"
+
+enum Renderer {
+	Vertex_2D = 0, // Vertex Engines default renderer.
+	Tension_2D, //  Tension is an upcoming Renderer that supports more features than the regular Vertex2D Renderer
+};
 
 class AssetManager
 {
 public:
+
 	AssetManager()
 	{
 		m_ActiveCamera = 0;
@@ -18,6 +25,9 @@ public:
 		m_TransformGizmoX.baseTexture = ResourceManager::GetTexture("Gizmo_Cords");
 		m_CenterGizmo.baseTexture = ResourceManager::GetTexture("Gizmo_Center");
 	};
+
+	void BootUpAll(BootUpContainer* _settings);
+
 	void Register(GameObject* _object);
 	void Register(RigidBody* _object);
 	void Register(Animator* _object);
@@ -45,6 +55,11 @@ public:
 
 	glm::vec2 GetMousePosition() { ConfigureMouse(); return mouse.position; }
 
+	// Tension 2D Functions
+	void TensionRendering();
+	void TensionLayerSort();
+
+
 	void ConfigSetup();
 	void ExecuteAll();
 	void UnRegister(GameObject* _target);
@@ -59,6 +74,8 @@ public:
 private:
 	void UpdateComponents(float delta);
 	void ConfigureMouse();
+
+	Renderer m_RendererToUse = Vertex_2D;
 
 	GLFWwindow* m_Window;
 	Transform mouse;
