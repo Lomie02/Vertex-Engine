@@ -6,6 +6,8 @@
 #include <vector>
 #include "GameObject.h"
 #include "Transform.h"
+#include <sstream>
+
 class VertexPrefs
 {
 public:

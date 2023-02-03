@@ -61,6 +61,9 @@ void VertexPrefs::SaveTransform(GameObject* _target)
 	{
 		Ypos << _target->transform.position.y;
 		Ypos.close();
+
+		std::cout << "==========================================" << std::endl;
+		std::cout << ObjectsName << _target->transform.position.y << std::endl;
 	}
 }
 
@@ -71,17 +74,30 @@ Transform VertexPrefs::GetTransform(std::string _name)
 
 	Transform convertedTransform;
 
+	std::string DataX;
+	std::string DataY;
+
+	std::stringstream Con;
+	std::stringstream Con1;
+
 	if (Xpos.is_open())
 	{
-		Xpos >> convertedTransform.position.x;
+		Xpos >> DataX;
+
+		Con << DataX;
+		Con >> convertedTransform.position.x;
 		Xpos.close();
 	}
 
 	if (Ypos.is_open())
 	{
-		Xpos >> convertedTransform.position.y;
+		Ypos >> DataY;
+
+		Con1 << DataY;
+		Con1 >> convertedTransform.position.y;
 		Ypos.close();
 	}
+	std::cout << "Vertex Engine Message: " << _name << " | " << DataY << " | " << convertedTransform.position.y << std::endl;
 
 	return convertedTransform;
 }
@@ -105,6 +121,10 @@ float VertexPrefs::GetFloat(std::string _key)
 	std::ifstream Vertex("Builds/Data/0x021_0KAW/" + _key + ".txt");
 	std::string line;
 
+	std::string Data;
+
+	std::stringstream Con;
+
 	float ConvertedValue = 0;
 	if (Vertex.is_open())
 	{
@@ -112,11 +132,13 @@ float VertexPrefs::GetFloat(std::string _key)
 
 			for (int i = Vertex.beg; i != Vertex.end; i++)
 			{
-				Vertex >> ConvertedValue;
+				Vertex >> Data;
 			}
 		}
 		Vertex.close();
 	}
+	Con << Data;
+	Con >> ConvertedValue;
 
 	return ConvertedValue;
 }
@@ -140,6 +162,10 @@ int VertexPrefs::GetInt(std::string _key)
 	std::ifstream Vertex("Builds/Data/0x021_0KAW/" + _key + ".txt");
 	std::string line;
 
+	std::string Data;
+
+	std::stringstream Con;
+
 	int ConvertedValue = 0;
 	if (Vertex.is_open())
 	{
@@ -147,11 +173,14 @@ int VertexPrefs::GetInt(std::string _key)
 
 			for (int i = Vertex.beg; i != Vertex.end; i++)
 			{
-				Vertex >> ConvertedValue;
+				Vertex >> Data;
 			}
 		}
 		Vertex.close();
 	}
+
+	Con << Data;
+	Con >> ConvertedValue;
 
 	return ConvertedValue;
 }
@@ -209,19 +238,26 @@ bool VertexPrefs::Getbool(std::string _key)
 {
 	std::ifstream Vertex("Builds/Data/0x021_0KAW/" + _key + ".txt");
 	std::string line;
+	std::string Data;
+
+	std::stringstream Con;
 
 	bool ConvertedValue = "null";
+
 	if (Vertex.is_open())
 	{
 		while (std::getline(Vertex, line)) {
 
 			for (int i = Vertex.beg; i != Vertex.end; i++)
 			{
-				Vertex >> ConvertedValue;
+				Vertex >> Data;
 			}
 		}
 		Vertex.close();
 	}
+
+	Con << Data;
+	Con >> ConvertedValue;
 
 	return ConvertedValue;
 }
