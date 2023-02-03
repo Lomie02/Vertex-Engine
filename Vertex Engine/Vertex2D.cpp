@@ -57,7 +57,6 @@ void Vertex2D::DrawSprite(GameObject* _object, Material& material, glm::vec3 pos
 
 	glEnable(GL_DEPTH_TEST);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	//glDepthFunc(GL_EQUAL);
 
 	this->m_Shader = material.shader;
 
@@ -99,41 +98,42 @@ void Vertex2D::DrawSprite(GameObject* _object, Material& material, glm::vec3 pos
 	glDisable(GL_CULL_FACE);
 }
 
-void Vertex2D::TensionDraw(GameObject* _object, Material& material, glm::vec2 position, glm::vec2 size, float rotate, float scale, glm::mat4 per, Layer _RenderLayer )
+void Vertex2D::TensionDraw(GameObject* _object, Material& material, glm::vec2 position, glm::vec2 size, float rotate, float scale, glm::mat4 per, int _RenderLayer)
 {
-	if (_RenderLayer == transparent)
-	{
-		glEnable(GL_BLEND);
-		glEnable(GL_CULL_FACE);
-	}
-	glEnable(GL_DEPTH_TEST);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glDepthFunc(GL_EQUAL);
 
+	glEnable(GL_CULL_FACE);
+	glEnable(GL_DEPTH_TEST);
+	if (material.surface == Transparent)
+	{
+		glCullFace(GL_BACK);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	}
+	else 
+	{
+		glDepthFunc(GL_LESS);
+	}
 	this->m_Shader = material.shader;
 
 	this->m_Shader.Use();
+	
+	if (RENDER_DEPTH_TEST == false) {
+		this->m_Shader.SetInteger("UseDepth", 0);
+	}
+	else {
+
+		this->m_Shader.SetInteger("UseDepth", 1);
+	}
+
 	glm::mat4 model = glm::mat4(1.0f);
 
-	model = glm::translate(model, glm::vec3(position, _RenderLayer));
+	model = glm::translate(model, glm::vec3(position, (float)_RenderLayer));
 
-	if (_object->GetParent() != nullptr)
-	{
-		model = glm::translate(model, glm::vec3(_object->GetParent()->transform.position.x, _object->GetParent()->transform.position.y, 0.0f));
-		model = glm::rotate(model, glm::radians(rotate), glm::vec3(0.0f, 0.0f, 1.0f));
-		model = glm::translate(model, glm::vec3(-0.5f * size.x, -0.5f * -size.y, 0.0f));
+	model = glm::translate(model, glm::vec3(0.5f * size.x, 0.5f * -size.y, 0.0f));
+	model = glm::rotate(model, glm::radians(rotate), glm::vec3(0.0f, 0.0f, 1.0f));
+	model = glm::translate(model, glm::vec3(-0.5f * size.x, -0.5f * -size.y, 0.0f));
 
-		model = glm::scale(model, glm::vec3(size.x * scale, -size.y * scale, 1.0f));
-	}
-	else
-	{
-		model = glm::translate(model, glm::vec3(0.5f * size.x, 0.5f * -size.y, 0.0f));
-		model = glm::rotate(model, glm::radians(rotate), glm::vec3(0.0f, 0.0f, 1.0f));
-		model = glm::translate(model, glm::vec3(-0.5f * size.x, -0.5f * -size.y, 0.0f));
-
-		model = glm::scale(model, glm::vec3(size.x * scale, -size.y * scale, 1.0f));
-	}
-
+	model = glm::scale(model, glm::vec3(size.x * scale, -size.y * scale, 1.0f));
 	this->m_Shader.SetMatrix4("model", model);
 	this->m_Shader.SetMatrix4("pro", per);
 	this->m_Shader.SetVector4f("Colour", material.colour);

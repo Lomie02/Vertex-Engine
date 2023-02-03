@@ -87,5 +87,5 @@ private:
 	float m_TimeStep = 0.01f;
 
 	// The renderer that the engine will use.
-	Renderer m_UsingRenderer = Vertex_2D;
+	Renderer m_UsingRenderer = Tension_2D;
 };

@@ -6,6 +6,8 @@
 #include <vector>
 #include "Material.h"
 #include "GameObject.h"
+#include "AdvancedSettings.h"
+
 #define LAYER_MAX 20
 
 enum Layer {
@@ -52,7 +54,7 @@ public:
 
 	void DrawSprite(Material& material, glm::vec2 position, glm::vec2 size = glm::vec2(10.0f, 10.0f), float rotate = 0.0f, float scale = 1.0f, glm::mat4 per = glm::mat4(1.0f));
 	void DrawSprite(GameObject* _object ,Material& material, glm::vec3 position, glm::vec2 size = glm::vec2(10.0f, 10.0f), float rotate = 0.0f, float scale = 1.0f, glm::mat4 per = glm::mat4(1.0f));
-	void TensionDraw(GameObject* _object ,Material& material, glm::vec2 position, glm::vec2 size = glm::vec2(10.0f, 10.0f), float rotate = 0.0f, float scale = 1.0f, glm::mat4 per = glm::mat4(1.0f), Layer _RenderLayer = DefaultLayer);
+	void TensionDraw(GameObject* _object ,Material& material, glm::vec2 position, glm::vec2 size = glm::vec2(10.0f, 10.0f), float rotate = 0.0f, float scale = 1.0f, glm::mat4 per = glm::mat4(1.0f), int _RenderLayer = 0);
 
 	void DrawLine(glm::vec2 _start, glm::vec2 _end, Material& _mat);
 

@@ -56,9 +56,10 @@ public:
 	glm::vec2 GetMousePosition() { ConfigureMouse(); return mouse.position; }
 
 	// Tension 2D Functions
-	void TensionRendering();
+	void TensionRendering(Vertex2D* m_Renderer);
 	void TensionLayerSort();
 
+	void Vertex2dRendering(Vertex2D* render);
 
 	void ConfigSetup();
 	void ExecuteAll();
@@ -75,7 +76,12 @@ private:
 	void UpdateComponents(float delta);
 	void ConfigureMouse();
 
-	Renderer m_RendererToUse = Vertex_2D;
+	bool m_SingleSortRenderering = true;
+	bool m_HasRendered = false;
+	Renderer m_RendererToUse = Tension_2D;
+
+	std::vector<GameObject*> m_Opaque;
+	std::vector<GameObject*> m_Transparent;
 
 	GLFWwindow* m_Window;
 	Transform mouse;

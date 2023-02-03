@@ -9,6 +9,11 @@
 //===============================================
 // Vertex Console
 //===============================================
-#define ENABLE_VERTEX_CONSOLE true;
+#define ENABLE_VERTEX_CONSOLE true
 
-#define HIDE_CONSOLE false;
+#define HIDE_CONSOLE false
+
+//===============================================
+// TENSION RENDERER
+//===============================================
+#define RENDER_DEPTH_TEST false

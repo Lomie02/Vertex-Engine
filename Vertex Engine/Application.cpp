@@ -166,7 +166,8 @@ void Application::StartUp()
 	{
 		m_Settings->m_UseDefaultRenderer = true;
 	}
-	else {
+	else if(m_UsingRenderer == Tension_2D)
+	{
 		m_Settings->m_UseDefaultRenderer = false;
 	}
 
@@ -305,7 +306,7 @@ void Application::EditorMain()
 		ImGui::Spacing();
 		ImGui::SameLine();
 		ImGui::Checkbox("Active", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selected)->m_Active);
-
+		ImGui::SameLine(); ImGui::InputInt("Layer", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selected)->layer, 2);
 
 		//===================================== Position
 		ImGui::Text("Position");

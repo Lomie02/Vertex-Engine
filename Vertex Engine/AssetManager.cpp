@@ -255,89 +255,13 @@ void AssetManager::ConfigureSystems()
 
 void AssetManager::ConfigureRenderSystems(Vertex2D* render)
 {
-	if (m_Objects.size() > 0)
+	if (m_RendererToUse == Vertex_2D)
 	{
-		for (int i = 0; i < m_Objects.size(); i++)
-		{
-			float WithinDistance = glm::distance(m_Objects.at(i)->transform.position, m_Cameras.at(m_ActiveCamera)->transform.position);
-
-			if (m_Objects.at(i)->m_Active == true && WithinDistance < CAMERA_DISTANCE_RENDER_LIMIT && m_Objects.at(i)->material.surface == Opaque)
-			{
-				render->DrawSprite(m_Objects.at(i)->material, m_Objects.at(i)->transform.position, m_Objects.at(i)->transform.size, m_Objects.at(i)->transform.rotation, m_Objects.at(i)->transform.scale, m_Cameras.at(m_ActiveCamera)->GetProjection());
-				m_Cameras.at(m_ActiveCamera)->ConfigureSystems();
-				m_Objects.at(i)->ConfigureSystems();
-			}
-		}
+		Vertex2dRendering(render);
 	}
-
-	if (m_Objects.size() > 0)
-	{
-		for (int i = 0; i < m_Objects.size(); i++)
-		{
-			float WithinDistance = glm::distance(m_Objects.at(i)->transform.position, m_Cameras.at(m_ActiveCamera)->transform.position);
-
-			if (m_Objects.at(i)->m_Active == true && WithinDistance < CAMERA_DISTANCE_RENDER_LIMIT && m_Objects.at(i)->material.surface == Transparent)
-			{
-				render->DrawSprite(m_Objects.at(i)->material, m_Objects.at(i)->transform.position, m_Objects.at(i)->transform.size, m_Objects.at(i)->transform.rotation, m_Objects.at(i)->transform.scale, m_Cameras.at(m_ActiveCamera)->GetProjection());
-				m_Cameras.at(m_ActiveCamera)->ConfigureSystems();
-				m_Objects.at(i)->ConfigureSystems();
-			}
-		}
+	else if(m_RendererToUse == Tension_2D) {
+		TensionRendering(render);
 	}
-
-	if (m_PhysicsObjects.size() > 0)
-	{
-		for (int i = 0; i < m_PhysicsObjects.size(); i++)
-		{
-			float WithinDistance = glm::distance(m_PhysicsObjects.at(i)->transform.position, m_Cameras.at(m_ActiveCamera)->transform.position);
-			if (m_PhysicsObjects.at(i)->m_Active == true && WithinDistance < CAMERA_DISTANCE_RENDER_LIMIT)
-			{
-				render->DrawSprite(m_PhysicsObjects.at(i)->material, m_PhysicsObjects.at(i)->transform.position, m_PhysicsObjects.at(i)->transform.size, m_PhysicsObjects.at(i)->transform.rotation, m_PhysicsObjects.at(i)->transform.scale, m_Cameras.at(m_ActiveCamera)->GetProjection());
-				m_PhysicsObjects.at(i)->ConfigureSystems();
-			}
-		}
-	}
-
-	if (m_UiObjects.size() > 0)
-	{
-		for (int i = 0; i < m_UiObjects.size(); i++)
-		{
-			float WithinDistance = glm::distance(m_UiObjects.at(i)->transform.position, m_Cameras.at(m_ActiveCamera)->transform.position);
-			if (m_UiObjects.at(i)->m_Active == true && WithinDistance < CAMERA_DISTANCE_RENDER_LIMIT)
-			{
-				m_UiObjects.at(i)->ConfigureSystems();
-				render->DrawSprite(m_UiObjects.at(i)->material, m_UiObjects.at(i)->transform.position, m_UiObjects.at(i)->transform.size, m_UiObjects.at(i)->transform.rotation, m_UiObjects.at(i)->transform.scale, m_Cameras.at(m_ActiveCamera)->GetProjection());
-			}
-		}
-	}
-
-	//============================================== Render UI Last
-
-	if (m_UiButtonObjects.size() > 0)
-	{
-		for (int i = 0; i < m_UiButtonObjects.size(); i++)
-		{
-			float WithinDistance = glm::distance(m_UiButtonObjects.at(i)->transform.position, m_Cameras.at(m_ActiveCamera)->transform.position);
-			if (m_UiButtonObjects.at(i)->m_Active == true && WithinDistance < CAMERA_DISTANCE_RENDER_LIMIT)
-			{
-				m_UiButtonObjects.at(i)->ConfigureSystems();
-				render->DrawSprite(m_UiButtonObjects.at(i)->material, m_UiButtonObjects.at(i)->transform.position, m_UiButtonObjects.at(i)->transform.size, m_UiButtonObjects.at(i)->transform.rotation, m_UiButtonObjects.at(i)->transform.scale, m_Cameras.at(m_ActiveCamera)->GetProjection());
-				m_UiButtonObjects.at(i)->ConfigureCustoms(m_Cameras.at(m_ActiveCamera)->GetProjection());
-			}
-		}
-	}
-
-	if (m_UiTextObjects.size() > 0)
-	{
-		for (int i = 0; i < m_UiTextObjects.size(); i++)
-		{
-			if (m_UiTextObjects.at(i)->m_Active)
-			{
-				m_UiTextObjects.at(i)->ConfigureRenderSystems(m_Cameras.at(m_ActiveCamera)->GetProjection());
-			}
-		}
-	}
-
 }
 
 void AssetManager::ConfigurePhysics(float fixedDelta)
@@ -455,13 +379,137 @@ bool AssetManager::Raycast2D(glm::vec2 _pos, glm::vec2 _dir, GameObject& _out, f
 	return false;
 }
 
-void AssetManager::TensionRendering()
+void AssetManager::TensionRendering(Vertex2D* m_Renderer)
 {
+	if (m_SingleSortRenderering && !m_HasRendered)
+	{
+		TensionLayerSort();
+		m_HasRendered = true;
+	}
+	else if (!m_SingleSortRenderering) 
+	{
+		TensionLayerSort();
+	}
 
+	for (int i = 0; i < m_Opaque.size(); i++)
+	{
+		m_Renderer->TensionDraw(m_Opaque.at(i), m_Opaque.at(i)->material, m_Opaque.at(i)->transform.position,
+			m_Opaque.at(i)->transform.size, m_Opaque.at(i)->transform.rotation, m_Opaque.at(i)->transform.scale,
+			m_Cameras.at(m_ActiveCamera)->GetProjection(), m_Opaque.at(i)->layer);
+	}
+
+	for (int i = 0; i < m_Transparent.size(); i++)
+	{
+		m_Renderer->TensionDraw(m_Transparent.at(i), m_Transparent.at(i)->material, m_Transparent.at(i)->transform.position,
+			m_Transparent.at(i)->transform.size, m_Transparent.at(i)->transform.rotation, m_Transparent.at(i)->transform.scale,
+			m_Cameras.at(m_ActiveCamera)->GetProjection(), m_Transparent.at(i)->layer);
+	}
+
+	std::cout << "Tension2D Render" << std::endl;
 }
 
 void AssetManager::TensionLayerSort()
 {
+
+	for (int i = 0; i < m_Objects.size(); i++)
+	{
+		if (m_Objects.at(i)->material.surface == Opaque)
+		{
+			m_Opaque.push_back(m_Objects.at(i));
+		}
+		else if (m_Objects.at(i)->material.surface == Transparent)
+		{
+			m_Transparent.push_back(m_Objects.at(i));
+		}
+	}
+}
+
+void AssetManager::Vertex2dRendering(Vertex2D* render)
+{
+	if (m_Objects.size() > 0)
+	{
+		for (int i = 0; i < m_Objects.size(); i++)
+		{
+			float WithinDistance = glm::distance(m_Objects.at(i)->transform.position, m_Cameras.at(m_ActiveCamera)->transform.position);
+
+			if (m_Objects.at(i)->m_Active == true && WithinDistance < CAMERA_DISTANCE_RENDER_LIMIT && m_Objects.at(i)->material.surface == Opaque)
+			{
+				render->DrawSprite(m_Objects.at(i)->material, m_Objects.at(i)->transform.position, m_Objects.at(i)->transform.size, m_Objects.at(i)->transform.rotation, m_Objects.at(i)->transform.scale, m_Cameras.at(m_ActiveCamera)->GetProjection());
+				m_Cameras.at(m_ActiveCamera)->ConfigureSystems();
+				m_Objects.at(i)->ConfigureSystems();
+			}
+		}
+	}
+
+	if (m_Objects.size() > 0)
+	{
+		for (int i = 0; i < m_Objects.size(); i++)
+		{
+			float WithinDistance = glm::distance(m_Objects.at(i)->transform.position, m_Cameras.at(m_ActiveCamera)->transform.position);
+
+			if (m_Objects.at(i)->m_Active == true && WithinDistance < CAMERA_DISTANCE_RENDER_LIMIT && m_Objects.at(i)->material.surface == Transparent)
+			{
+				render->DrawSprite(m_Objects.at(i)->material, m_Objects.at(i)->transform.position, m_Objects.at(i)->transform.size, m_Objects.at(i)->transform.rotation, m_Objects.at(i)->transform.scale, m_Cameras.at(m_ActiveCamera)->GetProjection());
+				m_Cameras.at(m_ActiveCamera)->ConfigureSystems();
+				m_Objects.at(i)->ConfigureSystems();
+			}
+		}
+	}
+
+	if (m_PhysicsObjects.size() > 0)
+	{
+		for (int i = 0; i < m_PhysicsObjects.size(); i++)
+		{
+			float WithinDistance = glm::distance(m_PhysicsObjects.at(i)->transform.position, m_Cameras.at(m_ActiveCamera)->transform.position);
+			if (m_PhysicsObjects.at(i)->m_Active == true && WithinDistance < CAMERA_DISTANCE_RENDER_LIMIT)
+			{
+				render->DrawSprite(m_PhysicsObjects.at(i)->material, m_PhysicsObjects.at(i)->transform.position, m_PhysicsObjects.at(i)->transform.size, m_PhysicsObjects.at(i)->transform.rotation, m_PhysicsObjects.at(i)->transform.scale, m_Cameras.at(m_ActiveCamera)->GetProjection());
+				m_PhysicsObjects.at(i)->ConfigureSystems();
+			}
+		}
+	}
+
+	if (m_UiObjects.size() > 0)
+	{
+		for (int i = 0; i < m_UiObjects.size(); i++)
+		{
+			float WithinDistance = glm::distance(m_UiObjects.at(i)->transform.position, m_Cameras.at(m_ActiveCamera)->transform.position);
+			if (m_UiObjects.at(i)->m_Active == true && WithinDistance < CAMERA_DISTANCE_RENDER_LIMIT)
+			{
+				m_UiObjects.at(i)->ConfigureSystems();
+				render->DrawSprite(m_UiObjects.at(i)->material, m_UiObjects.at(i)->transform.position, m_UiObjects.at(i)->transform.size, m_UiObjects.at(i)->transform.rotation, m_UiObjects.at(i)->transform.scale, m_Cameras.at(m_ActiveCamera)->GetProjection());
+			}
+		}
+	}
+
+	//============================================== Render UI Last
+
+	if (m_UiButtonObjects.size() > 0)
+	{
+		for (int i = 0; i < m_UiButtonObjects.size(); i++)
+		{
+			float WithinDistance = glm::distance(m_UiButtonObjects.at(i)->transform.position, m_Cameras.at(m_ActiveCamera)->transform.position);
+			if (m_UiButtonObjects.at(i)->m_Active == true && WithinDistance < CAMERA_DISTANCE_RENDER_LIMIT)
+			{
+				m_UiButtonObjects.at(i)->ConfigureSystems();
+				render->DrawSprite(m_UiButtonObjects.at(i)->material, m_UiButtonObjects.at(i)->transform.position, m_UiButtonObjects.at(i)->transform.size, m_UiButtonObjects.at(i)->transform.rotation, m_UiButtonObjects.at(i)->transform.scale, m_Cameras.at(m_ActiveCamera)->GetProjection());
+				m_UiButtonObjects.at(i)->ConfigureCustoms(m_Cameras.at(m_ActiveCamera)->GetProjection());
+			}
+		}
+	}
+
+	if (m_UiTextObjects.size() > 0)
+	{
+		for (int i = 0; i < m_UiTextObjects.size(); i++)
+		{
+			if (m_UiTextObjects.at(i)->m_Active)
+			{
+				m_UiTextObjects.at(i)->ConfigureRenderSystems(m_Cameras.at(m_ActiveCamera)->GetProjection());
+			}
+		}
+	}
+
+	std::cout << "Vertex2D Render" << std::endl;
 }
 
 void AssetManager::ConfigSetup()

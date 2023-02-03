@@ -66,6 +66,8 @@ void MyScene::Awake()
 	m_Object2->material.baseTexture = ResourceManager::GetTexture("boy1");
 	m_Canvas->material.baseTexture = ResourceManager::GetTexture("Canvas");
 
+	m_Object->material.surface = Transparent;
+
 	m_Button->material.baseTexture = ResourceManager::GetTexture("UI_Button");
 
 	m_Object2->material.colour = glm::vec4(1, 0, 0, 0.5f);
@@ -78,6 +80,8 @@ void MyScene::Awake()
 	m_Manager.Register(m_Object2);
 	m_Manager.Register(m_Object);
 	m_MyComponent->name = "My Componenet";
+
+	m_Object2->layer = layer_07;
 
 	TestComponent dont;
 

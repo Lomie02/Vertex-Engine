@@ -7,8 +7,11 @@
 #include "Collider.h"
 #include "VertexComponent.h"
 #include <iostream>
+
+
 class GameObject
 {
+
 public:
 	GameObject();
 	GameObject(const char* _Name);
@@ -39,11 +42,12 @@ public:
 	int ComponentCount() { return m_Components.size(); }
 	bool GetComponentInParent(VertexComponent& _target);
 	bool GetComponentInChildren(VertexComponent& _target);
-	
 
 	std::vector<VertexComponent*> ComponentList() { return m_Components; }
 	std::string Tag = "Untagged";
+	int layer;
 
+	class Vertex2D;
 private:
 	void ConfigurePartners();
 
