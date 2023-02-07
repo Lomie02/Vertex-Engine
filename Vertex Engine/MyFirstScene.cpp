@@ -14,6 +14,9 @@ MyFirstScene::~MyFirstScene()
 {
 	delete m_MyCamera;
 	m_MyCamera = nullptr;
+
+	delete m_GameObject;
+	m_GameObject = nullptr;
 }
 
 void MyFirstScene::Awake()

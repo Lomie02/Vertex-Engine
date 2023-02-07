@@ -73,6 +73,8 @@ public:
 	GameObject* FindComponent(VertexComponent& _ref);
 
 private:
+
+	char m_ScenesName[30] = "s";
 	void UpdateComponents(float delta);
 	void ConfigureMouse();
 

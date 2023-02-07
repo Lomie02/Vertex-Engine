@@ -25,5 +25,6 @@ public:
 	Texture2D baseTexture;
 
 	Surface surface = Opaque;
+	bool glow = false;
 	std::string name;
 };

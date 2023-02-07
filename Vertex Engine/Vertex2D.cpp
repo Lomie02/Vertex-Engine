@@ -107,7 +107,13 @@ void Vertex2D::TensionDraw(GameObject* _object, Material& material, glm::vec2 po
 	{
 		glCullFace(GL_BACK);
 		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		if (!material.glow) {
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		}
+		else {
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+		}
 	}
 	else 
 	{
@@ -148,6 +154,24 @@ void Vertex2D::TensionDraw(GameObject* _object, Material& material, glm::vec2 po
 	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_BLEND);
 	glDisable(GL_CULL_FACE);
+}
+
+void Vertex2D::TensionParticle(ParticleSystem &system)
+{
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+	this->m_ParticleShader.Use();
+
+	for (Particle effects : system.m_Particles)
+	{
+		this->m_ParticleShader.SetVector2f("offset", effects.transform.position);
+		this->m_ParticleShader.SetVector4f("color", effects.material);
+		system.m_Image.Bind();
+		glBindVertexArray(system.VAO);
+	}
+
+
+	glDisable(GL_BLEND);
 }
 
 void Vertex2D::DrawLine(glm::vec2 _start, glm::vec2 _end, Material& _mat)

@@ -259,7 +259,7 @@ void AssetManager::ConfigureRenderSystems(Vertex2D* render)
 	{
 		Vertex2dRendering(render);
 	}
-	else if(m_RendererToUse == Tension_2D) {
+	else if (m_RendererToUse == Tension_2D) {
 		TensionRendering(render);
 	}
 }
@@ -386,7 +386,7 @@ void AssetManager::TensionRendering(Vertex2D* m_Renderer)
 		TensionLayerSort();
 		m_HasRendered = true;
 	}
-	else if (!m_SingleSortRenderering) 
+	else if (!m_SingleSortRenderering)
 	{
 		TensionLayerSort();
 	}
@@ -404,8 +404,6 @@ void AssetManager::TensionRendering(Vertex2D* m_Renderer)
 			m_Transparent.at(i)->transform.size, m_Transparent.at(i)->transform.rotation, m_Transparent.at(i)->transform.scale,
 			m_Cameras.at(m_ActiveCamera)->GetProjection(), m_Transparent.at(i)->layer);
 	}
-
-	std::cout << "Tension2D Render" << std::endl;
 }
 
 void AssetManager::TensionLayerSort()
@@ -508,24 +506,28 @@ void AssetManager::Vertex2dRendering(Vertex2D* render)
 			}
 		}
 	}
-
-	std::cout << "Vertex2D Render" << std::endl;
 }
 
 void AssetManager::ConfigSetup()
 {
 	for (int i = 0; i < m_Objects.size(); i++)
 	{
+		m_Objects.at(i)->layer = VertexPrefs::GetInt(m_Objects.at(i)->name);
 		m_Objects.at(i)->transform.position = VertexPrefs::GetTransform(m_Objects.at(i)->name).position;
 	}
+
+	//VertexPrefs::GetFile("Scene_data", m_Objects);
 }
 
 void AssetManager::ExecuteAll()
 {
 	for (int i = 0; i < m_Objects.size(); i++)
 	{
+		VertexPrefs::SetInt(m_Objects.at(i)->name, m_Objects.at(i)->layer);
 		VertexPrefs::SaveTransform(m_Objects.at(i));
 	}
+
+	//VertexPrefs::SaveFile("Scene_data", m_Objects);
 }
 
 void AssetManager::UnRegister(GameObject* _target)

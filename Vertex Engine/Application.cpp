@@ -45,7 +45,6 @@ Application::~Application()
 		YourScene = nullptr;
 	*/
 
-	delete m_SecondScene;
 	m_SecondScene = nullptr;
 }
 
@@ -561,6 +560,7 @@ void Application::SceneSetUp()
 	m_Scene = new MyScene("Scene 1");
 	m_SecondScene = new Scene2("Scene 2");
 
+
 	m_SceneManager->AddScene(m_Scene);
 	m_SceneManager->AddScene(m_SecondScene);
 
@@ -571,10 +571,7 @@ void Application::SceneSetUp()
 	m_Scene->GiveSceneManager(m_SceneManager);
 	m_SecondScene->GiveSceneManager(m_SceneManager);
 
-	for (int i = 0; i < m_SceneManager->m_SceneList.size(); i++)
-	{
-		m_SceneManager->m_SceneList.at(i)->GetAssets().ConfigSetup();
-	}
+		m_SceneManager->m_SceneList.at(0)->GetAssets().ConfigSetup();
 }
 
 void Application::UpdateEditorMode()

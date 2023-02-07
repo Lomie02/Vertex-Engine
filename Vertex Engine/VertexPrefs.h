@@ -7,6 +7,8 @@
 #include "GameObject.h"
 #include "Transform.h"
 #include <sstream>
+#include <cstdio>
+#include <direct.h>
 
 class VertexPrefs
 {
@@ -29,6 +31,11 @@ public:
 	static void SetBool(std::string _key, bool _target);
 	static bool Getbool(std::string _key);
 
+	static void DeleteKey(std::string _key);
+	static void DeleteAllKeys();
+
+	static bool CreateFolder(std::string _key);
+	static bool DeleteFolder(std::string _key);
 private:
 	VertexPrefs();
 

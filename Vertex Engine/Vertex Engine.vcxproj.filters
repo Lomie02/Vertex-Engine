@@ -302,6 +302,9 @@
     <ClInclude Include="BootUpContainer.h">
       <Filter>Game Settings</Filter>
     </ClInclude>
+    <ClInclude Include="Particle.h">
+      <Filter>Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Vertex Engine 2D.rc">

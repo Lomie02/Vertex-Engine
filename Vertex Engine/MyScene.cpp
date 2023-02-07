@@ -2,7 +2,7 @@
 #include <iostream>
 #include "ResourceManager.h"
 #include "SceneManager.h"
-
+#include "VertexPrefs.h"
 #define GRID_SIZE 800
 
 MyScene::MyScene() : VertexScene("DEFAULT_SCENE_VERTEX")
@@ -34,6 +34,12 @@ MyScene::~MyScene()
 
 	delete m_Button;
 	m_Button = nullptr;
+
+	delete m_MyComponent;
+	m_MyComponent = nullptr;
+
+	delete m_MainCamera;
+	m_MainCamera = nullptr;
 }
 
 void MyScene::Awake()
@@ -52,7 +58,7 @@ void MyScene::Awake()
 
 	m_Object = new GameObject("Huggy", true);
 	m_Object2 = new GameObject("Animation", true);
-	m_Canvas = new GameObject("Canvas", true);
+	//m_Canvas = new GameObject("Canvas", true);
 
 	m_MainCamera = new Camera();
 	m_DummyCamera = new Camera("Boy Camera");
@@ -64,7 +70,7 @@ void MyScene::Awake()
 
 	m_Object->material.baseTexture = ResourceManager::GetTexture("Vertex");
 	m_Object2->material.baseTexture = ResourceManager::GetTexture("boy1");
-	m_Canvas->material.baseTexture = ResourceManager::GetTexture("Canvas");
+	//m_Canvas->material.baseTexture = ResourceManager::GetTexture("Canvas");
 
 	m_Object->material.surface = Transparent;
 
@@ -96,13 +102,13 @@ void MyScene::Awake()
 	m_MainCamera->transform.rotation = 0;
 
 	m_Manager.Register(m_Button);
-	m_Body = new RigidBody("Yep");
+	//m_Body = new RigidBody("Yep");
 
-	m_Body->material.baseTexture = ResourceManager::GetTexture("boy1");
-	m_Body->material.colour.r = 1;
+	//m_Body->material.baseTexture = ResourceManager::GetTexture("boy1");
+	//m_Body->material.colour.r = 1;
 	//m_Manager.Register(m_Body);
 
-	m_Canvas->transform.size = glm::vec2(1280, 720);
+	//m_Canvas->transform.size = glm::vec2(1280, 720);
 	//m_Anim->SetMaster(m_Object2);
 	//m_Manager.Register(m_Canvas);
 }
@@ -120,10 +126,10 @@ void MyScene::Start()
 	//m_Object2->transform.position.y = 20;
 	//m_Object2->transform.position.x = 20;
 
-	m_Body->transform.position.x = 0;
-	m_Body->transform.position.y = 0;
+	//m_Body->transform.position.x = 0;
+	//m_Body->transform.position.y = 0;
 
-	m_Body->transform.size = glm::vec2(2, 2);
+	//m_Body->transform.size = glm::vec2(2, 2);
 
 	m_Object2->transform.size = glm::vec2(2, 1);
 
