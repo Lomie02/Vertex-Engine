@@ -50,9 +50,11 @@ public:
 	std::string text = "Button";
 	float size = 1.0f;
 
+	void SetOffset(glm::vec2 _offset);
+
 	Text* m_Text;
 private:
-
+	glm::vec2 m_Offset = glm::vec2(0, 0);
 	void BeginSetUp();
 	bool m_WasPressed = false;
 };
