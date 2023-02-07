@@ -74,7 +74,7 @@ void MyScene::Awake()
 
 	m_Object->material.surface = Transparent;
 
-	m_Button->material.baseTexture = ResourceManager::GetTexture("UI_Button");
+	m_Button->material.baseTexture = ResourceManager::GetTexture("boy1");
 
 	m_Object2->material.colour = glm::vec4(1, 0, 0, 0.5f);
 	m_Object->material.surface = Transparent;
@@ -116,7 +116,7 @@ void MyScene::Awake()
 void MyScene::Start()
 {
 
-	m_Button->material.colour = glm::vec4(1,1,1,1);
+	m_Button->material.colour = glm::vec4(1,0,0,1);
 	m_Manager.GiveWindow(m_Window);
 	m_Object->transform.size = glm::vec2(1, 1);
 
@@ -133,10 +133,13 @@ void MyScene::Start()
 
 	m_Object2->transform.size = glm::vec2(2, 1);
 
-	m_Button->transform.size.x = 3;
-	m_Button->transform.size.y = 2;
+	m_Button->transform.size.x = 5;
+	m_Button->transform.size.y = 3;
 
-	m_Button->text = "Ya boy";
+	m_Button->text = "Play";
+
+	m_Button->transform.position.x = 5.0f;
+	m_Button->transform.position.y = 5.0f;
 
 	m_MainCamera->transform.position.x = 10;
 	m_MainCamera->transform.position.y = 10;

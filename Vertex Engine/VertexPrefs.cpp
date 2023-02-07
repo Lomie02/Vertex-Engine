@@ -48,8 +48,6 @@ void VertexPrefs::SaveTransform(GameObject* _target)
 		Ypos << _target->transform.position.y;
 		Ypos.close();
 
-		std::cout << "==========================================" << std::endl;
-		std::cout << ObjectsName << _target->transform.position.y << std::endl;
 	}
 }
 
@@ -83,8 +81,6 @@ Transform VertexPrefs::GetTransform(std::string _name)
 		Con1 >> convertedTransform.position.y;
 		Ypos.close();
 	}
-	std::cout << "Vertex Engine Message: " << _name << " | " << DataY << " | " << convertedTransform.position.y << std::endl;
-
 	return convertedTransform;
 }
 
