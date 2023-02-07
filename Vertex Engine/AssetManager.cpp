@@ -189,8 +189,8 @@ bool AssetManager::OnTrigger(GameObject* A, GameObject* B)
 		bool colX = A->transform.position.x + A->transform.size.x >= B->transform.position.x
 			&& B->transform.position.x + B->transform.size.x >= A->transform.position.x;
 
-		bool colY = A->transform.position.y - A->transform.size.y >= B->transform.position.y
-			&& B->transform.position.y - B->transform.size.y >= A->transform.position.y;
+		bool colY = A->transform.position.y - A->transform.size.y <= B->transform.position.y
+			&& B->transform.position.y - B->transform.size.y <= A->transform.position.y;
 
 		if (colX && colY)
 		{
@@ -410,6 +410,8 @@ void AssetManager::TensionRendering(Vertex2D* m_Renderer)
 		m_Renderer->TensionDraw(m_UiButtonObjects.at(i), m_UiButtonObjects.at(i)->material, m_UiButtonObjects.at(i)->transform.position,
 			m_UiButtonObjects.at(i)->transform.size, m_UiButtonObjects.at(i)->transform.rotation, m_UiButtonObjects.at(i)->transform.scale,
 			m_Cameras.at(m_ActiveCamera)->GetProjection(), m_UiButtonObjects.at(i)->layer);
+
+		m_UiButtonObjects.at(i)->ConfigureCustoms(m_Cameras.at(m_ActiveCamera)->GetProjection());
 	}
 }
 
