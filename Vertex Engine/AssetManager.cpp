@@ -236,10 +236,10 @@ void AssetManager::ConfigureSystems()
 					ConfigureMouse();
 
 					bool colX = m_UiButtonObjects.at(i)->transform.position.x + m_UiButtonObjects.at(i)->transform.size.x >= mouse.position.x
-						&& mouse.position.x + 0.2f >= m_UiButtonObjects.at(i)->transform.position.x;
+						&& mouse.position.x + 0.5f >= m_UiButtonObjects.at(i)->transform.position.x;
 
-					bool colY = m_UiButtonObjects.at(i)->transform.position.y + m_UiButtonObjects.at(i)->transform.size.y >= mouse.position.y
-						&& mouse.position.y + 0.2f >= m_UiButtonObjects.at(i)->transform.position.y;
+					bool colY = m_UiButtonObjects.at(i)->transform.position.y - m_UiButtonObjects.at(i)->transform.size.y >= mouse.position.y
+						&& mouse.position.y - 0.5f <= m_UiButtonObjects.at(i)->transform.position.y;
 
 					//============================================================================
 
@@ -403,6 +403,13 @@ void AssetManager::TensionRendering(Vertex2D* m_Renderer)
 		m_Renderer->TensionDraw(m_Transparent.at(i), m_Transparent.at(i)->material, m_Transparent.at(i)->transform.position,
 			m_Transparent.at(i)->transform.size, m_Transparent.at(i)->transform.rotation, m_Transparent.at(i)->transform.scale,
 			m_Cameras.at(m_ActiveCamera)->GetProjection(), m_Transparent.at(i)->layer);
+	}
+
+	for (int i = 0; i < m_UiButtonObjects.size(); i++)
+	{
+		m_Renderer->TensionDraw(m_UiButtonObjects.at(i), m_UiButtonObjects.at(i)->material, m_UiButtonObjects.at(i)->transform.position,
+			m_UiButtonObjects.at(i)->transform.size, m_UiButtonObjects.at(i)->transform.rotation, m_UiButtonObjects.at(i)->transform.scale,
+			m_Cameras.at(m_ActiveCamera)->GetProjection(), m_UiButtonObjects.at(i)->layer);
 	}
 }
 
