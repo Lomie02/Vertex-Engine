@@ -1,219 +1,117 @@
-#include "MyScene.h"
-#include <iostream>
-#include "ResourceManager.h"
-#include "SceneManager.h"
-#include "VertexPrefs.h"
-#define GRID_SIZE 800
+rence** to the name `FindProperty` uses. In this example, it's **_MyColor**.
 
-MyScene::MyScene() : VertexScene("DEFAULT_SCENE_VERTEX")
+![](Images/custom-material-inspector-node-settings-example.png)
+
+The following image shows how the Inspector looks for the UI block in the code sample.
+
+![](Images/custom-material-inspector-ui-block-example.png)
+
+#### Implementing a foldout section
+
+By default, UI blocks aren't nested in a foldout. The foldouts in other HDRP Material Inspectors use the `MaterialHeaderScope` class. This class specifies the name of the header and whether the section is expanded or not. For an example of how to implement a UI block in a foldout, see the following code sample:
+
+
+```CSharp
+class ColorUIBlock : MaterialUIBlock
 {
-	Awake();
-}
+    ExpandableBit   foldoutBit;
 
-MyScene::MyScene(const char _name[]) : VertexScene(_name)
+    MaterialProperty colorProperty;
+
+    public ColorUIBlock(ExpandableBit expandableBit)
+    {
+        foldoutBit = expandableBit;
+    }
+
+    public override void LoadMaterialProperties()
+    {
+        colorProperty = FindProperty("_MyColor");
+    }
+
+    public override void OnGUI()
+    {
+        using (var header = new MaterialHeaderScope("Color Options", (uint)foldoutBit, materialEditor))
+        {
+            if (header.expanded)
+            {
+                materialEditor.ShaderProperty(colorProperty, "My Color");
+            }
+        }
+    }
+}
+```
+
+
+**Note**: To track whether the foldout is expanded or not, `MateralHeaderScope` uses an `ExpandableBit`. To assign the `ExpandableBit`, this UI block example has a constructor that takes an ExpandableBit as a parameter. Because Unity serializes the state of each foldout in Editor preferences, you should use the `User[0..19]` part of the ExpandableBit enum to avoid overlap with built-in reserved bits. For an example of how to do this, see the code sample in [Custom Lit Material Inspector](#custom-lit-material-inspector).
+
+You can also hardcode the bit in a UI block but this isn't best practice especially if you intend to create a lot of UI blocks that multiple materials share.
+
+The following image shows how the Inspector looks for the UI block in the above code sample.
+
+![](Images/custom-material-inspector-ui-block-foldout-example.png)
+
+#### Block cross-reference
+
+If you need to access another UI block from your current UI block, the `parent` member gives you access to the list of UI blocks in the custom Material Inspector. You can use this to find the UI block and use the result to call a function or get a material property for example.
+
+
+```CSharp
+var surfaceBlock = parent.FirstOrDefault(b => b is SurfaceOptionUIBlock) as SurfaceOptionUIBlock;
+```
+
+
+**Note**: You can’t access the parent in the constructor of a UIBlock so be sure to access it either in `LoadMaterialProperties` or `OnGUI`.
+
+## Examples
+
+This section provides example implementations for the following custom Material Inspectors :
+
+- [Lit](#custom-lit-material-inspector)
+- [Unlit](#custom-unlit-material-inspector)
+- [Decals](#custom-decal-material-inspector)
+- [Bespoke](#bespoke-material-inspector)
+
+### Custom Lit Material Inspector
+
+For Lit Materials, the custom Material Inspector should inherit from `LightingShaderGraphGUI`. The `LightingShaderGraphGUI` represents any Shader Graph that uses lighting. For HDRP, this includes Lit, StackLit, Hair, Fabric, and Eye.
+
+The `LightingShaderGraphGUI` class directly inherits from `HDShaderGUI` and overrides every function that renders the UI. This means that any class that inherits from `LightingShaderGraphGUI` already works correctly, all the new class needs to do is add/remove some UI blocks. For an example of this, see the following code snippet:
+
+```CSharp
+using UnityEditor.Rendering.HighDefinition;
+
+public class LightingInspectorExample : LightingShaderGraphGUI
 {
-	Awake();
-}
+    public LightingInspectorExample()
+    {
+        // Remove the ShaderGraphUIBlock to avoid having duplicated properties in the UI.
+        uiBlocks.RemoveAll(b => b is ShaderGraphUIBlock);
 
-MyScene::~MyScene()
+        // Insert the color block just after the Surface Option block.
+        uiBlocks.Insert(1, new ColorUIBlock(MaterialUIBlock.ExpandableBit.User0));
+    }
+}
+```
+
+
+This code sample produces the following Inspector:
+
+![](Images/custom-material-inspector-lit-example.png)
+
+### Custom Unlit Material Inspector
+
+For Unlit Materials, the custom Material Inspector should inherit from `UnlitShaderGraphGUI`.
+
+The `UnlitShaderGraphGUI` class directly inherits from `HDShaderGUI` and overrides every function that renders the UI. This means that any class that inherits from `UnlitShaderGraphGUI` already works correctly, all the new class needs to do is add/remove some UI blocks. For an example of this, see the following code snippet:
+
+```CSharp
+using UnityEditor.Rendering.HighDefinition;
+
+public class UnlitExampleGUI : UnlitShaderGraphGUI
 {
-	delete m_Object;
-	m_Object = nullptr;
+    public UnlitExampleGUI()
+    {
+        // Remove the ShaderGraphUIBlock to avoid having duplicated properties in the UI.
+        uiBlocks.RemoveAll(b => b is ShaderGraphUIBlock);
 
-	delete m_Object2;
-	m_Object2 = nullptr;
-
-	delete m_MyText;
-	m_MyText = nullptr;
-
-	delete m_DummyCamera;
-	m_DummyCamera = nullptr;
-
-	delete m_Body;
-	m_Body = nullptr;
-
-	delete m_Button;
-	m_Button = nullptr;
-
-	delete m_MyComponent;
-	m_MyComponent = nullptr;
-
-	delete m_MainCamera;
-	m_MainCamera = nullptr;
-}
-
-void MyScene::Awake()
-{
-	m_Button = new Button("Play");
-	m_Button->text = "Play";
-
-	m_MyText = new Text();
-	m_Manager.Register(m_MyText);
-
-	m_MyText->text = "Vertex Engine";
-
-	ResourceManager::LoadTexture("Builds/Textures/PowerIcon.png", "Vertex");
-	ResourceManager::LoadTexture("Builds/Textures/Huggy.png", "boy1");
-	ResourceManager::LoadTexture("Builds/Textures/UI_Canvas.png", "Canvas");
-
-	m_Object = new GameObject("Huggy", true);
-	m_Object2 = new GameObject("Animation", true);
-	//m_Canvas = new GameObject("Canvas", true);
-
-	m_MainCamera = new Camera();
-	m_DummyCamera = new Camera("Boy Camera");
-
-	m_Button->SetActive(true);
-	m_Button->transform.position.x = 10;
-
-	m_Button->transform.size = glm::vec2(100, -100);
-
-	m_Object->material.baseTexture = ResourceManager::GetTexture("Vertex");
-	m_Object2->material.baseTexture = ResourceManager::GetTexture("boy1");
-	//m_Canvas->material.baseTexture = ResourceManager::GetTexture("Canvas");
-
-	m_Object->material.surface = Transparent;
-
-	m_Button->material.baseTexture = ResourceManager::GetTexture("boy1");
-
-	m_Object2->material.colour = glm::vec4(1, 0, 0, 0.5f);
-	m_Object->material.surface = Transparent;
-
-	m_MyComponent = new TestComponent();
-
-	m_Object2->AddComponent(m_MyComponent);
-
-	m_Manager.Register(m_Object2);
-	m_Manager.Register(m_Object);
-	m_MyComponent->name = "My Componenet";
-
-	m_Object2->layer = layer_07;
-
-	TestComponent dont;
-
-	if(m_Object2->GetComponent(dont));
-	{
-		std::cout << dont.name << std::endl;
-	}
-
-	m_Manager.Register(m_MainCamera);
-	m_Manager.Register(m_DummyCamera);
-
-	m_MainCamera->transform.rotation = 0;
-
-	m_Manager.Register(m_Button);
-	//m_Body = new RigidBody("Yep");
-
-	//m_Body->material.baseTexture = ResourceManager::GetTexture("boy1");
-	//m_Body->material.colour.r = 1;
-	//m_Manager.Register(m_Body);
-
-	//m_Canvas->transform.size = glm::vec2(1280, 720);
-	//m_Anim->SetMaster(m_Object2);
-	//m_Manager.Register(m_Canvas);
-}
-
-void MyScene::Start()
-{
-
-	m_Button->material.colour = glm::vec4(1,0,0,1);
-	m_Manager.GiveWindow(m_Window);
-	m_Object->transform.size = glm::vec2(1, 1);
-
-	m_Object->transform.position.x = 0;
-	m_Object->transform.position.y = 0;
-
-	//m_Object2->transform.position.y = 20;
-	//m_Object2->transform.position.x = 20;
-
-	//m_Body->transform.position.x = 0;
-	//m_Body->transform.position.y = 0;
-
-	//m_Body->transform.size = glm::vec2(2, 2);
-
-	m_Object2->transform.size = glm::vec2(2, 1);
-
-	m_Button->transform.size.x = 5;
-	m_Button->transform.size.y = 3;
-
-	m_Button->text = "Play";
-
-	m_Button->transform.position.x = 5.0f;
-	m_Button->transform.position.y = 5.0f;
-
-	m_MainCamera->transform.position.x = 10;
-	m_MainCamera->transform.position.y = 10;
-
-	m_MyText->transform.position.x = 10;
-	m_MyText->transform.position.y = 10;
-
-	glClearColor(0.2f, 0.2f, 0.2f, 0);
-
-}
-
-void MyScene::Update(float delta)
-{
-	m_Manager.LogEvents(); // Dont Remove
-
-	if (glfwGetKey(m_Window, GLFW_KEY_W) == GLFW_PRESS)
-	{
-		m_MainCamera->transform.position.y += 5 * delta;
-	}
-
-	if (glfwGetKey(m_Window, GLFW_KEY_S) == GLFW_PRESS)
-	{
-		m_MainCamera->transform.position.y -= 5 * delta;
-	}
-
-	if (glfwGetKey(m_Window, GLFW_KEY_A) == GLFW_PRESS)
-	{
-		m_MainCamera->transform.position.x -= 5 * delta;
-	}
-
-	if (glfwGetKey(m_Window, GLFW_KEY_D) == GLFW_PRESS)
-	{
-		m_MainCamera->transform.position.x += 5 * delta;
-	}
-
-	if (glfwGetKey(m_Window, GLFW_KEY_Q) == GLFW_PRESS)
-	{
-		m_MainCamera->zoom += 1 * delta;
-	}
-
-	if (glfwGetKey(m_Window, GLFW_KEY_E) == GLFW_PRESS)
-	{
-		m_MainCamera->zoom -= 1 * delta;
-	}
-
-	if (glfwGetKey(m_Window, GLFW_KEY_SPACE) == GLFW_PRESS)
-	{
-		GameObject cast;
-
-		if (m_Manager.Raycast2D(m_Manager.GetMousePosition(), glm::vec2(0, 1), cast, 5.0f))
-		{
-			std::cout << cast.name << std::endl;
-		}
-	}
-
-	if (m_Button->Pressed())
-	{
-		std::cout << "PRESSED BUTTON" << std::endl;
-		m_Button->CloseEvent();
-	}
-}
-
-void MyScene::LateUpdate(float delta)
-{
-	m_Manager.ConfigureSystems();
-	m_Manager.CollisionCheck();
-}
-
-void MyScene::FixedUpdate(float fixedDelta)
-{
-	m_Manager.ConfigurePhysics(fixedDelta);
-}
-
-void MyScene::Rendering(Vertex2D* render)
-{
-	m_Manager.ConfigureRenderSystems(render);
-}
+        // Insert the color block just after the Surface Option b

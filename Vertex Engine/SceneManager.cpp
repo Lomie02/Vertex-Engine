@@ -12,6 +12,7 @@ void SceneManager::SetUpWindow(GLFWwindow* _window)
 {
 	for (int i = 0; i < m_SceneList.size(); i++)
 	{
+		m_SceneList.at(i)->GiveWindow(_window);
 	}
 }
 
@@ -61,4 +62,12 @@ void SceneManager::RenderCurrentScene(Vertex2D* render)
 void SceneManager::EndSceneSetUpProcess(SceneManager* _sceneManager)
 {
 
+}
+
+void SceneManager::AssignManager()
+{
+	for (int i = 0; i < m_SceneList.size(); i++)
+	{
+		m_SceneList.at(i)->GiveSceneManager(this);
+	}
 }
