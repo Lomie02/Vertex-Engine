@@ -54,7 +54,7 @@ public:
 
 	Text* m_Text;
 private:
-	glm::vec2 m_Offset = glm::vec2(0, 0);
+	glm::vec2 m_Offset = glm::vec2(2, 1);
 	void BeginSetUp();
 	bool m_WasPressed = false;
 };

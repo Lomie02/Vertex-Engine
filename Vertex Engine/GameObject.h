@@ -7,7 +7,7 @@
 #include "Collider.h"
 #include "VertexComponent.h"
 #include <iostream>
-
+#include <vector>
 
 class GameObject
 {
@@ -30,7 +30,9 @@ public:
 
 	GameObject* GetParent() { return m_Parent; }
 	void SetChild(GameObject* _child);
-	void RemoveChild();
+	void RemoveChild(GameObject* _target);
+	void RemoveChildren();
+
 	void ConfigureSystems();
 	Collider* GetCollider() { return m_Collider; }
 
