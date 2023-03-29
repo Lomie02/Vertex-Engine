@@ -13,6 +13,8 @@
 class VertexPrefs
 {
 public:
+	static void Open() { m_RunningEngine = true; }
+
 	static void GetFile(std::string _file, std::vector<GameObject*> _data);
 	static void SaveFile(std::string _file, std::vector<GameObject*> _data);
 
@@ -36,9 +38,12 @@ public:
 
 	static bool CreateFolder(std::string _key);
 	static bool DeleteFolder(std::string _key);
+
+	static bool EngineStatus() { return m_RunningEngine; }
+	static void Close() { m_RunningEngine = false; }
 private:
 	VertexPrefs();
-
+	static bool m_RunningEngine;
 
 };
 
