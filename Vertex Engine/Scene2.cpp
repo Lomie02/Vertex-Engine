@@ -38,7 +38,7 @@ void Scene2::Awake()
 
 void Scene2::Start()
 {
-	m_Manager.GiveWindow(m_Window);
+	m_Manager.GiveWindow(Window);
 }
 
 void Scene2::Update(float delta)

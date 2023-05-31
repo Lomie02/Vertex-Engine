@@ -1,110 +1,25 @@
-#pragma once
-#include "GameObject.h"
-#include <vector>
-#include "VertexRenderPackage.h"
-#include "VertexUIPackage.h"
-#include "Camera.h"
-#include "Animator.h"
-#include "BootUpContainer.h"
-
-#include "RigidBody.h"
-
-enum Renderer {
-	Vertex_2D = 0, // Vertex Engines default renderer.
-	Tension_2D, //  Tension is an upcoming Renderer that supports more features than the regular Vertex2D Renderer
-};
-
-class AssetManager
-{
-public:
-
-	AssetManager()
-	{
-		m_ActiveCamera = 0;
-		m_CameraGizmo.baseTexture = ResourceManager::GetTexture("Gizmo_Camera");
-		m_TransformGizmoX.baseTexture = ResourceManager::GetTexture("Gizmo_Cords");
-		m_CenterGizmo.baseTexture = ResourceManager::GetTexture("Gizmo_Center");
-	};
-
-	void BootUpAll(BootUpContainer* _settings);
-
-	void Register(GameObject* _object);
-	void Register(RigidBody* _object);
-	void Register(Animator* _object);
-	void Register(Button* _object);
-	void Register(Camera* camera);
-	void Register(Text* _text);
-
-	void GiveWindow(GLFWwindow* _window) { m_Window = _window; };
-	bool OnTrigger(GameObject* A, GameObject* B);
-
-	bool CollisionCheck();
-	void ConfigureSystems();
-	void ConfigureRenderSystems(Vertex2D* render);
-	void ConfigurePhysics(float fixedDelta);
-	void LogEvents();
-	void SetActiveCamera(int _index);
-
-	std::vector<GameObject*> m_Objects;
-	std::vector<GameObject*> m_UiObjects;
-	std::vector<Camera*> m_Cameras;
-	std::vector<Animator*> m_Animators;
-
-	bool MousePick(GameObject* _target);
-	bool Raycast2D(glm::vec2 _pos, glm::vec2 _dir, GameObject& _out, float length = 100.0f);
-
-	glm::vec2 GetMousePosition() { ConfigureMouse(); return mouse.position; }
-
-	// Tension 2D Functions
-	void TensionRendering(Vertex2D* m_Renderer);
-	void TensionLayerSort();
-
-	void Vertex2dRendering(Vertex2D* render);
-
-	void ConfigSetup();
-	void ExecuteAll();
-	void UnRegister(GameObject* _target);
-	void Gizmos(Vertex2D* render);
-
-	GameObject* FindObjectWithTag(std::string _tag);
-	std::vector<GameObject*> FindObjecstWithTag(std::string _tag);
-	std::vector<GameObject*> FindObjecstWithComponent(VertexComponent& _ref);
-	GameObject* FindObjectWithComponent(VertexComponent& _ref);
-	GameObject* FindComponent(VertexComponent& _ref);
-
-private:
-
-	char m_ScenesName[30] = "s";
-	void UpdateComponents(float delta);
-	void ConfigureMouse();
-
-	bool m_SingleSortRenderering = true;
-	bool m_HasRendered = false;
-	Renderer m_RendererToUse = Tension_2D;
-
-	std::vector<GameObject*> m_Opaque;
-	std::vector<GameObject*> m_Transparent;
-
-	GLFWwindow* m_Window;
-	Transform mouse;
-	float m_TimeStep = 0.01f;
-	glm::vec2 m_WorldGravity = glm::vec2(0, -1);
-
-	Material m_CameraGizmo;
-	Material m_TransformGizmoX;
-	Material m_CenterGizmo;
-
-	std::vector<RigidBody*> m_PhysicsObjects;
-	std::vector<Transform*> m_PreviousLocations;
-	std::vector<Button*> m_UiButtonObjects;
-	std::vector<Text*> m_UiTextObjects;
-	int m_ActiveCamera;
-	bool m_ShutDownManager = false;
-
-	float lastX = 1920;
-	float lastY = 1080;
-
-	float yaw = 0;
-	float pitch = 0;
-
-};
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <LangVersion>9.0</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.20506</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <RootNamespace></RootNamespace>
+    <ProjectGuid>{3368FAF7-0ECC-0F64-77ED-F61A2D2B071F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <AssemblyName>Assembly-CSharp</AssemblyName>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <BaseDirectory>.</BaseDirectory>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>Temp\Bin\Debug\</OutputPath>
+    <DefineConstants>UNITY_2022_2_8;UNITY_2022_2;UNITY_2022;UNITY_5_3_OR_NEWER;UNITY_5_4_OR_NEWER;UNITY_5_5_OR_NEWER;UNITY_5_6_OR_NEWER;UNITY_2017_1_OR_NEWER;UNITY_2017_2_OR_NEWER;UNITY_2017_3_OR_NEWER;UNITY_2017_4_OR_NEWER;UNITY_2018_1_OR_NEWER;UNITY_2018_2_OR_NEWER;UNITY_2018_3_OR_NEWER;UNITY_2018_4_OR_NEWER;UNITY_2019_1_OR_NEWER;UNITY_2019_2_OR_NEWER;UNITY_2019_3_OR_NEWER;UNITY_2019_4_OR_NEWER;UNITY_2020_1_OR_NEWER;UNITY_2020_2_OR_NEWER;UNITY_2020_3_OR_NEWER;UNITY_2021_1_OR_NEWER;UNITY_2021_2_OR_NEWER;UNITY_2021_3_OR_NEWER;UNITY_2022_1_OR_NEWER;UNITY_2022_2_OR_NEWER;PLATFORM_ARCH_64;UNITY_64;UNITY_INCLUDE_TESTS;ENABLE_AR;ENABLE_AUDIO;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_EVENT_QUEUE;ENABLE_MICROPHONE;ENABLE_MULTIPLE_DISPLAYS;ENABLE_PHYSICS;ENABLE_TEXTURE_STREAMING;ENABLE_VIRTUALTEXTURING;ENABLE_LZMA;ENABLE_UNITYEVENTS;ENABLE_VR;ENABLE_WEBCAM;ENABLE_UNITYWEBREQUEST;ENABLE_WWW;ENABLE_CLOUD_SERVICES;ENABLE_CLOUD_SERVICES_COLLAB;ENABLE_CLOUD_SERVICES_COLLAB_SOFTLOCKS;ENABLE_CLOUD_SERVICES_ADS;ENABLE_CLOUD_SERVICES_USE_WEBREQUEST;ENABLE_CLOUD_SERVICES_CRASH_REPORTING;ENABLE_CLOUD_SERVICES_PURCHASING;ENABLE_CLOUD_SERVICES_ANALYTICS;ENABLE_CLOUD_SERVICES_BUILD;ENABLE_EDITOR_GAME_SERVICES;ENABLE_UNITY_GAME_SERVICES_ANALYTICS_SUPPORT;ENABLE_CLOUD_LICENSE;ENABLE_EDITOR_HUB_LICENSE;ENABLE_WEBSOCKET_CLIENT;ENABLE_GENERATE_NATIVE_PLUGINS_FOR_ASSEMBLIES_API;ENABLE_DIRECTOR_AUDIO;ENABLE_DIRECTOR_TEXTURE;ENABLE_MANAGED_JOBS;ENABLE_MANAGED_TRANSFORM_JOBS;ENABLE_MANAGED_ANIMATION_JOBS;ENABLE_MANAGED_AUDIO_JOBS;ENABLE_MANAGED_UNITYTLS;INCLUDE_DYNAMIC_GI;ENABLE_SCRIPTING_GC_WBARRIERS;PLATFORM_SUPPORTS_MONO;RENDER_SOFTWARE_CURSOR;ENABLE_VIDEO;ENABLE_ACCELERATOR_CLIENT_DEBUGGING;ENABLE_NAVIGATION_PACKAGE_DEBUG_VISUALIZATION;ENABLE_NAVIGATION_HEIGHTMESH_RUNTIME_SUPPORT;ENABLE_NAVIGATION_UI_REQUIRES_PACKAGE;PLATFORM_STANDALONE;TEXTCORE_1_0_OR_NEWER;PLATFORM_STANDALONE_WIN;UNITY_STANDALONE_WIN;UNITY_STANDALONE;ENABLE_RUNTIME_GI;ENABLE_MOVIES;ENABLE_NETWORK;ENABLE_NVIDIA;ENABLE_CRUNCH_TEXTURE_COMPRESSION;ENABLE_OUT_OF_PROCESS_CRASH_HANDLER;ENABLE_CLUSTER_SYNC;ENABLE_CLUSTERINPUT;PLATFORM_UPDATES_TIME_OUTSIDE_OF_PLAYER_LOOP;GFXDEVICE_WAITFOREVENT_MESSAGEPUMP;PLATFORM_INITIALIZES_MEMORY_MANAGER_EXPLICITLY;ENABLE_MONO;NET_STANDARD_2_0;NET_STANDARD;NET_STANDARD_2_1;NETSTANDARD;NETSTANDARD2_1;

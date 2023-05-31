@@ -14,14 +14,14 @@ next to come:
 
 Tension2D Features:
 
- • Layers will be introduced in the Tension2D renderer
+ • Layers will be introduced in the Tension2D renderer (Completed)
  • Gameobjects will need to render their own children in the Tension2D renderer 
  • Gameobjects will update their children instead of the asset manager
  • Render Textures introduced
+ • Auto detect Transparency in textures
  • 2D Lighting 
- • Depth testing
- • Improved transparency renderering 
-
+ • Depth testing (Completed)
+ • Improved transparency renderering (Completed)
 
 
 Changes to come:
@@ -60,3 +60,12 @@ Editor Changes To Come:
  5. Scale Gizmos
  6. Rotation Gizmos (subject to change)
  
+Tension 2D vs Vertex 2D Renderer
+1) Tension has layers & auto layer sorting.
+vertex does not.
+
+2) Tension has depth testing. Vertex does not
+
+3) Tension only sorts layers once to save performance. 
+Sorting before every frame is drawn can also be turned on
+in a boot up container

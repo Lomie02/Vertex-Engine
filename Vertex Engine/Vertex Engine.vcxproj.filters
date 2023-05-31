@@ -61,8 +61,11 @@
     <Filter Include="Components">
       <UniqueIdentifier>{560fabd4-3f43-4762-9f34-f300331fba97}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Scenes\Scene 3">
+    <Filter Include="Shaders\Scene 3">
       <UniqueIdentifier>{f1d50b3a-5a3b-4e07-9bb3-97548b9d311d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Time">
+      <UniqueIdentifier>{c5410ea7-9ce4-442e-9452-a486191aa591}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -166,7 +169,13 @@
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="MyFirstScene.cpp">
-      <Filter>Scenes\Scene 3</Filter>
+      <Filter>Shaders\Scene 3</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Time.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -207,9 +216,6 @@
       <Filter>Game Settings</Filter>
     </ClInclude>
     <ClInclude Include="AssetManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Button.h">
@@ -288,7 +294,7 @@
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="MyFirstScene.h">
-      <Filter>Scenes\Scene 3</Filter>
+      <Filter>Shaders\Scene 3</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
@@ -304,6 +310,18 @@
     </ClInclude>
     <ClInclude Include="Particle.h">
       <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Debug.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexGeneral.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Time.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

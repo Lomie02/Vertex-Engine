@@ -15,7 +15,9 @@
 #include <direct.h>
 
 #include "stb_image.h"
+#include "Debug.h"
 
+#include "Time.h"
 #define GL_SILENCE_DEPRECATION
 #pragma warning(disable : 4996);
 
@@ -57,9 +59,9 @@ void Application::StartUp()
 		std::cout << "Window Failed ERROR: " << description << std::endl;
 		ShutDown();
 	}
-	char other[] = PROJECT_NAME;
+	char other[70] = PROJECT_NAME;
 
-	char name[150] = "Vertex Engine | Editor | Project: ";
+	char name[150] = "Vertex 2023 Editor: ";
 
 	strcat(name, other);
 
@@ -165,7 +167,7 @@ void Application::StartUp()
 	{
 		m_Settings->m_UseDefaultRenderer = true;
 	}
-	else if(m_UsingRenderer == Tension_2D)
+	else if (m_UsingRenderer == Tension_2D)
 	{
 		m_Settings->m_UseDefaultRenderer = false;
 	}
@@ -190,12 +192,17 @@ void Application::StartUp()
 		std::cout << "Vertex Message: Editor Succeded." << std::endl;
 	}
 
-	for(int i = 0; i < m_SceneManager->m_SceneList.size(); i++)
+	for (int i = 0; i < m_SceneManager->m_SceneList.size(); i++)
 	{
 		m_SceneManager->m_SceneList.at(i)->GetAssets().BootUpAll(m_Settings);
 	}
 
+	if (ENABLE_VERTEX_CONSOLE)
+	{
 		std::cout << "Vertex Message: Start Up Succeded." << std::endl;
+	}
+
+	Debug::Log("Stop");
 
 	glClearColor(BACKGROUND_COLOUR);
 }
@@ -203,7 +210,10 @@ void Application::StartUp()
 void Application::Start()
 {
 	m_SceneManager->StartUpScenes();
-	std::cout << "Vertex Message: Start Succeded." << std::endl;
+
+	if (ENABLE_VERTEX_CONSOLE) {
+		std::cout << "Vertex Message: Start Succeded." << std::endl;
+	}
 }
 
 void Application::Update()
@@ -236,6 +246,139 @@ void Application::Update()
 	}
 }
 
+void Application::EditorMenu(EditorWindow _window)
+{
+	ImGui::BeginMainMenuBar();
+	ImGui::Text(PROJECT_NAME);
+	EditorSpacer(1);
+
+	if (ImGui::Button("File"))
+	{
+		system("explorer C:\\");
+	}
+
+
+	EditorSpacer(2);
+
+	if (ImGui::Button("Main Window"))
+	{
+		glViewport(299.973f, 349.968f, 1280, 720);
+		m_WindowMode = Main;
+	}
+
+	if (ImGui::Button("Animation Window")) {
+
+		glViewport(1080, 349.968f, 1280, 720);
+		m_WindowMode = Animation;
+	}
+
+	if (ImGui::Button("Vertex Canvas"))
+	{
+		m_WindowMode = HudEditor;
+	}
+
+
+	ImGui::Spacing();
+
+	if (ImGui::Button("Window"))
+	{
+	}
+
+	EditorSpacer(40);
+
+	if (_window == Main) {
+
+		if (ImGui::ArrowButton("Play", ImGuiDir_Right) && m_Mode == EDITOR)
+		{
+			m_Mode = EDITOR_PLAY;
+			m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->Start();
+			UpdateEditorMode();
+		}
+		if (ImGui::Button("||"))
+		{
+			if (m_Mode == EDITOR_PLAY)
+			{
+				m_Mode = EDITOR_PAUSED;
+			}
+			else if (m_Mode == EDITOR_PAUSED)
+			{
+				m_Mode = EDITOR_PLAY;
+			}
+		}
+		if (ImGui::Button("STOP"))
+		{
+			if (m_Mode == EDITOR_PLAY || m_Mode == EDITOR_PAUSED) {
+
+				m_Mode = EDITOR;
+				m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->Start();
+				UpdateEditorMode();
+			}
+		}
+	}
+	else if (_window == Animation) {
+
+		if (ImGui::ArrowButton("PlayAnimation", ImGuiDir_Right) && m_Mode == EDITOR_PLAY)
+		{
+			m_SceneManager->GetCurrentScene()->GetAssets().m_Animators.at(0)->Play();
+		}
+
+		if (ImGui::Button("KeyFrame") && m_Mode == EDITOR_PLAY)
+		{
+			m_SceneManager->GetCurrentScene()->GetAssets().m_Animators.at(0)->AddKeyFrame();
+		}
+		if (ImGui::Button("Stop") && m_Mode == EDITOR_PLAY)
+		{
+			m_SceneManager->GetCurrentScene()->GetAssets().m_Animators.at(0)->Stop();
+		}
+	}
+
+	EditorSpacer(2);
+	ImGui::Text("Mouse: ", m_SceneManager->GetCurrentScene()->GetAssets().GetMousePosition());
+	ImGui::SameLine();
+
+	EditorSpacer(90);
+	//if (ShowHelp)
+	//{
+	//	ImGui::Begin("Help");
+	//	if (ImGui::Button("close"))
+	//	{
+	//		ShowHelp = false;
+	//	}
+	//	ImGui::Text("Welcome to the Vertex Engine Editor! This editor allows for developers to place objects around a scene.");
+	//	ImGui::Text("The engine can be toggled between Play, Editor Play & Editor mode by changing the mode inside the Application.h file.");
+	//	ImGui::Text("This Editor cannot add or delete GameObjects from a scene. Objects can only be edited & moved around to create a scene.");
+	//	ImGui::Text("All GameObjects must be created in code first & registered to a AssetManager to be shown in the editor.");
+	//	ImGui::End();
+	//}
+
+	if (ImGui::BeginCombo("##yep", "Tools"))
+	{
+		if (ImGui::Selectable("Notepad"))
+		{
+			system("notepad");
+		}
+
+		if (ImGui::Selectable("Textures"))
+		{
+			system("explorer C:\\");
+		};
+
+		ImGui::Selectable("Shaders");
+		ImGui::Selectable("Containing Folder");
+
+		ImGui::EndCombo();
+	}
+
+	ImGui::EndMainMenuBar();
+}
+
+void Application::EditorSpacer(int _amount)
+{
+	for (int i = 0; i < _amount; i++) {
+		ImGui::Spacing();
+	}
+}
+
 void Application::EditorMain()
 {
 	static bool ShowHelp;
@@ -249,7 +392,10 @@ void Application::EditorMain()
 	static int CanvaSelected = 0;
 	static int selected = 0;
 	static int currentScene = 0;
+	static int SelectedUi = 0;
 
+	static int m_DisplayAsset = 0;
+	//===================================================
 
 	static float ScaleAmount = 0;
 	for (int i = 0; i < MAX_ASSETS; i++)
@@ -288,10 +434,23 @@ void Application::EditorMain()
 		}
 	}
 
+	for (int i = 0; i < 80; i++)
+	{
+		if (i < m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_UiButtonObjects.size())
+		{
+			m_UI[i] = m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_UiButtonObjects.at(i)->name;
+		}
+		else
+		{
+			m_UI[i] = " ";
+		}
+	}
+
 	ImGui_ImplGlfw_NewFrame();
 	ImGui_ImplOpenGL3_NewFrame();
 
 	ImGui::NewFrame();
+
 
 	ImGui::Begin("Inspector");
 
@@ -300,9 +459,9 @@ void Application::EditorMain()
 	{
 		ImGui::Text("Transform");
 		ImGui::SameLine();
-		ImGui::Spacing();
+		EditorSpacer(1);
 		ImGui::SameLine();
-		ImGui::Spacing();
+		EditorSpacer(1);
 		ImGui::SameLine();
 		ImGui::Checkbox("Active", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selected)->m_Active);
 		ImGui::SameLine(); ImGui::InputInt("Layer", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selected)->layer, 2);
@@ -321,8 +480,7 @@ void Application::EditorMain()
 
 		ImGui::SameLine(); ImGui::InputFloat("##Ypos", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selected)->transform.position.y);
 
-		ImGui::Spacing();
-		ImGui::Spacing();
+		EditorSpacer(2);
 		//===================================== Rotation
 		ImGui::InputFloat("Rotation", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selected)->transform.rotation);
 
@@ -330,16 +488,13 @@ void Application::EditorMain()
 		ImGui::InputFloat("Scale", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selected)->transform.scale);
 		ImGui::InputFloat2("Size", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selected)->transform.size.x);
 
-		ImGui::Spacing();
-		ImGui::Spacing();
+		EditorSpacer(2);
 		//==================================== Colour
 
 		ImGui::Text("Colour");
-		ImGui::DragFloat4("##Colour", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selected)->material.colour.r,0.05f ,0.0f ,1.0f);
+		ImGui::DragFloat4("##Colour", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selected)->material.colour.r, 0.05f, 0.0f, 1.0f);
 
-		ImGui::Spacing();
-		ImGui::Spacing();
-		ImGui::Spacing();
+		EditorSpacer(3);
 
 	}
 
@@ -376,105 +531,77 @@ void Application::EditorMain()
 	}
 	ImGui::End();
 
-	ImGui::BeginMainMenuBar();
-	ImGui::Text(PROJECT_NAME);
-	ImGui::Spacing();
-
-	ImGui::Button("Main Window");
-	ImGui::Spacing();
-
-	ImGui::Button("Animation Window");
-	ImGui::Spacing();
-
-	ImGui::Button("Vertex Canvas");
-
-	if (ImGui::Button("Help"))
-	{
-		ShowHelp = true;
-	}
-
-	for (int i = 0; i < 68; i++) //Space out the play buttons
-	{
-		ImGui::Spacing();
-	}
-
-	if (glfwGetKey(m_GameWindow, GLFW_KEY_F) == GLFW_PRESS)
-	{
-		m_SceneManager->GetCurrentScene()->GetAssets().m_Cameras.at(0)->transform.position = m_SceneManager->GetCurrentScene()->GetAssets().m_Objects.at(selected)->transform.position;
-	}
-
-
-	if (ImGui::ArrowButton("Play", ImGuiDir_Right) && m_Mode == EDITOR)
-	{
-		m_Mode = EDITOR_PLAY;
-		m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->Start();
-		UpdateEditorMode();
-	}
-	if (ImGui::Button("||"))
-	{
-		if (m_Mode == EDITOR_PLAY)
-		{
-			m_Mode = EDITOR_PAUSED;
-		}
-		else if (m_Mode == EDITOR_PAUSED)
-		{
-			m_Mode = EDITOR_PLAY;
-		}
-	}
-	if (ImGui::Button("STOP"))
-	{
-		if (m_Mode == EDITOR_PLAY || m_Mode == EDITOR_PAUSED) {
-
-			m_Mode = EDITOR;
-			m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->Start();
-			UpdateEditorMode();
-		}
-	}
-
-	for (int i = 0; i < 57; i++) //Space out the play buttons
-	{
-		ImGui::Spacing();
-	}
-
-	if (ImGui::ArrowButton("PlayAnimation", ImGuiDir_Right) && m_Mode == EDITOR_PLAY)
-	{
-		m_SceneManager->GetCurrentScene()->GetAssets().m_Animators.at(0)->Play();
-	}
-
-	if (ImGui::Button("KeyFrame") && m_Mode == EDITOR_PLAY)
-	{
-		m_SceneManager->GetCurrentScene()->GetAssets().m_Animators.at(0)->AddKeyFrame();
-	}
-	if (ImGui::Button("Stop") && m_Mode == EDITOR_PLAY)
-	{
-		m_SceneManager->GetCurrentScene()->GetAssets().m_Animators.at(0)->Stop();
-	}
-
-	if (ShowHelp)
-	{
-		ImGui::Begin("Help");
-		if (ImGui::Button("close"))
-		{
-			ShowHelp = false;
-		}
-		ImGui::Text("Welcome to the Vertex Engine Editor! This editor allows for developers to place objects around a scene.");
-		ImGui::Text("The engine can be toggled between Play, Editor Play & Editor mode by changing the mode inside the Application.h file.");
-		ImGui::Text("This Editor cannot add or delete GameObjects from a scene. Objects can only be edited & moved around to create a scene.");
-		ImGui::Text("All GameObjects must be created in code first & registered to a AssetManager to be shown in the editor.");
-		ImGui::End();
-	}
-
-	ImGui::EndMainMenuBar();
+	EditorMenu(m_WindowMode);
 
 	//=====================================
 	ImGui::Begin("Assets");
 
-	ImGui::Text("Currently Editing: ");
-	ImGui::Text(m_SceneList[currentScene]);
-	ImGui::Text("Scene Objects");
+	ImGui::Text("Currently Editing: "); ImGui::SameLine(); ImGui::Text(m_SceneList[currentScene]);
 
-	ImGui::ListBox("Assets", &selected, m_Assets, m_SceneManager->GetCurrentScene()->GetAssets().m_Objects.size());
-	ImGui::ListBox("Cameras", &Cameraselected, m_Cameras, m_SceneManager->GetCurrentScene()->GetAssets().m_Cameras.size());
+	EditorSpacer(3);
+
+	ImGui::Text("Assets In Scene");
+
+	if (ImGui::Button("GameObjects"))
+	{
+		m_DisplayAsset = 0;
+	}
+
+	ImGui::SameLine();
+	if (ImGui::Button("Cameras"))
+	{
+		m_DisplayAsset = 1;
+	}
+
+	ImGui::SameLine();
+	if (ImGui::Button("UI"))
+	{
+		m_DisplayAsset = 2;
+	}
+
+	if (glfwGetKey(m_GameWindow, GLFW_KEY_F) == GLFW_PRESS)
+	{
+		switch (m_DisplayAsset)
+		{
+		case 0:
+
+			break;
+		}
+
+
+		m_SceneManager->GetCurrentScene()->GetAssets().m_Cameras.at(0)->transform.position = m_SceneManager->GetCurrentScene()->GetAssets().m_Objects.at(selected)->transform.position;
+	}
+
+	switch (m_DisplayAsset)
+	{
+	case 0:
+		ImGui::ListBox("GameObjects", &selected, m_Assets, m_SceneManager->GetCurrentScene()->GetAssets().m_Objects.size());
+
+		//if (ImGui::BeginCombo("##Assets", "Kingdom"));
+		//{
+		//	for (int i = 0; i < IM_ARRAYSIZE(m_Assets); i++)
+		//	{
+		//		if (ImGui::Selectable(m_Assets[i]))
+		//		{
+		//			selected = i;
+		//		}
+		//	}
+		//
+		//	ImGui::EndCombo();
+		//}
+		break;
+
+	case 1:
+
+		ImGui::ListBox("Cameras", &Cameraselected, m_Cameras, m_SceneManager->GetCurrentScene()->GetAssets().m_Cameras.size());
+		break;
+
+	case 2:
+
+		ImGui::ListBox("UI", &SelectedUi, m_UI, m_SceneManager->GetCurrentScene()->GetAssets().m_UiButtonObjects.size());
+
+		break;
+	}
 
 	ImGui::End();
 
@@ -489,6 +616,8 @@ void Application::EditorMain()
 
 	ImGui::Text("Scenes");
 	ImGui::BeginChild("Scenes");
+
+
 
 	if (ImGui::ListBox("##Assets", &currentScene, m_SceneList, m_SceneManager->m_SceneList.size()) && m_Mode == EDITOR)
 	{
@@ -509,10 +638,58 @@ void Application::EditorMain()
 
 void Application::EditorAnimation()
 {
+	ImGui_ImplGlfw_NewFrame();
+	ImGui_ImplOpenGL3_NewFrame();
+
+	static char animateObjects[MAX_ASSETS];
+
+	//for (int i = 0; i < MAX_ASSETS; i++) {
+	//
+	//	//if (i < m_SceneManager->GetCurrentScene()->GetAssets())
+	//	//{
+	//	//
+	//	//}
+	//
+	//}
+
+	ImGui::NewFrame();
+
+	EditorMenu(m_WindowMode);
+
+	ImGui::Begin("Outliner");
+
+	ImGui::Text("Animation Window");
+
+	ImGui::End();
+
+	//========================================= Time line
+
+	ImGui::Begin("Timeline");
+
+
+	ImGui::End();
+
+	//========================================= Tools
+	ImGui::Begin("Tools");
+
+
+	ImGui::End();
+
+	ImGui::Render();
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
 void Application::EditorHud()
 {
+	ImGui_ImplGlfw_NewFrame();
+	ImGui_ImplOpenGL3_NewFrame();
+
+	ImGui::NewFrame();
+
+	EditorMenu(m_WindowMode);
+
+	ImGui::Render();
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
 void Application::RenderAll()
@@ -560,18 +737,13 @@ void Application::SceneSetUp()
 	m_Scene = new MyScene("Scene 1");
 	m_SecondScene = new Scene2("Scene 2");
 
-
 	m_SceneManager->AddScene(m_Scene);
 	m_SceneManager->AddScene(m_SecondScene);
 
-	//============================================================ Remove this & automate it in the scene manager! Temp for testing
-	m_Scene->GiveWindow(m_GameWindow);
-	m_SecondScene->GiveWindow(m_GameWindow);
+	m_SceneManager->SetUpWindow(m_GameWindow);
+	m_SceneManager->AssignManager();
 
-	m_Scene->GiveSceneManager(m_SceneManager);
-	m_SecondScene->GiveSceneManager(m_SceneManager);
-
-		m_SceneManager->m_SceneList.at(0)->GetAssets().ConfigSetup();
+	m_SceneManager->m_SceneList.at(0)->GetAssets().ConfigSetup();
 }
 
 void Application::UpdateEditorMode()
@@ -615,6 +787,7 @@ void Application::ShutDown()
 	m_SceneManager->GetCurrentScene()->GetAssets().ExecuteAll();
 }
 
+
 void Application::FolderCreation()
 {
 	int success;
@@ -627,6 +800,10 @@ void Application::FolderCreation()
 	success = mkdir("Builds/Audio");
 	success = mkdir("Builds/Data");
 	success = mkdir("Builds/Data/0x021_0KAW");
+	success = mkdir("Builds/Data/0x0983@134");
 
-	std::cout << "Vertex Message: Completed file creation." << std::endl;
+	if (ENABLE_VERTEX_CONSOLE)
+	{
+		std::cout << "Vertex Message: Completed file creation." << std::endl;
+	}
 }

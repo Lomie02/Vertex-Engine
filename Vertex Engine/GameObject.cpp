@@ -1,5 +1,6 @@
 #include "GameObject.h"
 
+
 GameObject::GameObject()
 {
 	name = "GameObject";
@@ -79,9 +80,20 @@ void GameObject::SetChild(GameObject* _child)
 	m_Children.push_back(_child);
 }
 
-void GameObject::RemoveChild()
+void GameObject::RemoveChild(GameObject* _target)
 {
-	//TODO: Add children remove
+	for (int i = 0; i < m_Children.size(); i++)
+	{
+		if (&_target == &m_Children.at(i))
+		{
+			m_Children.erase(m_Children.begin() + i);
+		}
+	}
+}
+
+void GameObject::RemoveChildren()
+{
+	m_Children.clear();
 }
 
 void GameObject::ConfigureSystems()
@@ -153,4 +165,5 @@ bool GameObject::GetComponentInChildren(VertexComponent& _target)
 
 void GameObject::ConfigurePartners()
 {
+	std::cout << "Ok" << std::endl;
 }
