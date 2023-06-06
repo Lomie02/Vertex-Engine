@@ -4,16 +4,14 @@
 #include "Vertex2D.h"
 #include "Texture2D.h"
 
-#include "GameObject.h"
 #include "AssetManager.h"
-#include "Camera.h"
 #include "Button.h"
 
 #include "RigidBody.h"
-#include "Animator.h"
-
 #include "TestComponent.h"
 #include "Text.h"
+
+#include "VertexGeneral.h"
 
 class MyScene : public VertexScene
 {
@@ -28,10 +26,14 @@ public:
 	virtual void FixedUpdate(float fixedDelta);
 	virtual void Rendering(Vertex2D* renderer);
 
+	void GiveWindow(GLFWwindow* window) { m_Window = window; }
+	void GiveSceneManager(SceneManager* scenes) { m_SceneManager = scenes; }
 	AssetManager GetAssets() { return m_Manager; }
 private:
 
 	TestComponent* m_MyComponent;
+	SceneManager* m_SceneManager;
+	GLFWwindow* m_Window;
 
 	Texture2D Dont;
 	Texture2D Dont2;
@@ -49,4 +51,3 @@ private:
 	Camera* m_MainCamera;
 	Camera* m_DummyCamera;
 };
-

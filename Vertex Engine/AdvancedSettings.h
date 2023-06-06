@@ -7,10 +7,10 @@
 
 
 //===============================================
-// General
+// Vertex Console
 //===============================================
 #define ENABLE_VERTEX_CONSOLE true
-#define RESTART_SCENES_ON_LOAD false
+
 #define HIDE_CONSOLE false
 
 //===============================================

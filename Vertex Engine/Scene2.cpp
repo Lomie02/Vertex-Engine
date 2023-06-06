@@ -24,6 +24,7 @@ Scene2::~Scene2()
 
 void Scene2::Awake()
 {
+
 	m_Object2 = new GameObject("Object");
 
 	m_Object2->material.baseTexture = ResourceManager::GetTexture("boy1");
@@ -31,19 +32,42 @@ void Scene2::Awake()
 
 	m_MainCamera = new Camera("Camera 1");
 
+	m_PlayerCon;
+
 	m_MainCamera->transform.position.x = 0;
 	m_MainCamera->transform.position.y = 0;
 	m_Manager.Register(m_MainCamera);
+
+	m_PlayerCon.AssignPlayer(m_Object2);
+
 }
 
 void Scene2::Start()
 {
-	m_Manager.GiveWindow(Window);
+	m_Manager.GiveWindow(m_Window);
 }
 
 void Scene2::Update(float delta)
 {
+	if (glfwGetKey(m_Window, GLFW_KEY_W) == GLFW_PRESS)
+	{
+		m_PlayerCon.MovePosition(glm::vec2(0, 1), delta);
+	}
 
+	if (glfwGetKey(m_Window, GLFW_KEY_S) == GLFW_PRESS)
+	{
+		m_PlayerCon.MovePosition(glm::vec2(0, -1), delta);
+	}
+
+	if (glfwGetKey(m_Window, GLFW_KEY_A) == GLFW_PRESS)
+	{
+		m_PlayerCon.MovePosition(glm::vec2(-1, 0), delta);
+	}
+
+	if (glfwGetKey(m_Window, GLFW_KEY_D) == GLFW_PRESS)
+	{
+		m_PlayerCon.MovePosition(glm::vec2(1, 0), delta);
+	}
 }
 
 void Scene2::LateUpdate(float delta)

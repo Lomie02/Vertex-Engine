@@ -34,7 +34,7 @@ public:
 
 	float far = 50.0f;
 	float near = -1.0f;
-	float zoom = 0.1f;
+	float zoom = 0.1;
 private:
 
 	glm::vec3 m_CameraPos = glm::vec3(0, 0, 0);
@@ -44,7 +44,7 @@ private:
 	glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
 	glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
-	float m_FieldofView = 80.0f;
+	float m_FieldofView = 120.0f;
 
 	glm::mat4 m_PerMat;
 	glm::mat4 m_ProjectionMat;

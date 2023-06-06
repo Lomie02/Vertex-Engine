@@ -1,6 +1,5 @@
 #include "GameObject.h"
 
-
 GameObject::GameObject()
 {
 	name = "GameObject";
@@ -11,8 +10,8 @@ GameObject::GameObject()
 	transform.localPosition.x = 0;
 
 	material = Material("Mat");
-	transform.size.x = 1;
-	transform.size.y = -1;
+	transform.size.x = 5;
+	transform.size.y = 5;
 }
 
 GameObject::GameObject(const char* _Name, bool active)
@@ -23,8 +22,8 @@ GameObject::GameObject(const char* _Name, bool active)
 	transform.localPosition.x = 0;
 
 	material = Material("Mat");
-	transform.size.x = 1;
-	transform.size.y = -1;
+	transform.size.x = 5;
+	transform.size.y = 5;
 
 	m_Collider = new Collider();
 }
@@ -38,8 +37,8 @@ GameObject::GameObject(const char* _Name)
 
 	material = Material("Mat");
 	m_Collider = new Collider();
-	transform.size.x = 1;
-	transform.size.y = -1;
+	transform.size.x = 5;
+	transform.size.y = 5;
 }
 
 void GameObject::SetParent(GameObject* _object)
@@ -80,20 +79,9 @@ void GameObject::SetChild(GameObject* _child)
 	m_Children.push_back(_child);
 }
 
-void GameObject::RemoveChild(GameObject* _target)
+void GameObject::RemoveChild()
 {
-	for (int i = 0; i < m_Children.size(); i++)
-	{
-		if (&_target == &m_Children.at(i))
-		{
-			m_Children.erase(m_Children.begin() + i);
-		}
-	}
-}
-
-void GameObject::RemoveChildren()
-{
-	m_Children.clear();
+	//TODO: Add children remove
 }
 
 void GameObject::ConfigureSystems()
@@ -111,12 +99,12 @@ void GameObject::AddComponent(VertexComponent* _comp)
 	m_Components.push_back(_comp);
 }
 
-bool GameObject::GetComponent(VertexComponent& _target)
+bool GameObject::GetComponent(VertexComponent* _target)
 {
 	for (int i = 0; i < m_Components.size(); i++) {
 		if (typeid(_target) == typeid(m_Components.at(i)))
 		{
-			_target = *m_Components.at(i);
+			_target = m_Components.at(i);
 			return true;
 		}
 	}
@@ -128,19 +116,19 @@ void GameObject::RemoveComponent(VertexComponent* _comp)
 {
 	for (int i = 0; i < m_Components.size(); i++)
 	{
-		if (_comp == m_Components.at(i))
+		if (typeid(_comp) == typeid(m_Components.at(i)))
 		{
 			m_Components.erase(m_Components.begin() + i);
 		}
 	}
 }
 
-bool GameObject::GetComponentInParent(VertexComponent& _target)
+bool GameObject::GetComponentInParent(VertexComponent* _target)
 {
 	for (int i = 0; i < m_Parent->m_Components.size(); i++) {
 		if (typeid(_target) == typeid(m_Parent->m_Components.at(i)))
 		{
-			_target = *m_Parent->m_Components.at(i);
+			_target = m_Parent->m_Components.at(i);
 			return true;
 		}
 	}
@@ -148,14 +136,14 @@ bool GameObject::GetComponentInParent(VertexComponent& _target)
 	return false;
 }
 
-bool GameObject::GetComponentInChildren(VertexComponent& _target)
+bool GameObject::GetComponentInChildren(VertexComponent* _target)
 {
 	for (int k = 0; k < m_Children.size(); k++) {
 
 		for (int i = 0; i < m_Children.at(k)->m_Components.size(); i++) {
 			if (typeid(_target) == typeid(m_Parent->m_Components.at(i)))
 			{
-				_target = *m_Children.at(k)->m_Components.at(i);
+				_target = m_Children.at(k)->m_Components.at(i);
 				return true;
 			}
 		}
@@ -165,5 +153,4 @@ bool GameObject::GetComponentInChildren(VertexComponent& _target)
 
 void GameObject::ConfigurePartners()
 {
-	std::cout << "Ok" << std::endl;
 }

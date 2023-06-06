@@ -2,16 +2,16 @@
 // ============================================== 
 //	GENERAL
 // ============================================== 
-#define PROJECT_NAME "Resident Evil 9.exe"
-#define PROJECT_RESOLUTION 1920, 1080 
+#define PROJECT_NAME "My Game"
+#define PROJECT_RESOLUTION 1920, 1080
 
 #define PROJECT_ASPECT_WIDTH 1920
 #define PROJECT_ASPECT_HEIGHT 1080
 
-#define PROJECT_DEVELOPER "none"
-#define PROJECT_COMPANY "none"
+#define PROJECT_DEVELOPER "Your Name"
+#define PROJECT_COMPANY "Your Company"
 
-#define ENGINE_VERSION 0.2.1
+#define ENGINE_VERSION 0.1.0
 #define ENGINE_EDITION "Vertex Engine 2D"
 
 #define PROJECT_ICON "PowerIcon.png"
@@ -63,7 +63,7 @@
 #define EDITOR_TABS 0.0f, 0.0f, 0.1f, 0.2f
 #define EDITOR_TABS_SELECT 0.1f, 0.1f, 0.3f, 1.0f
 
-#define EDITOR_BUTTONS_SELECT 0.5f, 0.0f, 0.0f, 1.0f
+#define EDITOR_BUTTONS_SELECT 0.5f, 0.0f, 0.0f, 0.1f
 #define PLAY_MODE_COLOUR 0.5f, 0.1f, 0.0f, 1.0f
 
 // =============================================

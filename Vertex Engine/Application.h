@@ -45,30 +45,21 @@ public:
 	bool AppStatus() { return m_IsRunning; };
 	void ShutDown();
 
-	void C_LogComment(std::string _log);
-	void C_LogError(std::string _log);
-	void C_LogWarning(std::string _log);
-
 private:
-
-	void EditorMenu(EditorWindow _window);
-	void EditorSpacer(int _amount = 1);
 
 	void EditorMain();
 	void EditorAnimation();
 	void EditorHud();
 	// Editors
+
 	void FolderCreation();
 	void SceneSetUp();
 	void UpdateEditorMode();
-
-	std::vector<std::string> m_ConsoleLogs;
 
 	EditorWindow m_WindowMode = Main;
 	EditorMode m_Mode = EDITOR;
 	GLFWwindow* m_GameWindow = nullptr;
 
-	static const char* m_ConsoleLog[50];
 	bool m_IsRunning = false;
 
 	VertexText2D* Text;

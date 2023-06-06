@@ -2,21 +2,6 @@
 
 VertexComponent::VertexComponent()
 {
-	OnEnable();
-}
-
-void VertexComponent::OnEnable()
-{
-	enable = true;
-}
-
-void VertexComponent::OnDisable()
-{
-	enable = false;
-}
-
-void VertexComponent::Awake()
-{
 }
 
 void VertexComponent::Start()

@@ -28,9 +28,6 @@ public:
 
 	 int GetActiveScene() { return m_ActiveScene; }
 	 std::vector<VertexScene*> m_SceneList;
-
-	 void AssignManager();
 private:
-
 	 int m_ActiveScene;
 };

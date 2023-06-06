@@ -7,7 +7,7 @@
 #include "Collider.h"
 #include "VertexComponent.h"
 #include <iostream>
-#include <vector>
+
 
 class GameObject
 {
@@ -30,20 +30,18 @@ public:
 
 	GameObject* GetParent() { return m_Parent; }
 	void SetChild(GameObject* _child);
-	void RemoveChild(GameObject* _target);
-	void RemoveChildren();
-
+	void RemoveChild();
 	void ConfigureSystems();
 	Collider* GetCollider() { return m_Collider; }
 
 	void AddComponent(VertexComponent* _comp);
 
-	bool GetComponent(VertexComponent& _target);
+	bool GetComponent(VertexComponent* _target);
 	void RemoveComponent(VertexComponent* _comp);
 
 	int ComponentCount() { return m_Components.size(); }
-	bool GetComponentInParent(VertexComponent& _target);
-	bool GetComponentInChildren(VertexComponent& _target);
+	bool GetComponentInParent(VertexComponent* _target);
+	bool GetComponentInChildren(VertexComponent* _target);
 
 	std::vector<VertexComponent*> ComponentList() { return m_Components; }
 	std::string Tag = "Untagged";

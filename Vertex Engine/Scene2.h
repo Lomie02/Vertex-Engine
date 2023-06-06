@@ -4,9 +4,8 @@
 #include "Vertex2D.h"
 #include "Texture2D.h"
 
-#include "GameObject.h"
 #include "AssetManager.h"
-#include "Camera.h"
+#include "VertexGeneral.h"
 
 class Scene2 : public VertexScene
 {
@@ -22,10 +21,16 @@ public:
 	virtual void FixedUpdate(float fixedDelta);
 	virtual void Rendering(Vertex2D* renderer);
 
+	void GiveWindow(GLFWwindow* window) { m_Window = window; }
+	void GiveSceneManager(SceneManager* scenes) { m_SceneManager = scenes; }
 	AssetManager GetAssets() { return m_Manager; }
 
 private:
 
+	GLFWwindow* m_Window;
+	SceneManager* m_SceneManager;
+
+	PlayerController m_PlayerCon;
 	GameObject* m_Object2;
 	GameObject* m_Object0;
 
