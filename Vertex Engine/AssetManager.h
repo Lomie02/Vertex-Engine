@@ -9,6 +9,8 @@
 //#include "SceneManager.h"
 #include "RigidBody.h"
 
+#include "VertexGeneral.h"
+
 enum Renderer {
 	Vertex_2D = 0, // Vertex Engines default renderer.
 	Tension_2D, //  Tension is an upcoming Renderer that supports more features than the regular Vertex2D Renderer
@@ -74,8 +76,10 @@ public:
 
 	GLFWwindow* GetWindow() { return m_Window; }
 	//void AssignSceneManager(SceneManager* _scene) { SceneManager = _scene; }
-private:
 
+	void AssignMode(EditorMode _mode) { m_OperatingMode = _mode; }
+private:
+	EditorMode m_OperatingMode;
 	//SceneManager* SceneManager;
 	char m_ScenesName[30] = "s";
 	void UpdateComponents(float delta);

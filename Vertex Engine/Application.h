@@ -4,11 +4,13 @@
 #include "Scene2.h"
 #include "Vertex2D.h"
 
+#include "VertexTransitions.h"
 #include "SceneManager.h"
 #include "VertexText2D.h"
 #include "AdvancedSettings.h"
 #include "BootUpContainer.h"
 
+#include "VertexGeneral.h"
 #include "MyFirstScene.h"
 
 #define SIZE m_Size
@@ -17,13 +19,6 @@ enum EditorWindow {
 	Main = 0,
 	Animation,
 	HudEditor,
-};
-
-enum EditorMode {
-	EDITOR = 0,
-	PLAY,
-	EDITOR_PLAY,
-	EDITOR_PAUSED,
 };
 
 class Application
@@ -67,6 +62,7 @@ private:
 	SceneManager* m_SceneManager;
 
 	MyFirstScene* m_MyScene;
+	VertexTransitions* m_TransitionScene;
 
 	MyScene* m_Scene;
 	Scene2* m_SecondScene;

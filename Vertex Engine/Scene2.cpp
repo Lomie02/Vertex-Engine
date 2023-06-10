@@ -44,7 +44,6 @@ void Scene2::Awake()
 
 void Scene2::Start()
 {
-	m_Manager.GiveWindow(m_Window);
 }
 
 void Scene2::Update(float delta)
@@ -72,14 +71,9 @@ void Scene2::Update(float delta)
 
 void Scene2::LateUpdate(float delta)
 {
-	m_Manager.ConfigureSystems();
 }
 
 void Scene2::FixedUpdate(float fixedDelta)
 {
 }
 
-void Scene2::Rendering(Vertex2D* render)
-{
-	m_Manager.ConfigureRenderSystems(render);
-}

@@ -14,7 +14,6 @@ public:
 	virtual void Update(float delta);
 	virtual void LateUpdate(float delta);
 	virtual void FixedUpdate(float fixedDelta);
-	virtual void Rendering(Vertex2D* renderer);
 
 	AssetManager GetAssets() { return m_Manager; }
 

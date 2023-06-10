@@ -51,15 +51,11 @@ void SceneManager::SetActiveScene(const char _scene[])
 	}
 }
 
-void SceneManager::RenderCurrentScene(Vertex2D* render)
-{
-	if (m_SceneList.size() >= 1)
-	{
-		m_SceneList[m_ActiveScene]->Rendering(render);
-	}
-}
-
 void SceneManager::EndSceneSetUpProcess(SceneManager* _sceneManager)
 {
 
+}
+
+void SceneManager::DestroyScenes()
+{
 }

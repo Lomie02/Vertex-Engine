@@ -37,7 +37,6 @@ void MyFirstScene::Start()
 
 void MyFirstScene::Update(float delta)
 {
-	m_Manager.LogEvents();
 
 }
 
@@ -46,9 +45,5 @@ void MyFirstScene::LateUpdate(float delta)
 }
 
 void MyFirstScene::FixedUpdate(float fixedDelta)
-{
-}
-
-void MyFirstScene::Rendering(Vertex2D* renderer)
 {
 }

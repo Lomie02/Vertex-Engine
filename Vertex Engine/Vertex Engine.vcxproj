@@ -194,6 +194,7 @@
     <ClCompile Include="VertexPrefs.cpp" />
     <ClCompile Include="VertexScene.cpp" />
     <ClCompile Include="VertexText2D.cpp" />
+    <ClCompile Include="VertexTransitions.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\imgui\imconfig.h" />
@@ -242,6 +243,7 @@
     <ClInclude Include="VertexRenderPackage.h" />
     <ClInclude Include="VertexScene.h" />
     <ClInclude Include="VertexText2D.h" />
+    <ClInclude Include="VertexTransitions.h" />
     <ClInclude Include="VertexUIPackage.h" />
   </ItemGroup>
   <ItemGroup>

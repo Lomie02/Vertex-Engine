@@ -16,6 +16,8 @@ public:
 	float scale = 1.0f;
 	float localScale = 1.0f;
 	void Reset();
+
+	glm::vec2 GetCentre();
 private:
 
 };

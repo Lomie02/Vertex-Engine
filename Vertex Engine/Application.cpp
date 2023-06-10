@@ -156,8 +156,15 @@ void Application::StartUp()
 	m_prevTime = (float)glfwGetTime();
 
 	FolderCreation();
+
+	m_TransitionScene = new VertexTransitions("Transitions");
+	m_SceneManager->AddScene(m_TransitionScene);
+
+	m_TransitionScene->GiveWindow(m_SceneManager);
+
+	// Set up the scenes.
 	SceneSetUp();
-	m_SceneManager->SetUpWindow(m_GameWindow);
+
 	// Load UI Textures
 	ResourceManager::LoadTexture("Builds/Textures/UI_Button.png", "UI_Button");
 
@@ -165,7 +172,7 @@ void Application::StartUp()
 	{
 		m_Settings->m_UseDefaultRenderer = true;
 	}
-	else if(m_UsingRenderer == Tension_2D)
+	else if (m_UsingRenderer == Tension_2D)
 	{
 		m_Settings->m_UseDefaultRenderer = false;
 	}
@@ -190,19 +197,28 @@ void Application::StartUp()
 		std::cout << "Vertex Message: Editor Succeded." << std::endl;
 	}
 
-	for(int i = 0; i < m_SceneManager->m_SceneList.size(); i++)
+	for (int i = 0; i < m_SceneManager->m_SceneList.size(); i++)
 	{
 		m_SceneManager->m_SceneList.at(i)->GetAssets().BootUpAll(m_Settings);
 	}
 
-		std::cout << "Vertex Message: Start Up Succeded." << std::endl;
+	std::cout << "Vertex Message: Start Up Succeded." << std::endl;
 
 	glClearColor(BACKGROUND_COLOUR);
 }
 
 void Application::Start()
 {
+	if (m_Mode != PLAY) {
+		m_SceneManager->SetActiveScene(1);
+	}
+	else {
+		m_SceneManager->SetActiveScene(0);
+	}
+
+
 	m_SceneManager->StartUpScenes();
+
 	std::cout << "Vertex Message: Start Succeded." << std::endl;
 }
 
@@ -223,14 +239,19 @@ void Application::Update()
 			m_fpsInterval -= 1.0f;
 		}
 
-		m_SceneManager->UpdateScenes(m_deltaTime);
+		m_SceneManager->GetCurrentScene()->GetAssets().LogEvents(); // Log Positions for collsion
+		m_SceneManager->UpdateScenes(m_deltaTime); // Update regular loop
 
 		static float fixedDelta = 0.0f;
 		fixedDelta += m_deltaTime;
 
+		//m_SceneManager->GetCurrentScene()->GetAssets().CollisionCheck(); // Check Collisions
+
 		while (fixedDelta >= m_TimeStep)
 		{
-			m_SceneManager->UpdateFixedScenes(m_TimeStep);
+			m_SceneManager->GetCurrentScene()->GetAssets().ConfigureSystems(); // Update asset managers systems
+			m_SceneManager->UpdateFixedScenes(m_TimeStep); // Add timestep to Fixed & Late Update Loop.
+			m_SceneManager->GetCurrentScene()->GetAssets().ConfigurePhysics(m_TimeStep);
 			fixedDelta -= m_TimeStep;
 		}
 	}
@@ -335,7 +356,7 @@ void Application::EditorMain()
 		//==================================== Colour
 
 		ImGui::Text("Colour");
-		ImGui::DragFloat4("##Colour", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selected)->material.colour.r,0.05f ,0.0f ,1.0f);
+		ImGui::DragFloat4("##Colour", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selected)->material.colour.r, 0.05f, 0.0f, 1.0f);
 
 		ImGui::Spacing();
 		ImGui::Spacing();
@@ -518,7 +539,8 @@ void Application::EditorHud()
 void Application::RenderAll()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	m_SceneManager->RenderCurrentScene(m_Renderer);
+
+	m_SceneManager->GetCurrentScene()->GetAssets().ConfigureRenderSystems(m_Renderer);
 
 	if (m_Mode != PLAY)
 	{
@@ -555,7 +577,6 @@ void Application::Quit()
 //=============================================== Add your scenes Here
 void Application::SceneSetUp()
 {
-	m_SceneManager->SetActiveScene(1); // Sets the current scene to the first in the list.
 
 	m_Scene = new MyScene("Scene 1");
 	m_SecondScene = new Scene2("Scene 2");
@@ -564,14 +585,20 @@ void Application::SceneSetUp()
 	m_SceneManager->AddScene(m_SecondScene);
 
 	//============================================================ Remove this & automate it in the scene manager! Temp for testing
-	
+
 	m_Scene->GiveWindow(m_GameWindow);
 	m_SecondScene->GiveWindow(m_GameWindow);
-	
+
 	m_Scene->GiveSceneManager(m_SceneManager);
 	m_SecondScene->GiveSceneManager(m_SceneManager);
 
-	m_SceneManager->m_SceneList.at(0)->GetAssets().ConfigSetup();
+	m_SceneManager->m_SceneList.at(1)->GetAssets().ConfigSetup();
+
+	for (int i = 0; i < m_SceneManager->m_SceneList.size(); i++)
+	{
+		m_SceneManager->m_SceneList.at(i)->GetAssets().AssignMode(m_Mode);
+		m_SceneManager->m_SceneList.at(i)->GetAssets().GiveWindow(m_GameWindow);
+	}
 }
 
 void Application::UpdateEditorMode()

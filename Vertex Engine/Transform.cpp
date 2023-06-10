@@ -17,3 +17,13 @@ void Transform::Reset()
 
 	scale = 0.5f;
 }
+
+glm::vec2 Transform::GetCentre()
+{
+	glm::vec2 Centre{};
+
+	Centre.x = position.x + size.x / 2;
+	Centre.y = position.y - size.y / 2;
+
+	return Centre;
+}

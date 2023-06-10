@@ -50,7 +50,7 @@ void MyScene::Awake()
 	m_MyText->text = "Vertex Engine";
 
 	ResourceManager::LoadTexture("Builds/Textures/PowerIcon.png", "Vertex");
-	ResourceManager::LoadTexture("Builds/Textures/Huggy.png", "boy1");
+	ResourceManager::LoadTexture("Builds/Textures/VertexLogo.png", "boy1");
 	ResourceManager::LoadTexture("Builds/Textures/UI_Canvas.png", "Canvas");
 
 	m_Object = new GameObject("Huggy", true);
@@ -100,9 +100,7 @@ void MyScene::Awake()
 
 void MyScene::Start()
 {
-
 	m_Button->material.colour = glm::vec4(1,0,0,1);
-	m_Manager.GiveWindow(m_Window);
 	m_Object->transform.size = glm::vec2(1, 1);
 
 	m_Object->transform.position.x = 0;
@@ -138,8 +136,8 @@ void MyScene::Start()
 
 void MyScene::Update(float delta)
 {
-	m_Manager.LogEvents(); // Dont Remove
-
+	//m_Object2->transform.position.x = m_Manager.GetMousePosition().x;
+	//m_Object2->transform.position.y = -m_Manager.GetMousePosition().y * delta;
 	if (glfwGetKey(m_Window, GLFW_KEY_W) == GLFW_PRESS)
 	{
 		m_MainCamera->transform.position.y += 5 * delta;
@@ -180,6 +178,10 @@ void MyScene::Update(float delta)
 		}
 	}
 
+	if (m_Manager.GetMousePosition().x < m_Object2->transform.GetCentre().x + 5 * m_Object2->transform.scale && m_Manager.GetMousePosition().x > m_Object2->transform.GetCentre().x - 5 * m_Object2->transform.scale) {
+		std::cout << "X Collision" << std::endl;
+	}
+
 	if (m_Button->Pressed())
 	{
 		std::cout << "PRESSED BUTTON" << std::endl;
@@ -187,18 +189,10 @@ void MyScene::Update(float delta)
 	}
 }
 
-void MyScene::LateUpdate(float delta)
+void MyScene::LateUpdate(float delta) //TODO: Automate all below
 {
-	m_Manager.ConfigureSystems();
-	m_Manager.CollisionCheck();
 }
 
 void MyScene::FixedUpdate(float fixedDelta)
 {
-	m_Manager.ConfigurePhysics(fixedDelta);
-}
-
-void MyScene::Rendering(Vertex2D* render)
-{
-	m_Manager.ConfigureRenderSystems(render);
 }

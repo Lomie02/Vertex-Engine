@@ -45,7 +45,7 @@
 	Dark Green = 0.0f, 0.5f, 0.3f, 0.2f
 	Dark Yellow = 0.5f, 0.5f, 0.0f, 0.2f
 
-	Defualt Grey = 0.1f, 0.1f, 0.1f, 1.0f
+	Default Grey = 0.1f, 0.1f, 0.1f, 1.0f
 */
 
 // ============================================== 
