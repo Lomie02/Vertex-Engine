@@ -10,6 +10,14 @@
 
 #include "Collider.h"
 
+/*
+	The AssetManager is the engines way of knowing what exists in the game & what to do with the objects. This system controls major things such as Renderering, Collision,
+
+
+
+
+*/
+
 void AssetManager::BootUpAll(BootUpContainer* _settings)
 {
 	if (_settings != nullptr) {
@@ -47,134 +55,40 @@ void AssetManager::Register(Button* _object)
 bool AssetManager::CollisionCheck()
 {
 
-
-	/*Collider type1;
-	Collider type2;
-	if (m_Objects.size() < 1) {
-		return false;
-	}
-
-	for (int i = 0; i < m_Objects.size(); i++)
+	for (int i = 0; m_Objects.size(); i++)
 	{
-		type1 = m_Objects.at(i)->GetCollider();
-		for (int j = 0; j < m_Objects.size(); j++)
+		Collider* obj1 = m_Objects.at(i)->GetCollider();
+		Collider* obj2 = m_Objects.at(i)->GetCollider();
+
+		if (obj1->GetType() == AABB && obj2->GetType() == AABB) // Checks if both colliders are AABB
 		{
-			type2 = m_Objects.at(j)->GetCollider();
-			if (i != j && type1 == AABB && type2 == AABB)
-			{
-				bool colX = m_Objects.at(i)->transform.position.x + m_Objects.at(i)->transform.size.x >= m_Objects.at(j)->transform.position.x
-					&& m_Objects.at(j)->transform.position.x + m_Objects.at(j)->transform.size.x >= m_UiButtonObjects.at(i)->transform.position.x;
 
-				bool colY = m_Objects.at(i)->transform.position.y + m_Objects.at(i)->transform.size.y >= m_Objects.at(j)->transform.position.y
-					&& m_Objects.at(j)->transform.position.y + m_Objects.at(j)->transform.size.y >= m_Objects.at(i)->transform.position.y;
+		}
+		else if (obj1->GetType() == AABB && obj2->GetType() == Circle || obj1->GetType() == Circle && obj2->GetType() == AABB) // Checks if colliders are circle to box.
+		{
 
-				if (colX && colY)
-				{
-					m_Objects.at(i)->transform.position = m_PreviousLocations.at(i)->PreviousPosition;
-					m_Objects.at(j)->transform.position = m_PreviousLocations.at(j)->PreviousPosition;
-					return colX && colY;
-				}
-			}
+		}
+		else if (obj1->GetType() == Circle && obj2->GetType() == Circle) // Checks if colliders are circles
+		{
+
+		}
+		else if (obj1->GetType() == Circle && obj2->GetType() == Plane || obj1->GetType() == Plane && obj2->GetType() == Circle) // Checks Plane to Circles.
+		{
+
 		}
 	}
-	return false;*/
-
-	for (int k = 0; k < m_Objects.size(); k++) {
-
-		Collider* c1 = m_Objects.at(k)->GetCollider();
-
-		for (int j = 1; j < m_Objects.size(); j++) {
-
-			Collider* c2 = m_Objects.at(j)->GetCollider();
-
-			if (k != j) {
-
-				if (m_Objects.at(k)->GetCollider()->GetType() == Convex && m_Objects.at(j)->GetCollider()->GetType() == Convex) {
-
-					bool ret = true;
-
-					int c1_faces = c1->m_Vertices.size();
-					int c2_faces = c2->m_Vertices.size();
 
 
-					for (int i = 0; i < c1_faces; i++)
-					{
-						c1->m_Vertices.at(i).y = m_Objects.at(i)->transform.position.y;
-						float fx = c1->m_Vertices[i].x - c1->m_Vertices[(i + 1) % c1_faces].x;
-						float fy = c1->m_Vertices[i].y - c1->m_Vertices[(i + 1) % c1_faces].y;
 
 
-						float ax = -fy, ay = fx;
 
-						float len_v = sqrt(ax * ax + ay * ay);
-						ax /= len_v;
-						ay /= len_v;
 
-						float c1_min = FLT_MAX, c1_max = -FLT_MAX;
-						float c2_min = FLT_MAX, c2_max = -FLT_MAX;
 
-						for (int j = 0; j < c1_faces; j++)
-						{
-							float c1_proj = (ax * (c1->m_Vertices[j].x + c1->tX) + ay * (c1->m_Vertices[j].y + c1->tY)) / (ax * ax + ay * ay);
-							c1_min = min(c1_proj, c1_min);
-							c1_max = max(c1_proj, c1_max);
-						}
 
-						for (int j = 0; j < c2_faces; j++)
-						{
-							float c2_proj = (ax * (c2->m_Vertices[j].x + c2->tX) + ay * (c2->m_Vertices[j].y + c2->tY)) / (ax * ax + ay * ay);
-							c2_min = min(c2_proj, c2_min);
-							c2_max = max(c2_proj, c2_max);
-						}
 
-						if (!(c1_max >= c2_min && c1_min <= c2_max))
-							ret = false;
 
-						if (ret == true)
-						{
-							m_Objects.at(k)->transform.position = m_PreviousLocations.at(k)->position;
-							m_Objects.at(j)->transform.position = m_PreviousLocations.at(j)->position;
-						}
 
-						return ret;
-					}
-				}
-				else if (m_Objects.at(k)->GetCollider()->GetType() == AABB && m_Objects.at(j)->GetCollider()->GetType() == AABB)
-				{
-					bool colX = m_Objects.at(k)->transform.position.x + m_Objects.at(k)->transform.size.x >= m_Objects.at(j)->transform.position.x
-						&& m_Objects.at(j)->transform.position.x + m_Objects.at(j)->transform.size.x >= m_UiButtonObjects.at(k)->transform.position.x;
 
-					bool colY = m_Objects.at(k)->transform.position.y + m_Objects.at(k)->transform.size.y >= m_Objects.at(j)->transform.position.y
-						&& m_Objects.at(j)->transform.position.y + m_Objects.at(j)->transform.size.y >= m_Objects.at(k)->transform.position.y;
-
-					if (colX && colY)
-					{
-						m_Objects.at(k)->transform.position = m_PreviousLocations.at(k)->PreviousPosition;
-						m_Objects.at(j)->transform.position = m_PreviousLocations.at(j)->PreviousPosition;
-						return colX && colY;
-					}
-				}
-				else if (m_Objects.at(k)->GetCollider()->GetType() == Circle && m_Objects.at(k)->GetCollider()->GetType() == Circle)
-				{
-					float distance = glm::distance(m_Objects.at(k)->transform.position, m_Objects.at(j)->transform.position);
-					float radius = m_Objects.at(k)->GetCollider()->ColliderSizeCircle() + m_Objects.at(j)->GetCollider()->ColliderSizeCircle();
-					if (distance < radius)
-					{
-						m_Objects.at(k)->transform.position = m_PreviousLocations.at(k)->position;
-						m_Objects.at(j)->transform.position = m_PreviousLocations.at(j)->position;
-					}
-				}
-				else if (m_Objects.at(k)->GetCollider()->GetType() == AABB && m_Objects.at(j)->GetCollider()->GetType() == Circle) {
-
-					//TODO: Add AABB to Circle
-				}
-				else
-				{
-					return false;
-				}
-			}
-		}
-	}
 	return false;
 }
 
@@ -226,7 +140,7 @@ void AssetManager::ConfigureSystems()
 			std::cout << "!-VERTEX ERROR: NO ACTIVE CAMERAS IN SCENE-! \n Please register all cameras to a AssetManager." << std::endl;
 		}
 
-		if (m_UiButtonObjects.size() > 0)
+		if (m_UiButtonObjects.size() > 0 && m_Window != nullptr)
 		{
 			if (glfwGetMouseButton(m_Window, GLFW_MOUSE_BUTTON_1) == GLFW_PRESS)
 			{
@@ -286,16 +200,23 @@ void AssetManager::Register(Camera* camera)
 	m_Cameras.push_back(camera);
 }
 
+
 void AssetManager::Register(Text* _text)
 {
 	m_UiTextObjects.push_back(_text);
 }
 
+/// <summary>
+/// Sets the active camera that will be used for the game.
+/// </summary>
+/// <param name="_index"></param>
 void AssetManager::SetActiveCamera(int _index)
 {
 	m_ActiveCamera = _index;
 }
 
+
+//Improve this to use the new Vertex Collsion System.
 bool AssetManager::MousePick(GameObject* _target)
 {
 	if (m_Objects.size() > 0)
@@ -327,6 +248,7 @@ bool AssetManager::MousePick(GameObject* _target)
 	return false;
 }
 
+//TODO: Fix/Improve Raycasting
 bool AssetManager::Raycast2D(glm::vec2 _pos, glm::vec2 _dir, GameObject& _out, float length)
 {
 	GameObject* Ray = new GameObject();
@@ -379,6 +301,7 @@ bool AssetManager::Raycast2D(glm::vec2 _pos, glm::vec2 _dir, GameObject& _out, f
 	return false;
 }
 
+//Vertex Tension Renderer 
 void AssetManager::TensionRendering(Vertex2D* m_Renderer)
 {
 	if (m_SingleSortRenderering && !m_HasRendered)
@@ -393,28 +316,35 @@ void AssetManager::TensionRendering(Vertex2D* m_Renderer)
 
 	for (int i = 0; i < m_Opaque.size(); i++)
 	{
-		m_Renderer->TensionDraw(m_Opaque.at(i), m_Opaque.at(i)->material, m_Opaque.at(i)->transform.position,
-			m_Opaque.at(i)->transform.size, m_Opaque.at(i)->transform.rotation, m_Opaque.at(i)->transform.scale,
-			m_Cameras.at(m_ActiveCamera)->GetProjection(), m_Opaque.at(i)->layer);
+		if (m_Opaque.at(i)->GetActive())
+		{
+			m_Renderer->TensionDraw(m_Opaque.at(i), m_Opaque.at(i)->material, m_Opaque.at(i)->transform.position,
+				m_Opaque.at(i)->transform.size, m_Opaque.at(i)->transform.rotation, m_Opaque.at(i)->transform.scale,
+				m_Cameras.at(m_ActiveCamera)->GetProjection(), m_Opaque.at(i)->layer);
+		}
 	}
 
 	for (int i = 0; i < m_Transparent.size(); i++)
 	{
-		m_Renderer->TensionDraw(m_Transparent.at(i), m_Transparent.at(i)->material, m_Transparent.at(i)->transform.position,
-			m_Transparent.at(i)->transform.size, m_Transparent.at(i)->transform.rotation, m_Transparent.at(i)->transform.scale,
-			m_Cameras.at(m_ActiveCamera)->GetProjection(), m_Transparent.at(i)->layer);
+		if (m_Transparent.at(i)->GetActive()) {
+			m_Renderer->TensionDraw(m_Transparent.at(i), m_Transparent.at(i)->material, m_Transparent.at(i)->transform.position,
+				m_Transparent.at(i)->transform.size, m_Transparent.at(i)->transform.rotation, m_Transparent.at(i)->transform.scale,
+				m_Cameras.at(m_ActiveCamera)->GetProjection(), m_Transparent.at(i)->layer);
+		}
 	}
 
 	for (int i = 0; i < m_UiButtonObjects.size(); i++)
 	{
-		m_Renderer->TensionDraw(m_UiButtonObjects.at(i), m_UiButtonObjects.at(i)->material, m_UiButtonObjects.at(i)->transform.position,
-			m_UiButtonObjects.at(i)->transform.size, m_UiButtonObjects.at(i)->transform.rotation, m_UiButtonObjects.at(i)->transform.scale,
-			m_Cameras.at(m_ActiveCamera)->GetProjection(), m_UiButtonObjects.at(i)->layer);
-
-		m_UiButtonObjects.at(i)->ConfigureCustoms(m_Cameras.at(m_ActiveCamera)->GetProjection());
+		if (m_UiButtonObjects.at(i)->GetActive()) {
+			m_Renderer->TensionDraw(m_UiButtonObjects.at(i), m_UiButtonObjects.at(i)->material, m_UiButtonObjects.at(i)->transform.position,
+				m_UiButtonObjects.at(i)->transform.size, m_UiButtonObjects.at(i)->transform.rotation, m_UiButtonObjects.at(i)->transform.scale,
+				m_Cameras.at(m_ActiveCamera)->GetProjection(), m_UiButtonObjects.at(i)->layer);
+			m_UiButtonObjects.at(i)->ConfigureCustoms(m_Cameras.at(m_ActiveCamera)->GetProjection());
+		}
 	}
 }
 
+//Tension Renderers Layer Sorting
 void AssetManager::TensionLayerSort()
 {
 
@@ -431,6 +361,7 @@ void AssetManager::TensionLayerSort()
 	}
 }
 
+// Vertex Default 2D renderer.
 void AssetManager::Vertex2dRendering(Vertex2D* render)
 {
 	if (m_Objects.size() > 0)
@@ -517,6 +448,7 @@ void AssetManager::Vertex2dRendering(Vertex2D* render)
 	}
 }
 
+//TODO: Remove this or improve it
 void AssetManager::ConfigSetup()
 {
 	for (int i = 0; i < m_Objects.size(); i++)
@@ -528,6 +460,8 @@ void AssetManager::ConfigSetup()
 	//VertexPrefs::GetFile("Scene_data", m_Objects);
 }
 
+
+//TODO: Remove this or improve it
 void AssetManager::ExecuteAll()
 {
 	for (int i = 0; i < m_Objects.size(); i++)
@@ -539,6 +473,10 @@ void AssetManager::ExecuteAll()
 	//VertexPrefs::SaveFile("Scene_data", m_Objects);
 }
 
+/// <summary>
+/// Unregisters a gameobject so the engine no longer treats it as an object.
+/// </summary>
+/// <param name="_target"></param>
 void AssetManager::UnRegister(GameObject* _target)
 {
 	if (_target == nullptr) {
@@ -556,6 +494,8 @@ void AssetManager::UnRegister(GameObject* _target)
 	}
 }
 
+
+// Render all gizmos in editor
 void AssetManager::Gizmos(Vertex2D* render)
 {
 	if (m_Cameras.size() > 0)
@@ -594,6 +534,12 @@ GameObject* AssetManager::FindObjectWithTag(std::string _tag)
 	return nullptr;
 }
 
+
+/// <summary>
+/// Finds the object with the mathcing tag & returns it. It goes in order of the objects when they were registered.
+/// </summary>
+/// <param name="_tag"></param>
+/// <returns></returns>
 std::vector<GameObject*> AssetManager::FindObjecstWithTag(std::string _tag)
 {
 	std::vector<GameObject*> TaggedObjects;
@@ -609,10 +555,21 @@ std::vector<GameObject*> AssetManager::FindObjecstWithTag(std::string _tag)
 	return TaggedObjects;
 }
 
+/// <summary>
+/// Returns an array with all the objects that have the specified componenet
+/// </summary>
+/// <param name="_ref"></param>
+/// <returns></returns>
 std::vector<GameObject*> AssetManager::FindObjecstWithComponent(VertexComponent& _ref)
 {
 	return std::vector<GameObject*>();
 }
+
+/// <summary>
+/// Finds an object with the matching componenet set & returns it.
+/// </summary>
+/// <param name="_ref"></param>
+/// <returns></returns>
 
 GameObject* AssetManager::FindObjectWithComponent(VertexComponent& _ref)
 {
@@ -630,6 +587,11 @@ GameObject* AssetManager::FindObjectWithComponent(VertexComponent& _ref)
 
 	return nullptr;
 }
+
+/// <summary>
+/// Updates all components attached to a gameobject.
+/// </summary>
+/// <param name="delta"></param>
 
 void AssetManager::UpdateComponents(float delta)
 {
@@ -650,16 +612,29 @@ void AssetManager::UpdateComponents(float delta)
 	}
 }
 
+/// <summary>
+/// Updates the mouse positon from screen to world space.
+/// </summary>
+
 void AssetManager::ConfigureMouse()
 {
-	double Xpos;
-	double Ypos;
+	if (m_Window != nullptr)
+	{
+		double Xpos;
+		double Ypos;
 
-	glfwGetCursorPos(m_Window, &Xpos, &Ypos);
+		glfwGetCursorPos(m_Window, &Xpos, &Ypos);
 
-	mouse.position = glm::unProject(glm::vec3(Xpos, Ypos, 0), glm::mat4(1.0f), m_Cameras.at(m_ActiveCamera)->GetProjection(), glm::vec4(0, 0, PROJECT_RESOLUTION));
+		if (m_OperatingMode == EDITOR) {
+			mouse.position = glm::unProject(glm::vec3(Xpos, Ypos, 0), glm::mat4(1.0f), m_Cameras.at(m_ActiveCamera)->GetProjection(), glm::vec4(299.973f, 349.968f, 1280, 720));
+		}
+		else {
+			mouse.position = glm::unProject(glm::vec3(Xpos, Ypos, 0), glm::mat4(1.0f), m_Cameras.at(m_ActiveCamera)->GetProjection(), glm::vec4(0, 0, PROJECT_RESOLUTION));
+		}
+	}
 }
 
+//TODO: Remove this from scenes & automate it in the asset manager.
 void AssetManager::LogEvents()
 {
 	for (int i = 0; i < m_Objects.size(); i++)

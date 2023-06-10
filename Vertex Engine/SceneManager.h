@@ -19,7 +19,6 @@ public:
 
 	 void SetActiveScene(const char _scene[]);
 
-	 void RenderCurrentScene(Vertex2D* render);
 	 void PrintActiveScene() { std::cout << m_SceneList[m_ActiveScene]->m_SceneName << std::endl; };
 
 	 void EndSceneSetUpProcess(SceneManager* _sceneManager);
@@ -28,6 +27,11 @@ public:
 
 	 int GetActiveScene() { return m_ActiveScene; }
 	 std::vector<VertexScene*> m_SceneList;
+	 void DestroyScenesOnLoad(bool _state) { m_DestroyScenes = _state; }
+
 private:
+	void DestroyScenes();
+
+	bool m_DestroyScenes = false;
 	 int m_ActiveScene;
 };
