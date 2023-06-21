@@ -27,3 +27,17 @@ glm::vec2 Transform::GetCentre()
 
 	return Centre;
 }
+
+float Transform::GetSizeFromCentre(glm::vec2 _axis)
+{
+	if (_axis.x == 1)
+	{
+		return size.x / 2;
+	}
+	else if (_axis.y == 1) {
+
+		return size.y / 2;	
+	}
+
+	return 0.0f;
+}

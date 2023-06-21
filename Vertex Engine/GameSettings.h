@@ -2,7 +2,7 @@
 // ============================================== 
 //	GENERAL
 // ============================================== 
-#define PROJECT_NAME "My Game"
+#define PROJECT_NAME "My Game" // When building you will need to change the .exe file name 
 #define PROJECT_RESOLUTION 1920, 1080
 
 #define PROJECT_ASPECT_WIDTH 1920
@@ -11,7 +11,7 @@
 #define PROJECT_DEVELOPER "Your Name"
 #define PROJECT_COMPANY "Your Company"
 
-#define ENGINE_VERSION 0.1.0
+#define ENGINE_VERSION 1.1.0
 #define ENGINE_EDITION "Vertex Engine 2D"
 
 #define PROJECT_ICON "PowerIcon.png"
@@ -25,7 +25,6 @@
 #define FULLSCREEN false //Doesnt affect the Editor!
 #define VSYNC true
 
-#define TARGET_FPS 60
 #define BACKGROUND_COLOUR 0.1f, 0.1f, 0.1f, 0.1f
 
 // ============================================== 

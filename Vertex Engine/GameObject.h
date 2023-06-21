@@ -49,6 +49,8 @@ public:
 
 	class Vertex2D;
 private:
+
+	void MaterialConfigure();
 	void ConfigurePartners();
 
 	std::vector<VertexComponent*> m_Components;

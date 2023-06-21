@@ -25,10 +25,24 @@ Scene2::~Scene2()
 void Scene2::Awake()
 {
 
-	m_Object2 = new GameObject("Object");
+	m_Object2 = new GameObject("Chimken");
+	m_Object0 = new GameObject("Stupid ahh");
 
-	m_Object2->material.baseTexture = ResourceManager::GetTexture("boy1");
+	m_Object0->material.m_KeepAspect = true;
+
+	m_Object2->material.baseTexture = ResourceManager::LoadTexture("Builds/Textures/Chimken.png", "Chimken");
+	m_Object2->material.baseTexture = ResourceManager::GetTexture("Chimken");
+
+	m_Object2->material.surface = Transparent;
+	m_Object0->material.surface = Opaque;
+
+
+	m_Object0->transform.position.x = 3;
+	m_Object0->layer = -1;
+
+	m_Object0->material.baseTexture = ResourceManager::GetTexture("Chimken");
 	m_Manager.Register(m_Object2);
+	m_Manager.Register(m_Object0);
 
 	m_MainCamera = new Camera("Camera 1");
 

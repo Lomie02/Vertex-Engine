@@ -27,4 +27,6 @@ public:
 	Surface surface = Opaque;
 	bool glow = false;
 	std::string name;
+	bool m_KeepAspect = false;
+	bool m_USeMipMaps = false;
 };

@@ -103,26 +103,18 @@ void Vertex2D::TensionDraw(GameObject* _object, Material& material, glm::vec2 po
 
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_DEPTH_TEST);
+
+	glDepthFunc(GL_LESS);
+
 	if (material.surface == Transparent)
 	{
-		glCullFace(GL_BACK);
 		glEnable(GL_BLEND);
-
-		if (!material.glow) {
-			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		}
-		else {
-			glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-		}
-	}
-	else 
-	{
-		glDepthFunc(GL_LESS);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	}
 	this->m_Shader = material.shader;
 
 	this->m_Shader.Use();
-	
+
 	if (RENDER_DEPTH_TEST == false) {
 		this->m_Shader.SetInteger("UseDepth", 0);
 	}
@@ -156,7 +148,7 @@ void Vertex2D::TensionDraw(GameObject* _object, Material& material, glm::vec2 po
 	glDisable(GL_CULL_FACE);
 }
 
-void Vertex2D::TensionParticle(ParticleSystem &system)
+void Vertex2D::TensionParticle(ParticleSystem& system)
 {
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
@@ -172,6 +164,51 @@ void Vertex2D::TensionParticle(ParticleSystem &system)
 
 
 	glDisable(GL_BLEND);
+}
+
+void Vertex2D::TensionTransparencyPass(std::vector<GameObject*> _list, glm::mat4 per)
+{
+	for (int i = _list.size(); i > 0; i--) {
+
+
+		glm::mat4 model = glm::mat4(1.0f);
+
+		model = glm::translate(model, glm::vec3(_list.at(i)->transform.position, _list.at(i)->layer));
+
+		model = glm::translate(model, glm::vec3(0.5f * _list.at(i)->transform.size.x, 0.5f * -_list.at(i)->transform.size.y, 0.0f));
+		model = glm::rotate(model, glm::radians(0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::translate(model, glm::vec3(-0.5f * _list.at(i)->transform.size.x, -0.5f * -_list.at(i)->transform.size.y, 0.0f));
+
+		model = glm::scale(model, glm::vec3(_list.at(i)->transform.size.x * _list.at(i)->transform.scale, -_list.at(i)->transform.size.y * _list.at(i)->transform.scale, 1.0f));
+		this->m_Shader.SetMatrix4("model", model);
+		this->m_Shader.SetMatrix4("pro", per);
+		this->m_Shader.SetVector4f("Colour", _list.at(i)->material.colour);
+
+		glActiveTexture(GL_TEXTURE0);
+		_list.at(i)->material.baseTexture.Bind();
+
+		glBindVertexArray(this->m_quadVAO);
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+		glBindVertexArray(0);
+
+		glDisable(GL_DEPTH_TEST);
+		glDisable(GL_BLEND);
+		glDisable(GL_CULL_FACE);
+	}
+}
+
+void Vertex2D::Tension_Bind_FrameBuffer()
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+void Vertex2D::Tension_unBind_FrameBuffer()
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+void Vertex2D::Tension_Rescale_FrameBuffer(float width, float height)
+{
 }
 
 void Vertex2D::DrawLine(glm::vec2 _start, glm::vec2 _end, Material& _mat)

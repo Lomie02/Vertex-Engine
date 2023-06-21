@@ -6,10 +6,10 @@
 #include "Camera.h"
 #include "Animator.h"
 #include "BootUpContainer.h"
-//#include "SceneManager.h"
 #include "RigidBody.h"
 
 #include "VertexGeneral.h"
+#include <irrKlang.h>
 
 enum Renderer {
 	Vertex_2D = 0, // Vertex Engines default renderer.
@@ -28,6 +28,7 @@ public:
 		m_CenterGizmo.baseTexture = ResourceManager::GetTexture("Gizmo_Center");
 	};
 
+	void AssignSoundSystem(irrklang::ISoundEngine* _engine);
 	void BootUpAll(BootUpContainer* _settings);
 
 	void Register(GameObject* _object);
@@ -40,7 +41,6 @@ public:
 	void GiveWindow(GLFWwindow* _window) { m_Window = _window; };
 	bool OnTrigger(GameObject* A, GameObject* B);
 
-	bool CollisionCheck();
 	void ConfigureSystems();
 	void ConfigureRenderSystems(Vertex2D* render);
 	void ConfigurePhysics(float fixedDelta);
@@ -78,19 +78,23 @@ public:
 	//void AssignSceneManager(SceneManager* _scene) { SceneManager = _scene; }
 
 	void AssignMode(EditorMode _mode) { m_OperatingMode = _mode; }
+
 private:
+
+	std::vector<GameObject*> m_TransParentList;
 	EditorMode m_OperatingMode;
 	//SceneManager* SceneManager;
 	char m_ScenesName[30] = "s";
 	void UpdateComponents(float delta);
 	void ConfigureMouse();
-
+	irrklang::ISoundEngine* m_SoundSystem;
 	bool m_SingleSortRenderering = true;
 	bool m_HasRendered = false;
 	Renderer m_RendererToUse = Tension_2D;
 
 	std::vector<GameObject*> m_Opaque;
 	std::vector<GameObject*> m_Transparent;
+	void CollisionCheck();
 
 	GLFWwindow* m_Window;
 	Transform mouse;
