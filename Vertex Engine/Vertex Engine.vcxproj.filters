@@ -174,6 +174,12 @@
     <ClCompile Include="VertexTransitions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Flipbook.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="AudioSource.cpp">
+      <Filter>GameObjects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="glad.h">
@@ -319,6 +325,12 @@
     </ClInclude>
     <ClInclude Include="VertexTransitions.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Flipbook.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioSource.h">
+      <Filter>GameObjects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

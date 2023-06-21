@@ -22,6 +22,7 @@
 //==========================================
 Application::Application()
 {
+	m_SoundManager = createIrrKlangDevice();
 }
 
 Application::~Application()
@@ -37,14 +38,7 @@ Application::~Application()
 	delete m_Settings;
 	m_Settings = nullptr;
 
-	//========================== Delete your scenes here!
-	/*
-		HOW TO DELETE SCENES CORRECTLY:
-
-		delete YourScene;
-		YourScene = nullptr;
-	*/
-
+	delete m_SecondScene;
 	m_SecondScene = nullptr;
 }
 
@@ -240,16 +234,17 @@ void Application::Update()
 		}
 
 		m_SceneManager->GetCurrentScene()->GetAssets().LogEvents(); // Log Positions for collsion
+
 		m_SceneManager->UpdateScenes(m_deltaTime); // Update regular loop
 
 		static float fixedDelta = 0.0f;
 		fixedDelta += m_deltaTime;
 
-		//m_SceneManager->GetCurrentScene()->GetAssets().CollisionCheck(); // Check Collisions
+		if (m_FinishedSceneSetUpStage)
+			m_SceneManager->GetCurrentScene()->GetAssets().ConfigureSystems(); // Update asset managers systems
 
 		while (fixedDelta >= m_TimeStep)
 		{
-			m_SceneManager->GetCurrentScene()->GetAssets().ConfigureSystems(); // Update asset managers systems
 			m_SceneManager->UpdateFixedScenes(m_TimeStep); // Add timestep to Fixed & Late Update Loop.
 			m_SceneManager->GetCurrentScene()->GetAssets().ConfigurePhysics(m_TimeStep);
 			fixedDelta -= m_TimeStep;
@@ -473,15 +468,14 @@ void Application::EditorMain()
 
 	if (ShowHelp)
 	{
-		ImGui::Begin("Help");
-		if (ImGui::Button("close"))
+		ImGui::Begin("Vertex Help Guide");
+		
+		ImGui::SmallButton("Someone come get their engine");
+
+		if (ImGui::Button("Exit"))
 		{
 			ShowHelp = false;
 		}
-		ImGui::Text("Welcome to the Vertex Engine Editor! This editor allows for developers to place objects around a scene.");
-		ImGui::Text("The engine can be toggled between Play, Editor Play & Editor mode by changing the mode inside the Application.h file.");
-		ImGui::Text("This Editor cannot add or delete GameObjects from a scene. Objects can only be edited & moved around to create a scene.");
-		ImGui::Text("All GameObjects must be created in code first & registered to a AssetManager to be shown in the editor.");
 		ImGui::End();
 	}
 
@@ -599,6 +593,8 @@ void Application::SceneSetUp()
 		m_SceneManager->m_SceneList.at(i)->GetAssets().AssignMode(m_Mode);
 		m_SceneManager->m_SceneList.at(i)->GetAssets().GiveWindow(m_GameWindow);
 	}
+
+	m_FinishedSceneSetUpStage = true;
 }
 
 void Application::UpdateEditorMode()

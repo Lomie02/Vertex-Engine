@@ -18,6 +18,7 @@ public:
 	void Reset();
 
 	glm::vec2 GetCentre();
+	float GetSizeFromCentre(glm::vec2 _axis);
 private:
 
 };

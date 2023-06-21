@@ -12,6 +12,7 @@ GameObject::GameObject()
 	material = Material("Mat");
 	transform.size.x = 5;
 	transform.size.y = 5;
+
 }
 
 GameObject::GameObject(const char* _Name, bool active)
@@ -34,6 +35,7 @@ GameObject::GameObject(const char* _Name)
 	m_Active = true;
 	transform.localPosition.y = 0;
 	transform.localPosition.x = 0;
+
 
 	material = Material("Mat");
 	m_Collider = new Collider();
@@ -86,6 +88,12 @@ void GameObject::RemoveChild()
 
 void GameObject::ConfigureSystems()
 {
+	MaterialConfigure();
+
+	if (m_Parent) {
+		glm::mat4 ParentTransform = glm::translate(m_Parent->transform.rotation, m_Parent->transform.position);
+	}
+
 	if (m_Parent != nullptr)
 	{
 		transform.position = m_Parent->transform.position + transform.localPosition;
@@ -149,6 +157,15 @@ bool GameObject::GetComponentInChildren(VertexComponent* _target)
 		}
 	}
 	return false;
+}
+
+void GameObject::MaterialConfigure()
+{
+	if (material.m_KeepAspect)
+	{
+		transform.size.x = material.baseTexture.Width;
+		transform.size.y = material.baseTexture.Height;
+	}
 }
 
 void GameObject::ConfigurePartners()

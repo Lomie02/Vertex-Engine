@@ -12,11 +12,12 @@
 
 /*
 	The AssetManager is the engines way of knowing what exists in the game & what to do with the objects. This system controls major things such as Renderering, Collision,
-
-
-
-
 */
+
+void AssetManager::AssignSoundSystem(irrklang::ISoundEngine* _engine)
+{
+	m_SoundSystem = _engine;
+}
 
 void AssetManager::BootUpAll(BootUpContainer* _settings)
 {
@@ -52,76 +53,59 @@ void AssetManager::Register(Button* _object)
 	m_UiButtonObjects.push_back(_object);
 }
 
-bool AssetManager::CollisionCheck()
+void AssetManager::CollisionCheck()
 {
-
-	for (int i = 0; m_Objects.size(); i++)
+	if (m_Objects.size() == 1 || m_Objects.at(0) == nullptr)
 	{
-		Collider* obj1 = m_Objects.at(i)->GetCollider();
-		Collider* obj2 = m_Objects.at(i)->GetCollider();
-
-		if (obj1->GetType() == AABB && obj2->GetType() == AABB) // Checks if both colliders are AABB
-		{
-
-		}
-		else if (obj1->GetType() == AABB && obj2->GetType() == Circle || obj1->GetType() == Circle && obj2->GetType() == AABB) // Checks if colliders are circle to box.
-		{
-
-		}
-		else if (obj1->GetType() == Circle && obj2->GetType() == Circle) // Checks if colliders are circles
-		{
-
-		}
-		else if (obj1->GetType() == Circle && obj2->GetType() == Plane || obj1->GetType() == Plane && obj2->GetType() == Circle) // Checks Plane to Circles.
-		{
-
-		}
+		return;
 	}
 
+	for (int i = 0; i < m_Objects.size(); i++)
+	{
+		for (int j = 1; j < m_Objects.size(); j++)
+		{
+			if (j != i) // Check that the 2 objects are not the same objects.
+			{
+				bool CollisionFound;
 
+				Transform Object1;
+				Transform Object2;
 
+				Object1 = m_Objects.at(i)->transform;
+				Object2 = m_Objects.at(j)->transform;
 
+				if (Object1.position.x < Object2.position.x + Object2.size.x
+					&& Object1.position.x + Object1.size.x > Object2.position.x
+					&& Object1.position.y < Object2.position.y + Object2.size.y &&
+					Object1.position.y + Object1.size.y > Object2.position.y)
+				{
+					m_Objects.at(i)->transform.position.x = m_PreviousLocations.at(i)->position.x;
+					m_Objects.at(i)->transform.position.y = m_PreviousLocations.at(i)->position.y;
 
-
-
-
-
-
-
-
-	return false;
+					m_Objects.at(j)->transform.position.x = m_PreviousLocations.at(j)->position.x;
+					m_Objects.at(j)->transform.position.y = m_PreviousLocations.at(j)->position.y;
+				}
+			}
+		}
+	}
 }
 
 bool AssetManager::OnTrigger(GameObject* A, GameObject* B)
 {
-	Collider* type1 = A->GetCollider();
-	Collider* type2 = B->GetCollider();
+	bool CollisionFound;
 
-	if (type1->GetType() == AABB && type1->GetType() == AABB) {
+	Transform Object1;
+	Transform Object2;
 
-		Transform prev = A->transform;
-		bool colX = A->transform.position.x + A->transform.size.x >= B->transform.position.x
-			&& B->transform.position.x + B->transform.size.x >= A->transform.position.x;
+	Object1 = A->transform;
+	Object2 = B->transform;
 
-		bool colY = A->transform.position.y - A->transform.size.y <= B->transform.position.y
-			&& B->transform.position.y - B->transform.size.y <= A->transform.position.y;
-
-		if (colX && colY)
-		{
-			return colX && colY;
-		}
-		return false;
-	}
-	else if (type1->GetType() == Circle && type1->GetType() == Circle)
+	if (Object1.position.x < Object2.position.x + Object2.size.x
+		&& Object1.position.x + Object1.size.x > Object2.position.x
+		&& Object1.position.y < Object2.position.y + Object2.size.y &&
+		Object1.position.y + Object1.size.y > Object2.position.y)
 	{
-		float distance = glm::distance(A->transform.position, B->transform.position);
-		float radius = type1->ColliderSizeCircle() + type2->ColliderSizeCircle();
-		if (distance < radius)
-		{
-			return true;
-		}
-
-		return false;
+		return true;
 	}
 	return false;
 }
@@ -165,6 +149,8 @@ void AssetManager::ConfigureSystems()
 			}
 		}
 	}
+
+	CollisionCheck();
 }
 
 void AssetManager::ConfigureRenderSystems(Vertex2D* render)
@@ -200,7 +186,6 @@ void AssetManager::Register(Camera* camera)
 	m_Cameras.push_back(camera);
 }
 
-
 void AssetManager::Register(Text* _text)
 {
 	m_UiTextObjects.push_back(_text);
@@ -215,7 +200,6 @@ void AssetManager::SetActiveCamera(int _index)
 	m_ActiveCamera = _index;
 }
 
-
 //Improve this to use the new Vertex Collsion System.
 bool AssetManager::MousePick(GameObject* _target)
 {
@@ -225,7 +209,6 @@ bool AssetManager::MousePick(GameObject* _target)
 		{
 			if (_target->name == m_Objects.at(i)->name)
 			{
-
 				//============================================================================
 				ConfigureMouse();
 
@@ -323,6 +306,7 @@ void AssetManager::TensionRendering(Vertex2D* m_Renderer)
 				m_Cameras.at(m_ActiveCamera)->GetProjection(), m_Opaque.at(i)->layer);
 		}
 	}
+	//m_Renderer->TensionTransparencyPass(m_TransParentList, m_Cameras.at(m_ActiveCamera)->GetProjection());
 
 	for (int i = 0; i < m_Transparent.size(); i++)
 	{
@@ -357,6 +341,15 @@ void AssetManager::TensionLayerSort()
 		else if (m_Objects.at(i)->material.surface == Transparent)
 		{
 			m_Transparent.push_back(m_Objects.at(i));
+		}
+	}
+
+	if (m_Transparent.size() > 1)
+	{
+		for (unsigned int i = 0; i < m_Transparent.size(); i++)
+		{
+			float distance = glm::length(glm::vec3(m_Cameras.at(m_ActiveCamera)->transform.position, 0) - glm::vec3(m_Transparent.at(i)->transform.position, m_Transparent.at(i)->layer));
+			m_TransParentList.push_back(m_Transparent.at(i));
 		}
 	}
 }
@@ -639,7 +632,8 @@ void AssetManager::LogEvents()
 {
 	for (int i = 0; i < m_Objects.size(); i++)
 	{
-		m_PreviousLocations.at(i)->PreviousPosition = m_Objects.at(i)->transform.position;
+		m_PreviousLocations.at(i)->PreviousPosition.x = m_Objects.at(i)->transform.position.x;
+		m_PreviousLocations.at(i)->PreviousPosition.y = m_Objects.at(i)->transform.position.y;
 	}
 }
 
