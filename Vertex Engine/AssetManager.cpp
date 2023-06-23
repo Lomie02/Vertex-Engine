@@ -9,6 +9,7 @@
 #include "VertexPrefs.h"
 
 #include "Collider.h"
+#include <thread>
 
 /*
 	The AssetManager is the engines way of knowing what exists in the game & what to do with the objects. This system controls major things such as Renderering, Collision,
@@ -66,8 +67,6 @@ void AssetManager::CollisionCheck()
 		{
 			if (j != i) // Check that the 2 objects are not the same objects.
 			{
-				bool CollisionFound;
-
 				Transform Object1;
 				Transform Object2;
 
@@ -133,18 +132,18 @@ void AssetManager::ConfigureSystems()
 					//============================================================================
 					ConfigureMouse();
 
-					bool colX = m_UiButtonObjects.at(i)->transform.position.x + m_UiButtonObjects.at(i)->transform.size.x >= mouse.position.x
-						&& mouse.position.x + 0.5f >= m_UiButtonObjects.at(i)->transform.position.x;
+					Transform button = m_UiButtonObjects.at(i)->transform;
+					mouse.size.x = 1;
+					mouse.size.y = 1;
 
-					bool colY = m_UiButtonObjects.at(i)->transform.position.y - m_UiButtonObjects.at(i)->transform.size.y >= mouse.position.y
-						&& mouse.position.y - 0.5f <= m_UiButtonObjects.at(i)->transform.position.y;
-
-					//============================================================================
-
-					if (colX && colY)
+					if (button.position.x < mouse.position.x + mouse.size.x
+						&& button.position.x + button.size.x > mouse.position.x
+						&& button.position.y < mouse.position.y + mouse.size.y &&
+						button.position.y + button.size.y > mouse.position.y)
 					{
 						m_UiButtonObjects.at(i)->PressEvent();
 					}
+
 				}
 			}
 		}
@@ -308,15 +307,6 @@ void AssetManager::TensionRendering(Vertex2D* m_Renderer)
 	}
 	//m_Renderer->TensionTransparencyPass(m_TransParentList, m_Cameras.at(m_ActiveCamera)->GetProjection());
 
-	for (int i = 0; i < m_Transparent.size(); i++)
-	{
-		if (m_Transparent.at(i)->GetActive()) {
-			m_Renderer->TensionDraw(m_Transparent.at(i), m_Transparent.at(i)->material, m_Transparent.at(i)->transform.position,
-				m_Transparent.at(i)->transform.size, m_Transparent.at(i)->transform.rotation, m_Transparent.at(i)->transform.scale,
-				m_Cameras.at(m_ActiveCamera)->GetProjection(), m_Transparent.at(i)->layer);
-		}
-	}
-
 	for (int i = 0; i < m_UiButtonObjects.size(); i++)
 	{
 		if (m_UiButtonObjects.at(i)->GetActive()) {
@@ -326,6 +316,17 @@ void AssetManager::TensionRendering(Vertex2D* m_Renderer)
 			m_UiButtonObjects.at(i)->ConfigureCustoms(m_Cameras.at(m_ActiveCamera)->GetProjection());
 		}
 	}
+
+	for (int i = 0; i < m_Transparent.size(); i++)
+	{
+		if (m_Transparent.at(i)->GetActive()) {
+
+			m_Renderer->TensionDraw(m_Transparent.at(i), m_Transparent.at(i)->material, m_Transparent.at(i)->transform.position,
+				m_Transparent.at(i)->transform.size, m_Transparent.at(i)->transform.rotation, m_Transparent.at(i)->transform.scale,
+				m_Cameras.at(m_ActiveCamera)->GetProjection(), m_Transparent.at(i)->layer);
+		}
+	}
+
 }
 
 //Tension Renderers Layer Sorting
@@ -344,13 +345,49 @@ void AssetManager::TensionLayerSort()
 		}
 	}
 
-	if (m_Transparent.size() > 1)
-	{
-		for (unsigned int i = 0; i < m_Transparent.size(); i++)
-		{
-			float distance = glm::length(glm::vec3(m_Cameras.at(m_ActiveCamera)->transform.position, 0) - glm::vec3(m_Transparent.at(i)->transform.position, m_Transparent.at(i)->layer));
-			m_TransParentList.push_back(m_Transparent.at(i));
+	//TODO: Implement a better sorting algorthm than bubble sort!
+	if (TENSION_TRANSPARENT_LAYER_SORTING) { //Testing with Bubblesort. Bubblesort will NOT stay in the source code & will be converted to insertion sort. Only here for bug testing.
+
+		std::vector<GameObject*> m_TransparentSortList = m_Transparent;
+
+		int J;
+		GameObject* key;
+		bool sorted = false;
+		if (m_Transparent.size() > 1) {
+
+			while (!sorted) {
+				sorted = true;
+
+				for (int i = 0; i < m_TransparentSortList.size() - 1; i++)
+				{
+					J = i + 1;
+					if (m_TransparentSortList.at(i)->layer >= m_TransparentSortList.at(J)->layer && J < m_TransparentSortList.size())
+					{
+						key = m_TransparentSortList.at(i);
+						m_TransparentSortList.at(i) = m_TransparentSortList.at(J);
+						m_TransparentSortList.at(J) = key;
+						sorted = false;
+
+					}
+				}
+			}
+			m_Transparent = m_TransparentSortList;
 		}
+
+		/*GameObject* key;
+		int j;
+		for (int i = 0; i < m_TransparentSortList.size() - 1; i++)
+		{
+			j = i + 1;
+			key = m_TransparentSortList.at(j);
+
+			while (j >= 0 && m_TransparentSortList.at(j)->layer >= key->layer && j < m_TransparentSortList.size())
+			{
+				m_TransparentSortList.at(j) = m_TransparentSortList.at(i);
+			}
+			m_TransparentSortList.at(j) = key;
+		}
+		m_Transparent = m_TransparentSortList;*/
 	}
 }
 
@@ -453,7 +490,6 @@ void AssetManager::ConfigSetup()
 	//VertexPrefs::GetFile("Scene_data", m_Objects);
 }
 
-
 //TODO: Remove this or improve it
 void AssetManager::ExecuteAll()
 {
@@ -486,7 +522,6 @@ void AssetManager::UnRegister(GameObject* _target)
 		}
 	}
 }
-
 
 // Render all gizmos in editor
 void AssetManager::Gizmos(Vertex2D* render)
@@ -526,7 +561,6 @@ GameObject* AssetManager::FindObjectWithTag(std::string _tag)
 
 	return nullptr;
 }
-
 
 /// <summary>
 /// Finds the object with the mathcing tag & returns it. It goes in order of the objects when they were registered.
@@ -609,21 +643,28 @@ void AssetManager::UpdateComponents(float delta)
 /// Updates the mouse positon from screen to world space.
 /// </summary>
 
-void AssetManager::ConfigureMouse()
+void AssetManager::ConfigureMouse() //TODO: FInd out how to convert the Y cords. X Cords are correct but the Y cords are not.
 {
 	if (m_Window != nullptr)
 	{
 		double Xpos;
 		double Ypos;
 
+		Transform ConvertPosition;
+
 		glfwGetCursorPos(m_Window, &Xpos, &Ypos);
 
 		if (m_OperatingMode == EDITOR) {
-			mouse.position = glm::unProject(glm::vec3(Xpos, Ypos, 0), glm::mat4(1.0f), m_Cameras.at(m_ActiveCamera)->GetProjection(), glm::vec4(299.973f, 349.968f, 1280, 720));
+			ConvertPosition.position = glm::unProject(glm::vec3(Xpos, Ypos, 1), glm::mat4(1.0f), m_Cameras.at(m_ActiveCamera)->GetProjection(), glm::vec4(299.973f, 349.968f, 1280, 720));
 		}
 		else {
-			mouse.position = glm::unProject(glm::vec3(Xpos, Ypos, 0), glm::mat4(1.0f), m_Cameras.at(m_ActiveCamera)->GetProjection(), glm::vec4(0, 0, PROJECT_RESOLUTION));
+			ConvertPosition.position = glm::unProject(glm::vec3(Xpos, Ypos, 1), glm::mat4(1.0f), m_Cameras.at(m_ActiveCamera)->GetProjection(), glm::vec4(0, 0, PROJECT_RESOLUTION));
 		}
+
+		mouse.position.x = ConvertPosition.position.x;
+		mouse.position.y = ConvertPosition.position.y;
+
+		std::cout << mouse.position.x << " | " << mouse.position.y + 10 << std::endl; //NOTE: This appears to have fixed the Y axes but could be wrong. This is temp for now
 	}
 }
 
@@ -636,4 +677,3 @@ void AssetManager::LogEvents()
 		m_PreviousLocations.at(i)->PreviousPosition.y = m_Objects.at(i)->transform.position.y;
 	}
 }
-

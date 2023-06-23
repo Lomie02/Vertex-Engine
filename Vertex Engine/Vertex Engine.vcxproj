@@ -174,9 +174,11 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Clip.cpp" />
     <ClCompile Include="Collider.cpp" />
+    <ClCompile Include="Cursor.cpp" />
     <ClCompile Include="Flipbook.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="glad.c" />
+    <ClCompile Include="Input.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="MyFirstScene.cpp" />
     <ClCompile Include="MyScene.cpp" />
@@ -190,6 +192,7 @@
     <ClCompile Include="TestComponent.cpp" />
     <ClCompile Include="Text.cpp" />
     <ClCompile Include="Texture2D.cpp" />
+    <ClCompile Include="Time.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Vertex2D.cpp" />
     <ClCompile Include="VertexComponent.cpp" />
@@ -218,11 +221,13 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Clip.h" />
     <ClInclude Include="Collider.h" />
+    <ClInclude Include="Cursor.h" />
     <ClInclude Include="Flipbook.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameSettings.h" />
     <ClInclude Include="glad.h" />
     <ClInclude Include="Graphics.h" />
+    <ClInclude Include="Input.h" />
     <ClInclude Include="khrplatform.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="MyFirstScene.h" />

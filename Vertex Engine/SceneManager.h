@@ -15,7 +15,7 @@ public:
 	 void AddScene(VertexScene* _scene);
 	 void UpdateScenes(float delta);
 	 void UpdateFixedScenes(float fixedDelta);
-	 void SetActiveScene(int _scene) { m_ActiveScene = _scene; StartUpScenes(); }
+	 void SetActiveScene(int _scene) { m_ActiveScene = _scene; if(m_IsAllowedToStartScenes) StartUpScenes(); }
 
 	 void SetActiveScene(const char _scene[]);
 
@@ -28,10 +28,12 @@ public:
 	 int GetActiveScene() { return m_ActiveScene; }
 	 std::vector<VertexScene*> m_SceneList;
 	 void DestroyScenesOnLoad(bool _state) { m_DestroyScenes = _state; }
+	 void EngineState(EditorMode _mode);
 
 private:
 	void DestroyScenes();
 
+	bool m_IsAllowedToStartScenes = true;
 	bool m_DestroyScenes = false;
 	 int m_ActiveScene;
 };

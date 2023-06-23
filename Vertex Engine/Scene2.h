@@ -26,6 +26,7 @@ public:
 
 private:
 
+	Button* m_ButtonTest;
 	GLFWwindow* m_Window;
 	SceneManager* m_SceneManager;
 

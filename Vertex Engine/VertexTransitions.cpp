@@ -35,7 +35,6 @@ void VertexTransitions::Awake()
 {
 	m_TransitionObject = new GameObject("Object");
 
-
 	m_Transitions.push_back(m_TransitionObject);
 
 	ResourceManager::LoadTexture("Builds/Textures/VertexMainDisplay.png", "VertexMainDisplay");
@@ -53,13 +52,14 @@ void VertexTransitions::Awake()
 
 	m_TransitionObject->transform.size.x = 1920;
 	m_TransitionObject->transform.size.y = 1080;
+
+	m_MainCamera->zoom = 0.002f;
+	m_MainCamera->transform.position = m_TransitionObject->transform.GetCentre();
 }
 
 void VertexTransitions::Start()
 {
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-	m_MainCamera->zoom = 0.002f;
-	m_MainCamera->transform.position = m_TransitionObject->transform.GetCentre();
 }
 
 void VertexTransitions::Update(float delta)
@@ -78,13 +78,17 @@ void VertexTransitions::Update(float delta)
 	{
 		m_Transitions.at(0)->material.colour.a -= m_FadeDuration * delta;
 
-		if (m_Transitions.at(0)->material.colour.a < 0) 
+		if (m_Transitions.at(0)->material.colour.a < 0)
 		{
 			m_Timer = m_TransitionSpeed;
-			m_SceneManager->SetActiveScene(1);
+			m_SceneManager->SetActiveScene(2);
 			m_LerpColour = false;
 			m_Transitions.at(0)->material.colour.a = 1;
 		}
+	}
+
+	if (Input::GetKeyDown(m_Window, GLFW_KEY_SPACE) && !m_LerpColour) {
+		m_LerpColour = true;
 	}
 }
 

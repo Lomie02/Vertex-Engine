@@ -5,6 +5,8 @@
 #include "GameObject.h"
 #include "Camera.h"
 #include "Graphics.h"
+#include "Cursor.h"
+#include "Input.h"
 
 enum EditorMode {
 	EDITOR = 0,

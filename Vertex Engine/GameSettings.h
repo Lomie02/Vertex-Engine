@@ -11,7 +11,7 @@
 #define PROJECT_DEVELOPER "Your Name"
 #define PROJECT_COMPANY "Your Company"
 
-#define ENGINE_VERSION 1.1.0
+#define ENGINE_VERSION 1.10
 #define ENGINE_EDITION "Vertex Engine 2D"
 
 #define PROJECT_ICON "PowerIcon.png"
