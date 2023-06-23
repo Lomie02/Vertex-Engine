@@ -1,0 +1,33 @@
+Vertex Engine 1.10 - 2023 
+----------------------------------------------
+Issues:
+- Buttons Don't Work
+- Collision Response needs to be added to complete Collision System
+- Tension Renderer needs to sort Transparent objects based on their distance before going through depth test.
+-
+
+
+
+----------------------------------------------
+Features Being Developed:
+- Flipbook Animation Componenet
+- Input
+- Cursor
+- Buttons
+- 
+
+
+
+
+
+---------------------------------------------
+Features Wanted or Hoping to Implement:
+- Flipbook
+- Lighting
+- 2D Rigidbodys
+- Animation Editor
+- Improved Editor
+- Vertex Console
+- Gamepad Support
+- multithreading
+- Material Class Re-Work

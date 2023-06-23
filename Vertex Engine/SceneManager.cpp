@@ -44,7 +44,10 @@ void SceneManager::SetActiveScene(const char _scene[])
 			if (m_SceneList[i]->m_SceneName == _scene)
 			{
 				m_ActiveScene = i;
-				StartUpScenes();
+				if (m_IsAllowedToStartScenes)
+				{
+					StartUpScenes();
+				}
 				return;
 			}
 		}
@@ -56,6 +59,20 @@ void SceneManager::EndSceneSetUpProcess(SceneManager* _sceneManager)
 
 }
 
+void SceneManager::EngineState(EditorMode _mode)
+{
+	if (_mode == PLAY || _mode == EDITOR_PLAY)
+	{
+		m_IsAllowedToStartScenes = true;
+	}
+	else {
+		m_IsAllowedToStartScenes = false;
+	}
+}
+
 void SceneManager::DestroyScenes()
 {
+	for (int i = 0; i < m_SceneList.size(); i++)
+	{
+	}
 }

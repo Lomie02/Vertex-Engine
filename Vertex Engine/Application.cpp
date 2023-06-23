@@ -13,7 +13,6 @@
 #include "imgui_impl_opengl3.h"
 #include "imgui.h"
 #include <direct.h>
-
 #include "stb_image.h"
 
 #define GL_SILENCE_DEPRECATION
@@ -86,6 +85,7 @@ void Application::StartUp()
 
 	glfwMakeContextCurrent(m_GameWindow);
 
+
 	if (!gladLoadGL()) {
 		ShutDown();
 	}
@@ -156,9 +156,6 @@ void Application::StartUp()
 
 	m_TransitionScene->GiveWindow(m_SceneManager);
 
-	// Set up the scenes.
-	SceneSetUp();
-
 	// Load UI Textures
 	ResourceManager::LoadTexture("Builds/Textures/UI_Button.png", "UI_Button");
 
@@ -198,18 +195,21 @@ void Application::StartUp()
 
 	std::cout << "Vertex Message: Start Up Succeded." << std::endl;
 
+	m_SceneManager->EngineState(m_Mode);
+
 	glClearColor(BACKGROUND_COLOUR);
 }
 
 void Application::Start()
 {
+	SceneSetUp(); //Start setting up all scenes in engine.
+
 	if (m_Mode != PLAY) {
 		m_SceneManager->SetActiveScene(1);
 	}
 	else {
 		m_SceneManager->SetActiveScene(0);
 	}
-
 
 	m_SceneManager->StartUpScenes();
 
@@ -223,6 +223,12 @@ void Application::Update()
 		double currTime = (float)glfwGetTime();
 		m_deltaTime = currTime - m_prevTime;
 		m_prevTime = currTime;
+
+		if (m_Mode == EDITOR_PLAY && Input::GetKeyDown(m_GameWindow, GLFW_KEY_ESCAPE)) 
+		{
+			m_Mode = EDITOR_PLAY;
+			Cursor::Show(m_GameWindow);
+		}
 
 		m_frames++;
 		m_fpsInterval += m_deltaTime;
@@ -636,6 +642,7 @@ void Application::ShutDown()
 	}
 
 	m_SceneManager->GetCurrentScene()->GetAssets().ExecuteAll();
+	glfwSetInputMode(m_GameWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 }
 
 void Application::FolderCreation()

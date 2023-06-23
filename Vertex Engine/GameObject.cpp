@@ -90,9 +90,9 @@ void GameObject::ConfigureSystems()
 {
 	MaterialConfigure();
 
-	if (m_Parent) {
+	/*if (m_Parent) {
 		glm::mat4 ParentTransform = glm::translate(m_Parent->transform.rotation, m_Parent->transform.position);
-	}
+	}*/
 
 	if (m_Parent != nullptr)
 	{

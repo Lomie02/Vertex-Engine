@@ -31,6 +31,7 @@ public:
 
 	void SetFieldOfView(float _fov);
 	float GetFieldOfView() { return m_FieldofView; };
+	glm::mat4 GetProjectionAlone() { return m_ProjectionMat; }
 
 	float far = 50.0f;
 	float near = -1.0f;

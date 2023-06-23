@@ -171,14 +171,23 @@
     <ClCompile Include="VertexComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="VertexTransitions.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Flipbook.cpp">
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="AudioSource.cpp">
       <Filter>GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Cursor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexTransitions.cpp">
+      <Filter>Scene Management</Filter>
+    </ClCompile>
+    <ClCompile Include="Input.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Time.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -323,14 +332,20 @@
     <ClInclude Include="VertexGeneral.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="VertexTransitions.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Flipbook.h">
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="AudioSource.h">
       <Filter>GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Cursor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexTransitions.h">
+      <Filter>Scene Management</Filter>
+    </ClInclude>
+    <ClInclude Include="Input.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
