@@ -10,7 +10,7 @@ out vec3 _worldNormals;
 void main()
 {
     TexCoords = vertex.zw;
-	_worldNormals = (model * vec4(1.0,1.0,1.0, 0.0)).xyz;
+	_worldNormals = (modelMatrix * vec4(Normal, 0.0)).xyz;
 	
     gl_Position = pro * model * vec4(vertex.xy, 0.0, 1.0);
 }
