@@ -18,7 +18,7 @@ void Transform::Reset()
 	scale = 0.5f;
 }
 
-glm::vec2 Transform::GetCentre()
+glm::vec2 Transform::GetCenter()
 {
 	glm::vec2 Centre{};
 

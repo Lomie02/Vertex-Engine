@@ -102,63 +102,6 @@ void GameObject::ConfigureSystems()
 	}
 }
 
-void GameObject::AddComponent(VertexComponent* _comp)
-{
-	m_Components.push_back(_comp);
-}
-
-bool GameObject::GetComponent(VertexComponent* _target)
-{
-	for (int i = 0; i < m_Components.size(); i++) {
-		if (typeid(_target) == typeid(m_Components.at(i)))
-		{
-			_target = m_Components.at(i);
-			return true;
-		}
-	}
-
-	return false;
-}
-
-void GameObject::RemoveComponent(VertexComponent* _comp)
-{
-	for (int i = 0; i < m_Components.size(); i++)
-	{
-		if (typeid(_comp) == typeid(m_Components.at(i)))
-		{
-			m_Components.erase(m_Components.begin() + i);
-		}
-	}
-}
-
-bool GameObject::GetComponentInParent(VertexComponent* _target)
-{
-	for (int i = 0; i < m_Parent->m_Components.size(); i++) {
-		if (typeid(_target) == typeid(m_Parent->m_Components.at(i)))
-		{
-			_target = m_Parent->m_Components.at(i);
-			return true;
-		}
-	}
-
-	return false;
-}
-
-bool GameObject::GetComponentInChildren(VertexComponent* _target)
-{
-	for (int k = 0; k < m_Children.size(); k++) {
-
-		for (int i = 0; i < m_Children.at(k)->m_Components.size(); i++) {
-			if (typeid(_target) == typeid(m_Parent->m_Components.at(i)))
-			{
-				_target = m_Children.at(k)->m_Components.at(i);
-				return true;
-			}
-		}
-	}
-	return false;
-}
-
 void GameObject::MaterialConfigure()
 {
 	if (material.m_KeepAspect)

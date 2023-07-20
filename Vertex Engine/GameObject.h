@@ -34,16 +34,6 @@ public:
 	void ConfigureSystems();
 	Collider* GetCollider() { return m_Collider; }
 
-	void AddComponent(VertexComponent* _comp);
-
-	bool GetComponent(VertexComponent* _target);
-	void RemoveComponent(VertexComponent* _comp);
-
-	int ComponentCount() { return m_Components.size(); }
-	bool GetComponentInParent(VertexComponent* _target);
-	bool GetComponentInChildren(VertexComponent* _target);
-
-	std::vector<VertexComponent*> ComponentList() { return m_Components; }
 	std::string Tag = "Untagged";
 	int layer;
 
@@ -53,7 +43,6 @@ private:
 	void MaterialConfigure();
 	void ConfigurePartners();
 
-	std::vector<VertexComponent*> m_Components;
 	Collider* m_Collider;
 	GameObject* m_Parent;
 	std::vector<GameObject*> m_Children;

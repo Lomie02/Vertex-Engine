@@ -26,11 +26,12 @@ public:
 
 private:
 
+	void SetupButton();
+
 	Button* m_ButtonTest;
 	GLFWwindow* m_Window;
 	SceneManager* m_SceneManager;
 
-	PlayerController m_PlayerCon;
 	GameObject* m_Object2;
 	GameObject* m_Object0;
 

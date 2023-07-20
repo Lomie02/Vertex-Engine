@@ -17,7 +17,7 @@ public:
 	float localScale = 1.0f;
 	void Reset();
 
-	glm::vec2 GetCentre();
+	glm::vec2 GetCenter();
 	float GetSizeFromCentre(glm::vec2 _axis);
 private:
 

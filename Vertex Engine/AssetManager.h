@@ -31,6 +31,8 @@ public:
 	void AssignSoundSystem(irrklang::ISoundEngine* _engine);
 	void BootUpAll(BootUpContainer* _settings);
 
+	// Register Functions
+	void Register(VertexComponent& _object);
 	void Register(GameObject* _object);
 	void Register(RigidBody* _object);
 	void Register(Animator* _object);
@@ -47,6 +49,7 @@ public:
 	void LogEvents();
 	void SetActiveCamera(int _index);
 
+	// For the Editor to access.
 	std::vector<GameObject*> m_Objects;
 	std::vector<GameObject*> m_UiObjects;
 	std::vector<Camera*> m_Cameras;
@@ -71,23 +74,24 @@ public:
 	GameObject* FindObjectWithTag(std::string _tag);
 	std::vector<GameObject*> FindObjecstWithTag(std::string _tag);
 	std::vector<GameObject*> FindObjecstWithComponent(VertexComponent& _ref);
+
 	GameObject* FindObjectWithComponent(VertexComponent& _ref);
 	GameObject* FindComponent(VertexComponent& _ref);
 
 	GLFWwindow* GetWindow() { return m_Window; }
-	//void AssignSceneManager(SceneManager* _scene) { SceneManager = _scene; }
-
 	void AssignMode(EditorMode _mode) { m_OperatingMode = _mode; }
 
 private:
 
+	void UpdateComponents(float delta);
+	std::vector<VertexComponent> m_VertexComponentsList;
 	std::vector<GameObject*> m_TransParentList;
 	EditorMode m_OperatingMode;
-	//SceneManager* SceneManager;
+
 	char m_ScenesName[30] = "s";
-	void UpdateComponents(float delta);
 	void ConfigureMouse();
 	irrklang::ISoundEngine* m_SoundSystem;
+	
 	bool m_SingleSortRenderering = true;
 	bool m_HasRendered = false;
 	Renderer m_RendererToUse = Tension_2D;

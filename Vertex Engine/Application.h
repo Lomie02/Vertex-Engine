@@ -74,6 +74,7 @@ private:
 	
 	// Basics
 	void FolderCreation();
+	void ExternalResources();
 	void SceneSetUp();
 	void UpdateEditorMode();
 

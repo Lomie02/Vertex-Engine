@@ -50,22 +50,14 @@ void Scene2::Awake()
 
 	m_MainCamera = new Camera("Camera 1");
 
-	m_PlayerCon;
-
 	m_MainCamera->transform.position.x = 0;
 	m_MainCamera->transform.position.y = 0;
 	m_Manager.Register(m_MainCamera);
 
-	m_PlayerCon.AssignPlayer(m_Object2);
-
-	m_ButtonTest = new Button("BUtton");
-
-	m_ButtonTest->transform.size.x = 10;
-	m_ButtonTest->transform.size.y = 5;
-
-	m_ButtonTest->transform.position.x = -5;
-
+	m_ButtonTest = new Button("Goofy Button");
 	m_Manager.Register(m_ButtonTest);
+
+	SetupButton();
 }
 
 void Scene2::Start()
@@ -77,35 +69,9 @@ void Scene2::Start()
 
 void Scene2::Update(float delta)
 {
-	if (Input::GetKeyDown(m_Window, GLFW_KEY_W))
-	{
-		m_PlayerCon.MovePosition(glm::vec2(0, 1), delta);
-	}
-
-	if (Input::GetKeyDown(m_Window, GLFW_KEY_S))
-	{
-		m_PlayerCon.MovePosition(glm::vec2(0, -1), delta);
-	}
-
-	if (Input::GetKeyDown(m_Window, GLFW_KEY_A))
-	{
-		m_PlayerCon.MovePosition(glm::vec2(-1, 0), delta);
-	}
-
-	if (Input::GetKeyDown(m_Window, GLFW_KEY_D))
-	{
-		m_PlayerCon.MovePosition(glm::vec2(1, 0), delta);
-	}
-
-	if (glfwGetKey(m_Window, GLFW_KEY_Q) == GLFW_PRESS)
-	{
-		Cursor::Show(m_Window);
-	}
-
 	if (m_ButtonTest->Pressed())
 	{
-		m_ButtonTest->material.colour.r = 1;
-		m_ButtonTest->CloseEvent();
+
 	}
 }
 
@@ -115,5 +81,18 @@ void Scene2::LateUpdate(float delta)
 
 void Scene2::FixedUpdate(float fixedDelta)
 {
+}
+
+void Scene2::SetupButton()
+{
+
+	m_ButtonTest->transform.size.x = 10;
+	m_ButtonTest->transform.size.y = 3;
+
+	m_ButtonTest->transform.position.x = -5;
+	m_ButtonTest->SetOffset(glm::vec2(-1, 0.3f));
+
+	m_ButtonTest->text = "Vertex Ahh Button";
+
 }
 
