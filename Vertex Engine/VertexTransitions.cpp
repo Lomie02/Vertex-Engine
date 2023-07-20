@@ -54,7 +54,7 @@ void VertexTransitions::Awake()
 	m_TransitionObject->transform.size.y = 1080;
 
 	m_MainCamera->zoom = 0.002f;
-	m_MainCamera->transform.position = m_TransitionObject->transform.GetCentre();
+	m_MainCamera->transform.position = m_TransitionObject->transform.GetCenter();
 }
 
 void VertexTransitions::Start()

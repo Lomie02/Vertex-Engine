@@ -178,7 +178,7 @@ void MyScene::Update(float delta)
 		}
 	}
 
-	if (m_Manager.GetMousePosition().x < m_Object2->transform.GetCentre().x + 5 * m_Object2->transform.scale && m_Manager.GetMousePosition().x > m_Object2->transform.GetCentre().x - 5 * m_Object2->transform.scale) {
+	if (m_Manager.GetMousePosition().x < m_Object2->transform.GetCenter().x + 5 * m_Object2->transform.scale && m_Manager.GetMousePosition().x > m_Object2->transform.GetCenter().x - 5 * m_Object2->transform.scale) {
 		std::cout << "X Collision" << std::endl;
 	}
 

@@ -11,6 +11,26 @@
 #include "Particle.h"
 #define LAYER_MAX 20
 
+/*==========================================================
+* 
+	Dylan Smith 2023, ©TropicalGames
+* 
+	Vertex has 2 renderers that it can use. Both have their pros & cons of course but 1 is better than the other.
+
+	Renderers: 
+		- Vertex2D (Default Renderer)
+		- Tension2D (Advanced Renderer)
+
+	What are the differences?
+				
+			Vertex2D is a basic sprite renderer that does not support depth testing or layers & transparency sorting.
+
+			Tension2D is a advanced version of the Vertex2D renderer but offers more. Tension can do Layer based depth testing & has Transparency Layer soting as well as 
+			having the option to render the depth test to for debugging. Tension is on the road to being implemented with way more renderering systems.
+
+===========================================================*/
+
+//TODO: Remove this, it does nothing
 enum Layer {
 	DefaultLayer = 0,
 	layer_01 = 1,

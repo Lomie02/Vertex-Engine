@@ -12,7 +12,15 @@
 #include <thread>
 
 /*
-	The AssetManager is the engines way of knowing what exists in the game & what to do with the objects. This system controls major things such as Renderering, Collision,
+	The AssetManager is the engines way of knowing what exists in the game & what to do with the objects.
+	This system controls all major things such as:
+	- Renderering
+	- Updating Objects/ Componenets
+	- Collision Detection
+	- Physics
+	- Sound
+	- Layer Sorting
+	- Configuring System Updates
 */
 
 void AssetManager::AssignSoundSystem(irrklang::ISoundEngine* _engine)
@@ -31,6 +39,11 @@ void AssetManager::BootUpAll(BootUpContainer* _settings)
 			m_RendererToUse = Tension_2D;
 		}
 	}
+}
+
+void AssetManager::Register(VertexComponent& _object)
+{
+	m_VertexComponentsList.push_back(_object);
 }
 
 void AssetManager::Register(GameObject* _object)
@@ -332,7 +345,7 @@ void AssetManager::TensionRendering(Vertex2D* m_Renderer)
 //Tension Renderers Layer Sorting
 void AssetManager::TensionLayerSort()
 {
-
+	// Seperate Opaque sprites from transparent sprites for tension layer sorting.
 	for (int i = 0; i < m_Objects.size(); i++)
 	{
 		if (m_Objects.at(i)->material.surface == Opaque)
@@ -375,17 +388,18 @@ void AssetManager::TensionLayerSort()
 		}
 
 		/*GameObject* key;
-		int j;
+
 		for (int i = 0; i < m_TransparentSortList.size() - 1; i++)
 		{
-			j = i + 1;
-			key = m_TransparentSortList.at(j);
-
-			while (j >= 0 && m_TransparentSortList.at(j)->layer >= key->layer && j < m_TransparentSortList.size())
+			for (int j = i + 1; j < m_TransparentSortList.size(); j++)
 			{
-				m_TransparentSortList.at(j) = m_TransparentSortList.at(i);
+				if (m_TransparentSortList.at(j)->layer > m_TransparentSortList.at(i)->layer)
+				{
+					key = m_TransparentSortList.at(i);
+					m_TransparentSortList.at(i) = m_TransparentSortList.at(j);
+					m_TransparentSortList.at(j) = key;
+				}
 			}
-			m_TransparentSortList.at(j) = key;
 		}
 		m_Transparent = m_TransparentSortList;*/
 	}
@@ -600,17 +614,6 @@ std::vector<GameObject*> AssetManager::FindObjecstWithComponent(VertexComponent&
 
 GameObject* AssetManager::FindObjectWithComponent(VertexComponent& _ref)
 {
-	for (int i = 0; i < m_Objects.size(); i++)
-	{
-		std::vector<VertexComponent*> comps = m_Objects.at(i)->ComponentList();
-		for (int k = 0; k < comps.size(); k++) {
-
-			if (typeid(_ref) == typeid(comps.at(k)))
-			{
-				return m_Objects.at(i);
-			}
-		}
-	}
 
 	return nullptr;
 }
@@ -620,22 +623,13 @@ GameObject* AssetManager::FindObjectWithComponent(VertexComponent& _ref)
 /// </summary>
 /// <param name="delta"></param>
 
-void AssetManager::UpdateComponents(float delta)
+void AssetManager::UpdateComponents(float delta) //TODO: Update this system for the new Componenet system
 {
-	for (int i = 0; i < m_Objects.size(); i++)
+	for (int i = 0; i < m_VertexComponentsList.size(); i++)
 	{
-		if (m_Objects.at(i)->ComponentCount() > 0)
-		{
-			std::vector<VertexComponent*> components;
-			components = m_Objects.at(i)->ComponentList();
-
-			for (auto comp : components)
-			{
-				comp->Update(delta);
-				comp->FixedUpdate(delta);
-				comp->LateUpdate(delta);
-			}
-		}
+		m_VertexComponentsList.at(i).Update(delta);
+		m_VertexComponentsList.at(i).FixedUpdate(delta);
+		m_VertexComponentsList.at(i).LateUpdate(delta);
 	}
 }
 
@@ -668,12 +662,17 @@ void AssetManager::ConfigureMouse() //TODO: FInd out how to convert the Y cords.
 	}
 }
 
-//TODO: Remove this from scenes & automate it in the asset manager.
+// Log special events like last objects position & button tracking
 void AssetManager::LogEvents()
 {
 	for (int i = 0; i < m_Objects.size(); i++)
 	{
 		m_PreviousLocations.at(i)->PreviousPosition.x = m_Objects.at(i)->transform.position.x;
 		m_PreviousLocations.at(i)->PreviousPosition.y = m_Objects.at(i)->transform.position.y;
+	}
+
+	for (int i = 0; i < m_UiButtonObjects.size(); i++)
+	{
+		m_UiButtonObjects.at(i)->CloseEvent();
 	}
 }

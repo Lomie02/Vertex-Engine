@@ -156,8 +156,6 @@ void Application::StartUp()
 
 	m_TransitionScene->GiveWindow(m_SceneManager);
 
-	// Load UI Textures
-	ResourceManager::LoadTexture("Builds/Textures/UI_Button.png", "UI_Button");
 
 	if (m_UsingRenderer == Vertex_2D)
 	{
@@ -195,6 +193,8 @@ void Application::StartUp()
 
 	std::cout << "Vertex Message: Start Up Succeded." << std::endl;
 
+	ExternalResources(); //Load External files.
+
 	m_SceneManager->EngineState(m_Mode);
 
 	glClearColor(BACKGROUND_COLOUR);
@@ -230,6 +230,7 @@ void Application::Update()
 			Cursor::Show(m_GameWindow);
 		}
 
+		// Calulate delta time
 		m_frames++;
 		m_fpsInterval += m_deltaTime;
 		if (m_fpsInterval >= 1.0f)
@@ -241,13 +242,14 @@ void Application::Update()
 
 		m_SceneManager->GetCurrentScene()->GetAssets().LogEvents(); // Log Positions for collsion
 
-		m_SceneManager->UpdateScenes(m_deltaTime); // Update regular loop
 
 		static float fixedDelta = 0.0f;
 		fixedDelta += m_deltaTime;
 
 		if (m_FinishedSceneSetUpStage)
 			m_SceneManager->GetCurrentScene()->GetAssets().ConfigureSystems(); // Update asset managers systems
+
+		m_SceneManager->UpdateScenes(m_deltaTime); // Update regular loop
 
 		while (fixedDelta >= m_TimeStep)
 		{
@@ -659,4 +661,9 @@ void Application::FolderCreation()
 	success = mkdir("Builds/Data/0x021_0KAW");
 
 	std::cout << "Vertex Message: Completed file creation." << std::endl;
+}
+
+void Application::ExternalResources() // Load all your external files such as textures, fonts & audio files.
+{
+	ResourceManager::LoadTexture("Builds/Textures/UI_Button.png", "UI_Button");
 }

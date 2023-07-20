@@ -4,8 +4,23 @@ Flipbook::Flipbook()
 {
 }
 
-bool Flipbook::CreateNewAnimation(std::string _name) //TODO: Figure out a way to create animation clips inside the componenet instead of manually creating them in a scene.
+bool Flipbook::CreateNewAnimation(Animation _clip)
 {
+	m_AnimationClips.push_back(_clip);
+	return false;
+}
+
+// Delete a animation from the flipbook componenet.
+bool Flipbook::RemoveAnimationClip(std::string _name)
+{
+	for (int i = 0; i < m_AnimationClips.size();i++)
+	{
+		if (m_AnimationClips.at(i).m_Name == _name)
+		{
+			m_AnimationClips.erase(m_AnimationClips.begin() + i);
+			return true;
+		}
+	}
 	return false;
 }
 
@@ -32,4 +47,8 @@ bool Flipbook::SetAnimation(int _index)
 		return true;
 	}
 	return false;
+}
+
+void Flipbook::Update(float delta)
+{
 }
