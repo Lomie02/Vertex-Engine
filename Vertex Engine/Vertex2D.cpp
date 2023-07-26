@@ -121,8 +121,14 @@ void Vertex2D::TensionDraw(GameObject* _object, Material& material, glm::vec2 po
 
 		this->m_Shader.SetInteger("UseDepth", 1);
 	}
-		this->m_Shader.SetInteger("UseLights", 0);
 
+	// TODO: remove this maybe since Lights might not come till later.
+	this->m_Shader.SetInteger("UseLights", 0);
+
+	// Vertex Filters.
+	this->m_Shader.SetInteger("UseChromatic", 0);
+
+	//=======================================
 	glm::mat4 model = glm::mat4(1.0f);
 
 	model = glm::translate(model, glm::vec3(position, (float)_RenderLayer));
@@ -132,7 +138,7 @@ void Vertex2D::TensionDraw(GameObject* _object, Material& material, glm::vec2 po
 	model = glm::translate(model, glm::vec3(-0.5f * size.x, -0.5f * -size.y, 0.0f));
 
 	model = glm::scale(model, glm::vec3(size.x * scale, -size.y * scale, 1.0f));
-	this->m_Shader.SetVector3f("lights", glm::vec3(1.0,1.0,1.0));
+	this->m_Shader.SetVector3f("lights", glm::vec3(1.0, 1.0, 1.0));
 
 	this->m_Shader.SetMatrix4("model", model);
 	this->m_Shader.SetMatrix4("pro", per);

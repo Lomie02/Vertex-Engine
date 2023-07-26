@@ -158,6 +158,26 @@ void AssetManager::ConfigureSystems()
 					}
 
 				}
+
+				for (int i = 0; i < m_Objects.size(); i++)
+				{
+					//============================================================================
+					ConfigureMouse();
+
+					Transform ObjectsPosition = m_Objects.at(i)->transform;
+					mouse.size.x = 1;
+					mouse.size.y = 1;
+
+					if (ObjectsPosition.position.x < mouse.position.x + mouse.size.x
+						&& ObjectsPosition.position.x + ObjectsPosition.size.x > mouse.position.x
+						&& ObjectsPosition.position.y < mouse.position.y + mouse.size.y &&
+						ObjectsPosition.position.y + ObjectsPosition.size.y > mouse.position.y)
+					{
+						m_Objects.at(i)->transform.position.x = mouse.position.x;
+						m_Objects.at(i)->transform.position.y = -mouse.position.y;
+					}
+
+				}
 			}
 		}
 	}

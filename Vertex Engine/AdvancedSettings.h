@@ -12,3 +12,9 @@
 //===============================================
 #define RENDER_DEPTH_TEST false		// Tension will render the depth test to the screen
 #define TENSION_TRANSPARENT_LAYER_SORTING true // Tensions transparent layer sorting is an experimental feature that may be broken
+
+
+//==============================================
+// OPEN EDITOR SETTINGS
+//==============================================
+#define USE_OPEN_EDITOR = false

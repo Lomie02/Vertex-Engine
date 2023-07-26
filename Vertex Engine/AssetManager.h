@@ -81,6 +81,9 @@ public:
 	GLFWwindow* GetWindow() { return m_Window; }
 	void AssignMode(EditorMode _mode) { m_OperatingMode = _mode; }
 
+	std::vector<Button*> GetButtonObjects() { return m_UiButtonObjects; }
+	std::vector<Text*> GetTextObjects() { return m_UiTextObjects; }
+
 private:
 
 	void UpdateComponents(float delta);

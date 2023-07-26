@@ -63,7 +63,6 @@ void Scene2::Awake()
 void Scene2::Start()
 {
 	glClearColor(0.0, 0.0, 0.1, 1.0);
-	Cursor::Hide(m_Window);
 	m_Manager.GiveWindow(m_Window);
 }
 

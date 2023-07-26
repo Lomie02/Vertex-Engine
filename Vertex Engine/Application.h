@@ -23,6 +23,13 @@ enum EditorWindow {
 	HudEditor,
 };
 
+enum EditorSelection {
+	Sprite = 0,
+	Camera,
+	GUI,
+
+};
+
 class Application
 {
 public:
@@ -66,12 +73,15 @@ private:
 	// Editor
 	void EditorMain();
 	void EditorAnimation();
+	void OpenEditor();
 	void EditorHud();
+
+	EditorSelection m_EditorSelectType = Sprite;
 
 	EditorWindow m_WindowMode = Main;
 	EditorMode m_Mode = EDITOR;
 	bool m_EditorFullScreen = false;
-	
+
 	// Basics
 	void FolderCreation();
 	void ExternalResources();
