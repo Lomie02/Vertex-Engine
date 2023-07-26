@@ -18,7 +18,12 @@ class Flipbook : VertexComponent
 {
 public:
 	Flipbook();
-	bool CreateNewAnimation(Animation _clip);
+
+	bool SetMaster(Material _ref);
+	bool Play();
+	bool Stop();
+
+	bool AddFrame(Animation _clip);
 	bool RemoveAnimationClip(std::string _name);
 
 	bool SetAnimation(std::string _name);
@@ -26,7 +31,12 @@ public:
 	void Update(float delta);
 
 private:
+
+	Material m_Master;
+	bool m_IsPlaying = false;
 	std::vector<Animation> m_AnimationClips;
 	int m_ActiveAnimation = 0;
+
+	float m_Timer = 0;
 };
 

@@ -17,7 +17,6 @@ class Camera : public GameObject
 public:
 	Camera() : GameObject("Camera")
 	{
-
 		m_ViewProjection = m_ProjectionMat * m_ViewMat;
 	}
 

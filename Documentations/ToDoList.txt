@@ -4,9 +4,7 @@ Vertex Engine Developer TO DO LIST:
 -
 2) Start on the collsion detection resolution code
 -
-3) Remove the old componenet system with a brand new one that will be utilised inside the asset manager.
--
-4) 
+3) Do a complete overhaul on the editor User Interface.
 
 
 -------------OPTIONAL TASKS / NON IMPORTANT TASKS------------------------------ 
@@ -14,6 +12,4 @@ Vertex Engine Developer TO DO LIST:
 -
 2) If Possible remove the material from the gameobject & turn it into a componenet (Optional Task)
 -
-3) Update Animator to animate colours
--
-4) 
+3) 

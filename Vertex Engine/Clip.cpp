@@ -22,6 +22,11 @@ void Clip::AddKeyframe(Transform _frame)
 	m_FramesRotations.push_back(_frame.rotation);
 }
 
+void Clip::AddKeyframe(Material _frame)
+{
+	m_FramesColours.push_back(_frame.colour);
+}
+
 void Clip::RemoveKeyframe(int keyframe, glm::vec2 _frame)
 {
 	//TODO: add remove clips
@@ -42,6 +47,11 @@ glm::vec2 Clip::GetFrame(int _index)
 glm::vec2 Clip::GetFrameSize(int _index)
 {
 	return m_FramesSizes.at(_index);
+}
+
+glm::vec4 Clip::GetFrameColour(int _index)
+{
+	return m_FramesColours.at(_index);
 }
 
 float Clip::GetFrameRot(int _index)

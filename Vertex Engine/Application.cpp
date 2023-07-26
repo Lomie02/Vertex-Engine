@@ -224,7 +224,7 @@ void Application::Update()
 		m_deltaTime = currTime - m_prevTime;
 		m_prevTime = currTime;
 
-		if (m_Mode == EDITOR_PLAY && Input::GetKeyDown(m_GameWindow, GLFW_KEY_ESCAPE)) 
+		if (m_Mode == EDITOR_PLAY && Input::GetKeyDown(m_GameWindow, GLFW_KEY_ESCAPE))
 		{
 			m_Mode = EDITOR_PLAY;
 			Cursor::Show(m_GameWindow);
@@ -262,16 +262,16 @@ void Application::Update()
 
 void Application::EditorMain()
 {
-	static bool ShowHelp;
+	static bool DisplaySceneDrawer;
 	static const char* m_SceneList[MAX_SCENES];
 	static const char* m_Assets[MAX_ASSETS];
 
 	static const char* m_Cameras[MAX_CAMERAS];
 	static const char* m_UI[80];
 
-	static int Cameraselected = 0;
-	static int CanvaSelected = 0;
-	static int selected = 0;
+	static int selectedCamera = 0;
+	static int selectedSprite = 0;
+	static int selectedUserInterface = 0;
 	static int currentScene = 0;
 
 
@@ -312,6 +312,18 @@ void Application::EditorMain()
 		}
 	}
 
+	for (int i = 0; i < 80; i++)
+	{
+		if (i < m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().GetButtonObjects().size())
+		{
+			m_UI[i] = m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().GetButtonObjects().at(i)->name;
+		}
+		else
+		{
+			m_UI[i] = " ";
+		}
+	}
+
 	ImGui_ImplGlfw_NewFrame();
 	ImGui_ImplOpenGL3_NewFrame();
 
@@ -322,50 +334,58 @@ void Application::EditorMain()
 	//ImGui::Text(m_SceneManager->GetCurrentScene()->GetAssets().m_Objects.at(selected)->name);
 	if (m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.size() != 0)
 	{
-		ImGui::Text("Transform");
-		ImGui::SameLine();
-		ImGui::Spacing();
-		ImGui::SameLine();
-		ImGui::Spacing();
-		ImGui::SameLine();
-		ImGui::Checkbox("Active", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selected)->m_Active);
-		ImGui::SameLine(); ImGui::InputInt("Layer", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selected)->layer, 2);
+		switch (m_EditorSelectType) {
+		case Sprite:
 
-		//===================================== Position
-		ImGui::Text("Position");
-		ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(200, 0, 0, 255));
-		ImGui::Button("X"); ImGui::SameLine();
-		ImGui::PopStyleColor();
+			ImGui::Text("Transform");
+			ImGui::SameLine();
+			ImGui::Spacing();
+			ImGui::SameLine();
+			ImGui::Spacing();
+			ImGui::SameLine();
+			ImGui::Checkbox("Active", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selectedSprite)->m_Active);
+			ImGui::SameLine(); ImGui::InputInt("Layer", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selectedSprite)->layer, 2);
 
-		ImGui::InputFloat("##Xpos", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selected)->transform.position.x, 0.0f, 0.0f, "%.1f");
+			//===================================== Position
 
-		ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(0, 200, 0, 255));
-		ImGui::Button("Y");
-		ImGui::PopStyleColor();
+			ImGui::Text("Position");
+			ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(200, 0, 0, 255));
+			ImGui::Button("X"); ImGui::SameLine();
+			ImGui::PopStyleColor();
 
-		ImGui::SameLine(); ImGui::InputFloat("##Ypos", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selected)->transform.position.y);
+			ImGui::InputFloat("##Xpos", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selectedSprite)->transform.position.x, 0.0f, 0.0f, "%.1f");
 
-		ImGui::Spacing();
-		ImGui::Spacing();
-		//===================================== Rotation
-		ImGui::InputFloat("Rotation", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selected)->transform.rotation);
+			ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(0, 200, 0, 255));
+			ImGui::Button("Y");
+			ImGui::PopStyleColor();
 
-		//===================================== Scale
-		ImGui::InputFloat("Scale", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selected)->transform.scale);
-		ImGui::InputFloat2("Size", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selected)->transform.size.x);
+			ImGui::SameLine(); ImGui::InputFloat("##Ypos", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selectedSprite)->transform.position.y);
 
-		ImGui::Spacing();
-		ImGui::Spacing();
-		//==================================== Colour
+			ImGui::Spacing();
+			ImGui::Spacing();
+			//===================================== Rotation
+			ImGui::InputFloat("Rotation", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selectedSprite)->transform.rotation);
 
-		ImGui::Text("Colour");
-		ImGui::DragFloat4("##Colour", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selected)->material.colour.r, 0.05f, 0.0f, 1.0f);
+			//===================================== Scale
+			ImGui::InputFloat("Scale", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selectedSprite)->transform.scale);
+			ImGui::InputFloat2("Size", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selectedSprite)->transform.size.x);
 
-		ImGui::Spacing();
-		ImGui::Spacing();
-		ImGui::Spacing();
+			ImGui::Spacing();
+			ImGui::Spacing();
+			//==================================== Colour
 
+			ImGui::Text("Colour");
+			ImGui::DragFloat4("##Colour", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selectedSprite)->material.colour.r, 0.05f, 0.0f, 1.0f);
+
+			ImGui::Spacing();
+			ImGui::Spacing();
+			ImGui::Spacing();
+			break;
+
+		}
 	}
+
+	// Camera Transform UI
 
 	if (m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Cameras.size() != 0)
 	{
@@ -378,24 +398,24 @@ void Application::EditorMain()
 		ImGui::Button("X"); ImGui::SameLine();
 		ImGui::PopStyleColor();
 
-		ImGui::InputFloat("##Xpos", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Cameras.at(Cameraselected)->transform.position.x, 0.0f, 0.0f, "%.1f");
+		ImGui::InputFloat("##Xpos", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Cameras.at(selectedCamera)->transform.position.x, 0.0f, 0.0f, "%.1f");
 
 		ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(0, 200, 0, 255));
 		ImGui::Button("Y");
 		ImGui::PopStyleColor();
 
-		ImGui::SameLine(); ImGui::InputFloat("##Ypos", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Cameras.at(Cameraselected)->transform.position.y);
+		ImGui::SameLine(); ImGui::InputFloat("##Ypos", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Cameras.at(selectedCamera)->transform.position.y);
 
 		ImGui::Spacing();
 		ImGui::Spacing();
 
 		//==============================================
-		ImGui::InputFloat("Rotation", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Cameras.at(Cameraselected)->transform.rotation);
+		ImGui::InputFloat("Rotation", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Cameras.at(selectedCamera)->transform.rotation);
 		ImGui::Text(" ");
 		ImGui::Text("Camera Lens");
-		ImGui::InputFloat("Zoom", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Cameras.at(Cameraselected)->zoom);
-		ImGui::InputFloat("Far", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Cameras.at(Cameraselected)->far);
-		ImGui::InputFloat("Near", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Cameras.at(Cameraselected)->near);
+		ImGui::InputFloat("Zoom", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Cameras.at(selectedCamera)->zoom);
+		ImGui::InputFloat("Far", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Cameras.at(selectedCamera)->far);
+		ImGui::InputFloat("Near", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Cameras.at(selectedCamera)->near);
 		ImGui::EndChild();
 	}
 	ImGui::End();
@@ -404,31 +424,49 @@ void Application::EditorMain()
 	ImGui::Text(PROJECT_NAME);
 	ImGui::Spacing();
 
-	ImGui::Button("Main Window");
+	if (ImGui::Button("Main Window"))
+	{
+		m_WindowMode = Main;
+	};
+
 	ImGui::Spacing();
 
-	ImGui::Button("Animation Window");
+	if (ImGui::Button("Animation Window"))
+	{
+		m_WindowMode = Animation;
+	};
 	ImGui::Spacing();
 
 	ImGui::Button("Vertex Canvas");
-
-	if (ImGui::Button("Help"))
-	{
-		ShowHelp = true;
-	}
 
 	for (int i = 0; i < 68; i++) //Space out the play buttons
 	{
 		ImGui::Spacing();
 	}
 
+	// Focusing Objects
+
 	if (glfwGetKey(m_GameWindow, GLFW_KEY_F) == GLFW_PRESS)
 	{
-		m_SceneManager->GetCurrentScene()->GetAssets().m_Cameras.at(0)->transform.position = m_SceneManager->GetCurrentScene()->GetAssets().m_Objects.at(selected)->transform.position;
+		switch (m_EditorSelectType) {
+		case Sprite:
+			if (m_SceneManager->GetCurrentScene()->GetAssets().m_Objects.size() != 0) {
+				m_SceneManager->GetCurrentScene()->GetAssets().m_Cameras.at(0)->transform.position = m_SceneManager->GetCurrentScene()->GetAssets().m_Objects.at(selectedSprite)->transform.position;
+			}
+			break;
+		case Camera:
+			m_SceneManager->GetCurrentScene()->GetAssets().m_Cameras.at(0)->transform.position = m_SceneManager->GetCurrentScene()->GetAssets().m_Cameras.at(selectedCamera)->transform.position;
+			break;
+
+		case GUI:
+			m_SceneManager->GetCurrentScene()->GetAssets().m_Cameras.at(0)->transform.position = m_SceneManager->GetCurrentScene()->GetAssets().GetButtonObjects().at(selectedUserInterface)->transform.position;
+			break;
+		}
 	}
 
+	//=======================================================
 
-	if (ImGui::ArrowButton("Play", ImGuiDir_Right) && m_Mode == EDITOR)
+	if (ImGui::ArrowButton("PLAY", ImGuiDir_Right) && m_Mode == EDITOR)
 	{
 		m_Mode = EDITOR_PLAY;
 		m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->Start();
@@ -455,49 +493,68 @@ void Application::EditorMain()
 		}
 	}
 
+	// User Interface Playbuttons.
+
 	for (int i = 0; i < 57; i++) //Space out the play buttons
 	{
 		ImGui::Spacing();
 	}
+	if (m_WindowMode == Animation) {
 
-	if (ImGui::ArrowButton("PlayAnimation", ImGuiDir_Right) && m_Mode == EDITOR_PLAY)
-	{
-		m_SceneManager->GetCurrentScene()->GetAssets().m_Animators.at(0)->Play();
-	}
-
-	if (ImGui::Button("KeyFrame") && m_Mode == EDITOR_PLAY)
-	{
-		m_SceneManager->GetCurrentScene()->GetAssets().m_Animators.at(0)->AddKeyFrame();
-	}
-	if (ImGui::Button("Stop") && m_Mode == EDITOR_PLAY)
-	{
-		m_SceneManager->GetCurrentScene()->GetAssets().m_Animators.at(0)->Stop();
-	}
-
-	if (ShowHelp)
-	{
-		ImGui::Begin("Vertex Help Guide");
-		
-		ImGui::SmallButton("Someone come get their engine");
-
-		if (ImGui::Button("Exit"))
+		if (ImGui::ArrowButton("PlayAnimation", ImGuiDir_Right) && m_Mode == EDITOR_PLAY)
 		{
-			ShowHelp = false;
+			m_SceneManager->GetCurrentScene()->GetAssets().m_Animators.at(0)->Play();
 		}
-		ImGui::End();
+
+		if (ImGui::Button("KeyFrame") && m_Mode == EDITOR_PLAY)
+		{
+			m_SceneManager->GetCurrentScene()->GetAssets().m_Animators.at(0)->AddKeyFrame();
+		}
+		if (ImGui::Button("Stop") && m_Mode == EDITOR_PLAY)
+		{
+			m_SceneManager->GetCurrentScene()->GetAssets().m_Animators.at(0)->Stop();
+		}
 	}
+
+	//======================================== Scene Drawer TODO: either get rid of this menu or replace it or have it display only when bot toggling the open editor.
+	if (ImGui::Combo("Your Assets", &currentScene, m_SceneList, m_SceneManager->m_SceneList.size(), m_SceneManager->m_SceneList.size()) && m_Mode == EDITOR)
+	{
+		if (m_Mode == EDITOR)
+		{
+			selectedSprite = 0;
+			m_EditorSelectType = Sprite;
+			m_SceneManager->SetActiveScene(currentScene);
+			DisplaySceneDrawer = false;
+		}
+	}
+
 
 	ImGui::EndMainMenuBar();
 
 	//=====================================
-	ImGui::Begin("Assets");
+	// Displaying Hirearchy
+
+	ImGui::Begin("Hierarchy");
 
 	ImGui::Text("Currently Editing: ");
 	ImGui::Text(m_SceneList[currentScene]);
+
 	ImGui::Text("Scene Objects");
 
-	ImGui::ListBox("Assets", &selected, m_Assets, m_SceneManager->GetCurrentScene()->GetAssets().m_Objects.size());
-	ImGui::ListBox("Cameras", &Cameraselected, m_Cameras, m_SceneManager->GetCurrentScene()->GetAssets().m_Cameras.size());
+	if (m_SceneManager->GetCurrentScene()->GetAssets().m_Objects.size() != 0) {
+		ImGui::ListBox("##Assets", &selectedSprite, m_Assets, m_SceneManager->GetCurrentScene()->GetAssets().m_Objects.size());
+		m_EditorSelectType = Sprite;
+	}
+
+	if (m_SceneManager->GetCurrentScene()->GetAssets().m_Cameras.size() != 0) {
+		ImGui::ListBox("##Cameras", &selectedCamera, m_Cameras, m_SceneManager->GetCurrentScene()->GetAssets().m_Cameras.size());
+		m_EditorSelectType = Camera;
+	}
+
+	if (m_SceneManager->GetCurrentScene()->GetAssets().GetButtonObjects().size() != 0) {
+		ImGui::ListBox("##GUI", &selectedUserInterface, m_UI, m_SceneManager->GetCurrentScene()->GetAssets().GetButtonObjects().size());
+		m_EditorSelectType = GUI;
+	}
 
 	ImGui::End();
 
@@ -508,23 +565,24 @@ void Application::EditorMain()
 
 	//=====================================
 
-	ImGui::Begin("Project Drawer");
+	//ImGui::Begin("Project Drawer");
 
-	ImGui::Text("Scenes");
-	ImGui::BeginChild("Scenes");
+	//ImGui::Text("Scenes");
+	//ImGui::BeginChild("Scenes");
 
-	if (ImGui::ListBox("##Assets", &currentScene, m_SceneList, m_SceneManager->m_SceneList.size()) && m_Mode == EDITOR)
-	{
-		if (m_Mode == EDITOR)
-		{
-			selected = 0;
-			m_SceneManager->SetActiveScene(currentScene);
-		}
-	}
+	//if (ImGui::ListBox("##Assets", &currentScene, m_SceneList, m_SceneManager->m_SceneList.size()) && m_Mode == EDITOR)
+	//{
+	//	if (m_Mode == EDITOR)
+	//	{
+	//		selectedSprite = 0;
+	//		m_EditorSelectType = Sprite;
+	//		m_SceneManager->SetActiveScene(currentScene);
+	//	}
+	//}
 
-	ImGui::EndChild();
+	//ImGui::EndChild();
 
-	ImGui::End();
+	//ImGui::End();
 
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

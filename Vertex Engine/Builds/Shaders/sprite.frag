@@ -9,6 +9,9 @@ uniform int UseDepth;
 in vec3 _worldNormals;
 uniform int UseLights = 0;
 uniform vec3 lights;
+uniform int UseChromatic = 0;
+
+float ChromaticOffset = 0.05;
 
 float near = 0.1;
 float far = 100.0f;
@@ -32,13 +35,33 @@ void main()
 		{
 			float lightVal = max(dot(_worldNormals, lights), 0.0);
 			color += vec4(Colour) * texture(image, TexCoords) * lightVal;
-		}else
+		}
+		else
 		{
-			color = vec4(Colour) * texture(image, TexCoords);
+			if(UseChromatic == 1){ //Chromattic Calulations
+		
+				float r = texture(image, TexCoords - vec2(ChromaticOffset,ChromaticOffset)).x;
+				float g = texture(image, TexCoords).y;
+				float b = texture(image, TexCoords + vec2(ChromaticOffset,ChromaticOffset)).z;
+				float a = texture(image, TexCoords).w;
+			
+				vec4 ArbColour;
+				ArbColour.x = r;
+				ArbColour.y = g;
+				ArbColour.z = b;
+				ArbColour.w = a;
+			
+				color = vec4(Colour) * ArbColour;
+			}
+			else // Normal Rendering
+			{
+				color = vec4(Colour) * texture(image, TexCoords);
+				
+			}
 		}
 		
 	}
-	else
+	else // Rendering Depth Test
 	{
 		float depth = LinearizeDepth(gl_FragCoord.z) / far;
 		color = vec4(vec3(depth),1.0);

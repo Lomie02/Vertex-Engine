@@ -4,7 +4,25 @@ Flipbook::Flipbook()
 {
 }
 
-bool Flipbook::CreateNewAnimation(Animation _clip)
+bool Flipbook::SetMaster(Material _ref)
+{
+	m_Master = _ref;
+	return true;
+}
+
+bool Flipbook::Play()
+{
+	m_IsPlaying = true;
+	return true;
+}
+
+bool Flipbook::Stop()
+{
+	m_IsPlaying = false;
+	return true;
+}
+
+bool Flipbook::AddFrame(Animation _clip)
 {
 	m_AnimationClips.push_back(_clip);
 	return false;
@@ -13,7 +31,7 @@ bool Flipbook::CreateNewAnimation(Animation _clip)
 // Delete a animation from the flipbook componenet.
 bool Flipbook::RemoveAnimationClip(std::string _name)
 {
-	for (int i = 0; i < m_AnimationClips.size();i++)
+	for (int i = 0; i < m_AnimationClips.size(); i++)
 	{
 		if (m_AnimationClips.at(i).m_Name == _name)
 		{
@@ -51,4 +69,13 @@ bool Flipbook::SetAnimation(int _index)
 
 void Flipbook::Update(float delta)
 {
+	if (m_IsPlaying)
+	{
+		m_Timer += 1 * m_AnimationClips.at(m_ActiveAnimation).m_PlaySpeed * delta;
+
+		if (m_Timer > 4)
+		{
+
+		}
+	}
 }
