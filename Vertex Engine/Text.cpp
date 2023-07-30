@@ -16,9 +16,13 @@ Text::~Text()
 	m_Text = nullptr;
 }
 
-void Text::ChangeFont(std::string _path)
+/// <summary>
+/// Name of the font. do not include the file type.
+/// </summary>
+/// <param name="_name"></param>
+void Text::ChangeFont(std::string _name)
 {
-	m_Text->Load(_path, m_FontSize);
+	m_Text->Load(m_FontPath + _name + ".ttf", m_FontSize);
 }
 
 void Text::ConfigureRenderSystems(glm::mat4 _camera)

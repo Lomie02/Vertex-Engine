@@ -319,16 +319,17 @@ bool AssetManager::Raycast2D(glm::vec2 _pos, glm::vec2 _dir, GameObject& _out, f
 //Vertex Tension Renderer 
 void AssetManager::TensionRendering(Vertex2D* m_Renderer)
 {
-	if (m_SingleSortRenderering && !m_HasRendered)
+	if (m_SingleSortRenderering && !m_HasRendered) // Sort the transparent layers once only to save performance. Use if objects never change layers in engine.
 	{
 		TensionLayerSort();
 		m_HasRendered = true;
 	}
-	else if (!m_SingleSortRenderering)
+	else if (!m_SingleSortRenderering) // Update the transparency layer sorting every frame. (Exspensive)
 	{
 		TensionLayerSort();
 	}
 
+	// Render normal sprites.
 	for (int i = 0; i < m_Opaque.size(); i++)
 	{
 		if (m_Opaque.at(i)->GetActive())
@@ -338,8 +339,8 @@ void AssetManager::TensionRendering(Vertex2D* m_Renderer)
 				m_Cameras.at(m_ActiveCamera)->GetProjection(), m_Opaque.at(i)->layer);
 		}
 	}
-	//m_Renderer->TensionTransparencyPass(m_TransParentList, m_Cameras.at(m_ActiveCamera)->GetProjection());
 
+	// Render UI Buttons.
 	for (int i = 0; i < m_UiButtonObjects.size(); i++)
 	{
 		if (m_UiButtonObjects.at(i)->GetActive()) {
@@ -350,6 +351,15 @@ void AssetManager::TensionRendering(Vertex2D* m_Renderer)
 		}
 	}
 
+	//  Render World Text
+	for (int i = 0; i < m_UiTextObjects.size(); i++)
+	{
+		if (m_UiTextObjects.at(i)->GetActive()) {
+			m_UiTextObjects.at(i)->ConfigureRenderSystems(m_Cameras.at(m_ActiveCamera)->GetProjection());
+		}
+	}
+
+	// Render transparent objects
 	for (int i = 0; i < m_Transparent.size(); i++)
 	{
 		if (m_Transparent.at(i)->GetActive()) {
@@ -675,10 +685,10 @@ void AssetManager::ConfigureMouse() //TODO: FInd out how to convert the Y cords.
 			ConvertPosition.position = glm::unProject(glm::vec3(Xpos, Ypos, 1), glm::mat4(1.0f), m_Cameras.at(m_ActiveCamera)->GetProjection(), glm::vec4(0, 0, PROJECT_RESOLUTION));
 		}
 
-		mouse.position.x = ConvertPosition.position.x;
-		mouse.position.y = ConvertPosition.position.y;
+		mouse.position.x = ConvertPosition.position.x * m_Cameras.at(m_ActiveCamera)->zoom;
+		mouse.position.y = ConvertPosition.position.y * m_Cameras.at(m_ActiveCamera)->zoom;
 
-		std::cout << mouse.position.x << " | " << mouse.position.y + 10 << std::endl; //NOTE: This appears to have fixed the Y axes but could be wrong. This is temp for now
+		//std::cout << mouse.position.x << " | " << mouse.position.y + 10 << std::endl; //NOTE: This appears to have fixed the Y axes but could be wrong. This is temp for now
 	}
 }
 

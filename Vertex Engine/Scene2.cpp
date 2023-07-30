@@ -23,6 +23,9 @@ Scene2::~Scene2()
 
 	delete m_ButtonTest;
 	m_ButtonTest = nullptr;
+
+	delete m_Title;
+	m_Title = nullptr;
 }
 
 void Scene2::Awake()
@@ -55,22 +58,40 @@ void Scene2::Awake()
 	m_Manager.Register(m_MainCamera);
 
 	m_ButtonTest = new Button("Goofy Button");
+
 	m_Manager.Register(m_ButtonTest);
 
+	m_Title = new Text();
+
+	m_Manager.Register(m_Title);
+
+	m_Title->m_FontSize = 90;
+
+	m_Title->ChangeFont("Open 24 Display St");
+
+	m_Title->transform.position.x = -5;
+	m_Title->transform.position.y = 5;
+	m_Title->text = "";
+
+	m_Title->material.colour.r = 1;
+	m_Title->material.colour.g = 1;
+	m_Title->material.colour.b = 1;
+
 	SetupButton();
+	glClearColor(0.1, 0.1, 0.1, 1.0);
 }
 
 void Scene2::Start()
 {
-	glClearColor(0.0, 0.0, 0.1, 1.0);
 	m_Manager.GiveWindow(m_Window);
+
 }
 
 void Scene2::Update(float delta)
 {
 	if (m_ButtonTest->Pressed())
 	{
-
+		m_Title->text += "D ";
 	}
 }
 

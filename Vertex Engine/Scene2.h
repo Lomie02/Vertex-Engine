@@ -28,6 +28,8 @@ private:
 
 	void SetupButton();
 
+	Text* m_Title;
+
 	Button* m_ButtonTest;
 	GLFWwindow* m_Window;
 	SceneManager* m_SceneManager;
