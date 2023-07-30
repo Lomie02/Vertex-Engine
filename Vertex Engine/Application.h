@@ -27,6 +27,7 @@ enum EditorSelection {
 	Sprite = 0,
 	Camera,
 	GUI,
+	GuiText,
 
 };
 

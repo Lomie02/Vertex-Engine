@@ -179,8 +179,10 @@ void Application::StartUp()
 
 		ImGui::StyleColorsDark();
 
-		glViewport(299.973f, 349.968f, 1280, 720);
-		glEnable(GL_SCISSOR_TEST);
+		//Commented out to test a new editor desigh
+
+		//glViewport(299.973f, 349.968f, 1280, 720);
+		//glEnable(GL_SCISSOR_TEST);
 
 		UpdateEditorMode();
 		std::cout << "Vertex Message: Editor Succeded." << std::endl;
@@ -264,29 +266,17 @@ void Application::EditorMain()
 {
 	static bool DisplaySceneDrawer;
 	static const char* m_SceneList[MAX_SCENES];
-	static const char* m_Assets[MAX_ASSETS];
-
-	static const char* m_Cameras[MAX_CAMERAS];
-	static const char* m_UI[80];
 
 	static int selectedCamera = 0;
 	static int selectedSprite = 0;
+
 	static int selectedUserInterface = 0;
+	static int selectedTextInterface = 0;
+
 	static int currentScene = 0;
-
-
 	static float ScaleAmount = 0;
-	for (int i = 0; i < MAX_ASSETS; i++)
-	{
-		if (i < m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.size())
-		{
-			m_Assets[i] = m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(i)->name;
-		}
-		else
-		{
-			m_Assets[i] = " ";
-		}
-	}
+
+	//============================================================ TODO: remove this since it is no longer needed anymore.
 
 	for (int i = 0; i < MAX_SCENES; i++)
 	{
@@ -300,29 +290,7 @@ void Application::EditorMain()
 		}
 	}
 
-	for (int i = 0; i < MAX_CAMERAS; i++)
-	{
-		if (i < m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Cameras.size())
-		{
-			m_Cameras[i] = m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Cameras.at(i)->name;
-		}
-		else
-		{
-			m_Cameras[i] = " ";
-		}
-	}
-
-	for (int i = 0; i < 80; i++)
-	{
-		if (i < m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().GetButtonObjects().size())
-		{
-			m_UI[i] = m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().GetButtonObjects().at(i)->name;
-		}
-		else
-		{
-			m_UI[i] = " ";
-		}
-	}
+	//==========================================
 
 	ImGui_ImplGlfw_NewFrame();
 	ImGui_ImplOpenGL3_NewFrame();
@@ -382,62 +350,69 @@ void Application::EditorMain()
 			ImGui::Spacing();
 			break;
 
+		case Camera:
+
+			if (m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Cameras.size() != 0)
+			{
+				ImGui::BeginChild("Camera Transform", ImVec2(0, 200), true);
+				ImGui::Text("Camera Transform");
+
+				//==============================================
+				ImGui::Text("Position");
+				ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(200, 0, 0, 255));
+				ImGui::Button("X"); ImGui::SameLine();
+				ImGui::PopStyleColor();
+
+				ImGui::InputFloat("##Xpos", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Cameras.at(selectedCamera)->transform.position.x, 0.0f, 0.0f, "%.1f");
+
+				ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(0, 200, 0, 255));
+				ImGui::Button("Y");
+				ImGui::PopStyleColor();
+
+				ImGui::SameLine(); ImGui::InputFloat("##Ypos", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Cameras.at(selectedCamera)->transform.position.y);
+
+				ImGui::Spacing();
+				ImGui::Spacing();
+
+				//==============================================
+				ImGui::InputFloat("Rotation", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Cameras.at(selectedCamera)->transform.rotation);
+				ImGui::Text(" ");
+				ImGui::Text("Camera Lens");
+				ImGui::InputFloat("Zoom", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Cameras.at(selectedCamera)->zoom);
+				ImGui::InputFloat("Far", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Cameras.at(selectedCamera)->far);
+				ImGui::InputFloat("Near", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Cameras.at(selectedCamera)->near);
+				ImGui::EndChild();
+			}
+
+			break;
 		}
 	}
 
 	// Camera Transform UI
 
-	if (m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Cameras.size() != 0)
-	{
-		ImGui::BeginChild("Camera Transform", ImVec2(0, 200), true);
-		ImGui::Text("Camera Transform");
-
-		//==============================================
-		ImGui::Text("Position");
-		ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(200, 0, 0, 255));
-		ImGui::Button("X"); ImGui::SameLine();
-		ImGui::PopStyleColor();
-
-		ImGui::InputFloat("##Xpos", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Cameras.at(selectedCamera)->transform.position.x, 0.0f, 0.0f, "%.1f");
-
-		ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(0, 200, 0, 255));
-		ImGui::Button("Y");
-		ImGui::PopStyleColor();
-
-		ImGui::SameLine(); ImGui::InputFloat("##Ypos", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Cameras.at(selectedCamera)->transform.position.y);
-
-		ImGui::Spacing();
-		ImGui::Spacing();
-
-		//==============================================
-		ImGui::InputFloat("Rotation", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Cameras.at(selectedCamera)->transform.rotation);
-		ImGui::Text(" ");
-		ImGui::Text("Camera Lens");
-		ImGui::InputFloat("Zoom", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Cameras.at(selectedCamera)->zoom);
-		ImGui::InputFloat("Far", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Cameras.at(selectedCamera)->far);
-		ImGui::InputFloat("Near", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Cameras.at(selectedCamera)->near);
-		ImGui::EndChild();
-	}
 	ImGui::End();
 
 	ImGui::BeginMainMenuBar();
 	ImGui::Text(PROJECT_NAME);
 	ImGui::Spacing();
 
-	if (ImGui::Button("Main Window"))
+	if (ImGui::Button("Main"))
 	{
 		m_WindowMode = Main;
 	};
 
 	ImGui::Spacing();
 
-	if (ImGui::Button("Animation Window"))
+	if (ImGui::Button("Animation"))
 	{
 		m_WindowMode = Animation;
 	};
+
 	ImGui::Spacing();
 
-	ImGui::Button("Vertex Canvas");
+	ImGui::Button("Canvas");
+
+	ImGui::Spacing();
 
 	for (int i = 0; i < 68; i++) //Space out the play buttons
 	{
@@ -471,6 +446,7 @@ void Application::EditorMain()
 		m_Mode = EDITOR_PLAY;
 		m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->Start();
 		UpdateEditorMode();
+
 	}
 	if (ImGui::Button("||"))
 	{
@@ -528,32 +504,84 @@ void Application::EditorMain()
 		}
 	}
 
-
 	ImGui::EndMainMenuBar();
 
 	//=====================================
 	// Displaying Hirearchy
 
-	ImGui::Begin("Hierarchy");
+	ImGui::Begin("Hirearchy");
 
-	ImGui::Text("Currently Editing: ");
-	ImGui::Text(m_SceneList[currentScene]);
+	if (ImGui::TreeNode(m_SceneList[currentScene]))
+	{
+		// Sprite Tree
+		for (int i = 0; i < m_SceneManager->GetCurrentScene()->GetAssets().m_Objects.size(); i++) {
 
-	ImGui::Text("Scene Objects");
+			ImGui::Spacing();
+			if (ImGui::TreeNode(m_SceneManager->GetCurrentScene()->GetAssets().m_Objects.at(i)->name))
+			{
+				ImGui::TreePop();
+			}
 
-	if (m_SceneManager->GetCurrentScene()->GetAssets().m_Objects.size() != 0) {
-		ImGui::ListBox("##Assets", &selectedSprite, m_Assets, m_SceneManager->GetCurrentScene()->GetAssets().m_Objects.size());
-		m_EditorSelectType = Sprite;
-	}
+			ImGui::SameLine();
 
-	if (m_SceneManager->GetCurrentScene()->GetAssets().m_Cameras.size() != 0) {
-		ImGui::ListBox("##Cameras", &selectedCamera, m_Cameras, m_SceneManager->GetCurrentScene()->GetAssets().m_Cameras.size());
-		m_EditorSelectType = Camera;
-	}
+			if (ImGui::Button("Edit"))
+			{
+				selectedSprite = i;
+				m_EditorSelectType = Sprite;
+			}
+		}
 
-	if (m_SceneManager->GetCurrentScene()->GetAssets().GetButtonObjects().size() != 0) {
-		ImGui::ListBox("##GUI", &selectedUserInterface, m_UI, m_SceneManager->GetCurrentScene()->GetAssets().GetButtonObjects().size());
-		m_EditorSelectType = GUI;
+		// Button Tree
+		for (int i = 0; i < m_SceneManager->GetCurrentScene()->GetAssets().GetButtonObjects().size(); i++) {
+
+			ImGui::Spacing();
+			if (ImGui::TreeNode(m_SceneManager->GetCurrentScene()->GetAssets().GetButtonObjects().at(i)->name))
+			{
+
+				ImGui::TreePop();
+			}
+			ImGui::SameLine();
+			if (ImGui::SmallButton("Edit")) {
+
+				selectedUserInterface = i;
+				m_EditorSelectType = GUI;
+			}
+		}
+		// Camera Tree
+		for (int i = 0; i < m_SceneManager->GetCurrentScene()->GetAssets().m_Cameras.size(); i++) {
+
+			ImGui::Spacing();
+			if (ImGui::TreeNode(m_SceneManager->GetCurrentScene()->GetAssets().m_Cameras.at(i)->name))
+			{
+				ImGui::TreePop();
+			}
+
+			ImGui::SameLine();
+
+			if (ImGui::Button("Edit")) {
+
+				m_EditorSelectType = Camera;
+				selectedCamera = i;
+			}
+		}
+
+		// Text Tree
+		for (int i = 0; i < m_SceneManager->GetCurrentScene()->GetAssets().GetTextObjects().size(); i++) {
+
+			ImGui::Spacing();
+			if (ImGui::TreeNode(m_SceneManager->GetCurrentScene()->GetAssets().GetTextObjects().at(i)->name))
+			{
+				ImGui::TreePop();
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("Edit")) {
+
+				m_EditorSelectType = GuiText;
+				selectedTextInterface = i;
+			}
+		}
+
+		ImGui::TreePop();
 	}
 
 	ImGui::End();
@@ -701,6 +729,7 @@ void Application::ShutDown()
 		ImGui::DestroyContext();
 	}
 
+	Cursor::Show(m_GameWindow);
 	m_SceneManager->GetCurrentScene()->GetAssets().ExecuteAll();
 	glfwSetInputMode(m_GameWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 }

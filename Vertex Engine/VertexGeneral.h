@@ -14,3 +14,5 @@ enum EditorMode {
 	EDITOR_PLAY,
 	EDITOR_PAUSED,
 };
+
+#define COLOUR_RED 1.0f,0.0f,0.0f

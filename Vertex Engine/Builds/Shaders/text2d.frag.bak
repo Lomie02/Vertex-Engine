@@ -17,5 +17,5 @@ void main()
 	
     //color = vec4(r,g,b,a) * sampled;
 	
-	color = vec4(textColor) * sampled;
+	color = vec4(r,g,b,a) * sampled;
 }  
