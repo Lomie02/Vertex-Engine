@@ -24,19 +24,43 @@ public:
 	void GiveSceneManager(SceneManager* scenes) { m_SceneManager = scenes; }
 	AssetManager GetAssets() { return m_Manager; }
 
+	void StartFlipbookSetUp();
+
+
 private:
 
 	void SetupButton();
-
-	Text* m_Title;
-
-	Button* m_ButtonTest;
-	GLFWwindow* m_Window;
 	SceneManager* m_SceneManager;
+	GLFWwindow* m_Window;
 
+	// Camaeras
+	Camera* m_MainCamera;
+
+	// GameObjects
 	GameObject* m_Object2;
 	GameObject* m_Object0;
+	GameObject* m_Egg;
+	
+	//User Interface
+	Text* m_Title;
+	Button* m_ButtonTest;
 
-	Camera* m_MainCamera;
+	// Vertex Componenets
+
+	// Animation
+	Flipbook* m_EggFlipBook;
+	FlipClip m_IdleClip;
+	FlipClip m_EggClip;
+
+	Flipbook* m_FlipbookAnimation;
+	Animator* m_Animation;
+	
+	//Controller
+	PlayerController* m_Controller;
+
+	//Timer
+
+	float m_TitleTimer = 0;
+	float m_Duration = 0.5f;
 };
 

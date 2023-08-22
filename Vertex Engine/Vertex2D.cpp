@@ -129,9 +129,26 @@ void Vertex2D::TensionDraw(GameObject* _object, Material& material, glm::vec2 po
 	this->m_Shader.SetInteger("UseChromatic", 0);
 
 	//=======================================
-	glm::mat4 model = glm::mat4(1.0f);
+	//glm::mat4 model = glm::mat4(1.0f);
 
-	model = glm::translate(model, glm::vec3(position, (float)_RenderLayer));
+	glm::mat4 model = glm::mat4(1);
+
+	// Pivots & Transform calulations,=.
+	Transform ParentsTransform;
+	glm::vec2 GeneralPivot;
+
+	if (_object->GetParent() != nullptr) { // If there is a parent then combine the 
+		ParentsTransform = _object->GetParent()->transform;
+
+		GeneralPivot = ParentsTransform.position + _object->transform.localPosition;
+	}
+	else {// If no parent then use objects pivot & position.
+		GeneralPivot = position + _object->transform.pivot;
+	}
+
+	//========================================== Main Render calulations for transforms.
+
+	model = glm::translate(model, glm::vec3(GeneralPivot, (float)_RenderLayer));
 
 	model = glm::translate(model, glm::vec3(0.5f * size.x, 0.5f * -size.y, 0.0f));
 	model = glm::rotate(model, glm::radians(rotate), glm::vec3(0.0f, 0.0f, 1.0f));

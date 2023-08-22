@@ -3,7 +3,7 @@
 #include "GameObject.h"
 #include "gtx/compatibility.hpp"
 #include <vector>
-class Animator
+class Animator : public VertexComponent
 {
 public:
 	Animator();
@@ -21,8 +21,11 @@ public:
 	void SetClip(int _index);
 	void AddClip(int _location, Clip& _clip);
 	void SwapClips(Clip& target, Clip& other); //TODO: Implement clip swapping method
+	void Start();
+	void Update(float delta);
 
-	void ConfigureSystems(float deltaTime);
+	void LateUpdate(float delta);
+	void FixedUpdate(float delta);
 
 private:
 

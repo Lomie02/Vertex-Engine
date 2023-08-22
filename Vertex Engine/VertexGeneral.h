@@ -3,10 +3,14 @@
 #include "Animator.h"
 #include "Clip.h"
 #include "GameObject.h"
+
 #include "Camera.h"
 #include "Graphics.h"
 #include "Cursor.h"
 #include "Input.h"
+
+#include "Flipbook.h"
+#include "AnimationClip.h"
 
 enum EditorMode {
 	EDITOR = 0,

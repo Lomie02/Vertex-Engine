@@ -102,6 +102,25 @@ void GameObject::ConfigureSystems()
 	}
 }
 
+void GameObject::InstanceMime(std::string _name, glm::vec2 _pos)
+{
+	m_Mimes.at(m_MimesAmount).Name = _name;
+	m_Mimes.at(m_MimesAmount).transform.position = _pos;
+	m_MimesAmount++;
+}
+
+MimeProfile GameObject::InstanceEditMime(std::string _name)
+{
+	for (int i = 0; i < m_Mimes.size(); i++) {
+		if (m_Mimes.at(i).Name == _name)
+		{
+			return m_Mimes.at(i);
+		}
+	}
+
+	return MimeProfile();
+}
+
 void GameObject::MaterialConfigure()
 {
 	if (material.m_KeepAspect)

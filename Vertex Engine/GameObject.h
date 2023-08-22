@@ -8,6 +8,7 @@
 #include "VertexComponent.h"
 #include <iostream>
 
+#include "Mime.h"
 
 class GameObject
 {
@@ -37,9 +38,18 @@ public:
 	std::string Tag = "Untagged";
 	int layer;
 
+	void InstanceMime(std::string _name, glm::vec2 _pos);
+	MimeProfile InstanceEditMime(std::string _name);
+	std::vector<MimeProfile> GetMimes() { return m_Mimes; }
+
+	int GetActiveMimesSize() { return m_MimesAmount; }
+
+
 	class Vertex2D;
 private:
 
+	std::vector<MimeProfile> m_Mimes = std::vector<MimeProfile>(10);
+	int m_MimesAmount = 0;
 	void MaterialConfigure();
 	void ConfigurePartners();
 
