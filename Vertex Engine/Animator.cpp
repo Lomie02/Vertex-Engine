@@ -79,8 +79,14 @@ void Animator::SwapClips(Clip& target, Clip& other)
 {
 }
 
-void Animator::ConfigureSystems(float deltaTime)
+void Animator::Start()
 {
+}
+
+void Animator::Update(float delta)
+{
+	std::cout << "Updating Animator" << std::endl;
+
 	if (m_IsPlaying)
 	{
 		if (!m_ReadyFrame && m_IsPlaying)
@@ -134,10 +140,10 @@ void Animator::ConfigureSystems(float deltaTime)
 			{
 				if (m_Master->GetParent() == nullptr)
 				{
-					m_Master->transform.position = glm::lerp(m_Master->transform.position, m_AnimationClip.at(m_CurrentClip).GetFrame(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * deltaTime);
-					m_Master->transform.size = glm::lerp(m_Master->transform.size, m_AnimationClip.at(m_CurrentClip).GetFrameSize(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * deltaTime);
-					m_Master->transform.rotation = glm::lerp(m_Master->transform.rotation, m_AnimationClip.at(m_CurrentClip).GetFrameRot(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * deltaTime);
-					m_Master->material.colour = glm::lerp(m_Master->material.colour, m_AnimationClip.at(m_CurrentClip).GetFrameColour(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * deltaTime);
+					m_Master->transform.position = glm::lerp(m_Master->transform.position, m_AnimationClip.at(m_CurrentClip).GetFrame(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * delta);
+					m_Master->transform.size = glm::lerp(m_Master->transform.size, m_AnimationClip.at(m_CurrentClip).GetFrameSize(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * delta);
+					m_Master->transform.rotation = glm::lerp(m_Master->transform.rotation, m_AnimationClip.at(m_CurrentClip).GetFrameRot(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * delta);
+					m_Master->material.colour = glm::lerp(m_Master->material.colour, m_AnimationClip.at(m_CurrentClip).GetFrameColour(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * delta);
 					float distanceToFrame = glm::distance(m_Master->transform.position, m_AnimationClip.at(m_CurrentClip).GetFrame(m_CurrentFrame));
 
 					if (distanceToFrame < 0.5f) {
@@ -145,10 +151,10 @@ void Animator::ConfigureSystems(float deltaTime)
 					}
 				}
 				else {
-					m_Master->transform.localPosition = glm::lerp(m_Master->transform.localPosition, m_AnimationClip.at(m_CurrentClip).GetFrame(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * deltaTime);
-					m_Master->transform.size = glm::lerp(m_Master->transform.size, m_AnimationClip.at(m_CurrentClip).GetFrameSize(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * deltaTime);
-					m_Master->transform.rotation = glm::lerp(m_Master->transform.rotation, m_AnimationClip.at(m_CurrentClip).GetFrameRot(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * deltaTime);
-					m_Master->material.colour = glm::lerp(m_Master->material.colour, m_AnimationClip.at(m_CurrentClip).GetFrameColour(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * deltaTime);
+					m_Master->transform.localPosition = glm::lerp(m_Master->transform.localPosition, m_AnimationClip.at(m_CurrentClip).GetFrame(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * delta);
+					m_Master->transform.size = glm::lerp(m_Master->transform.size, m_AnimationClip.at(m_CurrentClip).GetFrameSize(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * delta);
+					m_Master->transform.rotation = glm::lerp(m_Master->transform.rotation, m_AnimationClip.at(m_CurrentClip).GetFrameRot(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * delta);
+					m_Master->material.colour = glm::lerp(m_Master->material.colour, m_AnimationClip.at(m_CurrentClip).GetFrameColour(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * delta);
 					float distanceToFrame = glm::distance(m_Master->transform.localPosition, m_AnimationClip.at(m_CurrentClip).GetFrame(m_CurrentFrame));
 
 					if (distanceToFrame < 0.5f) {
@@ -160,10 +166,10 @@ void Animator::ConfigureSystems(float deltaTime)
 			{
 				if (m_Master->GetParent() == nullptr)
 				{
-					m_Master->transform.position = glm::lerp(m_Master->transform.position, m_AnimationClip.at(m_CurrentClip).GetFrame(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * deltaTime);
-					m_Master->transform.size = glm::lerp(m_Master->transform.size, m_AnimationClip.at(m_CurrentClip).GetFrameSize(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * deltaTime);
-					m_Master->transform.rotation = glm::lerp(m_Master->transform.rotation, m_AnimationClip.at(m_CurrentClip).GetFrameRot(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * deltaTime);
-					m_Master->material.colour = glm::lerp(m_Master->material.colour, m_AnimationClip.at(m_CurrentClip).GetFrameColour(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * deltaTime);
+					m_Master->transform.position = glm::lerp(m_Master->transform.position, m_AnimationClip.at(m_CurrentClip).GetFrame(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * delta);
+					m_Master->transform.size = glm::lerp(m_Master->transform.size, m_AnimationClip.at(m_CurrentClip).GetFrameSize(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * delta);
+					m_Master->transform.rotation = glm::lerp(m_Master->transform.rotation, m_AnimationClip.at(m_CurrentClip).GetFrameRot(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * delta);
+					m_Master->material.colour = glm::lerp(m_Master->material.colour, m_AnimationClip.at(m_CurrentClip).GetFrameColour(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * delta);
 					float distanceToFrame = glm::distance(m_Master->transform.position, m_AnimationClip.at(m_CurrentClip).GetFrame(m_CurrentFrame));
 
 					if (distanceToFrame < 0.5f) {
@@ -171,10 +177,10 @@ void Animator::ConfigureSystems(float deltaTime)
 					}
 				}
 				else {
-					m_Master->transform.localPosition = glm::lerp(m_Master->transform.localPosition, m_AnimationClip.at(m_CurrentClip).GetFrame(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * deltaTime);
-					m_Master->transform.size = glm::lerp(m_Master->transform.size, m_AnimationClip.at(m_CurrentClip).GetFrameSize(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * deltaTime);
-					m_Master->transform.rotation = glm::lerp(m_Master->transform.rotation, m_AnimationClip.at(m_CurrentClip).GetFrameRot(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * deltaTime);
-					m_Master->material.colour = glm::lerp(m_Master->material.colour, m_AnimationClip.at(m_CurrentClip).GetFrameColour(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * deltaTime);
+					m_Master->transform.localPosition = glm::lerp(m_Master->transform.localPosition, m_AnimationClip.at(m_CurrentClip).GetFrame(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * delta);
+					m_Master->transform.size = glm::lerp(m_Master->transform.size, m_AnimationClip.at(m_CurrentClip).GetFrameSize(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * delta);
+					m_Master->transform.rotation = glm::lerp(m_Master->transform.rotation, m_AnimationClip.at(m_CurrentClip).GetFrameRot(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * delta);
+					m_Master->material.colour = glm::lerp(m_Master->material.colour, m_AnimationClip.at(m_CurrentClip).GetFrameColour(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * delta);
 					float distanceToFrame = glm::distance(m_Master->transform.localPosition, m_AnimationClip.at(m_CurrentClip).GetFrame(m_CurrentFrame));
 
 					if (distanceToFrame < 0.5f) {
@@ -184,4 +190,12 @@ void Animator::ConfigureSystems(float deltaTime)
 			}
 		}
 	}
+}
+
+void Animator::LateUpdate(float delta)
+{
+}
+
+void Animator::FixedUpdate(float delta)
+{
 }

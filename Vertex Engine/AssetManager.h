@@ -10,6 +10,7 @@
 
 #include "VertexGeneral.h"
 #include <irrKlang.h>
+#include "Mime.h"
 
 enum Renderer {
 	Vertex_2D = 0, // Vertex Engines default renderer.
@@ -32,7 +33,7 @@ public:
 	void BootUpAll(BootUpContainer* _settings);
 
 	// Register Functions
-	void Register(VertexComponent& _object);
+	void Register(VertexComponent* _object);
 	void Register(GameObject* _object);
 	void Register(RigidBody* _object);
 	void Register(Animator* _object);
@@ -87,7 +88,7 @@ public:
 private:
 
 	void UpdateComponents(float delta);
-	std::vector<VertexComponent> m_VertexComponentsList;
+	std::vector<VertexComponent*> m_VertexComponentsList;
 	std::vector<GameObject*> m_TransParentList;
 	EditorMode m_OperatingMode;
 

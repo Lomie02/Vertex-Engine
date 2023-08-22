@@ -41,7 +41,7 @@ void AssetManager::BootUpAll(BootUpContainer* _settings)
 	}
 }
 
-void AssetManager::Register(VertexComponent& _object)
+void AssetManager::Register(VertexComponent* _object)
 {
 	m_VertexComponentsList.push_back(_object);
 }
@@ -337,6 +337,15 @@ void AssetManager::TensionRendering(Vertex2D* m_Renderer)
 			m_Renderer->TensionDraw(m_Opaque.at(i), m_Opaque.at(i)->material, m_Opaque.at(i)->transform.position,
 				m_Opaque.at(i)->transform.size, m_Opaque.at(i)->transform.rotation, m_Opaque.at(i)->transform.scale,
 				m_Cameras.at(m_ActiveCamera)->GetProjection(), m_Opaque.at(i)->layer);
+
+			if (m_Opaque.at(i)->GetMimes().size() > 1) // Render mimes
+			{
+				for (int m = 0; m < m_Opaque.at(i)->GetActiveMimesSize(); m++) {
+					m_Renderer->TensionDraw(m_Opaque.at(i), m_Opaque.at(i)->material, m_Opaque.at(i)->GetMimes().at(m).transform.position,
+						m_Opaque.at(i)->transform.size, m_Opaque.at(i)->transform.rotation, m_Opaque.at(i)->transform.scale,
+						m_Cameras.at(m_ActiveCamera)->GetProjection(), m_Opaque.at(i)->layer);
+				}
+			}
 		}
 	}
 
@@ -367,6 +376,15 @@ void AssetManager::TensionRendering(Vertex2D* m_Renderer)
 			m_Renderer->TensionDraw(m_Transparent.at(i), m_Transparent.at(i)->material, m_Transparent.at(i)->transform.position,
 				m_Transparent.at(i)->transform.size, m_Transparent.at(i)->transform.rotation, m_Transparent.at(i)->transform.scale,
 				m_Cameras.at(m_ActiveCamera)->GetProjection(), m_Transparent.at(i)->layer);
+
+			if (m_Transparent.at(i)->GetMimes().size() > 1)
+			{
+				for (int m = 0; m < m_Transparent.at(i)->GetActiveMimesSize(); m++) {
+					m_Renderer->TensionDraw(m_Transparent.at(i), m_Transparent.at(i)->material, m_Transparent.at(i)->GetMimes().at(m).transform.position,
+						m_Transparent.at(i)->transform.size, m_Transparent.at(i)->transform.rotation, m_Transparent.at(i)->transform.scale,
+						m_Cameras.at(m_ActiveCamera)->GetProjection(), m_Transparent.at(i)->layer);
+				}
+			}
 		}
 	}
 
@@ -655,12 +673,17 @@ GameObject* AssetManager::FindObjectWithComponent(VertexComponent& _ref)
 
 void AssetManager::UpdateComponents(float delta) //TODO: Update this system for the new Componenet system
 {
-	for (int i = 0; i < m_VertexComponentsList.size(); i++)
-	{
-		m_VertexComponentsList.at(i).Update(delta);
-		m_VertexComponentsList.at(i).FixedUpdate(delta);
-		m_VertexComponentsList.at(i).LateUpdate(delta);
+	for (auto test : m_VertexComponentsList) {
+		test->Update(delta);
+		test->FixedUpdate(delta);
+		test->LateUpdate(delta);
 	}
+	//for (int i = 0; i < m_VertexComponentsList.size(); i++)
+	//{
+	//	m_VertexComponentsList.at(i).Update(delta);
+	//	m_VertexComponentsList.at(i).FixedUpdate(delta);
+	//	m_VertexComponentsList.at(i).LateUpdate(delta);
+	//}
 }
 
 /// <summary>

@@ -353,6 +353,9 @@
     <ClInclude Include="AnimationClip.h">
       <Filter>Animation</Filter>
     </ClInclude>
+    <ClInclude Include="Mime.h">
+      <Filter>Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Vertex Engine 2D.rc">

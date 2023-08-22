@@ -1,31 +1,80 @@
 #include "Flipbook.h"
-
+#include <iostream>
 Flipbook::Flipbook()
 {
 }
 
-bool Flipbook::SetMaster(Material _ref)
+void Flipbook::AdjustClipPlaySpeed(std::string _name, float _speed)
 {
-	m_Master = _ref;
+	for (int i = 0; i < m_AnimationClips.size(); i++) {
+		if (m_AnimationClips.at(i).m_Name == _name) {
+			m_AnimationClips.at(i).m_PlaySpeed = _speed;
+		}
+	}
+}
+
+bool Flipbook::SetMaster(GameObject* _ref) // sets the master object that will have its material adjusted by the flipbook animation.
+{
+	switch (m_MasterMode)
+	{
+	case Singular:
+		m_Master = _ref;
+		break;
+	case Multiple:
+		m_MasterFamily.push_back(_ref);
+		break;
+	}
+
 	return true;
 }
 
-bool Flipbook::Play()
+bool Flipbook::Play() // plays the animation that is current.
 {
 	m_IsPlaying = true;
 	return true;
 }
 
-bool Flipbook::Stop()
+bool Flipbook::Stop() // stop playing the animation.
 {
 	m_IsPlaying = false;
+	m_CurrentFrame = 0;
 	return true;
 }
 
-bool Flipbook::AddFrame(Animation _clip)
+FlipClip Flipbook::AdjustClip(int _index) // returns the clip in the position given as long as its within the vectors size.
+{
+	if (_index < m_AnimationClips.size()) {
+		return m_AnimationClips.at(_index);
+	}
+
+	return m_AnimationClips.at(0);
+}
+
+FlipClip Flipbook::AdjustClip(std::string _name) // returns the clip with the same name as given.
+{
+	for (int i = 0; i < m_AnimationClips.size(); i++) {
+		if (m_AnimationClips.at(i).m_Name == _name) {
+			return m_AnimationClips.at(i);
+		}
+	}
+	return m_AnimationClips.at(0);
+}
+
+bool Flipbook::ReplaceClip(int _index, FlipClip _newClip) // Replaced the given clip with a new one given by the user.
+{
+	if (_index < m_AnimationClips.size()) {
+		m_AnimationClips.at(_index) = _newClip;
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+bool Flipbook::AddFrame(FlipClip _clip)
 {
 	m_AnimationClips.push_back(_clip);
-	return false;
+	return true;
 }
 
 // Delete a animation from the flipbook componenet.
@@ -67,15 +116,54 @@ bool Flipbook::SetAnimation(int _index)
 	return false;
 }
 
+void Flipbook::Start()
+{
+}
+
 void Flipbook::Update(float delta)
 {
 	if (m_IsPlaying)
 	{
 		m_Timer += 1 * m_AnimationClips.at(m_ActiveAnimation).m_PlaySpeed * delta;
 
-		if (m_Timer > 4)
+		if (m_Timer > 2)
 		{
+			m_Timer = 0;
+			//Change the texture to match the current frame.
 
+			if (m_CurrentFrame < m_AnimationClips.at(m_ActiveAnimation).m_Frames.size())
+			{
+				switch (m_MasterMode) {
+				case Singular:
+
+					m_Master->material.baseTexture = m_AnimationClips.at(m_ActiveAnimation).m_Frames.at(m_CurrentFrame);
+					m_CurrentFrame++;
+					break;
+				case Multiple:
+
+					for (int i = 0; i < m_MasterFamily.size(); i++) {
+
+						m_MasterFamily.at(i)->material.baseTexture = m_AnimationClips.at(m_ActiveAnimation).m_Frames.at(m_CurrentFrame);
+					}
+					m_CurrentFrame++;
+					break;
+				}
+			}
+			else {
+				m_CurrentFrame = 0;
+
+				if (!m_AnimationClips.at(m_ActiveAnimation).m_Loop) {
+					m_IsPlaying = false;
+				}
+			}
 		}
 	}
+}
+
+void Flipbook::LateUpdate(float delta)
+{
+}
+
+void Flipbook::FixedUpdate(float fixedDelta)
+{
 }
