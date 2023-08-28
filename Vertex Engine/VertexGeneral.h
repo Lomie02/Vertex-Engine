@@ -11,6 +11,8 @@
 
 #include "Flipbook.h"
 #include "AnimationClip.h"
+#include "Volume.h"
+#include "Random.h"
 
 enum EditorMode {
 	EDITOR = 0,

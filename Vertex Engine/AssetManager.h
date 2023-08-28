@@ -29,17 +29,20 @@ public:
 		m_CenterGizmo.baseTexture = ResourceManager::GetTexture("Gizmo_Center");
 	};
 
+	~AssetManager();
+
 	void AssignSoundSystem(irrklang::ISoundEngine* _engine);
 	void BootUpAll(BootUpContainer* _settings);
 
 	// Register Functions
-	void Register(VertexComponent* _object);
-	void Register(GameObject* _object);
-	void Register(RigidBody* _object);
-	void Register(Animator* _object);
-	void Register(Button* _object);
-	void Register(Camera* camera);
-	void Register(Text* _text);
+	void Register(VertexComponent* _object); // Componenet Systens
+	void Register(GameObject* _object);// Normal Objects
+	void Register(RigidBody* _object); // Physics object
+	void Register(Animator* _object); // TODO switch the animator to be a component
+	void Register(Button* _object); // Button
+	void Register(Camera* camera); // Cameras
+	void Register(Text* _text); // Text objects
+	void Register(Volume& _text); // Volumes Post Processing
 
 	void GiveWindow(GLFWwindow* _window) { m_Window = _window; };
 	bool OnTrigger(GameObject* A, GameObject* B);
@@ -87,6 +90,7 @@ public:
 
 private:
 
+	Volume m_SceneVolume;
 	void UpdateComponents(float delta);
 	std::vector<VertexComponent*> m_VertexComponentsList;
 	std::vector<GameObject*> m_TransParentList;
@@ -112,6 +116,8 @@ private:
 	Material m_CameraGizmo;
 	Material m_TransformGizmoX;
 	Material m_CenterGizmo;
+
+	bool m_DeleteAssetPointersAuto = false;
 
 	std::vector<RigidBody*> m_PhysicsObjects;
 	std::vector<Transform*> m_PreviousLocations;

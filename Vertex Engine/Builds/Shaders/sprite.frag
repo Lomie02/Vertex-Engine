@@ -11,7 +11,7 @@ uniform int UseLights = 0;
 uniform vec3 lights;
 uniform int UseChromatic = 0;
 
-float ChromaticOffset = 0.05;
+uniform float ChromaticOffset = 0.01;
 
 float near = 0.1;
 float far = 100.0f;
@@ -40,9 +40,9 @@ void main()
 		{
 			if(UseChromatic == 1){ //Chromattic Calulations
 		
-				float r = texture(image, TexCoords - vec2(ChromaticOffset,ChromaticOffset)).x;
+				float r = texture(image, TexCoords + vec2(ChromaticOffset,ChromaticOffset)).x;
 				float g = texture(image, TexCoords).y;
-				float b = texture(image, TexCoords + vec2(ChromaticOffset,ChromaticOffset)).z;
+				float b = texture(image, TexCoords - vec2(ChromaticOffset,ChromaticOffset)).z;
 				float a = texture(image, TexCoords).w;
 			
 				vec4 ArbColour;

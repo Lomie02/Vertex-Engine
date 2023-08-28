@@ -11,13 +11,11 @@ uniform int UseLights = 0;
 uniform vec3 lights;
 uniform int UseChromatic = 0;
 
-float ChromaticOffset = 0.05;
+float ChromaticOffset = 0.01;
 
 float near = 0.1;
 float far = 100.0f;
 vec3 worldSpaceNormals;
-
-float Ambient = 0.0;
 
 float LinearizeDepth(float depth)
 {
@@ -42,9 +40,9 @@ void main()
 		{
 			if(UseChromatic == 1){ //Chromattic Calulations
 		
-				float r = texture(image, TexCoords - vec2(ChromaticOffset,ChromaticOffset)).x;
+				float r = texture(image, TexCoords + vec2(ChromaticOffset,ChromaticOffset)).x;
 				float g = texture(image, TexCoords).y;
-				float b = texture(image, TexCoords + vec2(ChromaticOffset,ChromaticOffset)).z;
+				float b = texture(image, TexCoords - vec2(ChromaticOffset,ChromaticOffset)).z;
 				float a = texture(image, TexCoords).w;
 			
 				vec4 ArbColour;
@@ -58,7 +56,6 @@ void main()
 			else // Normal Rendering
 			{
 				color = vec4(Colour) * texture(image, TexCoords);
-				color += Colour * Ambient;
 				
 			}
 		}

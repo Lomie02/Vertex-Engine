@@ -17,176 +17,62 @@ MyScene::MyScene(const char _name[]) : VertexScene(_name)
 
 MyScene::~MyScene()
 {
-	delete m_Object;
-	m_Object = nullptr;
-
-	delete m_Object2;
-	m_Object2 = nullptr;
-
-	delete m_MyText;
-	m_MyText = nullptr;
-
-	delete m_DummyCamera;
-	m_DummyCamera = nullptr;
-
-	delete m_Body;
-	m_Body = nullptr;
-
-	delete m_Button;
-	m_Button = nullptr;
+	delete m_LadysFace;
+	m_LadysFace = nullptr;
 
 	delete m_MainCamera;
 	m_MainCamera = nullptr;
+
+	delete m_MyText;
+	m_MyText = nullptr;
 }
 
 void MyScene::Awake()
 {
-	m_Button = new Button("Play");
-	m_Button->text = "Play";
+	m_LadysFace = new GameObject("Picture");
+	m_MainCamera = new Camera("Camera");
+	m_Static = new GameObject("Static");
+	m_MansFace = new GameObject("man");
+
+	m_StaticAnimation = new Flipbook();
+	AssignTextures();
+	m_Manager.Register(m_StaticAnimation);
 
 	m_MyText = new Text();
-	m_Manager.Register(m_MyText);
 
-	m_MyText->text = "Vertex Engine";
-
-	ResourceManager::LoadTexture("Builds/Textures/PowerIcon.png", "Vertex");
-	ResourceManager::LoadTexture("Builds/Textures/VertexLogo.png", "boy1");
-	ResourceManager::LoadTexture("Builds/Textures/UI_Canvas.png", "Canvas");
-
-	m_Object = new GameObject("Huggy", true);
-	m_Object2 = new GameObject("Animation", true);
-	//m_Canvas = new GameObject("Canvas", true);
-
-	m_MainCamera = new Camera();
-	m_DummyCamera = new Camera("Boy Camera");
-
-	m_Button->SetActive(true);
-	m_Button->transform.position.x = 10;
-
-	m_Button->transform.size = glm::vec2(100, -100);
-
-	m_Object->material.baseTexture = ResourceManager::GetTexture("Vertex");
-	m_Object2->material.baseTexture = ResourceManager::GetTexture("boy1");
-	//m_Canvas->material.baseTexture = ResourceManager::GetTexture("Canvas");
-
-	m_Object->material.surface = Transparent;
-
-	m_Button->material.baseTexture = ResourceManager::GetTexture("boy1");
-
-	m_Object2->material.colour = glm::vec4(1, 0, 0, 0.5f);
-	m_Object->material.surface = Transparent;
-
-	m_Manager.Register(m_Object2);
-	m_Manager.Register(m_Object);
-
-	m_Object2->layer = layer_07;
+	m_Manager.Register(m_Static);
+	m_Manager.Register(m_MansFace);
+	m_Manager.Register(m_LadysFace);
 
 	m_Manager.Register(m_MainCamera);
-	m_Manager.Register(m_DummyCamera);
+	m_Manager.Register(m_MyText);
 
-	m_MainCamera->transform.rotation = 0;
+	m_MyText->text = "ANOMOLY CONTAINMENT";
+	m_MyText->ChangeFont("Open 24 Display St");
+	m_MyText->material.colour.r = 1.0f;
 
-	m_Manager.Register(m_Button);
-	//m_Body = new RigidBody("Yep");
+	m_Static->transform.size.x = 40;
+	m_Static->transform.size.y = 50;
 
-	//m_Body->material.baseTexture = ResourceManager::GetTexture("boy1");
-	//m_Body->material.colour.r = 1;
-	//m_Manager.Register(m_Body);
-
-	//m_Canvas->transform.size = glm::vec2(1280, 720);
-	//m_Anim->SetMaster(m_Object2);
-	//m_Manager.Register(m_Canvas);
+	m_Static->material.colour.a = 0.1f;
 }
 
 void MyScene::Start()
 {
-	m_Button->material.colour = glm::vec4(1,0,0,1);
-	m_Object->transform.size = glm::vec2(1, 1);
+	m_MyVolume.ChromaticAberation.ChromaticIntensity = 0.01f;
+	m_MyVolume.ChromaticAberation.ChromaticEnabled = true;
+	m_Manager.Register(m_MyVolume);
 
-	m_Object->transform.position.x = 0;
-	m_Object->transform.position.y = 0;
+	m_StaticAnimation->AdjustClipPlaySpeed("static", 50);
+	m_StaticAnimation->Play();
 
-	//m_Object2->transform.position.y = 20;
-	//m_Object2->transform.position.x = 20;
-
-	//m_Body->transform.position.x = 0;
-	//m_Body->transform.position.y = 0;
-
-	//m_Body->transform.size = glm::vec2(2, 2);
-
-	m_Object2->transform.size = glm::vec2(2, 1);
-
-	m_Button->transform.size.x = 5;
-	m_Button->transform.size.y = 3;
-
-	m_Button->text = "Play";
-
-	m_Button->transform.position.x = 5.0f;
-	m_Button->transform.position.y = 5.0f;
-
-	m_MainCamera->transform.position.x = 10;
-	m_MainCamera->transform.position.y = 10;
-
-	m_MyText->transform.position.x = 10;
-	m_MyText->transform.position.y = 10;
-
-	glClearColor(0.2f, 0.2f, 0.2f, 0);
+	m_Static->material.surface = Transparent;
+	glClearColor(0.0f, 0.0f, 0.0f, 0);
 
 }
 
 void MyScene::Update(float delta)
 {
-	//m_Object2->transform.position.x = m_Manager.GetMousePosition().x;
-	//m_Object2->transform.position.y = -m_Manager.GetMousePosition().y * delta;
-	if (glfwGetKey(m_Window, GLFW_KEY_W) == GLFW_PRESS)
-	{
-		m_MainCamera->transform.position.y += 5 * delta;
-	}
-
-	if (glfwGetKey(m_Window, GLFW_KEY_S) == GLFW_PRESS)
-	{
-		m_MainCamera->transform.position.y -= 5 * delta;
-	}
-
-	if (glfwGetKey(m_Window, GLFW_KEY_A) == GLFW_PRESS)
-	{
-		m_MainCamera->transform.position.x -= 5 * delta;
-	}
-
-	if (glfwGetKey(m_Window, GLFW_KEY_D) == GLFW_PRESS)
-	{
-		m_MainCamera->transform.position.x += 5 * delta;
-	}
-
-	if (glfwGetKey(m_Window, GLFW_KEY_Q) == GLFW_PRESS)
-	{
-		m_MainCamera->zoom += 1 * delta;
-	}
-
-	if (glfwGetKey(m_Window, GLFW_KEY_E) == GLFW_PRESS)
-	{
-		m_MainCamera->zoom -= 1 * delta;
-	}
-
-	if (glfwGetKey(m_Window, GLFW_KEY_SPACE) == GLFW_PRESS)
-	{
-		GameObject cast;
-
-		if (m_Manager.Raycast2D(m_Manager.GetMousePosition(), glm::vec2(0, 1), cast, 5.0f))
-		{
-			std::cout << cast.name << std::endl;
-		}
-	}
-
-	if (m_Manager.GetMousePosition().x < m_Object2->transform.GetCenter().x + 5 * m_Object2->transform.scale && m_Manager.GetMousePosition().x > m_Object2->transform.GetCenter().x - 5 * m_Object2->transform.scale) {
-		std::cout << "X Collision" << std::endl;
-	}
-
-	if (m_Button->Pressed())
-	{
-		std::cout << "PRESSED BUTTON" << std::endl;
-		m_Button->CloseEvent();
-	}
 }
 
 void MyScene::LateUpdate(float delta) //TODO: Automate all below
@@ -195,4 +81,29 @@ void MyScene::LateUpdate(float delta) //TODO: Automate all below
 
 void MyScene::FixedUpdate(float fixedDelta)
 {
+}
+
+void MyScene::AssignTextures() // Assign all textures
+{
+	ResourceManager::LoadTexture("Builds/Textures/Face.jpg", "Face");
+	ResourceManager::LoadTexture("Builds/Textures/Man.jpg", "ManFace");
+
+	ResourceManager::LoadTexture("Builds/Textures/Animation/state01.png", "Static");
+	ResourceManager::LoadTexture("Builds/Textures/Animation/state02.png", "Static1");
+	ResourceManager::LoadTexture("Builds/Textures/Animation/state03.png", "Static3");
+
+	m_LadysFace->material.baseTexture = ResourceManager::GetTexture("Face");
+	m_MansFace->material.baseTexture = ResourceManager::GetTexture("ManFace");
+	m_Static->material.baseTexture = ResourceManager::GetTexture("Static");
+
+	m_Clip.m_Name = "static";
+
+	m_Clip.m_Frames.push_back(ResourceManager::GetTexture("Static"));
+	m_Clip.m_Frames.push_back(ResourceManager::GetTexture("Static1"));
+	m_Clip.m_Frames.push_back(ResourceManager::GetTexture("Static3"));
+
+	m_Clip.m_Loop = true;
+
+	m_StaticAnimation->AddFrame(m_Clip);
+	m_StaticAnimation->SetMaster(m_Static);
 }

@@ -22,8 +22,8 @@ glm::vec2 Transform::GetCenter()
 {
 	glm::vec2 Centre{};
 
-	Centre.x = position.x + size.x / 2;
-	Centre.y = position.y - size.y / 2;
+	Centre.x = position.x - size.x / 2;
+	Centre.y = position.y + size.y / 2;
 
 	return Centre;
 }

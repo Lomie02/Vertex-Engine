@@ -30,23 +30,25 @@ public:
 	AssetManager GetAssets() { return m_Manager; }
 private:
 
+	void AssignTextures();
 	TestComponent* m_MyComponent;
 	SceneManager* m_SceneManager;
 	GLFWwindow* m_Window;
 
 	Texture2D Dont;
-	Texture2D Dont2;
 
 	RigidBody* m_Body;
+	Volume m_MyVolume;
 
 	Text* m_MyText;
-
 	Button* m_Button;
-	GameObject* m_Object;
-	GameObject* m_Object2;
-	GameObject* m_Canvas;
 
+	GameObject* m_LadysFace;
+	GameObject* m_MansFace;
+	GameObject* m_Static;
+
+	FlipClip m_Clip;
+	Flipbook* m_StaticAnimation;
 	float counter;
 	Camera* m_MainCamera;
-	Camera* m_DummyCamera;
 };
