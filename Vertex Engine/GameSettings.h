@@ -11,17 +11,19 @@
 #define PROJECT_DEVELOPER "Your Name"
 #define PROJECT_COMPANY "Your Company"
 
-#define ENGINE_VERSION 1.11
+#define ENGINE_VERSION 1.13
 #define ENGINE_EDITION "Vertex Engine 2D"
 
 #define PROJECT_ICON "PowerIcon.png"
 
 // Change to true if your game is finished & the game will be put into play mode by itself.
 #define FINAL_BUILD false
+#define AUTO_DELETE_ASSET_POINTERS false
 
 // ============================================== 
 //	SCREEN
 // ============================================== 
+
 #define FULLSCREEN false //Doesnt affect the Editor!
 #define VSYNC true
 

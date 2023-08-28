@@ -35,6 +35,8 @@ private:
 	int m_CurrentDisplay;
 	std::vector<GameObject*> m_Transitions;
 
+	Volume m_PPA;
+
 	Camera* m_MainCamera;
 	bool m_LerpColour;
 };

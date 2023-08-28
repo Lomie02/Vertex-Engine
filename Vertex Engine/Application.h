@@ -31,6 +31,12 @@ enum EditorSelection {
 
 };
 
+
+enum AntiAliasingMode {
+	none = 0,
+	MSAA,
+	SMAA,
+};
 class Application
 {
 public:
@@ -107,6 +113,8 @@ private:
 	MyScene* m_Scene;
 	Scene2* m_SecondScene;
 	MyFirstScene* m_MyScene;
+
+	AntiAliasingMode m_AnitAliasing = none;
 
 	//Delta Time 
 	float m_fps = 0;

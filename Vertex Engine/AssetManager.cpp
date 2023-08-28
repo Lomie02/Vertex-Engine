@@ -23,6 +23,29 @@
 	- Configuring System Updates
 */
 
+AssetManager::~AssetManager() // automatically delete all pointers when asset manager is destroyed. Can be toggled on or off.
+{
+	if (m_DeleteAssetPointersAuto) {
+
+		for (int i = 0; i < m_Objects.size(); i++) {
+			delete m_Objects.at(i);
+			m_Objects.at(i) = nullptr;
+		}
+		for (int i = 0; i < m_Opaque.size(); i++) {
+			delete m_Opaque.at(i);
+			m_Opaque.at(i) = nullptr;
+		}
+		for (int i = 0; i < m_Transparent.size(); i++) {
+			delete m_Transparent.at(i);
+			m_Transparent.at(i) = nullptr;
+		}
+		for (int i = 0; i < m_UiButtonObjects.size(); i++) {
+			delete m_UiButtonObjects.at(i);
+			m_UiButtonObjects.at(i) = nullptr;
+		}
+	}
+}
+
 void AssetManager::AssignSoundSystem(irrklang::ISoundEngine* _engine)
 {
 	m_SoundSystem = _engine;
@@ -31,6 +54,8 @@ void AssetManager::AssignSoundSystem(irrklang::ISoundEngine* _engine)
 void AssetManager::BootUpAll(BootUpContainer* _settings)
 {
 	if (_settings != nullptr) {
+		m_DeleteAssetPointersAuto = _settings->m_AutoDeletePointers;
+
 		if (_settings->m_UseDefaultRenderer == true)
 		{
 			m_RendererToUse = Vertex_2D;
@@ -223,6 +248,11 @@ void AssetManager::Register(Text* _text)
 	m_UiTextObjects.push_back(_text);
 }
 
+void AssetManager::Register(Volume& _text)
+{
+	m_SceneVolume = _text;
+}
+
 /// <summary>
 /// Sets the active camera that will be used for the game.
 /// </summary>
@@ -329,6 +359,8 @@ void AssetManager::TensionRendering(Vertex2D* m_Renderer)
 		TensionLayerSort();
 	}
 
+	m_Renderer->TensionVolume(m_SceneVolume);
+
 	// Render normal sprites.
 	for (int i = 0; i < m_Opaque.size(); i++)
 	{
@@ -434,22 +466,6 @@ void AssetManager::TensionLayerSort()
 			}
 			m_Transparent = m_TransparentSortList;
 		}
-
-		/*GameObject* key;
-
-		for (int i = 0; i < m_TransparentSortList.size() - 1; i++)
-		{
-			for (int j = i + 1; j < m_TransparentSortList.size(); j++)
-			{
-				if (m_TransparentSortList.at(j)->layer > m_TransparentSortList.at(i)->layer)
-				{
-					key = m_TransparentSortList.at(i);
-					m_TransparentSortList.at(i) = m_TransparentSortList.at(j);
-					m_TransparentSortList.at(j) = key;
-				}
-			}
-		}
-		m_Transparent = m_TransparentSortList;*/
 	}
 }
 

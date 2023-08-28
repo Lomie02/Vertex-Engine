@@ -48,8 +48,6 @@ void Scene2::Awake()
 	m_Object2 = new GameObject("Chimken");
 	m_Object0 = new GameObject("Stupid ahh");
 
-	m_Animation = new Animator();
-
 	m_Egg = new GameObject("Egg");
 	m_Controller = new PlayerController();
 
@@ -144,20 +142,7 @@ void Scene2::Awake()
 
 	// ANimator Setup
 
-	m_Animation->SetMaster(m_Egg);
-
-	m_Egg->transform.position = glm::vec2(2, 2);
-	m_Animation->AddKeyFrame();
-	m_Egg->transform.position = glm::vec2(5, 4);
-	m_Animation->AddKeyFrame();
-	m_Egg->transform.position = glm::vec2(4, 7);
-	m_Animation->AddKeyFrame();
-
-	m_Animation->WrapMode(Loop);
-
-	m_Manager.Register(m_Animation);
-
-
+	m_Egg->material.m_KeepAspect = true;
 }
 
 void Scene2::Start()
@@ -170,13 +155,11 @@ void Scene2::Start()
 	m_FlipbookAnimation->Play();
 	m_EggFlipBook->Play();
 
-	m_Title->text = "Dancing Chimkens!";
+	m_Title->text = "Chimken Party";
 
 	m_Object0->transform.position.x = -7;
 	m_Controller->SetWeight(0);
 	m_Controller->SetSpeed(20);
-
-	m_Animation->Play();
 }
 
 void Scene2::Update(float delta)

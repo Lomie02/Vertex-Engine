@@ -18,6 +18,11 @@
 #define GL_SILENCE_DEPRECATION
 #pragma warning(disable : 4996);
 
+/*
+	Its like a predator, its stalking you
+	its-ike-a-pred-ehg-tor-its-stalk-ing- you
+*/
+
 //==========================================
 Application::Application()
 {
@@ -83,8 +88,8 @@ void Application::StartUp()
 		ShutDown();
 	}
 
+	srand((unsigned)time(NULL));
 	glfwMakeContextCurrent(m_GameWindow);
-
 
 	if (!gladLoadGL()) {
 		ShutDown();
@@ -165,7 +170,7 @@ void Application::StartUp()
 	{
 		m_Settings->m_UseDefaultRenderer = false;
 	}
-
+	m_Settings->m_AutoDeletePointers = AUTO_DELETE_ASSET_POINTERS;
 
 	if (m_Mode == EDITOR)
 	{
@@ -304,50 +309,54 @@ void Application::EditorMain()
 	{
 		switch (m_EditorSelectType) {
 		case Sprite:
+			ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(255, 0, 0, 255));
+			if (ImGui::TreeNode("Transform"))
+			{
+				ImGui::Text(m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selectedSprite)->name);
+				ImGui::SameLine(); ImGui::Text(" Properties");
+				ImGui::Checkbox("Active", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selectedSprite)->m_Active);
+				ImGui::InputInt("Layer", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selectedSprite)->layer, 2);
 
-			ImGui::Text("Transform");
-			ImGui::SameLine();
-			ImGui::Spacing();
-			ImGui::SameLine();
-			ImGui::Spacing();
-			ImGui::SameLine();
-			ImGui::Checkbox("Active", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selectedSprite)->m_Active);
-			ImGui::SameLine(); ImGui::InputInt("Layer", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selectedSprite)->layer, 2);
+				//===================================== Position
 
-			//===================================== Position
+				if (ImGui::Button("X")) {
+					m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selectedSprite)->transform.position.x = 0;
+				};
+				ImGui::SameLine();
 
-			ImGui::Text("Position");
-			ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(200, 0, 0, 255));
-			ImGui::Button("X"); ImGui::SameLine();
+
+				ImGui::InputFloat("##Xpos", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selectedSprite)->transform.position.x, 0.0f, 0.0f, "%.1f");
+
+				if (ImGui::Button("Y")) {
+					m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selectedSprite)->transform.position.y = 0;
+				}
+				//ImGui::PopStyleColor();
+
+				ImGui::SameLine(); ImGui::InputFloat("##Ypos", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selectedSprite)->transform.position.y);
+
+				ImGui::Spacing();
+				ImGui::Spacing();
+				//===================================== Rotation
+				ImGui::InputFloat("Rotation", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selectedSprite)->transform.rotation);
+
+				//===================================== Scale
+				ImGui::InputFloat("Scale", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selectedSprite)->transform.scale);
+				ImGui::InputFloat2("Size", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selectedSprite)->transform.size.x);
+				ImGui::Spacing();
+
+				ImGui::Text("Pivots & Centers");
+				ImGui::InputFloat2("Pivot", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selectedSprite)->transform.pivot.x);
+
+				ImGui::TreePop();
+			}
 			ImGui::PopStyleColor();
 
-			ImGui::InputFloat("##Xpos", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selectedSprite)->transform.position.x, 0.0f, 0.0f, "%.1f");
+			if (ImGui::TreeNode("Material")) {
 
-			ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(0, 200, 0, 255));
-			ImGui::Button("Y");
-			ImGui::PopStyleColor();
+				ImGui::DragFloat4("Colour", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selectedSprite)->material.colour.r, 0.05f, 0.0f, 1.0f);
+				ImGui::TreePop();
+			}
 
-			ImGui::SameLine(); ImGui::InputFloat("##Ypos", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selectedSprite)->transform.position.y);
-
-			ImGui::Spacing();
-			ImGui::Spacing();
-			//===================================== Rotation
-			ImGui::InputFloat("Rotation", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selectedSprite)->transform.rotation);
-
-			//===================================== Scale
-			ImGui::InputFloat("Scale", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selectedSprite)->transform.scale);
-			ImGui::InputFloat2("Size", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selectedSprite)->transform.size.x);
-
-			ImGui::Spacing();
-			ImGui::Spacing();
-			//==================================== Colour
-
-			ImGui::Text("Colour");
-			ImGui::DragFloat4("##Colour", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selectedSprite)->material.colour.r, 0.05f, 0.0f, 1.0f);
-
-			ImGui::Spacing();
-			ImGui::Spacing();
-			ImGui::Spacing();
 			break;
 
 		case Camera:
@@ -396,21 +405,26 @@ void Application::EditorMain()
 	ImGui::Text(PROJECT_NAME);
 	ImGui::Spacing();
 
-	if (ImGui::Button("Main"))
+	if (ImGui::Button("Layout"))
 	{
 		m_WindowMode = Main;
 	};
 
 	ImGui::Spacing();
 
-	if (ImGui::Button("Animation"))
+	if (ImGui::Button("Flipbook"))
 	{
 		m_WindowMode = Animation;
+	};
+	static bool ViewInfo;
+	if (ImGui::Button("Information"))
+	{
+		ViewInfo = true;
 	};
 
 	ImGui::Spacing();
 
-	ImGui::Button("Canvas");
+	ImGui::Button("");
 
 	ImGui::Spacing();
 
@@ -437,6 +451,42 @@ void Application::EditorMain()
 			m_SceneManager->GetCurrentScene()->GetAssets().m_Cameras.at(0)->transform.position = m_SceneManager->GetCurrentScene()->GetAssets().GetButtonObjects().at(selectedUserInterface)->transform.position;
 			break;
 		}
+	}
+
+
+	if (ViewInfo) { // Information Window
+		ImGui::Begin("Vertex Information");
+		if (ImGui::TreeNode("Vertex Main Systems")) {
+
+			ImGui::Button("GameObjects");
+			ImGui::Button("Physics Object");
+			ImGui::Button("Sound & Audio");
+			ImGui::Button("Asset Manager");
+			ImGui::Button("Canvas");
+			ImGui::Button("UI Button");
+			ImGui::Button("Text Objects");
+
+			ImGui::Spacing();
+			ImGui::Button("Vertex2D");
+			ImGui::Button("Tension2D");
+			ImGui::TreePop();
+		}
+
+		if (ImGui::TreeNode("Vertex Components")) {
+
+			ImGui::Button("Mimes");
+			ImGui::Button("FlipBook Animation");
+			ImGui::Button("Animator");
+			ImGui::Button("Player Controller");
+			ImGui::Button("FlipClips");
+			ImGui::Button("Clips");
+
+			ImGui::TreePop();
+		}
+
+		if (ImGui::Button("Exit"))
+			ViewInfo = false;
+		ImGui::End();
 	}
 
 	//=======================================================
@@ -519,16 +569,11 @@ void Application::EditorMain()
 			ImGui::Spacing();
 			if (ImGui::TreeNode(m_SceneManager->GetCurrentScene()->GetAssets().m_Objects.at(i)->name))
 			{
+				selectedSprite = i;
+				m_EditorSelectType = Sprite;
 				ImGui::TreePop();
 			}
 
-			ImGui::SameLine();
-
-			if (ImGui::Button("Edit"))
-			{
-				selectedSprite = i;
-				m_EditorSelectType = Sprite;
-			}
 		}
 
 		// Button Tree
@@ -537,14 +582,10 @@ void Application::EditorMain()
 			ImGui::Spacing();
 			if (ImGui::TreeNode(m_SceneManager->GetCurrentScene()->GetAssets().GetButtonObjects().at(i)->name))
 			{
-
-				ImGui::TreePop();
-			}
-			ImGui::SameLine();
-			if (ImGui::SmallButton("Edit")) {
-
 				selectedUserInterface = i;
 				m_EditorSelectType = GUI;
+
+				ImGui::TreePop();
 			}
 		}
 		// Camera Tree
@@ -553,15 +594,9 @@ void Application::EditorMain()
 			ImGui::Spacing();
 			if (ImGui::TreeNode(m_SceneManager->GetCurrentScene()->GetAssets().m_Cameras.at(i)->name))
 			{
-				ImGui::TreePop();
-			}
-
-			ImGui::SameLine();
-
-			if (ImGui::Button("Edit")) {
-
 				m_EditorSelectType = Camera;
 				selectedCamera = i;
+				ImGui::TreePop();
 			}
 		}
 
@@ -571,12 +606,8 @@ void Application::EditorMain()
 			ImGui::Spacing();
 			if (ImGui::TreeNode(m_SceneManager->GetCurrentScene()->GetAssets().GetTextObjects().at(i)->name))
 			{
-				ImGui::TreePop();
-			}
-			ImGui::SameLine();
-			if (ImGui::Button("Edit")) {
-
 				m_EditorSelectType = GuiText;
+				ImGui::TreePop();
 				selectedTextInterface = i;
 			}
 		}

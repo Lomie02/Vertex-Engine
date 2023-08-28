@@ -26,15 +26,17 @@ glm::mat4 Camera::GetProjection()
 	}
 	else
 	{
-		m_CameraPos = glm::vec3(transform.position, zoom);
+		m_CameraPos = glm::vec3(transform.position, -50);
 		glm::vec3 cameraDirection = glm::normalize(m_CameraPos - cameraTarget);
 
 		glm::vec3 cameraRight = glm::normalize(glm::cross(up, cameraDirection));
 		glm::vec3 cameraUp = glm::cross(cameraDirection, cameraRight);
 
-		m_ProjectionMat = glm::perspective(m_FieldofView, aspect, near, far);
+		m_ProjectionMat = glm::perspective(glm::radians(m_FieldofView), aspect, near, far);
 
-		m_ViewMat = glm::lookAt(m_CameraPos, m_CameraPos + cameraFront, cameraUp);
+		m_ViewMat = glm::translate(m_ViewMat, glm::vec3(transform.position, -20));
+
+		//m_ViewMat = glm::lookAt(m_CameraPos, m_CameraPos + cameraFront, cameraUp);
 
 		m_ViewProjection = m_ProjectionMat * m_ViewMat;
 

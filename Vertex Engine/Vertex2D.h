@@ -3,11 +3,13 @@
 #include "Shader.h"
 #include "Texture2D.h"
 #include <map>
+
 #include <vector>
 #include "Material.h"
 #include "GameObject.h"
 #include "AdvancedSettings.h"
 
+#include "Volume.h"
 #include "Particle.h"
 #define LAYER_MAX 20
 
@@ -29,31 +31,6 @@
 			having the option to render the depth test to for debugging. Tension is on the road to being implemented with way more renderering systems.
 
 ===========================================================*/
-
-//TODO: Remove this, it does nothing
-enum Layer {
-	DefaultLayer = 0,
-	layer_01 = 1,
-	layer_02 = 2,
-	layer_03 = 3,
-	user_interface = 4,
-	transparent = 5,
-	layer_06 = 6,
-	layer_07 = 7,
-	layer_09 = 8,
-	layer_08 = 9,
-	layer_10 = 10,
-	layer_11 = 11,
-	layer_12 = 12,
-	layer_13 = 13,
-	layer_14 = 14,
-	layer_15 = 15,
-	layer_16 = 16,
-	layer_17 = 17,
-	layer_18 = 18,
-	layer_19 = 19,
-	layer_20 = 20,
-};
 
 struct Letters {
 	unsigned int TextureID;
@@ -89,10 +66,14 @@ public:
 	void Tension_unBind_FrameBuffer();
 	void Tension_Rescale_FrameBuffer(float width,float height);
 
+	void TensionVolume(Volume & _vol);
+
 	Shader m_TextShader;
 	std::vector<glm::vec2> GetVertices() { return m_Vertices; }
 	glm::mat4 GetMatrixModel() { return m_ModelMatrix; }
 private:
+
+	Volume m_VertexVolume;
 	glm::mat4 m_ModelMatrix;
 	std::vector<glm::vec2> m_Vertices;
 	Shader m_Shader;

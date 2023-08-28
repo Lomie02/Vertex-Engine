@@ -54,11 +54,12 @@ void VertexTransitions::Awake()
 	m_TransitionObject->transform.size.y = 1080;
 
 	m_MainCamera->zoom = 0.002f;
-	m_MainCamera->transform.position = m_TransitionObject->transform.GetCenter();
 }
 
 void VertexTransitions::Start()
 {
+	m_PPA.ChromaticAberation.ChromaticEnabled = false;
+	m_Manager.Register(m_PPA);
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 }
 
@@ -81,7 +82,7 @@ void VertexTransitions::Update(float delta)
 		if (m_Transitions.at(0)->material.colour.a < 0)
 		{
 			m_Timer = m_TransitionSpeed;
-			m_SceneManager->SetActiveScene(2);
+			m_SceneManager->SetActiveScene(1);
 			m_LerpColour = false;
 			m_Transitions.at(0)->material.colour.a = 1;
 		}

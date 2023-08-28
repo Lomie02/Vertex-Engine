@@ -173,6 +173,7 @@
     <ClCompile Include="AudioSource.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Canvas.cpp" />
     <ClCompile Include="Clip.cpp" />
     <ClCompile Include="Collider.cpp" />
     <ClCompile Include="Cursor.cpp" />
@@ -184,6 +185,7 @@
     <ClCompile Include="MyFirstScene.cpp" />
     <ClCompile Include="MyScene.cpp" />
     <ClCompile Include="PlayerController.cpp" />
+    <ClCompile Include="Random.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="RigidBody.cpp" />
     <ClCompile Include="Scene2.cpp" />
@@ -201,6 +203,7 @@
     <ClCompile Include="VertexScene.cpp" />
     <ClCompile Include="VertexText2D.cpp" />
     <ClCompile Include="VertexTransitions.cpp" />
+    <ClCompile Include="Volume.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\imgui\imconfig.h" />
@@ -221,6 +224,7 @@
     <ClInclude Include="BootUpContainer.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Canvas.h" />
     <ClInclude Include="Clip.h" />
     <ClInclude Include="Collider.h" />
     <ClInclude Include="Cursor.h" />
@@ -237,6 +241,7 @@
     <ClInclude Include="MyScene.h" />
     <ClInclude Include="Particle.h" />
     <ClInclude Include="PlayerController.h" />
+    <ClInclude Include="Random.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="resource1.h" />
     <ClInclude Include="ResourceManager.h" />
@@ -257,6 +262,7 @@
     <ClInclude Include="VertexText2D.h" />
     <ClInclude Include="VertexTransitions.h" />
     <ClInclude Include="VertexUIPackage.h" />
+    <ClInclude Include="Volume.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Vertex Engine 2D.rc" />
