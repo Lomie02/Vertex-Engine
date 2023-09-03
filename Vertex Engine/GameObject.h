@@ -43,7 +43,8 @@ public:
 	std::vector<MimeProfile> GetMimes() { return m_Mimes; }
 
 	int GetActiveMimesSize() { return m_MimesAmount; }
-
+	glm::vec2 GetVelocity() { return m_Velocity; }
+	void SetVelocity(glm::vec2 _vel) { m_Velocity += _vel; }
 
 	class Vertex2D;
 private:
@@ -52,6 +53,7 @@ private:
 	int m_MimesAmount = 0;
 	void MaterialConfigure();
 	void ConfigurePartners();
+	glm::vec2 m_Velocity;
 
 	Collider* m_Collider;
 	GameObject* m_Parent;

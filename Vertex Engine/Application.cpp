@@ -15,6 +15,8 @@
 #include <direct.h>
 #include "stb_image.h"
 
+#include "VertexPrefs.h"
+#include "VertexAccessExplorer.h"
 #define GL_SILENCE_DEPRECATION
 #pragma warning(disable : 4996);
 
@@ -309,7 +311,6 @@ void Application::EditorMain()
 	{
 		switch (m_EditorSelectType) {
 		case Sprite:
-			ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(255, 0, 0, 255));
 			if (ImGui::TreeNode("Transform"))
 			{
 				ImGui::Text(m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selectedSprite)->name);
@@ -349,12 +350,29 @@ void Application::EditorMain()
 
 				ImGui::TreePop();
 			}
-			ImGui::PopStyleColor();
 
 			if (ImGui::TreeNode("Material")) {
+				//=========================== Surface Type
 
+				static const char* surface[2];
+				surface[0] = "Opaque";
+				surface[1] = "Transparent";
+
+				static int yep;
+				if (ImGui::Combo("Surface Type", &yep, surface, 2)) {
+					if (yep ==0) {
+						m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selectedSprite)->material.surface = Opaque;
+					}
+					else {
+
+						m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selectedSprite)->material.surface = Transparent;
+					}
+				};
+
+				//=========================== Basic Colour
 				ImGui::DragFloat4("Colour", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selectedSprite)->material.colour.r, 0.05f, 0.0f, 1.0f);
 				ImGui::TreePop();
+
 			}
 
 			break;
@@ -388,11 +406,38 @@ void Application::EditorMain()
 				ImGui::Text(" ");
 				ImGui::Text("Camera Lens");
 				ImGui::InputFloat("Zoom", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Cameras.at(selectedCamera)->zoom);
-				ImGui::InputFloat("Far", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Cameras.at(selectedCamera)->far);
-				ImGui::InputFloat("Near", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Cameras.at(selectedCamera)->near);
+				ImGui::InputFloat("Far", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Cameras.at(selectedCamera)->farClip);
+				ImGui::InputFloat("Near", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Cameras.at(selectedCamera)->nearClip);
 				ImGui::EndChild();
 			}
+			break;
+		case GuiText: // Text Display in the editor
 
+			ImGui::Text(m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().GetTextObjects().at(selectedTextInterface)->name);
+			ImGui::SameLine(); ImGui::Text("Properties");
+			ImGui::Checkbox("Active", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().GetTextObjects().at(selectedTextInterface)->m_Active);
+
+			if (ImGui::TreeNode("Transform")) {
+
+				ImGui::Text("Position");
+				ImGui::Button("X"); ImGui::SameLine();
+
+				ImGui::InputFloat("##Xpos", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().GetTextObjects().at(selectedTextInterface)->transform.position.x, 0.0f, 0.0f, "%.1f");
+
+				ImGui::Button("Y");
+
+				ImGui::SameLine(); ImGui::InputFloat("##Ypos", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().GetTextObjects().at(selectedTextInterface)->transform.position.y);
+
+				ImGui::Spacing();
+				ImGui::Spacing();
+				ImGui::TreePop();
+			}
+
+			if (ImGui::TreeNode("Material")) {
+
+				ImGui::DragFloat4("Colour", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().GetTextObjects().at(selectedTextInterface)->material.colour.r, 0.05f, 0.0f, 1.0f);
+				ImGui::TreePop();
+			}
 			break;
 		}
 	}
@@ -419,6 +464,7 @@ void Application::EditorMain()
 	static bool ViewInfo;
 	if (ImGui::Button("Information"))
 	{
+		VertexAccessExplorer::OpenURL(L"https://www.google.com/search?sca_esv=561834441&rlz=1C1GCEA_enAU1052AU1052&q=winton+overwat&tbm=isch&source=lnms&sa=X&ved=2ahUKEwj4-oe10YiBAxXGamwGHawoC-0Q0pQJegQIDRAB&biw=1920&bih=963&dpr=1");
 		ViewInfo = true;
 	};
 
@@ -622,27 +668,6 @@ void Application::EditorMain()
 		m_Mode = EDITOR;
 	}
 
-	//=====================================
-
-	//ImGui::Begin("Project Drawer");
-
-	//ImGui::Text("Scenes");
-	//ImGui::BeginChild("Scenes");
-
-	//if (ImGui::ListBox("##Assets", &currentScene, m_SceneList, m_SceneManager->m_SceneList.size()) && m_Mode == EDITOR)
-	//{
-	//	if (m_Mode == EDITOR)
-	//	{
-	//		selectedSprite = 0;
-	//		m_EditorSelectType = Sprite;
-	//		m_SceneManager->SetActiveScene(currentScene);
-	//	}
-	//}
-
-	//ImGui::EndChild();
-
-	//ImGui::End();
-
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
@@ -718,6 +743,7 @@ void Application::SceneSetUp()
 		m_SceneManager->m_SceneList.at(i)->GetAssets().AssignMode(m_Mode);
 		m_SceneManager->m_SceneList.at(i)->GetAssets().GiveWindow(m_GameWindow);
 	}
+	m_SceneManager->SetActiveScene(3);
 
 	m_FinishedSceneSetUpStage = true;
 }

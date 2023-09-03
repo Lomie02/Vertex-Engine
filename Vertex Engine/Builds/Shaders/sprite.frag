@@ -9,9 +9,16 @@ uniform int UseDepth;
 in vec3 _worldNormals;
 uniform int UseLights = 0;
 uniform vec3 lights;
-uniform int UseChromatic = 0;
 
+// Chromatic & Invert
+uniform int UseChromatic = 0;
+uniform int UseInvert = 0;
 uniform float ChromaticOffset = 0.01;
+
+// Blur
+uniform int UseBlur = 1;
+uniform float xs,ys = 1080;
+uniform float r = 5;
 
 float near = 0.1;
 float far = 100.0f;
@@ -29,6 +36,7 @@ void main()
 	worldSpaceNormals.y = 1;
 	worldSpaceNormals.z = 1;
 	
+	// Blur Calulations
 	if(UseDepth == 0)
 	{
 		if(UseLights == 1)
@@ -36,7 +44,7 @@ void main()
 			float lightVal = max(dot(_worldNormals, lights), 0.0);
 			color += vec4(Colour) * texture(image, TexCoords) * lightVal;
 		}
-		else
+		else // Chromatic Arb Filter
 		{
 			if(UseChromatic == 1){ //Chromattic Calulations
 		
@@ -53,9 +61,19 @@ void main()
 			
 				color = vec4(Colour) * ArbColour;
 			}
+			else if(UseInvert == 1) // Invert Filter
+			{
+				vec4 Inverted;
+				Inverted.x = texture(image, TexCoords).x;
+				Inverted.y = texture(image, TexCoords).y;
+				Inverted.z = texture(image, TexCoords).z;
+				Inverted.w = 0.0f;
+				
+				color = vec4(Colour) - Inverted;
+			}
 			else // Normal Rendering
 			{
-				color = vec4(Colour) * texture(image, TexCoords);
+					color = vec4(Colour) * texture(image, TexCoords);
 				
 			}
 		}

@@ -13,7 +13,7 @@ glm::mat4 Camera::GetProjection()
 			zoom = 999;
 		}
 
-		m_ProjectionMat = glm::ortho(-aspect / zoom, aspect / zoom, -1.0f / zoom, 1.0f / zoom, near, far);
+		m_ProjectionMat = glm::ortho(-aspect / zoom, aspect / zoom, -1.0f / zoom, 1.0f / zoom, nearClip, farClip);
 
 
 		glm::mat4 mTransform = glm::translate(glm::mat4(1.0f), glm::vec3(transform.position, 10)) * glm::rotate(glm::mat4(1.0f), transform.rotation, glm::vec3(0, 0, 1));
@@ -32,7 +32,7 @@ glm::mat4 Camera::GetProjection()
 		glm::vec3 cameraRight = glm::normalize(glm::cross(up, cameraDirection));
 		glm::vec3 cameraUp = glm::cross(cameraDirection, cameraRight);
 
-		m_ProjectionMat = glm::perspective(glm::radians(m_FieldofView), aspect, near, far);
+		m_ProjectionMat = glm::perspective(glm::radians(m_FieldofView), aspect, nearClip, farClip);
 
 		m_ViewMat = glm::translate(m_ViewMat, glm::vec3(transform.position, -20));
 

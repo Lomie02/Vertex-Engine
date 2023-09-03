@@ -51,6 +51,22 @@ void VertexPrefs::SaveTransform(GameObject* _target)
 	}
 }
 
+void VertexPrefs::SaveTextfile(std::string _fileName,std::string _text)
+{
+	std::ofstream Vertex("Builds/Data/0x021_0KAW/" + _fileName + ".txt", std::ios::out | std::ios::binary);
+
+	if (Vertex.is_open())
+	{
+		Vertex << _text;
+		Vertex.close();
+	}
+}
+
+void VertexPrefs::OpenTextfile(std::string _fileName)
+{
+	//TODO: Implement text file opening.
+}
+
 Transform VertexPrefs::GetTransform(std::string _name)
 {
 	std::ifstream Xpos("Builds/Data/0x021_0KAW/" + _name + "x1" + ".txt");

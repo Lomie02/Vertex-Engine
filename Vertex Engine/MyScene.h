@@ -13,6 +13,9 @@
 
 #include "VertexGeneral.h"
 
+#define GRAPH_X 40
+#define GRAPH_Y 40
+
 class MyScene : public VertexScene
 {
 public:
@@ -37,12 +40,14 @@ private:
 
 	Texture2D Dont;
 
+	NavigationGrid* m_NavGrid;
 	RigidBody* m_Body;
 	Volume m_MyVolume;
 
 	Text* m_MyText;
 	Button* m_Button;
 
+	NavAgent* m_Agent;
 	GameObject* m_LadysFace;
 	GameObject* m_MansFace;
 	GameObject* m_Static;
