@@ -44,4 +44,9 @@
       <UniqueIdentifier>{cc460ee2-733a-4cb6-94f9-16f5fcfc6450}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="StartVertex3D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
 </Project>

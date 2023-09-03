@@ -10,11 +10,17 @@
 #include <cstdio>
 #include <direct.h>
 
+/*
+	Need to do a complete overhaul on the VertexPrefs system.
+*/
+
 class VertexPrefs
 {
 public:
 	static void GetFile(std::string _file, std::vector<GameObject*> _data);
 	static void SaveFile(std::string _file, std::vector<GameObject*> _data);
+	static void SaveTextfile(std::string _fileName, std::string _text);
+	static void OpenTextfile(std::string _fileName);
 
 	static void SaveTransform(GameObject* _target);
 	static Transform GetTransform(std::string _name);
@@ -38,7 +44,5 @@ public:
 	static bool DeleteFolder(std::string _key);
 private:
 	VertexPrefs();
-
-
 };
 

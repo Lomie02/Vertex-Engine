@@ -11,6 +11,7 @@
 #include "VertexGeneral.h"
 #include <irrKlang.h>
 #include "Mime.h"
+#include "NavAgent.h"
 
 enum Renderer {
 	Vertex_2D = 0, // Vertex Engines default renderer.
@@ -40,9 +41,11 @@ public:
 	void Register(RigidBody* _object); // Physics object
 	void Register(Animator* _object); // TODO switch the animator to be a component
 	void Register(Button* _object); // Button
+
 	void Register(Camera* camera); // Cameras
 	void Register(Text* _text); // Text objects
 	void Register(Volume& _text); // Volumes Post Processing
+	void Register(NavAgent* _nav); // AI 
 
 	void GiveWindow(GLFWwindow* _window) { m_Window = _window; };
 	bool OnTrigger(GameObject* A, GameObject* B);
@@ -94,6 +97,7 @@ private:
 	void UpdateComponents(float delta);
 	std::vector<VertexComponent*> m_VertexComponentsList;
 	std::vector<GameObject*> m_TransParentList;
+	std::vector<NavAgent*> m_NavList;
 	EditorMode m_OperatingMode;
 
 	char m_ScenesName[30] = "s";

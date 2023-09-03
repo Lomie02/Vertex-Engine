@@ -15,10 +15,15 @@ struct Blur { // Blur
 	float BlurIntensity = 0.02f;
 };
 
+struct Invert {
+	bool InvertedEnabled = false;
+};
+
 class Volume
 {
 public:
 
+	Invert Invert;
 	Blur Blur;
 	ChromaticAberation ChromaticAberation;
 };

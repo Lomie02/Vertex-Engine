@@ -184,6 +184,9 @@
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="MyFirstScene.cpp" />
     <ClCompile Include="MyScene.cpp" />
+    <ClCompile Include="NavAgent.cpp" />
+    <ClCompile Include="NavigationGrid.cpp" />
+    <ClCompile Include="Particle.cpp" />
     <ClCompile Include="PlayerController.cpp" />
     <ClCompile Include="Random.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
@@ -198,6 +201,7 @@
     <ClCompile Include="Time.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Vertex2D.cpp" />
+    <ClCompile Include="VertexAccessExplorer.cpp" />
     <ClCompile Include="VertexComponent.cpp" />
     <ClCompile Include="VertexPrefs.cpp" />
     <ClCompile Include="VertexScene.cpp" />
@@ -239,6 +243,8 @@
     <ClInclude Include="Mime.h" />
     <ClInclude Include="MyFirstScene.h" />
     <ClInclude Include="MyScene.h" />
+    <ClInclude Include="NavAgent.h" />
+    <ClInclude Include="NavigationGrid.h" />
     <ClInclude Include="Particle.h" />
     <ClInclude Include="PlayerController.h" />
     <ClInclude Include="Random.h" />
@@ -254,6 +260,7 @@
     <ClInclude Include="Texture2D.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Vertex2D.h" />
+    <ClInclude Include="VertexAccessExplorer.h" />
     <ClInclude Include="VertexComponent.h" />
     <ClInclude Include="VertexGeneral.h" />
     <ClInclude Include="VertexPrefs.h" />

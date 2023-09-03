@@ -253,6 +253,11 @@ void AssetManager::Register(Volume& _text)
 	m_SceneVolume = _text;
 }
 
+void AssetManager::Register(NavAgent* _nav)
+{
+	m_NavList.push_back(_nav);
+}
+
 /// <summary>
 /// Sets the active camera that will be used for the game.
 /// </summary>
@@ -438,6 +443,16 @@ void AssetManager::TensionLayerSort()
 		}
 	}
 
+	for (int i = 0; i < m_NavList.size(); i++)
+	{
+		if (m_NavList.at(i)->material.surface == Opaque) {
+			m_Opaque.push_back(m_NavList.at(i));
+		}
+		else if (m_NavList.at(i)->material.surface == Transparent) {
+
+			m_Transparent.push_back(m_NavList.at(i));
+		}
+	}
 	//TODO: Implement a better sorting algorthm than bubble sort!
 	if (TENSION_TRANSPARENT_LAYER_SORTING) { //Testing with Bubblesort. Bubblesort will NOT stay in the source code & will be converted to insertion sort. Only here for bug testing.
 
@@ -694,6 +709,11 @@ void AssetManager::UpdateComponents(float delta) //TODO: Update this system for 
 		test->FixedUpdate(delta);
 		test->LateUpdate(delta);
 	}
+
+	for (auto test : m_NavList) {
+		test->UpdateSystem(delta);
+	}
+
 	//for (int i = 0; i < m_VertexComponentsList.size(); i++)
 	//{
 	//	m_VertexComponentsList.at(i).Update(delta);
@@ -713,21 +733,27 @@ void AssetManager::ConfigureMouse() //TODO: FInd out how to convert the Y cords.
 		double Xpos;
 		double Ypos;
 
-		Transform ConvertPosition;
+		Transform ConvertedMouseCord;
 
 		glfwGetCursorPos(m_Window, &Xpos, &Ypos);
 
 		if (m_OperatingMode == EDITOR) {
-			ConvertPosition.position = glm::unProject(glm::vec3(Xpos, Ypos, 1), glm::mat4(1.0f), m_Cameras.at(m_ActiveCamera)->GetProjection(), glm::vec4(299.973f, 349.968f, 1280, 720));
+			ConvertedMouseCord.position = glm::unProject(glm::vec3(Xpos, Ypos, 1), glm::mat4(1.0f), m_Cameras.at(m_ActiveCamera)->GetProjection(), glm::vec4(299.973f, 349.968f, 1280, 720));
 		}
 		else {
-			ConvertPosition.position = glm::unProject(glm::vec3(Xpos, Ypos, 1), glm::mat4(1.0f), m_Cameras.at(m_ActiveCamera)->GetProjection(), glm::vec4(0, 0, PROJECT_RESOLUTION));
+			ConvertedMouseCord.position = glm::unProject(glm::vec3(Xpos, Ypos, 1), glm::mat4(1.0f), m_Cameras.at(m_ActiveCamera)->GetProjection(), glm::vec4(0, 0, PROJECT_RESOLUTION));
 		}
 
-		mouse.position.x = ConvertPosition.position.x * m_Cameras.at(m_ActiveCamera)->zoom;
-		mouse.position.y = ConvertPosition.position.y * m_Cameras.at(m_ActiveCamera)->zoom;
+		//mouse.position.x = ConvertPosition.position.x * m_Cameras.at(m_ActiveCamera)->zoom;
+		//mouse.position.y = ConvertPosition.position.y * m_Cameras.at(m_ActiveCamera)->zoom;
 
-		//std::cout << mouse.position.x << " | " << mouse.position.y + 10 << std::endl; //NOTE: This appears to have fixed the Y axes but could be wrong. This is temp for now
+		float x = (2.0f * mouse.position.x) / 1920 - 1.0f;
+		float y = (2.0f * mouse.position.y) / 1080 - 1.0f;
+
+		mouse.position.x = x * m_Cameras.at(m_ActiveCamera)->zoom;
+		mouse.position.y = y * m_Cameras.at(m_ActiveCamera)->zoom;
+
+		std::cout << mouse.position.x << " | " << mouse.position.y << std::endl; //NOTE: This appears to have fixed the Y axes but could be wrong. This is temp for now
 	}
 }
 

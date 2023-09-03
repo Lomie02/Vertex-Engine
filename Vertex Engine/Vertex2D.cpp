@@ -122,13 +122,13 @@ void Vertex2D::TensionDraw(GameObject* _object, Material& material, glm::vec2 po
 		this->m_Shader.SetInteger("UseDepth", 1);
 	}
 
-	// TODO: remove this maybe since Lights might not come till later.
-	this->m_Shader.SetInteger("UseLights", 0);
-
 	// Vertex Filters.
 	if (m_VertexVolume.ChromaticAberation.ChromaticEnabled) {
 		this->m_Shader.SetInteger("UseChromatic", 1);
 		this->m_Shader.SetFloat("ChromaticOffset", m_VertexVolume.ChromaticAberation.ChromaticIntensity);
+	}
+	if (m_VertexVolume.Invert.InvertedEnabled) {
+		this->m_Shader.SetFloat("UseInvert", 1);
 	}
 
 	//=======================================

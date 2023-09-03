@@ -14,6 +14,9 @@
 #include "Volume.h"
 #include "Random.h"
 
+#include "NavAgent.h"
+#include "NavigationGrid.h"
+
 enum EditorMode {
 	EDITOR = 0,
 	PLAY,

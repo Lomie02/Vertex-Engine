@@ -64,6 +64,9 @@
     <Filter Include="Scenes\Scene 3">
       <UniqueIdentifier>{f1d50b3a-5a3b-4e07-9bb3-97548b9d311d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="AI">
+      <UniqueIdentifier>{94d98bff-9de2-40ec-924f-7b2711670c3f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="StartUp.cpp">
@@ -199,6 +202,18 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Random.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="NavigationGrid.cpp">
+      <Filter>AI</Filter>
+    </ClCompile>
+    <ClCompile Include="NavAgent.cpp">
+      <Filter>AI</Filter>
+    </ClCompile>
+    <ClCompile Include="Particle.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexAccessExplorer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -372,6 +387,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Random.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NavigationGrid.h">
+      <Filter>AI</Filter>
+    </ClInclude>
+    <ClInclude Include="NavAgent.h">
+      <Filter>AI</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexAccessExplorer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
