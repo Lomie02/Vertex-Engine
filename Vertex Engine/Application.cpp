@@ -716,14 +716,11 @@ void Application::Quit()
 //=============================================== Add your scenes Here
 void Application::SceneSetUp()
 {
-
 	m_Scene = new MyScene("Scene 1");
 	m_SecondScene = new Scene2("Scene 2");
 
 	m_SceneManager->AddScene(m_Scene);
 	m_SceneManager->AddScene(m_SecondScene);
-
-	//============================================================ Remove this & automate it in the scene manager! Temp for testing
 
 	m_Scene->GiveWindow(m_GameWindow);
 	m_SecondScene->GiveWindow(m_GameWindow);

@@ -1,10 +1,16 @@
 #pragma once
 #include "VertexRenderPackage.h"
 #include "AssetManager.h"
+
+/*
+	Base class that all scenes should follow.
+*/
+
 class VertexScene {
 
 public:
 	VertexScene();
+	~VertexScene() {};
 	VertexScene(const char _name[]);
 	virtual void Awake() = 0;
 	virtual void Start() = 0;
@@ -17,5 +23,5 @@ public:
 	char m_SceneName[15] = "MyScene";
 
 protected:
-	AssetManager m_Manager;
+	AssetManager m_Manager; // Each scene has a asset manager attached to it. This system allows the engine to know what exists
 };
