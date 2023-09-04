@@ -187,6 +187,7 @@
     <ClCompile Include="NavAgent.cpp" />
     <ClCompile Include="NavigationGrid.cpp" />
     <ClCompile Include="Particle.cpp" />
+    <ClCompile Include="PhysicsScene.cpp" />
     <ClCompile Include="PlayerController.cpp" />
     <ClCompile Include="Random.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
@@ -246,6 +247,7 @@
     <ClInclude Include="NavAgent.h" />
     <ClInclude Include="NavigationGrid.h" />
     <ClInclude Include="Particle.h" />
+    <ClInclude Include="PhysicsScene.h" />
     <ClInclude Include="PlayerController.h" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="resource.h" />

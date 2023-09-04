@@ -216,6 +216,9 @@
     <ClCompile Include="VertexAccessExplorer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="PhysicsScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="glad.h">
@@ -396,6 +399,9 @@
       <Filter>AI</Filter>
     </ClInclude>
     <ClInclude Include="VertexAccessExplorer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

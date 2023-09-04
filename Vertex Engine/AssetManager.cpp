@@ -456,16 +456,16 @@ void AssetManager::TensionLayerSort()
 	//TODO: Implement a better sorting algorthm than bubble sort!
 	if (TENSION_TRANSPARENT_LAYER_SORTING) { //Testing with Bubblesort. Bubblesort will NOT stay in the source code & will be converted to insertion sort. Only here for bug testing.
 
-		std::vector<GameObject*> m_TransparentSortList = m_Transparent;
-
+		/*std::vector<GameObject*> m_TransparentSortList = m_Transparent;
+		
 		int J;
 		GameObject* key;
 		bool sorted = false;
 		if (m_Transparent.size() > 1) {
-
+		
 			while (!sorted) {
 				sorted = true;
-
+		
 				for (int i = 0; i < m_TransparentSortList.size() - 1; i++)
 				{
 					J = i + 1;
@@ -475,11 +475,17 @@ void AssetManager::TensionLayerSort()
 						m_TransparentSortList.at(i) = m_TransparentSortList.at(J);
 						m_TransparentSortList.at(J) = key;
 						sorted = false;
-
+		
 					}
 				}
 			}
 			m_Transparent = m_TransparentSortList;
+		}*/
+
+		QuickSort(m_Transparent, 0, m_Transparent.size() - 1);
+
+		for (int i = 0; i < m_Transparent.size(); i++) {
+			std::cout << "Asset: " << i << " = " << m_Transparent.at(i)->name << " | " << m_Transparent.at(i)->layer << std::endl;
 		}
 	}
 }
@@ -701,6 +707,51 @@ GameObject* AssetManager::FindObjectWithComponent(VertexComponent& _ref)
 /// Updates all components attached to a gameobject.
 /// </summary>
 /// <param name="delta"></param>
+
+void AssetManager::QuickSort(std::vector<GameObject*> _list, int _start, int _end)
+{
+
+	if (_start >= _end)
+		return;
+
+	int p = Partition(_list, _start, _end);
+	QuickSort(_list, _start, p - 1);
+	QuickSort(_list, p + 1, _end);
+}
+
+int AssetManager::Partition(std::vector<GameObject*> _list, int _start, int _end)
+{
+	int pivot = _start;
+
+	int count = 0;
+
+	for (int i = _start + 1; i <= _end; i++ ) {
+		if (_list.at(i)->layer <= pivot) {
+			count++;
+		}
+	}
+
+	int pivotIndex = _start + count;
+
+	std::swap(_list.at(pivotIndex), _list.at(_start));
+
+	int i = _start, j = _end;
+
+	while (i < pivotIndex && j > pivotIndex) {
+		while (_list.at(i)->layer <= pivot) {
+			i++;
+		}
+		while (_list.at(j)->layer > pivot) {
+			j--;
+		}
+		if (i < pivotIndex && j > pivotIndex) {
+
+			std::swap(_list.at(i++), _list.at(j--));
+		}
+	}
+
+	return pivotIndex;
+}
 
 void AssetManager::UpdateComponents(float delta) //TODO: Update this system for the new Componenet system
 {

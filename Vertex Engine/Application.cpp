@@ -209,7 +209,7 @@ void Application::Start()
 	SceneSetUp(); //Start setting up all scenes in engine.
 
 	if (m_Mode != PLAY) {
-		m_SceneManager->SetActiveScene(1);
+		m_SceneManager->SetActiveScene(2);
 	}
 	else {
 		m_SceneManager->SetActiveScene(0);
@@ -719,6 +719,7 @@ void Application::SceneSetUp()
 	m_Scene = new MyScene("Scene 1");
 	m_SecondScene = new Scene2("Scene 2");
 
+	m_SceneManager->SetActiveScene(0);
 	m_SceneManager->AddScene(m_Scene);
 	m_SceneManager->AddScene(m_SecondScene);
 
@@ -735,7 +736,6 @@ void Application::SceneSetUp()
 		m_SceneManager->m_SceneList.at(i)->GetAssets().AssignMode(m_Mode);
 		m_SceneManager->m_SceneList.at(i)->GetAssets().GiveWindow(m_GameWindow);
 	}
-	m_SceneManager->SetActiveScene(3);
 
 	m_FinishedSceneSetUpStage = true;
 }
