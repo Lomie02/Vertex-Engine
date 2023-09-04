@@ -93,9 +93,13 @@ public:
 
 private:
 
+	void QuickSort(std::vector<GameObject*> _list, int _start, int _end);
+	int Partition(std::vector<GameObject*> _list, int _start, int _end);
+
 	Volume m_SceneVolume;
 	void UpdateComponents(float delta);
 	std::vector<VertexComponent*> m_VertexComponentsList;
+
 	std::vector<GameObject*> m_TransParentList;
 	std::vector<NavAgent*> m_NavList;
 	EditorMode m_OperatingMode;
