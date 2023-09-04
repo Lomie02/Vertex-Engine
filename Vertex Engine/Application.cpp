@@ -20,11 +20,6 @@
 #define GL_SILENCE_DEPRECATION
 #pragma warning(disable : 4996);
 
-/*
-	Its like a predator, its stalking you
-	its-ike-a-pred-ehg-tor-its-stalk-ing- you
-*/
-
 //==========================================
 Application::Application()
 {
