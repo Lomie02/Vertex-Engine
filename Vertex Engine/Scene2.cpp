@@ -46,7 +46,7 @@ Scene2::~Scene2()
 void Scene2::Awake()
 {
 	m_Object2 = new GameObject("Chimken");
-	m_Object0 = new GameObject("Stupid ahh");
+	m_Object0 = new GameObject("Myring");
 
 	m_Egg = new GameObject("Egg");
 	m_Controller = new PlayerController();

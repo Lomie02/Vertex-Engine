@@ -12,6 +12,9 @@ enum LensMode {
 	Perspective,
 };
 
+/// <summary>
+/// Camera class used for rendering perspective
+/// </summary>
 class Camera : public GameObject
 {
 public:

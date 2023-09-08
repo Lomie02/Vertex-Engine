@@ -43,6 +43,10 @@ AssetManager::~AssetManager() // automatically delete all pointers when asset ma
 			delete m_UiButtonObjects.at(i);
 			m_UiButtonObjects.at(i) = nullptr;
 		}
+		for (int i = 0; i < m_AudioSources.size(); i++) {
+			delete m_AudioSources.at(i);
+			m_AudioSources.at(i) = nullptr;
+		}
 	}
 }
 
@@ -62,6 +66,22 @@ void AssetManager::BootUpAll(BootUpContainer* _settings)
 		}
 		else {
 			m_RendererToUse = Tension_2D;
+		}
+
+		switch (_settings->m_TransparentSortingAlgo) {
+		case BubbleSort:
+			m_SortingTransparentAlgo = BubbleSort;
+			std::cout << "VERTEX MESSAGE: Bubble Sort set as transparency layer sorting method." << std::endl;
+			break;
+		case Quick_Sort:
+			std::cout << "VERTEX WARNING: Quicksort is not supported currently, the transparency sorting will revert to default (Bubble Sort)" << std::endl;
+			m_SortingTransparentAlgo = BubbleSort;
+			break;
+
+		case Insertion_Sort:
+			std::cout << "VERTEX MESSAGE: Insertion Sort set as transparency layer sorting method." << std::endl;
+			m_SortingTransparentAlgo = Insertion_Sort;
+			break;
 		}
 	}
 }
@@ -91,6 +111,8 @@ void AssetManager::Register(Button* _object)
 {
 	m_UiButtonObjects.push_back(_object);
 }
+
+//============================================================================
 
 void AssetManager::CollisionCheck()
 {
@@ -258,14 +280,15 @@ void AssetManager::Register(NavAgent* _nav)
 	m_NavList.push_back(_nav);
 }
 
-/// <summary>
-/// Sets the active camera that will be used for the game.
-/// </summary>
-/// <param name="_index"></param>
 void AssetManager::SetActiveCamera(int _index)
 {
 	m_ActiveCamera = _index;
 }
+
+void AssetManager::Register(AudioSource* _audio) 
+{
+	m_AudioSources.push_back(_audio);
+} 
 
 //Improve this to use the new Vertex Collsion System.
 bool AssetManager::MousePick(GameObject* _target)
@@ -453,39 +476,50 @@ void AssetManager::TensionLayerSort()
 			m_Transparent.push_back(m_NavList.at(i));
 		}
 	}
-	//TODO: Implement a better sorting algorthm than bubble sort!
-	if (TENSION_TRANSPARENT_LAYER_SORTING) { //Testing with Bubblesort. Bubblesort will NOT stay in the source code & will be converted to insertion sort. Only here for bug testing.
 
-		/*std::vector<GameObject*> m_TransparentSortList = m_Transparent;
-		
+	if (TENSION_TRANSPARENT_LAYER_SORTING) {
+
+		// Local vars are here so the compilier doesnt cry
+		std::vector<GameObject*> m_TransparentSortList = m_Transparent;
 		int J;
 		GameObject* key;
 		bool sorted = false;
-		if (m_Transparent.size() > 1) {
-		
-			while (!sorted) {
-				sorted = true;
-		
-				for (int i = 0; i < m_TransparentSortList.size() - 1; i++)
-				{
-					J = i + 1;
-					if (m_TransparentSortList.at(i)->layer >= m_TransparentSortList.at(J)->layer && J < m_TransparentSortList.size())
+
+		switch (m_SortingTransparentAlgo)
+
+		{
+		case BubbleSort: // Use the default bubble sort for transparent objects.
+
+			if (m_Transparent.size() > 1) {
+
+				while (!sorted) {
+					sorted = true;
+
+					for (int i = 0; i < m_TransparentSortList.size() - 1; i++)
 					{
-						key = m_TransparentSortList.at(i);
-						m_TransparentSortList.at(i) = m_TransparentSortList.at(J);
-						m_TransparentSortList.at(J) = key;
-						sorted = false;
-		
+						J = i + 1;
+						if (m_TransparentSortList.at(i)->layer >= m_TransparentSortList.at(J)->layer && J < m_TransparentSortList.size())
+						{
+							key = m_TransparentSortList.at(i);
+							m_TransparentSortList.at(i) = m_TransparentSortList.at(J);
+							m_TransparentSortList.at(J) = key;
+							sorted = false;
+
+						}
 					}
 				}
+				m_Transparent = m_TransparentSortList;
 			}
-			m_Transparent = m_TransparentSortList;
-		}*/
+			break;
 
-		QuickSort(m_Transparent, 0, m_Transparent.size() - 1);
+		case Quick_Sort: // Quicksort method is unsupported at this time.
 
-		for (int i = 0; i < m_Transparent.size(); i++) {
-			std::cout << "Asset: " << i << " = " << m_Transparent.at(i)->name << " | " << m_Transparent.at(i)->layer << std::endl;
+			QuickSort(m_Transparent, 0, m_Transparent.size() - 1);
+			break;
+		case Insertion_Sort:
+
+			InsertionSort();
+			break;
 		}
 	}
 }
@@ -708,45 +742,69 @@ GameObject* AssetManager::FindObjectWithComponent(VertexComponent& _ref)
 /// </summary>
 /// <param name="delta"></param>
 
+void AssetManager::SwapResources(std::vector<GameObject*> _list, int _element1, int _element2)
+{
+	GameObject* _temp;
+	_temp = _list.at(_element1); // Temp storage for 1st element.
+
+	_list.at(_element1) = _list.at(_element2); // Change element 1 to element 2.
+
+	_list.at(_element2) = _temp;
+}
+
+void AssetManager::InsertionSort() //Transparency layer sorting with the insertion sort algo.
+{
+	int i, j;
+	GameObject* key;
+	for (i = 1; i < m_Transparent.size(); i++) {
+		key = m_Transparent[i];
+		j = i - 1;
+
+		while (j >= 0 && m_Transparent[j]->layer >= key->layer) {
+			m_Transparent[j + 1] = m_Transparent[j];
+			j = j - 1;
+		}
+		m_Transparent[j + 1] = key;
+	}
+}
+
 void AssetManager::QuickSort(std::vector<GameObject*> _list, int _start, int _end)
 {
-
 	if (_start >= _end)
 		return;
 
 	int p = Partition(_list, _start, _end);
 	QuickSort(_list, _start, p - 1);
 	QuickSort(_list, p + 1, _end);
-}
+} // TODO: Fix quicksort
 
 int AssetManager::Partition(std::vector<GameObject*> _list, int _start, int _end)
 {
-	int pivot = _start;
+	GameObject* pivot = _list[_start];
 
 	int count = 0;
-
-	for (int i = _start + 1; i <= _end; i++ ) {
-		if (_list.at(i)->layer <= pivot) {
+	for (int i = _start + 1; i <= _end; i++) {
+		if (_list[i]->layer <= pivot->layer)
 			count++;
-		}
 	}
 
 	int pivotIndex = _start + count;
-
-	std::swap(_list.at(pivotIndex), _list.at(_start));
+	std::swap(_list[pivotIndex], _list[_start]);
 
 	int i = _start, j = _end;
 
 	while (i < pivotIndex && j > pivotIndex) {
-		while (_list.at(i)->layer <= pivot) {
+
+		while (_list[i]->layer <= pivot->layer) {
 			i++;
 		}
-		while (_list.at(j)->layer > pivot) {
+
+		while (_list[j]->layer > pivot->layer) {
 			j--;
 		}
-		if (i < pivotIndex && j > pivotIndex) {
 
-			std::swap(_list.at(i++), _list.at(j--));
+		if (i < pivotIndex && j > pivotIndex) {
+			std::swap(_list[i++], _list[j--]);
 		}
 	}
 
