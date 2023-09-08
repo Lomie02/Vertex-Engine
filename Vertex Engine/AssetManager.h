@@ -3,6 +3,7 @@
 #include <vector>
 #include "VertexRenderPackage.h"
 #include "VertexUIPackage.h"
+
 #include "Camera.h"
 #include "Animator.h"
 #include "BootUpContainer.h"
@@ -12,12 +13,18 @@
 #include <irrKlang.h>
 #include "Mime.h"
 #include "NavAgent.h"
+#include "irrKlang-64bit-1.6.0/include/irrKlang.h"
+
+using namespace irrklang;
 
 enum Renderer {
 	Vertex_2D = 0, // Vertex Engines default renderer.
 	Tension_2D, //  Tension is an upcoming Renderer that supports more features than the regular Vertex2D Renderer
 };
 
+/// <summary>
+/// The backbone of the engine is the Asset Manager. Each scene has their own asset manager that controls every aspect of the scene.
+/// </summary>
 class AssetManager
 {
 public:
@@ -46,6 +53,7 @@ public:
 	void Register(Text* _text); // Text objects
 	void Register(Volume& _text); // Volumes Post Processing
 	void Register(NavAgent* _nav); // AI 
+	void Register(AudioSource* _audio); // Audio
 
 	void GiveWindow(GLFWwindow* _window) { m_Window = _window; };
 	bool OnTrigger(GameObject* A, GameObject* B);
@@ -93,8 +101,16 @@ public:
 
 private:
 
-	void QuickSort(std::vector<GameObject*> _list, int _start, int _end);
+	void AssignSoundEngineToVertexComponenets();
+
+	std::vector<AudioSource*> m_AudioSources;
+	ISoundEngine* m_SoundEngine;
+	TransparencySorting m_SortingTransparentAlgo;
+	void SwapResources(std::vector<GameObject*> _list, int _element1, int _element2);
 	int Partition(std::vector<GameObject*> _list, int _start, int _end);
+
+	void InsertionSort();
+	void QuickSort(std::vector<GameObject*> _list, int _start, int _end);
 
 	Volume m_SceneVolume;
 	void UpdateComponents(float delta);

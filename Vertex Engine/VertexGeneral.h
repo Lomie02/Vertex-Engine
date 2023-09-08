@@ -16,6 +16,7 @@
 
 #include "NavAgent.h"
 #include "NavigationGrid.h"
+#include "AudioSource.h"
 
 enum EditorMode {
 	EDITOR = 0,

@@ -120,6 +120,11 @@ void MyScene::Awake()
 	m_Static->transform.size.y = 50;
 
 	m_Static->material.colour.a = 0.1f;
+
+	m_SoundEffect = new AudioSource();
+
+	m_SoundEffect->AudioClip("Builds/Audio/Im_The_Homelander.wav");
+	m_Manager.Register(m_SoundEffect);
 }
 
 void MyScene::Start()
@@ -127,7 +132,7 @@ void MyScene::Start()
 	m_MyVolume.ChromaticAberation.ChromaticIntensity = 0.01f;
 	m_MyVolume.ChromaticAberation.ChromaticEnabled = true;
 	//m_Manager.Register(m_MyVolume);
-
+	m_SoundEffect->Play();
 	m_StaticAnimation->AdjustClipPlaySpeed("static", 50);
 	m_StaticAnimation->Play();
 

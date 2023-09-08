@@ -168,6 +168,7 @@ void Application::StartUp()
 		m_Settings->m_UseDefaultRenderer = false;
 	}
 	m_Settings->m_AutoDeletePointers = AUTO_DELETE_ASSET_POINTERS;
+	m_Settings->m_TransparentSortingAlgo = Insertion_Sort;
 
 	if (m_Mode == EDITOR)
 	{
@@ -208,6 +209,10 @@ void Application::Start()
 {
 	SceneSetUp(); //Start setting up all scenes in engine.
 
+	for (int i = 0; i < m_SceneManager->m_SceneList.size(); i++) {
+		m_SceneManager->m_SceneList.at(i)->GetAssets().AssignSoundSystem(m_SoundManager);
+	}
+
 	if (m_Mode != PLAY) {
 		m_SceneManager->SetActiveScene(2);
 	}
@@ -246,7 +251,6 @@ void Application::Update()
 
 		m_SceneManager->GetCurrentScene()->GetAssets().LogEvents(); // Log Positions for collsion
 
-
 		static float fixedDelta = 0.0f;
 		fixedDelta += m_deltaTime;
 
@@ -264,7 +268,7 @@ void Application::Update()
 	}
 }
 
-void Application::EditorMain()
+void Application::EditorMain() // Main Editor
 {
 	static bool DisplaySceneDrawer;
 	static const char* m_SceneList[MAX_SCENES];
@@ -608,11 +612,10 @@ void Application::EditorMain()
 		for (int i = 0; i < m_SceneManager->GetCurrentScene()->GetAssets().m_Objects.size(); i++) {
 
 			ImGui::Spacing();
-			if (ImGui::TreeNode(m_SceneManager->GetCurrentScene()->GetAssets().m_Objects.at(i)->name))
+			if (ImGui::Button(m_SceneManager->GetCurrentScene()->GetAssets().m_Objects.at(i)->name))
 			{
 				selectedSprite = i;
 				m_EditorSelectType = Sprite;
-				ImGui::TreePop();
 			}
 
 		}
@@ -621,23 +624,21 @@ void Application::EditorMain()
 		for (int i = 0; i < m_SceneManager->GetCurrentScene()->GetAssets().GetButtonObjects().size(); i++) {
 
 			ImGui::Spacing();
-			if (ImGui::TreeNode(m_SceneManager->GetCurrentScene()->GetAssets().GetButtonObjects().at(i)->name))
+			if (ImGui::Button(m_SceneManager->GetCurrentScene()->GetAssets().GetButtonObjects().at(i)->name))
 			{
 				selectedUserInterface = i;
 				m_EditorSelectType = GUI;
 
-				ImGui::TreePop();
 			}
 		}
 		// Camera Tree
 		for (int i = 0; i < m_SceneManager->GetCurrentScene()->GetAssets().m_Cameras.size(); i++) {
 
 			ImGui::Spacing();
-			if (ImGui::TreeNode(m_SceneManager->GetCurrentScene()->GetAssets().m_Cameras.at(i)->name))
+			if (ImGui::Button(m_SceneManager->GetCurrentScene()->GetAssets().m_Cameras.at(i)->name))
 			{
 				m_EditorSelectType = Camera;
 				selectedCamera = i;
-				ImGui::TreePop();
 			}
 		}
 
@@ -645,10 +646,9 @@ void Application::EditorMain()
 		for (int i = 0; i < m_SceneManager->GetCurrentScene()->GetAssets().GetTextObjects().size(); i++) {
 
 			ImGui::Spacing();
-			if (ImGui::TreeNode(m_SceneManager->GetCurrentScene()->GetAssets().GetTextObjects().at(i)->name))
+			if (ImGui::Button(m_SceneManager->GetCurrentScene()->GetAssets().GetTextObjects().at(i)->name))
 			{
 				m_EditorSelectType = GuiText;
-				ImGui::TreePop();
 				selectedTextInterface = i;
 			}
 		}

@@ -40,6 +40,7 @@ private:
 
 	Texture2D Dont;
 
+	AudioSource* m_SoundEffect;
 	NavigationGrid* m_NavGrid;
 	RigidBody* m_Body;
 	Volume m_MyVolume;

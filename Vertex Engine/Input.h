@@ -5,6 +5,8 @@
 	Documentation to read https://www.glfw.org/docs/3.3/input_guide.html
 
 	TODO: Implement single press keys.
+
+	Note: THis system may be scrapped.
 */
 
 class Input
