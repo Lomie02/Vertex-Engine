@@ -324,7 +324,6 @@ void Application::EditorMain() // Main Editor
 				};
 				ImGui::SameLine();
 
-
 				ImGui::InputFloat("##Xpos", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selectedSprite)->transform.position.x, 0.0f, 0.0f, "%.1f");
 
 				if (ImGui::Button("Y")) {
@@ -372,6 +371,11 @@ void Application::EditorMain() // Main Editor
 				ImGui::DragFloat4("Colour", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selectedSprite)->material.colour.r, 0.05f, 0.0f, 1.0f);
 				ImGui::TreePop();
 
+				if (m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selectedSprite)->GetMimes().size() > 0) {
+					for (int i = 0; i < m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selectedSprite)->GetMimes().size() - 1; i++) {
+						ImGui::Button(m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selectedSprite)->GetMimes().at(i).Name.c_str());
+					}
+				}
 			}
 
 			break;

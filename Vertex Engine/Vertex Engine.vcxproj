@@ -189,7 +189,6 @@
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="PhysicsScene.cpp" />
     <ClCompile Include="PlayerController.cpp" />
-    <ClCompile Include="Random.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="RigidBody.cpp" />
     <ClCompile Include="Scene2.cpp" />
