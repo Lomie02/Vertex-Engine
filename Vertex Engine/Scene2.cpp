@@ -47,6 +47,9 @@ void Scene2::Awake()
 {
 	m_Object2 = new GameObject("Chimken");
 	m_Object0 = new GameObject("Myring");
+	m_Block = new GameObject("Block");
+
+	m_Block->material.baseTexture = ResourceManager::LoadTexture("Builds/Textures/block.png", "block");
 
 	m_Egg = new GameObject("Egg");
 	m_Controller = new PlayerController();
@@ -140,8 +143,10 @@ void Scene2::Awake()
 	m_Controller->AssignPlayer(m_Object0);
 	m_Manager.Register(m_Controller);
 
+	m_Block->InstanceMime("Yeah", glm::vec2(3,3));
+	  
+	m_Manager.Register(m_Block);
 	// ANimator Setup
-
 	m_Egg->material.m_KeepAspect = true;
 }
 

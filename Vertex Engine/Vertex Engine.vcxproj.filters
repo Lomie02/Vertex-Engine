@@ -201,9 +201,6 @@
     <ClCompile Include="Volume.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Random.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="NavigationGrid.cpp">
       <Filter>AI</Filter>
     </ClCompile>

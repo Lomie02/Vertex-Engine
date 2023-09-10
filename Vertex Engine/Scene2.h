@@ -39,6 +39,7 @@ private:
 	// GameObjects
 	GameObject* m_Object2;
 	GameObject* m_Object0;
+	GameObject* m_Block;
 	GameObject* m_Egg;
 	
 	//User Interface
