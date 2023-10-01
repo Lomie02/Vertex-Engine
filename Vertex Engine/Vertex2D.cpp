@@ -96,10 +96,7 @@ void Vertex2D::DrawSprite(GameObject* _object, Material& material, glm::vec3 pos
 
 void Vertex2D::TensionDraw(GameObject* _object, Material& material, glm::vec2 position, glm::vec2 size, float rotate, float scale, glm::mat4 per, int _RenderLayer)
 {
-
 	//glEnable(GL_CULL_FACE);
-
-
 
 	if (material.surface == Transparent)
 	{
@@ -191,7 +188,6 @@ void Vertex2D::TensionDraw(GameObject* _object, Material& material, glm::vec2 po
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 	glBindVertexArray(0);
 
-
 	if (USE_DEPTH_TESTING) {
 		glDisable(GL_DEPTH_TEST);
 	}
@@ -213,14 +209,12 @@ void Vertex2D::TensionParticle(ParticleSystem& system)
 		glBindVertexArray(system.VAO);
 	}
 
-
 	glDisable(GL_BLEND);
 }
 
 void Vertex2D::TensionTransparencyPass(std::vector<GameObject*> _list, glm::mat4 per)
 {
 	for (int i = _list.size(); i > 0; i--) {
-
 
 		glm::mat4 model = glm::mat4(1.0f);
 

@@ -310,7 +310,7 @@ void Application::EditorMain() // Main Editor
 	if (m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.size() != 0)
 	{
 		switch (m_EditorSelectType) {
-		case Sprite:
+		case eSprite:
 			if (ImGui::TreeNode("Transform"))
 			{
 				ImGui::Text(m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selectedSprite)->name);
@@ -401,7 +401,7 @@ void Application::EditorMain() // Main Editor
 
 			break;
 
-		case Camera:
+		case eCamera:
 
 			if (m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Cameras.size() != 0)
 			{
@@ -435,7 +435,7 @@ void Application::EditorMain() // Main Editor
 				ImGui::EndChild();
 			}
 			break;
-		case GuiText: // Text Display in the editor
+		case eGuiText: // Text Display in the editor
 
 			ImGui::Text(m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().GetTextObjects().at(selectedTextInterface)->name);
 			ImGui::SameLine(); ImGui::Text("Properties");
@@ -508,16 +508,16 @@ void Application::EditorMain() // Main Editor
 	if (glfwGetKey(m_GameWindow, GLFW_KEY_F) == GLFW_PRESS)
 	{
 		switch (m_EditorSelectType) {
-		case Sprite:
+		case eSprite:
 			if (m_SceneManager->GetCurrentScene()->GetAssets().m_Objects.size() != 0) {
 				m_SceneManager->GetCurrentScene()->GetAssets().m_Cameras.at(0)->transform.position = m_SceneManager->GetCurrentScene()->GetAssets().m_Objects.at(selectedSprite)->transform.position;
 			}
 			break;
-		case Camera:
+		case eCamera:
 			m_SceneManager->GetCurrentScene()->GetAssets().m_Cameras.at(0)->transform.position = m_SceneManager->GetCurrentScene()->GetAssets().m_Cameras.at(selectedCamera)->transform.position;
 			break;
 
-		case GUI:
+		case eGUI:
 			m_SceneManager->GetCurrentScene()->GetAssets().m_Cameras.at(0)->transform.position = m_SceneManager->GetCurrentScene()->GetAssets().GetButtonObjects().at(selectedUserInterface)->transform.position;
 			break;
 		}
@@ -619,7 +619,7 @@ void Application::EditorMain() // Main Editor
 		if (m_Mode == EDITOR)
 		{
 			selectedSprite = 0;
-			m_EditorSelectType = Sprite;
+			m_EditorSelectType = eSprite;
 			m_SceneManager->SetActiveScene(currentScene);
 			DisplaySceneDrawer = false;
 		}
@@ -641,7 +641,7 @@ void Application::EditorMain() // Main Editor
 			if (ImGui::Button(m_SceneManager->GetCurrentScene()->GetAssets().m_Objects.at(i)->name))
 			{
 				selectedSprite = i;
-				m_EditorSelectType = Sprite;
+				m_EditorSelectType = eSprite;
 			}
 
 		}
@@ -653,7 +653,7 @@ void Application::EditorMain() // Main Editor
 			if (ImGui::Button(m_SceneManager->GetCurrentScene()->GetAssets().GetButtonObjects().at(i)->name))
 			{
 				selectedUserInterface = i;
-				m_EditorSelectType = GUI;
+				m_EditorSelectType = eGUI;
 
 			}
 		}
@@ -663,7 +663,7 @@ void Application::EditorMain() // Main Editor
 			ImGui::Spacing();
 			if (ImGui::Button(m_SceneManager->GetCurrentScene()->GetAssets().m_Cameras.at(i)->name))
 			{
-				m_EditorSelectType = Camera;
+				m_EditorSelectType = eCamera;
 				selectedCamera = i;
 			}
 		}
@@ -674,7 +674,7 @@ void Application::EditorMain() // Main Editor
 			ImGui::Spacing();
 			if (ImGui::Button(m_SceneManager->GetCurrentScene()->GetAssets().GetTextObjects().at(i)->name))
 			{
-				m_EditorSelectType = GuiText;
+				m_EditorSelectType = eGuiText;
 				selectedTextInterface = i;
 			}
 		}

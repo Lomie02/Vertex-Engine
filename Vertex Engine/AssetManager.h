@@ -101,36 +101,25 @@ public:
 
 private:
 
-	void AssignSoundEngineToVertexComponenets();
-
+	Camera* m_Vertex_Ui_Camera;
 	std::vector<AudioSource*> m_AudioSources;
 	ISoundEngine* m_SoundEngine;
 	TransparencySorting m_SortingTransparentAlgo;
-	void SwapResources(std::vector<GameObject*> _list, int _element1, int _element2);
-	int Partition(std::vector<GameObject*> _list, int _start, int _end);
-
-	void InsertionSort();
-	void QuickSort(std::vector<GameObject*> _list, int _start, int _end);
-
 	Volume m_SceneVolume;
-	void UpdateComponents(float delta);
-	std::vector<VertexComponent*> m_VertexComponentsList;
 
+	std::vector<VertexComponent*> m_VertexComponentsList;
 	std::vector<GameObject*> m_TransParentList;
 	std::vector<NavAgent*> m_NavList;
 	EditorMode m_OperatingMode;
 
 	char m_ScenesName[30] = "s";
-	void ConfigureMouse();
 	irrklang::ISoundEngine* m_SoundSystem;
-	
-	bool m_SingleSortRenderering = true;
-	bool m_HasRendered = false;
-	Renderer m_RendererToUse = Tension_2D;
-
 	std::vector<GameObject*> m_Opaque;
 	std::vector<GameObject*> m_Transparent;
-	void CollisionCheck();
+
+	Renderer m_RendererToUse = Tension_2D;
+	bool m_SingleSortRenderering = true;
+	bool m_HasRendered = false;
 
 	GLFWwindow* m_Window;
 	Transform mouse;
@@ -140,20 +129,29 @@ private:
 	Material m_CameraGizmo;
 	Material m_TransformGizmoX;
 	Material m_CenterGizmo;
-
 	bool m_DeleteAssetPointersAuto = false;
 
 	std::vector<RigidBody*> m_PhysicsObjects;
 	std::vector<Transform*> m_PreviousLocations;
 	std::vector<Button*> m_UiButtonObjects;
 	std::vector<Text*> m_UiTextObjects;
+
 	int m_ActiveCamera;
 	bool m_ShutDownManager = false;
-
 	float lastX = 1920;
 	float lastY = 1080;
 
 	float yaw = 0;
 	float pitch = 0;
 
+	// Asset private functions
+	void AssignSoundEngineToVertexComponenets();
+	void SwapResources(std::vector<GameObject*> _list, int _element1, int _element2);
+	int Partition(std::vector<GameObject*> _list, int _start, int _end);
+	void ConfigureMouse();
+
+	void InsertionSort();
+	void QuickSort(std::vector<GameObject*> _list, int _start, int _end);
+	void UpdateComponents(float delta);
+	void CollisionCheck();
 };

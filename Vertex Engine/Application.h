@@ -24,13 +24,11 @@ enum EditorWindow {
 };
 
 enum EditorSelection {
-	Sprite = 0,
-	Camera,
-	GUI,
-	GuiText,
-
+	eSprite = 0,
+	eCamera,
+	eGUI,
+	eGuiText,
 };
-
 
 enum AntiAliasingMode {
 	none = 0,
@@ -84,10 +82,10 @@ private:
 	void EditorHud();
 	void EditorSpacer(int _spaces);
 
-	EditorSelection m_EditorSelectType = Sprite;
+	EditorSelection m_EditorSelectType = eSprite;
 
 	EditorWindow m_WindowMode = Main;
-	EditorMode m_Mode = PLAY;
+	EditorMode m_Mode = EDITOR;
 	bool m_EditorFullScreen = false;
 
 	// Basics

@@ -48,6 +48,10 @@ AssetManager::~AssetManager() // automatically delete all pointers when asset ma
 			m_AudioSources.at(i) = nullptr;
 		}
 	}
+	if (m_Vertex_Ui_Camera != nullptr) {
+		delete m_Vertex_Ui_Camera;
+		m_Vertex_Ui_Camera = nullptr;
+	}
 }
 
 void AssetManager::AssignSoundSystem(irrklang::ISoundEngine* _engine)
@@ -84,6 +88,9 @@ void AssetManager::BootUpAll(BootUpContainer* _settings)
 			break;
 		}
 	}
+
+	m_Vertex_Ui_Camera = new Camera();
+
 }
 
 void AssetManager::Register(VertexComponent* _object)
@@ -285,10 +292,10 @@ void AssetManager::SetActiveCamera(int _index)
 	m_ActiveCamera = _index;
 }
 
-void AssetManager::Register(AudioSource* _audio) 
+void AssetManager::Register(AudioSource* _audio)
 {
 	m_AudioSources.push_back(_audio);
-} 
+}
 
 //Improve this to use the new Vertex Collsion System.
 bool AssetManager::MousePick(GameObject* _target)
@@ -409,25 +416,6 @@ void AssetManager::TensionRendering(Vertex2D* m_Renderer)
 		}
 	}
 
-	// Render UI Buttons.
-	for (int i = 0; i < m_UiButtonObjects.size(); i++)
-	{
-		if (m_UiButtonObjects.at(i)->GetActive()) {
-			m_Renderer->TensionDraw(m_UiButtonObjects.at(i), m_UiButtonObjects.at(i)->material, m_UiButtonObjects.at(i)->transform.position,
-				m_UiButtonObjects.at(i)->transform.size, m_UiButtonObjects.at(i)->transform.rotation, m_UiButtonObjects.at(i)->transform.scale,
-				m_Cameras.at(m_ActiveCamera)->GetProjection(), m_UiButtonObjects.at(i)->layer);
-			m_UiButtonObjects.at(i)->ConfigureCustoms(m_Cameras.at(m_ActiveCamera)->GetProjection());
-		}
-	}
-
-	//  Render World Text
-	for (int i = 0; i < m_UiTextObjects.size(); i++)
-	{
-		if (m_UiTextObjects.at(i)->GetActive()) {
-			m_UiTextObjects.at(i)->ConfigureRenderSystems(m_Cameras.at(m_ActiveCamera)->GetProjection());
-		}
-	}
-
 	// Render transparent objects
 	for (int i = 0; i < m_Transparent.size(); i++)
 	{
@@ -448,6 +436,28 @@ void AssetManager::TensionRendering(Vertex2D* m_Renderer)
 		}
 	}
 
+	// Render User Interface Objects
+	if (m_Vertex_Ui_Camera != nullptr) {
+
+		//  Render World Text
+		for (int i = 0; i < m_UiTextObjects.size(); i++)
+		{
+			if (m_UiTextObjects.at(i)->GetActive()) {
+				m_UiTextObjects.at(i)->ConfigureRenderSystems(m_Vertex_Ui_Camera->GetProjection());
+			}
+		}
+
+		// Render UI Buttons.
+		for (int i = 0; i < m_UiButtonObjects.size(); i++)
+		{
+			if (m_UiButtonObjects.at(i)->GetActive()) {
+				m_Renderer->TensionDraw(m_UiButtonObjects.at(i), m_UiButtonObjects.at(i)->material, m_UiButtonObjects.at(i)->transform.position,
+					m_UiButtonObjects.at(i)->transform.size, m_UiButtonObjects.at(i)->transform.rotation, m_UiButtonObjects.at(i)->transform.scale,
+					m_Vertex_Ui_Camera->GetProjection(), m_UiButtonObjects.at(i)->layer);
+				m_UiButtonObjects.at(i)->ConfigureCustoms(m_Vertex_Ui_Camera->GetProjection());
+			}
+		}
+	}
 }
 
 //Tension Renderers Layer Sorting
@@ -831,7 +841,7 @@ int AssetManager::Partition(std::vector<GameObject*> _list, int _start, int _end
 
 void AssetManager::UpdateComponents(float delta) //TODO: Update this system for the new Componenet system
 {
-	for (int i = 0; i < m_Animators.size();i ++) {
+	for (int i = 0; i < m_Animators.size(); i++) {
 		m_Animators.at(i)->Update(delta);
 	}
 

@@ -38,3 +38,8 @@ bool Input::GetKey(GLFWwindow* _window, int _index)
 	return false;
 }
 
+void Input::SetKeyCallBack(GLFWwindow* _window, GLFWkeyfun _func)
+{
+	glfwSetKeyCallback(_window, _func);
+}
+
