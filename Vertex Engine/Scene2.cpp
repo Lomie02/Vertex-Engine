@@ -156,6 +156,7 @@ void Scene2::Awake()
 
 	m_Block->InstanceMime("Yeah", glm::vec2(3,3));
 	  
+
 	m_Manager.Register(m_Block);
 	// ANimator Setup
 	m_Egg->material.m_KeepAspect = true;
@@ -163,6 +164,9 @@ void Scene2::Awake()
 
 	m_Animation->WrapMode(Loop);
 	m_Manager.Register(m_Animation);
+
+	m_UserCamera = new Camera("UserCamera");
+	m_Manager.RegisterUserInterfaceCamera(m_UserCamera);
 }
 
 void Scene2::Start()
@@ -176,7 +180,7 @@ void Scene2::Start()
 	m_EggFlipBook->Play();
 
 	m_Title->text = "Chimken Party";
-	m_Title->SetActive(false);
+	m_Title->SetActive(true);
 
 	m_Animation->Play();
 	m_Object0->transform.position.x = -7;
@@ -243,6 +247,5 @@ void Scene2::SetupButton()
 	m_ButtonTest->SetOffset(glm::vec2(-1, 0.3f));
 
 	m_ButtonTest->text = "Vertex Ahh Button";
-
 }
 

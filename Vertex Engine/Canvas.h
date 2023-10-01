@@ -1,19 +1,31 @@
 #pragma once
 #include "Transform.h"
+#include <vector>
+#include "Sprite.h"
+#include "Button.h"
+#include "VertexText2D.h"
 
-enum CanvasProjectionMode {
-	Overlay = 0,
-	Universal,
-};
-class Canvas
-{
+class Canvas {
 public:
-	void SetActive(bool _state) { m_IsActive = _state; }
+	Canvas();
+	Canvas(const char* _name) { m_CanvasName = _name; }
 
-	Transform transform;
+	bool IsActive() { return m_IsActiveCanvas; }
+	void SetActive(bool _state) { m_IsActiveCanvas = _state; }
+
+	void Add(Sprite* _sprite);
+	void Add(Button* _button);
+	void Add(Text* _text);
+
+	std::vector<Sprite*> GetSprites() { return m_SpriteObjects; }
+	std::vector<Button*> GetButtons() { return m_ButtonObjects; }
+	std::vector<Text*> GetText() { return m_TextObjects; }
+
 private:
-	CanvasProjectionMode m_ProjectionMode;
-	bool m_IsActive = true;
-	// a list of UserInterfaceObject types that will replace the GameObject hierachy that the current UI elements follow.
-};
+	const char* m_CanvasName = "Canvas";
+	bool m_IsActiveCanvas = true;
 
+	std::vector<Sprite*> m_SpriteObjects;
+	std::vector<Button*> m_ButtonObjects;
+	std::vector<Text*> m_TextObjects;
+};

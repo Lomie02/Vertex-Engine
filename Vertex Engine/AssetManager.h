@@ -14,6 +14,7 @@
 #include "Mime.h"
 #include "NavAgent.h"
 #include "irrKlang-64bit-1.6.0/include/irrKlang.h"
+#include "Canvas.h"
 
 using namespace irrklang;
 
@@ -54,6 +55,7 @@ public:
 	void Register(Volume& _text); // Volumes Post Processing
 	void Register(NavAgent* _nav); // AI 
 	void Register(AudioSource* _audio); // Audio
+	void Register(Canvas* _canvas); // Register Canvas
 
 	void GiveWindow(GLFWwindow* _window) { m_Window = _window; };
 	bool OnTrigger(GameObject* A, GameObject* B);
@@ -99,6 +101,9 @@ public:
 	std::vector<Button*> GetButtonObjects() { return m_UiButtonObjects; }
 	std::vector<Text*> GetTextObjects() { return m_UiTextObjects; }
 
+	void RegisterUserInterfaceCamera(Camera* _camera) { m_Vertex_Ui_Camera = _camera; }
+	void SetCanvasDisplayActive(int _index) { m_ActiveCanvasDisplay = _index; }
+
 private:
 
 	Camera* m_Vertex_Ui_Camera;
@@ -106,6 +111,9 @@ private:
 	ISoundEngine* m_SoundEngine;
 	TransparencySorting m_SortingTransparentAlgo;
 	Volume m_SceneVolume;
+
+	std::vector<Canvas*> m_CanvasList;
+	int m_ActiveCanvasDisplay = 0;
 
 	std::vector<VertexComponent*> m_VertexComponentsList;
 	std::vector<GameObject*> m_TransParentList;

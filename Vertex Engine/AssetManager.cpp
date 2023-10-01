@@ -47,10 +47,7 @@ AssetManager::~AssetManager() // automatically delete all pointers when asset ma
 			delete m_AudioSources.at(i);
 			m_AudioSources.at(i) = nullptr;
 		}
-	}
-	if (m_Vertex_Ui_Camera != nullptr) {
-		delete m_Vertex_Ui_Camera;
-		m_Vertex_Ui_Camera = nullptr;
+
 	}
 }
 
@@ -88,9 +85,6 @@ void AssetManager::BootUpAll(BootUpContainer* _settings)
 			break;
 		}
 	}
-
-	m_Vertex_Ui_Camera = new Camera();
-
 }
 
 void AssetManager::Register(VertexComponent* _object)
