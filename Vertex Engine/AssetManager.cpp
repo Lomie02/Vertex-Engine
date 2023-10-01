@@ -47,6 +47,7 @@ AssetManager::~AssetManager() // automatically delete all pointers when asset ma
 			delete m_AudioSources.at(i);
 			m_AudioSources.at(i) = nullptr;
 		}
+
 	}
 }
 
@@ -285,10 +286,15 @@ void AssetManager::SetActiveCamera(int _index)
 	m_ActiveCamera = _index;
 }
 
-void AssetManager::Register(AudioSource* _audio) 
+void AssetManager::Register(AudioSource* _audio)
 {
 	m_AudioSources.push_back(_audio);
-} 
+}
+
+void AssetManager::Register(Canvas* _canvas)
+{
+	m_CanvasList.push_back(_canvas);
+}
 
 //Improve this to use the new Vertex Collsion System.
 bool AssetManager::MousePick(GameObject* _target)
@@ -409,25 +415,6 @@ void AssetManager::TensionRendering(Vertex2D* m_Renderer)
 		}
 	}
 
-	// Render UI Buttons.
-	for (int i = 0; i < m_UiButtonObjects.size(); i++)
-	{
-		if (m_UiButtonObjects.at(i)->GetActive()) {
-			m_Renderer->TensionDraw(m_UiButtonObjects.at(i), m_UiButtonObjects.at(i)->material, m_UiButtonObjects.at(i)->transform.position,
-				m_UiButtonObjects.at(i)->transform.size, m_UiButtonObjects.at(i)->transform.rotation, m_UiButtonObjects.at(i)->transform.scale,
-				m_Cameras.at(m_ActiveCamera)->GetProjection(), m_UiButtonObjects.at(i)->layer);
-			m_UiButtonObjects.at(i)->ConfigureCustoms(m_Cameras.at(m_ActiveCamera)->GetProjection());
-		}
-	}
-
-	//  Render World Text
-	for (int i = 0; i < m_UiTextObjects.size(); i++)
-	{
-		if (m_UiTextObjects.at(i)->GetActive()) {
-			m_UiTextObjects.at(i)->ConfigureRenderSystems(m_Cameras.at(m_ActiveCamera)->GetProjection());
-		}
-	}
-
 	// Render transparent objects
 	for (int i = 0; i < m_Transparent.size(); i++)
 	{
@@ -448,6 +435,37 @@ void AssetManager::TensionRendering(Vertex2D* m_Renderer)
 		}
 	}
 
+	// TODO: Implement the canvas system into the UI rendering instead.
+
+	// Render User Interface Objects
+	if (m_Vertex_Ui_Camera != nullptr && m_CanvasList.size() != 0) {
+
+		//  Render World Text
+		for (int i = 0; i < m_CanvasList.at(m_ActiveCanvasDisplay)->GetText().size(); i++)
+		{
+			if (m_CanvasList.at(m_ActiveCanvasDisplay)->GetText().at(i)->GetActive()) {
+				m_CanvasList.at(m_ActiveCanvasDisplay)->GetText().at(i)->ConfigureRenderSystems(m_Vertex_Ui_Camera->GetProjection());
+			}
+		}
+
+		// Render UI Buttons.
+		for (int i = 0; i < m_CanvasList.at(m_ActiveCanvasDisplay)->GetButtons().size(); i++)
+		{
+			if (m_CanvasList.at(m_ActiveCanvasDisplay)->GetButtons().at(i)->GetActive()) {
+				m_Renderer->TensionDraw(m_CanvasList.at(m_ActiveCanvasDisplay)->GetButtons().at(i), m_CanvasList.at(m_ActiveCanvasDisplay)->GetButtons().at(i)->material, m_CanvasList.at(m_ActiveCanvasDisplay)->GetButtons().at(i)->transform.position,
+					m_CanvasList.at(m_ActiveCanvasDisplay)->GetButtons().at(i)->transform.size, m_CanvasList.at(m_ActiveCanvasDisplay)->GetButtons().at(i)->transform.rotation, m_CanvasList.at(m_ActiveCanvasDisplay)->GetButtons().at(i)->transform.scale,
+					m_Vertex_Ui_Camera->GetProjection(), m_CanvasList.at(m_ActiveCanvasDisplay)->GetButtons().at(i)->layer);
+				m_CanvasList.at(m_ActiveCanvasDisplay)->GetButtons().at(i)->ConfigureCustoms(m_Vertex_Ui_Camera->GetProjection());
+			}
+		}
+
+		for (int i = 0; i < m_CanvasList.at(m_ActiveCamera)->GetSprites().size(); i++) {
+			if (m_CanvasList.at(m_ActiveCanvasDisplay)->GetSprites().at(i)->GetActive())
+			{
+				m_Renderer->TensionSprite(m_CanvasList.at(m_ActiveCanvasDisplay)->GetSprites().at(i), m_Vertex_Ui_Camera->GetProjection());
+			}
+		}
+	}
 }
 
 //Tension Renderers Layer Sorting
@@ -504,11 +522,14 @@ void AssetManager::TensionLayerSort()
 							m_TransparentSortList.at(i) = m_TransparentSortList.at(J);
 							m_TransparentSortList.at(J) = key;
 							sorted = false;
-
 						}
 					}
 				}
 				m_Transparent = m_TransparentSortList;
+				for (int i = 0; i < m_Transparent.size(); i++)
+				{
+					std::cout << m_Transparent.at(i)->layer << std::endl;
+				}
 			}
 			break;
 
@@ -528,6 +549,21 @@ void AssetManager::TensionLayerSort()
 void AssetManager::Vertex2dRendering(Vertex2D* render)
 {
 	if (m_Objects.size() > 0)
+	{
+		for (int i = 0; i < m_Objects.size(); i++)
+		{
+			float WithinDistance = glm::distance(m_Objects.at(i)->transform.position, m_Cameras.at(m_ActiveCamera)->transform.position);
+
+			if (m_Objects.at(i)->m_Active == true && WithinDistance < CAMERA_DISTANCE_RENDER_LIMIT)
+			{
+				render->DrawSprite(m_Objects.at(i)->material, m_Objects.at(i)->transform.position, m_Objects.at(i)->transform.size, m_Objects.at(i)->transform.rotation, m_Objects.at(i)->transform.scale, m_Cameras.at(m_ActiveCamera)->GetProjection());
+				m_Cameras.at(m_ActiveCamera)->ConfigureSystems();
+				m_Objects.at(i)->ConfigureSystems();
+			}
+		}
+	}
+
+	/*if (m_Objects.size() > 0)
 	{
 		for (int i = 0; i < m_Objects.size(); i++)
 		{
@@ -555,7 +591,7 @@ void AssetManager::Vertex2dRendering(Vertex2D* render)
 				m_Objects.at(i)->ConfigureSystems();
 			}
 		}
-	}
+	}*/
 
 	if (m_PhysicsObjects.size() > 0)
 	{
@@ -813,6 +849,10 @@ int AssetManager::Partition(std::vector<GameObject*> _list, int _start, int _end
 
 void AssetManager::UpdateComponents(float delta) //TODO: Update this system for the new Componenet system
 {
+	for (int i = 0; i < m_Animators.size(); i++) {
+		m_Animators.at(i)->Update(delta);
+	}
+
 	for (auto test : m_VertexComponentsList) {
 		test->Update(delta);
 		test->FixedUpdate(delta);
@@ -822,13 +862,6 @@ void AssetManager::UpdateComponents(float delta) //TODO: Update this system for 
 	for (auto test : m_NavList) {
 		test->UpdateSystem(delta);
 	}
-
-	//for (int i = 0; i < m_VertexComponentsList.size(); i++)
-	//{
-	//	m_VertexComponentsList.at(i).Update(delta);
-	//	m_VertexComponentsList.at(i).FixedUpdate(delta);
-	//	m_VertexComponentsList.at(i).LateUpdate(delta);
-	//}
 }
 
 /// <summary>

@@ -85,8 +85,6 @@ void Animator::Start()
 
 void Animator::Update(float delta)
 {
-	std::cout << "Updating Animator" << std::endl;
-
 	if (m_IsPlaying)
 	{
 		if (!m_ReadyFrame && m_IsPlaying)

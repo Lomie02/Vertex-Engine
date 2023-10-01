@@ -35,7 +35,8 @@ private:
 
 	// Camaeras
 	Camera* m_MainCamera;
-
+	Camera* m_UserCamera;
+	Canvas* m_Canvas;
 	// GameObjects
 	GameObject* m_Object2;
 	GameObject* m_Object0;
@@ -45,6 +46,7 @@ private:
 	//User Interface
 	Text* m_Title;
 	Button* m_ButtonTest;
+	Sprite* m_Sprite;
 
 	// Vertex Componenets
 

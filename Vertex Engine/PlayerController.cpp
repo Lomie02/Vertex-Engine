@@ -16,8 +16,8 @@ void PlayerController::MovePosition(glm::vec2 _direction, float delta)
 {
 	if (_direction != glm::vec2(0,0)) // Checks if there is any direction input, if false the component will not update position.
 	{
-		m_Target->transform.position.x += _direction.x * delta;
-		m_Target->transform.position.y += _direction.y * delta;
+		m_Target->transform.position.x += _direction.x * m_Speed * delta;
+		m_Target->transform.position.y += _direction.y * m_Speed * delta;
 	}
 }
 

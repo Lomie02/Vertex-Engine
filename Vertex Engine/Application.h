@@ -24,13 +24,11 @@ enum EditorWindow {
 };
 
 enum EditorSelection {
-	Sprite = 0,
-	Camera,
-	GUI,
-	GuiText,
-
+	eSprite = 0,
+	eCamera,
+	eGUI,
+	eGuiText,
 };
-
 
 enum AntiAliasingMode {
 	none = 0,
@@ -82,8 +80,9 @@ private:
 	void EditorAnimation();
 	void OpenEditor();
 	void EditorHud();
+	void EditorSpacer(int _spaces);
 
-	EditorSelection m_EditorSelectType = Sprite;
+	EditorSelection m_EditorSelectType = eSprite;
 
 	EditorWindow m_WindowMode = Main;
 	EditorMode m_Mode = EDITOR;

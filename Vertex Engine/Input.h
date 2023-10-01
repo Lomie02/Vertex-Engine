@@ -19,6 +19,9 @@ public:
 	//Is key being held down
 	static bool GetKey(GLFWwindow* _window, int _index);
 
+	// Testing Input Re-works.
+	static void SetKeyCallBack(GLFWwindow* _window, GLFWkeyfun _func);
+
 private:
 	Input();
 };

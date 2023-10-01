@@ -14,12 +14,13 @@
 #include "Mime.h"
 #include "NavAgent.h"
 #include "irrKlang-64bit-1.6.0/include/irrKlang.h"
+#include "Canvas.h"
 
 using namespace irrklang;
 
 enum Renderer {
 	Vertex_2D = 0, // Vertex Engines default renderer.
-	Tension_2D, //  Tension is an upcoming Renderer that supports more features than the regular Vertex2D Renderer
+	Tension_2D, //  Tension 2D is a more advanced version of Vertex 2D
 };
 
 /// <summary>
@@ -54,6 +55,7 @@ public:
 	void Register(Volume& _text); // Volumes Post Processing
 	void Register(NavAgent* _nav); // AI 
 	void Register(AudioSource* _audio); // Audio
+	void Register(Canvas* _canvas); // Register Canvas
 
 	void GiveWindow(GLFWwindow* _window) { m_Window = _window; };
 	bool OnTrigger(GameObject* A, GameObject* B);
@@ -99,38 +101,33 @@ public:
 	std::vector<Button*> GetButtonObjects() { return m_UiButtonObjects; }
 	std::vector<Text*> GetTextObjects() { return m_UiTextObjects; }
 
+	void RegisterUserInterfaceCamera(Camera* _camera) { m_Vertex_Ui_Camera = _camera; }
+	void SetCanvasDisplayActive(int _index) { m_ActiveCanvasDisplay = _index; }
+
 private:
 
-	void AssignSoundEngineToVertexComponenets();
-
+	Camera* m_Vertex_Ui_Camera;
 	std::vector<AudioSource*> m_AudioSources;
 	ISoundEngine* m_SoundEngine;
 	TransparencySorting m_SortingTransparentAlgo;
-	void SwapResources(std::vector<GameObject*> _list, int _element1, int _element2);
-	int Partition(std::vector<GameObject*> _list, int _start, int _end);
-
-	void InsertionSort();
-	void QuickSort(std::vector<GameObject*> _list, int _start, int _end);
-
 	Volume m_SceneVolume;
-	void UpdateComponents(float delta);
-	std::vector<VertexComponent*> m_VertexComponentsList;
 
+	std::vector<Canvas*> m_CanvasList;
+	int m_ActiveCanvasDisplay = 0;
+
+	std::vector<VertexComponent*> m_VertexComponentsList;
 	std::vector<GameObject*> m_TransParentList;
 	std::vector<NavAgent*> m_NavList;
 	EditorMode m_OperatingMode;
 
 	char m_ScenesName[30] = "s";
-	void ConfigureMouse();
 	irrklang::ISoundEngine* m_SoundSystem;
-	
-	bool m_SingleSortRenderering = true;
-	bool m_HasRendered = false;
-	Renderer m_RendererToUse = Tension_2D;
-
 	std::vector<GameObject*> m_Opaque;
 	std::vector<GameObject*> m_Transparent;
-	void CollisionCheck();
+
+	Renderer m_RendererToUse = Tension_2D;
+	bool m_SingleSortRenderering = true;
+	bool m_HasRendered = false;
 
 	GLFWwindow* m_Window;
 	Transform mouse;
@@ -140,20 +137,29 @@ private:
 	Material m_CameraGizmo;
 	Material m_TransformGizmoX;
 	Material m_CenterGizmo;
-
 	bool m_DeleteAssetPointersAuto = false;
 
 	std::vector<RigidBody*> m_PhysicsObjects;
 	std::vector<Transform*> m_PreviousLocations;
 	std::vector<Button*> m_UiButtonObjects;
 	std::vector<Text*> m_UiTextObjects;
+
 	int m_ActiveCamera;
 	bool m_ShutDownManager = false;
-
 	float lastX = 1920;
 	float lastY = 1080;
 
 	float yaw = 0;
 	float pitch = 0;
 
+	// Asset private functions
+	void AssignSoundEngineToVertexComponenets();
+	void SwapResources(std::vector<GameObject*> _list, int _element1, int _element2);
+	int Partition(std::vector<GameObject*> _list, int _start, int _end);
+	void ConfigureMouse();
+
+	void InsertionSort();
+	void QuickSort(std::vector<GameObject*> _list, int _start, int _end);
+	void UpdateComponents(float delta);
+	void CollisionCheck();
 };
