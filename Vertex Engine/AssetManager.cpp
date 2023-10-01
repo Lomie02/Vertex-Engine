@@ -291,6 +291,11 @@ void AssetManager::Register(AudioSource* _audio)
 	m_AudioSources.push_back(_audio);
 }
 
+void AssetManager::Register(Canvas* _canvas)
+{
+	m_CanvasList.push_back(_canvas);
+}
+
 //Improve this to use the new Vertex Collsion System.
 bool AssetManager::MousePick(GameObject* _target)
 {
@@ -430,25 +435,34 @@ void AssetManager::TensionRendering(Vertex2D* m_Renderer)
 		}
 	}
 
+	// TODO: Implement the canvas system into the UI rendering instead.
+
 	// Render User Interface Objects
-	if (m_Vertex_Ui_Camera != nullptr) {
+	if (m_Vertex_Ui_Camera != nullptr && m_CanvasList.size() != 0) {
 
 		//  Render World Text
-		for (int i = 0; i < m_UiTextObjects.size(); i++)
+		for (int i = 0; i < m_CanvasList.at(m_ActiveCanvasDisplay)->GetText().size(); i++)
 		{
-			if (m_UiTextObjects.at(i)->GetActive()) {
-				m_UiTextObjects.at(i)->ConfigureRenderSystems(m_Vertex_Ui_Camera->GetProjection());
+			if (m_CanvasList.at(m_ActiveCanvasDisplay)->GetText().at(i)->GetActive()) {
+				m_CanvasList.at(m_ActiveCanvasDisplay)->GetText().at(i)->ConfigureRenderSystems(m_Vertex_Ui_Camera->GetProjection());
 			}
 		}
 
 		// Render UI Buttons.
-		for (int i = 0; i < m_UiButtonObjects.size(); i++)
+		for (int i = 0; i < m_CanvasList.at(m_ActiveCanvasDisplay)->GetButtons().size(); i++)
 		{
-			if (m_UiButtonObjects.at(i)->GetActive()) {
-				m_Renderer->TensionDraw(m_UiButtonObjects.at(i), m_UiButtonObjects.at(i)->material, m_UiButtonObjects.at(i)->transform.position,
-					m_UiButtonObjects.at(i)->transform.size, m_UiButtonObjects.at(i)->transform.rotation, m_UiButtonObjects.at(i)->transform.scale,
-					m_Vertex_Ui_Camera->GetProjection(), m_UiButtonObjects.at(i)->layer);
-				m_UiButtonObjects.at(i)->ConfigureCustoms(m_Vertex_Ui_Camera->GetProjection());
+			if (m_CanvasList.at(m_ActiveCanvasDisplay)->GetButtons().at(i)->GetActive()) {
+				m_Renderer->TensionDraw(m_CanvasList.at(m_ActiveCanvasDisplay)->GetButtons().at(i), m_CanvasList.at(m_ActiveCanvasDisplay)->GetButtons().at(i)->material, m_CanvasList.at(m_ActiveCanvasDisplay)->GetButtons().at(i)->transform.position,
+					m_CanvasList.at(m_ActiveCanvasDisplay)->GetButtons().at(i)->transform.size, m_CanvasList.at(m_ActiveCanvasDisplay)->GetButtons().at(i)->transform.rotation, m_CanvasList.at(m_ActiveCanvasDisplay)->GetButtons().at(i)->transform.scale,
+					m_Vertex_Ui_Camera->GetProjection(), m_CanvasList.at(m_ActiveCanvasDisplay)->GetButtons().at(i)->layer);
+				m_CanvasList.at(m_ActiveCanvasDisplay)->GetButtons().at(i)->ConfigureCustoms(m_Vertex_Ui_Camera->GetProjection());
+			}
+		}
+
+		for (int i = 0; i < m_CanvasList.at(m_ActiveCamera)->GetSprites().size(); i++) {
+			if (m_CanvasList.at(m_ActiveCanvasDisplay)->GetSprites().at(i)->GetActive())
+			{
+				m_Renderer->TensionSprite(m_CanvasList.at(m_ActiveCanvasDisplay)->GetSprites().at(i), m_Vertex_Ui_Camera->GetProjection());
 			}
 		}
 	}

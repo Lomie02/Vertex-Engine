@@ -95,8 +95,15 @@ void Scene2::Awake()
 	m_Manager.Register(m_ButtonTest);
 
 	m_Title = new Text();
+	m_Canvas = new Canvas();
 
-	m_Manager.Register(m_Title);
+	m_Canvas->Add(m_Title);
+	m_Sprite = new Sprite("ye");
+	m_Sprite->material.baseTexture = ResourceManager::GetTexture("Chimken");
+	m_Sprite->material.m_KeepAspect = true;
+
+	m_Canvas->Add(m_Sprite);
+	m_Manager.Register(m_Canvas);
 
 	m_Title->m_FontSize = 90;
 
@@ -155,7 +162,6 @@ void Scene2::Awake()
 	m_Manager.Register(m_Controller);
 
 	m_Block->InstanceMime("Yeah", glm::vec2(3,3));
-	  
 
 	m_Manager.Register(m_Block);
 	// ANimator Setup

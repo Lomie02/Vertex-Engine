@@ -194,6 +194,7 @@
     <ClCompile Include="Scene2.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="StartUp.cpp" />
     <ClCompile Include="TestComponent.cpp" />
     <ClCompile Include="Text.cpp" />
@@ -256,6 +257,7 @@
     <ClInclude Include="Scene2.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="Sprite.h" />
     <ClInclude Include="TestComponent.h" />
     <ClInclude Include="Text.h" />
     <ClInclude Include="Texture2D.h" />

@@ -242,6 +242,98 @@ void Vertex2D::TensionTransparencyPass(std::vector<GameObject*> _list, glm::mat4
 	}
 }
 
+void Vertex2D::TensionSprite(Sprite* _sprite, glm::mat4 _pro) //TODO May redo this part of the renderer to base positions from the canvas instead.
+{
+	if (_sprite->material.surface == Transparent)
+	{
+		glEnable(GL_BLEND);
+
+		switch (_sprite->material.TransparencyBlend) {
+		case Alpha:
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			break;
+		case Additive:
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+			break;
+
+		case Screen:
+			glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_COLOR);
+			break;
+		}
+	}
+	if (USE_DEPTH_TESTING) {
+		glEnable(GL_DEPTH_TEST);
+		glDepthFunc(GL_LESS);
+	}
+	this->m_Shader = _sprite->material.shader;
+
+	this->m_Shader.Use();
+
+	if (RENDER_DEPTH_TEST == false) {
+		this->m_Shader.SetInteger("UseDepth", 0);
+	}
+	else {
+
+		this->m_Shader.SetInteger("UseDepth", 1);
+	}
+
+	// Vertex Filters.
+	if (m_VertexVolume.ChromaticAberation.ChromaticEnabled) {
+		this->m_Shader.SetInteger("UseChromatic", 1);
+		this->m_Shader.SetFloat("ChromaticOffset", m_VertexVolume.ChromaticAberation.ChromaticIntensity);
+	}
+	if (m_VertexVolume.Invert.InvertedEnabled) {
+		this->m_Shader.SetFloat("UseInvert", 1);
+	}
+
+	//=======================================
+	//glm::mat4 model = glm::mat4(1.0f);
+
+	glm::mat4 model = glm::mat4(1);
+
+	// Pivots & Transform calulations,=.
+	glm::vec2 ImageOffset;
+
+	ImageOffset.x = _sprite->transform.size.x / 2;
+	ImageOffset.y = _sprite->transform.size.y / 2;
+
+	_sprite->transform.position.x -= ImageOffset.x;
+	_sprite->transform.position.y += ImageOffset.y;
+
+	glm::vec2 GeneralPivot;
+	Transform ParentsTransform;
+
+	GeneralPivot = _sprite->transform.position + _sprite->transform.pivot;
+
+	//========================================== Main Render calulations for transforms.
+
+	model = glm::translate(model, glm::vec3(GeneralPivot, 0)); // position
+
+	model = glm::translate(model, glm::vec3(0.5f * _sprite->transform.size.x, 0.5f * -_sprite->transform.size.y, 0.0f)); // Position
+	model = glm::rotate(model, glm::radians(_sprite->transform.rotation), glm::vec3(0.0f, 0.0f, 1.0f)); // Rotation
+	model = glm::translate(model, glm::vec3(-0.5f * _sprite->transform.size.x, -0.5f * -_sprite->transform.size.y, 0.0f));
+
+	model = glm::scale(model, glm::vec3(_sprite->transform.size.x * _sprite->transform.scale, -_sprite->transform.size.y * _sprite->transform.scale, 1.0f));
+	this->m_Shader.SetVector3f("lights", glm::vec3(1.0, 1.0, 1.0));
+
+	this->m_Shader.SetMatrix4("model", model);
+	this->m_Shader.SetMatrix4("pro", _pro);
+	this->m_Shader.SetVector4f("Colour", _sprite->material.colour);
+
+	glActiveTexture(GL_TEXTURE0);
+	_sprite->material.baseTexture.Bind();
+
+	glBindVertexArray(this->m_quadVAO);
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+	glBindVertexArray(0);
+
+	if (USE_DEPTH_TESTING) {
+		glDisable(GL_DEPTH_TEST);
+	}
+	glDisable(GL_BLEND);
+	glDisable(GL_CULL_FACE);
+}
+
 void Vertex2D::Tension_Bind_FrameBuffer()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
