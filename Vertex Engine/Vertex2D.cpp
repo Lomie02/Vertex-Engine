@@ -17,9 +17,6 @@ void Vertex2D::DrawSprite(Material& material, glm::vec2 position, glm::vec2 size
 
 	glEnable(GL_DEPTH_TEST);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	if (material.surface == Transparent)
-	{
-	}
 	//glDepthFunc(GL_EQUAL);
 
 	this->m_Shader = material.shader;
@@ -51,10 +48,10 @@ void Vertex2D::DrawSprite(Material& material, glm::vec2 position, glm::vec2 size
 
 void Vertex2D::DrawSprite(GameObject* _object, Material& material, glm::vec3 position, glm::vec2 size, float rotate, float scale, glm::mat4 per)
 {
-	glEnable(GL_BLEND);
+	//glEnable(GL_BLEND);
 	glEnable(GL_CULL_FACE);
 
-	glEnable(GL_DEPTH_TEST);
+	//glEnable(GL_DEPTH_TEST);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	this->m_Shader = material.shader;
@@ -92,7 +89,7 @@ void Vertex2D::DrawSprite(GameObject* _object, Material& material, glm::vec3 pos
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 	glBindVertexArray(0);
 
-	glDisable(GL_DEPTH_TEST);
+	//glDisable(GL_DEPTH_TEST);
 	glDisable(GL_BLEND);
 	glDisable(GL_CULL_FACE);
 }
@@ -100,15 +97,30 @@ void Vertex2D::DrawSprite(GameObject* _object, Material& material, glm::vec3 pos
 void Vertex2D::TensionDraw(GameObject* _object, Material& material, glm::vec2 position, glm::vec2 size, float rotate, float scale, glm::mat4 per, int _RenderLayer)
 {
 
-	glEnable(GL_CULL_FACE);
-	glEnable(GL_DEPTH_TEST);
+	//glEnable(GL_CULL_FACE);
 
-	glDepthFunc(GL_LESS);
+
 
 	if (material.surface == Transparent)
 	{
 		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		switch (material.TransparencyBlend) {
+		case Alpha:
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			break;
+		case Additive:
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+			break;
+
+		case Screen:
+			glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_COLOR);
+			break;
+		}
+	}
+	if (USE_DEPTH_TESTING) {
+		glEnable(GL_DEPTH_TEST);
+		glDepthFunc(GL_LESS);
 	}
 	this->m_Shader = material.shader;
 
@@ -179,7 +191,10 @@ void Vertex2D::TensionDraw(GameObject* _object, Material& material, glm::vec2 po
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 	glBindVertexArray(0);
 
-	glDisable(GL_DEPTH_TEST);
+
+	if (USE_DEPTH_TESTING) {
+		glDisable(GL_DEPTH_TEST);
+	}
 	glDisable(GL_BLEND);
 	glDisable(GL_CULL_FACE);
 }

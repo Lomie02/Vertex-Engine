@@ -10,6 +10,12 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
+enum TransparentMode {
+    Alpha = 0,
+    Additive,
+    Screen,
+};
+
 #include "glad.h"
 
 class Texture2D

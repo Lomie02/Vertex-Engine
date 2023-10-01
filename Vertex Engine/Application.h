@@ -82,11 +82,12 @@ private:
 	void EditorAnimation();
 	void OpenEditor();
 	void EditorHud();
+	void EditorSpacer(int _spaces);
 
 	EditorSelection m_EditorSelectType = Sprite;
 
 	EditorWindow m_WindowMode = Main;
-	EditorMode m_Mode = EDITOR;
+	EditorMode m_Mode = PLAY;
 	bool m_EditorFullScreen = false;
 
 	// Basics

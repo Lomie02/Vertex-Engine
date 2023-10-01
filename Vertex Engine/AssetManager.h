@@ -19,7 +19,7 @@ using namespace irrklang;
 
 enum Renderer {
 	Vertex_2D = 0, // Vertex Engines default renderer.
-	Tension_2D, //  Tension is an upcoming Renderer that supports more features than the regular Vertex2D Renderer
+	Tension_2D, //  Tension 2D is a more advanced version of Vertex 2D
 };
 
 /// <summary>

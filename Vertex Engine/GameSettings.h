@@ -2,13 +2,13 @@
 // ============================================== 
 //	GENERAL
 // ============================================== 
-#define PROJECT_NAME "My Game" // When building you will need to change the .exe file name 
+#define PROJECT_NAME "Transparent Rendering Example" // When building you will need to change the .exe file name 
 #define PROJECT_RESOLUTION 1920, 1080
 
 #define PROJECT_ASPECT_WIDTH 1920
 #define PROJECT_ASPECT_HEIGHT 1080
 
-#define PROJECT_DEVELOPER "Your Name"
+#define PROJECT_DEVELOPER "Dylan Smith"
 #define PROJECT_COMPANY "Your Company"
 
 #define ENGINE_VERSION 1.13

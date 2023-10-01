@@ -504,11 +504,14 @@ void AssetManager::TensionLayerSort()
 							m_TransparentSortList.at(i) = m_TransparentSortList.at(J);
 							m_TransparentSortList.at(J) = key;
 							sorted = false;
-
 						}
 					}
 				}
 				m_Transparent = m_TransparentSortList;
+				for (int i = 0; i < m_Transparent.size(); i++)
+				{
+					std::cout << m_Transparent.at(i)->layer << std::endl;
+				}
 			}
 			break;
 
@@ -528,6 +531,21 @@ void AssetManager::TensionLayerSort()
 void AssetManager::Vertex2dRendering(Vertex2D* render)
 {
 	if (m_Objects.size() > 0)
+	{
+		for (int i = 0; i < m_Objects.size(); i++)
+		{
+			float WithinDistance = glm::distance(m_Objects.at(i)->transform.position, m_Cameras.at(m_ActiveCamera)->transform.position);
+
+			if (m_Objects.at(i)->m_Active == true && WithinDistance < CAMERA_DISTANCE_RENDER_LIMIT)
+			{
+				render->DrawSprite(m_Objects.at(i)->material, m_Objects.at(i)->transform.position, m_Objects.at(i)->transform.size, m_Objects.at(i)->transform.rotation, m_Objects.at(i)->transform.scale, m_Cameras.at(m_ActiveCamera)->GetProjection());
+				m_Cameras.at(m_ActiveCamera)->ConfigureSystems();
+				m_Objects.at(i)->ConfigureSystems();
+			}
+		}
+	}
+
+	/*if (m_Objects.size() > 0)
 	{
 		for (int i = 0; i < m_Objects.size(); i++)
 		{
@@ -555,7 +573,7 @@ void AssetManager::Vertex2dRendering(Vertex2D* render)
 				m_Objects.at(i)->ConfigureSystems();
 			}
 		}
-	}
+	}*/
 
 	if (m_PhysicsObjects.size() > 0)
 	{
@@ -813,6 +831,10 @@ int AssetManager::Partition(std::vector<GameObject*> _list, int _start, int _end
 
 void AssetManager::UpdateComponents(float delta) //TODO: Update this system for the new Componenet system
 {
+	for (int i = 0; i < m_Animators.size();i ++) {
+		m_Animators.at(i)->Update(delta);
+	}
+
 	for (auto test : m_VertexComponentsList) {
 		test->Update(delta);
 		test->FixedUpdate(delta);
@@ -822,13 +844,6 @@ void AssetManager::UpdateComponents(float delta) //TODO: Update this system for 
 	for (auto test : m_NavList) {
 		test->UpdateSystem(delta);
 	}
-
-	//for (int i = 0; i < m_VertexComponentsList.size(); i++)
-	//{
-	//	m_VertexComponentsList.at(i).Update(delta);
-	//	m_VertexComponentsList.at(i).FixedUpdate(delta);
-	//	m_VertexComponentsList.at(i).LateUpdate(delta);
-	//}
 }
 
 /// <summary>

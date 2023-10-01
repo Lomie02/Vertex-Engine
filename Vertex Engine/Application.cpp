@@ -17,6 +17,7 @@
 
 #include "VertexPrefs.h"
 #include "VertexAccessExplorer.h"
+
 #define GL_SILENCE_DEPRECATION
 #pragma warning(disable : 4996);
 
@@ -168,7 +169,7 @@ void Application::StartUp()
 		m_Settings->m_UseDefaultRenderer = false;
 	}
 	m_Settings->m_AutoDeletePointers = AUTO_DELETE_ASSET_POINTERS;
-	m_Settings->m_TransparentSortingAlgo = Insertion_Sort;
+	m_Settings->m_TransparentSortingAlgo = BubbleSort;
 
 	if (m_Mode == EDITOR)
 	{
@@ -333,8 +334,7 @@ void Application::EditorMain() // Main Editor
 
 				ImGui::SameLine(); ImGui::InputFloat("##Ypos", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selectedSprite)->transform.position.y);
 
-				ImGui::Spacing();
-				ImGui::Spacing();
+				EditorSpacer(2);
 				//===================================== Rotation
 				ImGui::InputFloat("Rotation", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selectedSprite)->transform.rotation);
 
@@ -347,18 +347,29 @@ void Application::EditorMain() // Main Editor
 				ImGui::InputFloat2("Pivot", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selectedSprite)->transform.pivot.x);
 
 				ImGui::TreePop();
+
+				EditorSpacer(2);
 			}
 
 			if (ImGui::TreeNode("Material")) {
 				//=========================== Surface Type
-
+				EditorSpacer(2);
 				static const char* surface[2];
 				surface[0] = "Opaque";
 				surface[1] = "Transparent";
 
-				static int yep;
-				if (ImGui::Combo("Surface Type", &yep, surface, 2)) {
-					if (yep ==0) {
+				static const char* blendmode[3];
+				blendmode[0] = "Alpha";
+				blendmode[1] = "Additive";
+				blendmode[2] = "Screen";
+
+				static int surfaceType;
+				static int blendModeValue;
+
+				surfaceType = m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selectedSprite)->material.surface;
+				blendModeValue = m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selectedSprite)->material.TransparencyBlend;
+				if (ImGui::Combo("Surface Type", &surfaceType, surface, 2)) {
+					if (surfaceType ==0) {
 						m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selectedSprite)->material.surface = Opaque;
 					}
 					else {
@@ -367,15 +378,25 @@ void Application::EditorMain() // Main Editor
 					}
 				};
 
+				EditorSpacer(2);
+
+				// Setting blending mode in editor
+				if (ImGui::Combo("Blend Mode", &blendModeValue, blendmode, 3)) {
+					if (blendModeValue == 0) {
+						m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selectedSprite)->material.TransparencyBlend = Alpha;
+					}
+					else if(blendModeValue == 1) {
+
+						m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selectedSprite)->material.TransparencyBlend = Additive;
+					}
+					else {
+						m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selectedSprite)->material.TransparencyBlend = Screen;
+					}
+				};
+
 				//=========================== Basic Colour
 				ImGui::DragFloat4("Colour", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selectedSprite)->material.colour.r, 0.05f, 0.0f, 1.0f);
 				ImGui::TreePop();
-
-				if (m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selectedSprite)->GetMimes().size() > 0) {
-					for (int i = 0; i < m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selectedSprite)->GetMimes().size() - 1; i++) {
-						ImGui::Button(m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selectedSprite)->GetMimes().at(i).Name.c_str());
-					}
-				}
 			}
 
 			break;
@@ -502,9 +523,10 @@ void Application::EditorMain() // Main Editor
 		}
 	}
 
-
 	if (ViewInfo) { // Information Window
 		ImGui::Begin("Vertex Information");
+
+
 		if (ImGui::TreeNode("Vertex Main Systems")) {
 
 			ImGui::Button("GameObjects");
@@ -679,6 +701,13 @@ void Application::EditorHud()
 {
 }
 
+void Application::EditorSpacer(int _spaces)
+{
+	for (int i = 0; i < _spaces; i++) {
+		ImGui::Spacing();
+	}
+}
+
 void Application::RenderAll()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -723,10 +752,10 @@ void Application::SceneSetUp()
 	m_Scene = new MyScene("Scene 1");
 	m_SecondScene = new Scene2("Scene 2");
 
-	m_SceneManager->SetActiveScene(0);
-	m_SceneManager->AddScene(m_Scene);
 	m_SceneManager->AddScene(m_SecondScene);
+	m_SceneManager->AddScene(m_Scene);
 
+	m_SceneManager->SetActiveScene(1);
 	m_Scene->GiveWindow(m_GameWindow);
 	m_SecondScene->GiveWindow(m_GameWindow);
 

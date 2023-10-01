@@ -23,7 +23,7 @@ public:
 	Shader shader;
 	glm::vec4 colour = glm::vec4(1,0,0,1);
 	Texture2D baseTexture;
-
+	TransparentMode TransparencyBlend = Alpha;
 	Surface surface = Opaque;
 	bool glow = false;
 	std::string name;

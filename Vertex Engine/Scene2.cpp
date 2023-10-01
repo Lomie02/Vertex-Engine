@@ -133,6 +133,17 @@ void Scene2::Awake()
 	m_EggClip.m_PlaySpeed = 2.0f;
 	m_EggFlipBook->AddFrame(m_EggClip);
 
+	m_Animation = new Animator();
+
+	m_Animation->SetMaster(m_Object2);
+	m_Object2->transform.position = glm::vec2(6, 0);
+	m_Animation->AddKeyFrame();
+	m_Object2->transform.position = glm::vec2(1, 0);
+	m_Object2->material.colour.a = 0.1f;
+	m_Animation->AddKeyFrame();
+	m_Object2->transform.position = glm::vec2(6, 0);
+	m_Object2->material.colour.a = 1.0f;
+	m_Animation->AddKeyFrame();
 
 	//====================
 	SetupButton();
@@ -148,6 +159,10 @@ void Scene2::Awake()
 	m_Manager.Register(m_Block);
 	// ANimator Setup
 	m_Egg->material.m_KeepAspect = true;
+	m_Egg->material.TransparencyBlend = Alpha;
+
+	m_Animation->WrapMode(Loop);
+	m_Manager.Register(m_Animation);
 }
 
 void Scene2::Start()
@@ -161,7 +176,9 @@ void Scene2::Start()
 	m_EggFlipBook->Play();
 
 	m_Title->text = "Chimken Party";
+	m_Title->SetActive(false);
 
+	m_Animation->Play();
 	m_Object0->transform.position.x = -7;
 	m_Controller->SetWeight(0);
 	m_Controller->SetSpeed(20);
@@ -183,17 +200,17 @@ void Scene2::Update(float delta)
 	}
 
 	// Timer for text
-	m_TitleTimer += 1 * delta;
+	//m_TitleTimer += 1 * delta;
 
-	if (m_TitleTimer > m_Duration) {
+	//if (m_TitleTimer > m_Duration) {
 
-		m_TitleTimer = 0;
+	//	m_TitleTimer = 0;
 
-		if (m_Title->GetActive())
-			m_Title->SetActive(false);
-		else
-			m_Title->SetActive(true);
-	}
+	//	if (m_Title->GetActive())
+	//		m_Title->SetActive(false);
+	//	else
+	//		m_Title->SetActive(true);
+	//}
 }
 
 void Scene2::LateUpdate(float delta)
