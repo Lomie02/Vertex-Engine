@@ -98,11 +98,18 @@ void Scene2::Awake()
 	m_Canvas = new Canvas();
 
 	m_Canvas->Add(m_Title);
+
+	//========================================
 	m_Sprite = new Sprite("ye");
 	m_Sprite->material.baseTexture = ResourceManager::GetTexture("Chimken");
 	m_Sprite->material.m_KeepAspect = true;
 
+	m_Sprite->transform.size.x = 5;
+	m_Sprite->transform.size.y = 5;
+
 	m_Canvas->Add(m_Sprite);
+	//========================================
+
 	m_Manager.Register(m_Canvas);
 
 	m_Title->m_FontSize = 90;
@@ -173,6 +180,7 @@ void Scene2::Awake()
 
 	m_UserCamera = new Camera("UserCamera");
 	m_Manager.RegisterUserInterfaceCamera(m_UserCamera);
+
 }
 
 void Scene2::Start()

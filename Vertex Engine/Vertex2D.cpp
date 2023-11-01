@@ -297,8 +297,10 @@ void Vertex2D::TensionSprite(Sprite* _sprite, glm::mat4 _pro) //TODO May redo th
 	ImageOffset.x = _sprite->transform.size.x / 2;
 	ImageOffset.y = _sprite->transform.size.y / 2;
 
-	_sprite->transform.position.x -= ImageOffset.x;
-	_sprite->transform.position.y += ImageOffset.y;
+	//TODO: Offset causes sprites position to change.
+
+	//_sprite->transform.position.x -= ImageOffset.x;
+	//_sprite->transform.position.y += ImageOffset.y;
 
 	glm::vec2 GeneralPivot;
 	Transform ParentsTransform;
@@ -307,7 +309,7 @@ void Vertex2D::TensionSprite(Sprite* _sprite, glm::mat4 _pro) //TODO May redo th
 
 	//========================================== Main Render calulations for transforms.
 
-	model = glm::translate(model, glm::vec3(GeneralPivot, 0)); // position
+	model = glm::translate(model, glm::vec3(_sprite->transform.position, 0)); // position
 
 	model = glm::translate(model, glm::vec3(0.5f * _sprite->transform.size.x, 0.5f * -_sprite->transform.size.y, 0.0f)); // Position
 	model = glm::rotate(model, glm::radians(_sprite->transform.rotation), glm::vec3(0.0f, 0.0f, 1.0f)); // Rotation
@@ -332,6 +334,7 @@ void Vertex2D::TensionSprite(Sprite* _sprite, glm::mat4 _pro) //TODO May redo th
 	}
 	glDisable(GL_BLEND);
 	glDisable(GL_CULL_FACE);
+
 }
 
 void Vertex2D::Tension_Bind_FrameBuffer()

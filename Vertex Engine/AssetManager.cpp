@@ -462,7 +462,9 @@ void AssetManager::TensionRendering(Vertex2D* m_Renderer)
 		for (int i = 0; i < m_CanvasList.at(m_ActiveCamera)->GetSprites().size(); i++) {
 			if (m_CanvasList.at(m_ActiveCanvasDisplay)->GetSprites().at(i)->GetActive())
 			{
+				std::cout << "Sprite Position: " << m_CanvasList.at(m_ActiveCanvasDisplay)->GetSprites().at(i)->transform.position.x << " | " << m_CanvasList.at(m_ActiveCanvasDisplay)->GetSprites().at(i)->transform.position.y << std::endl;
 				m_Renderer->TensionSprite(m_CanvasList.at(m_ActiveCanvasDisplay)->GetSprites().at(i), m_Vertex_Ui_Camera->GetProjection());
+
 			}
 		}
 	}
@@ -526,10 +528,7 @@ void AssetManager::TensionLayerSort()
 					}
 				}
 				m_Transparent = m_TransparentSortList;
-				for (int i = 0; i < m_Transparent.size(); i++)
-				{
-					std::cout << m_Transparent.at(i)->layer << std::endl;
-				}
+				
 			}
 			break;
 
