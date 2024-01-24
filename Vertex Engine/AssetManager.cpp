@@ -605,6 +605,8 @@ void AssetManager::Vertex2dRendering(Vertex2D* render)
 		}
 	}
 
+	//============================================== Render UI Last
+
 	if (m_UiObjects.size() > 0)
 	{
 		for (int i = 0; i < m_UiObjects.size(); i++)
@@ -618,7 +620,6 @@ void AssetManager::Vertex2dRendering(Vertex2D* render)
 		}
 	}
 
-	//============================================== Render UI Last
 
 	if (m_UiButtonObjects.size() > 0)
 	{
