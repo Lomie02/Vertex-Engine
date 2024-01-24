@@ -755,7 +755,7 @@ void Application::SceneSetUp()
 	m_SceneManager->AddScene(m_SecondScene);
 	m_SceneManager->AddScene(m_Scene);
 
-	m_SceneManager->SetActiveScene(1);
+	m_SceneManager->SetActiveScene(2);
 	m_Scene->GiveWindow(m_GameWindow);
 	m_SecondScene->GiveWindow(m_GameWindow);
 

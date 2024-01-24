@@ -47,9 +47,6 @@ void Scene2::Awake()
 {
 	m_Object2 = new GameObject("Chimken");
 	m_Object0 = new GameObject("Myring");
-	m_Block = new GameObject("Block");
-
-	m_Block->material.baseTexture = ResourceManager::LoadTexture("Builds/Textures/block.png", "block");
 
 	m_Egg = new GameObject("Egg");
 	m_Controller = new PlayerController();
@@ -63,7 +60,6 @@ void Scene2::Awake()
 
 	m_Object2->material.surface = Transparent;
 	m_Object0->material.surface = Transparent;
-
 
 	// Egg Texture
 	ResourceManager::LoadTexture("Builds/Textures/Egg.png", "Egg");
@@ -95,14 +91,32 @@ void Scene2::Awake()
 	m_Manager.Register(m_ButtonTest);
 
 	m_Title = new Text();
+	m_CounterText = new Text();
 	m_Canvas = new Canvas();
 
 	m_Canvas->Add(m_Title);
-	m_Sprite = new Sprite("ye");
-	m_Sprite->material.baseTexture = ResourceManager::GetTexture("Chimken");
+
+	//========================================
+	m_Sprite = new Sprite("EggIcon");
+	m_Sprite->material.baseTexture = ResourceManager::GetTexture("Egg");
 	m_Sprite->material.m_KeepAspect = true;
+	m_Sprite->material.surface = Transparent;
+
+	m_Sprite->transform.position = glm::vec2(-18,-4);
+
+	m_Sprite->transform.size.x = 5;
+	m_Sprite->transform.size.y = 5;
 
 	m_Canvas->Add(m_Sprite);
+	m_Canvas->Add(m_CounterText);
+	//======================================== Counter Text
+
+	m_CounterText->m_FontSize = 17;
+	m_CounterText->material.colour = glm::vec4(1, 1, 1, 1);
+	m_CounterText->text = "0";
+	m_CounterText->transform.position = glm::vec2(-15, -5);
+	//========================================
+
 	m_Manager.Register(m_Canvas);
 
 	m_Title->m_FontSize = 90;
@@ -161,9 +175,6 @@ void Scene2::Awake()
 	m_Controller->AssignPlayer(m_Object0);
 	m_Manager.Register(m_Controller);
 
-	m_Block->InstanceMime("Yeah", glm::vec2(3,3));
-
-	m_Manager.Register(m_Block);
 	// ANimator Setup
 	m_Egg->material.m_KeepAspect = true;
 	m_Egg->material.TransparencyBlend = Alpha;
@@ -173,6 +184,7 @@ void Scene2::Awake()
 
 	m_UserCamera = new Camera("UserCamera");
 	m_Manager.RegisterUserInterfaceCamera(m_UserCamera);
+
 }
 
 void Scene2::Start()
@@ -185,7 +197,7 @@ void Scene2::Start()
 	m_FlipbookAnimation->Play();
 	m_EggFlipBook->Play();
 
-	m_Title->text = "Chimken Party";
+	m_Title->text = "Gather Eggs!";
 	m_Title->SetActive(true);
 
 	m_Animation->Play();
@@ -209,18 +221,9 @@ void Scene2::Update(float delta)
 		m_Controller->MovePosition(glm::vec2(-1, 0), delta);
 	}
 
-	// Timer for text
-	//m_TitleTimer += 1 * delta;
+	m_MainCamera->transform.position.x = glm::lerp(m_MainCamera->transform.position.x, m_Object0->transform.position.x, delta);
+	m_MainCamera->transform.position.y = glm::lerp(m_MainCamera->transform.position.y, m_Object0->transform.position.y, delta);
 
-	//if (m_TitleTimer > m_Duration) {
-
-	//	m_TitleTimer = 0;
-
-	//	if (m_Title->GetActive())
-	//		m_Title->SetActive(false);
-	//	else
-	//		m_Title->SetActive(true);
-	//}
 }
 
 void Scene2::LateUpdate(float delta)
