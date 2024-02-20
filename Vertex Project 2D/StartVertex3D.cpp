@@ -1,5 +1,4 @@
 #include "uApplication.h"
-
 /*
 	Vertex UltraLight is a 3D model rendering engine designed by Dylan Smith. 2024
 
