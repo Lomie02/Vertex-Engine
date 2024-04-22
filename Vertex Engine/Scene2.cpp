@@ -48,6 +48,8 @@ void Scene2::Awake()
 	m_Object2 = new GameObject("Chimken");
 	m_Object0 = new GameObject("Myring");
 
+	m_SceneManager = GetAssets().GetSceneManager();
+
 	m_Egg = new GameObject("Egg");
 	m_Controller = new PlayerController();
 

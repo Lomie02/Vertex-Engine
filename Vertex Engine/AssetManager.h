@@ -28,6 +28,7 @@ enum Renderer {
 /// </summary>
 class AssetManager
 {
+	friend class SceneManager;
 public:
 
 	AssetManager()
@@ -57,8 +58,7 @@ public:
 	void Register(AudioSource* _audio); // Audio
 	void Register(Canvas* _canvas); // Register Canvas
 
-	void GiveWindow(GLFWwindow* _window) { m_Window = _window; };
-	bool OnTrigger(GameObject* A, GameObject* B);
+	void GiveWindow(GLFWwindow* _window) { m_Window = _window; }
 
 	void ConfigureSystems();
 	void ConfigureRenderSystems(Vertex2D* render);
@@ -103,7 +103,9 @@ public:
 
 	void RegisterUserInterfaceCamera(Camera* _camera) { m_Vertex_Ui_Camera = _camera; }
 	void SetCanvasDisplayActive(int _index) { m_ActiveCanvasDisplay = _index; }
+	void GiveSceneManager(SceneManager* _sceneManagerPtr) { m_SceneManager = _sceneManagerPtr; std::cout << "Scene Manager Given." << std::endl; }
 
+	SceneManager* GetSceneManager() { return m_SceneManager; }
 private:
 
 	Camera* m_Vertex_Ui_Camera;
@@ -111,6 +113,7 @@ private:
 	ISoundEngine* m_SoundEngine;
 	TransparencySorting m_SortingTransparentAlgo;
 	Volume m_SceneVolume;
+	SceneManager* m_SceneManager;
 
 	std::vector<Canvas*> m_CanvasList;
 	int m_ActiveCanvasDisplay = 0;
@@ -162,4 +165,5 @@ private:
 	void QuickSort(std::vector<GameObject*> _list, int _start, int _end);
 	void UpdateComponents(float delta);
 	void CollisionCheck();
+	bool OnTrigger(GameObject* A, GameObject* B);
 };

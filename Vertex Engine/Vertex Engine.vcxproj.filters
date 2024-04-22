@@ -49,9 +49,6 @@
     <Filter Include="Scenes\Scene 1\Scene Scripts">
       <UniqueIdentifier>{f9a8915c-d8e2-4e7b-a38a-33e324deded1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Scenes\Scene 2">
-      <UniqueIdentifier>{e3846c4c-af21-49d8-9491-7582f7c496dc}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Physics">
       <UniqueIdentifier>{fdcdf32d-a9eb-4a8e-8d01-de39ca7bf57c}</UniqueIdentifier>
     </Filter>
@@ -66,6 +63,9 @@
     </Filter>
     <Filter Include="AI">
       <UniqueIdentifier>{94d98bff-9de2-40ec-924f-7b2711670c3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scenes\Chicken Scene">
+      <UniqueIdentifier>{e3846c4c-af21-49d8-9491-7582f7c496dc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -139,7 +139,7 @@
       <Filter>Scenes\Scene 1</Filter>
     </ClCompile>
     <ClCompile Include="Scene2.cpp">
-      <Filter>Scenes\Scene 2</Filter>
+      <Filter>Scenes\Chicken Scene</Filter>
     </ClCompile>
     <ClCompile Include="Text.cpp">
       <Filter>UI</Filter>
@@ -303,7 +303,7 @@
       <Filter>Scenes\Scene 1</Filter>
     </ClInclude>
     <ClInclude Include="Scene2.h">
-      <Filter>Scenes\Scene 2</Filter>
+      <Filter>Scenes\Chicken Scene</Filter>
     </ClInclude>
     <ClInclude Include="Transform.h">
       <Filter>GameObjects</Filter>

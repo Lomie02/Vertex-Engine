@@ -2,7 +2,7 @@
 
 void SceneManager::StartUpScenes()
 {
-	if (m_SceneList.size() >= 1)
+	if (m_SceneList.size() >= 0 && m_ActiveScene <= m_SceneList.size())
 	{
 		m_SceneList[m_ActiveScene]->Start();
 	}

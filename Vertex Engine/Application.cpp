@@ -215,7 +215,7 @@ void Application::Start()
 	}
 
 	if (m_Mode != PLAY) {
-		m_SceneManager->SetActiveScene(2);
+		m_SceneManager->SetActiveScene(1);
 	}
 	else {
 		m_SceneManager->SetActiveScene(0);
@@ -749,25 +749,19 @@ void Application::Quit()
 //=============================================== Add your scenes Here
 void Application::SceneSetUp()
 {
-	m_Scene = new MyScene("Scene 1");
-	m_SecondScene = new Scene2("Scene 2");
+	m_SecondScene = new Scene2("Lil Chickens");
 
 	m_SceneManager->AddScene(m_SecondScene);
-	m_SceneManager->AddScene(m_Scene);
-
-	m_SceneManager->SetActiveScene(2);
-	m_Scene->GiveWindow(m_GameWindow);
-	m_SecondScene->GiveWindow(m_GameWindow);
-
-	m_Scene->GiveSceneManager(m_SceneManager);
-	m_SecondScene->GiveSceneManager(m_SceneManager);
 
 	m_SceneManager->m_SceneList.at(1)->GetAssets().ConfigSetup();
+
+	// Give all scenes the editor mode & a pointer to the game window.
 
 	for (int i = 0; i < m_SceneManager->m_SceneList.size(); i++)
 	{
 		m_SceneManager->m_SceneList.at(i)->GetAssets().AssignMode(m_Mode);
 		m_SceneManager->m_SceneList.at(i)->GetAssets().GiveWindow(m_GameWindow);
+		m_SceneManager->m_SceneList.at(i)->GetAssets().GiveSceneManager(m_SceneManager);
 	}
 
 	m_FinishedSceneSetUpStage = true;

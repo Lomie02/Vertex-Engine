@@ -34,6 +34,7 @@ void MyScene::Awake()
 	m_Static = new GameObject("Static");
 	m_MansFace = new GameObject("man");
 
+	m_SceneManager = GetAssets().GetSceneManager();
 	m_NavGrid = new NavigationGrid();
 	NavigationNode* nodes[11 * 11];
 
