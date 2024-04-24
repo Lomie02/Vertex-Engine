@@ -67,6 +67,9 @@
     <Filter Include="Scenes\Chicken Scene">
       <UniqueIdentifier>{e3846c4c-af21-49d8-9491-7582f7c496dc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Vertex Workspace">
+      <UniqueIdentifier>{faba2dbf-62c5-4061-affc-db1e9983e6d6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="StartUp.cpp">
@@ -218,6 +221,9 @@
     </ClCompile>
     <ClCompile Include="Sprite.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexWorkSpace.cpp">
+      <Filter>Vertex Workspace</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -406,6 +412,9 @@
     </ClInclude>
     <ClInclude Include="Sprite.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexWorkSpace.h">
+      <Filter>Vertex Workspace</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

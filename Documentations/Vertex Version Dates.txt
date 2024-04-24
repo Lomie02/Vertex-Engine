@@ -6,3 +6,4 @@ Vertex Engine Release Versions
 2023-June-16 | Vertex 1.10
 
 2023-August-20 | Vertex 1.11
+2024-April-25  | Vertex 1.13

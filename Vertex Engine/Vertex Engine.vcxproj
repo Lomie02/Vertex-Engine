@@ -208,6 +208,7 @@
     <ClCompile Include="VertexScene.cpp" />
     <ClCompile Include="VertexText2D.cpp" />
     <ClCompile Include="VertexTransitions.cpp" />
+    <ClCompile Include="VertexWorkSpace.cpp" />
     <ClCompile Include="Volume.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -272,6 +273,7 @@
     <ClInclude Include="VertexText2D.h" />
     <ClInclude Include="VertexTransitions.h" />
     <ClInclude Include="VertexUIPackage.h" />
+    <ClInclude Include="VertexWorkSpace.h" />
     <ClInclude Include="Volume.h" />
   </ItemGroup>
   <ItemGroup>

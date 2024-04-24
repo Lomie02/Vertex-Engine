@@ -1,7 +1,6 @@
 #pragma once
 #include "Graphics.h"
 #include "MyScene.h"
-#include "Scene2.h"
 #include "Vertex2D.h"
 
 #include "VertexTransitions.h"
@@ -16,13 +15,16 @@
 
 using namespace irrklang;
 
-//Determines what editor window to display.
+/// <summary>
+/// The editor window that should be displayed.
+/// </summary>
 enum EditorWindow {
 	Main = 0,
 	Animation,
 	HudEditor,
 };
 
+//TODO: Find out if this is needed or not. Otherwise delete it.
 enum EditorSelection {
 	eSprite = 0,
 	eCamera,
@@ -30,6 +32,9 @@ enum EditorSelection {
 	eGuiText,
 };
 
+/// <summary>
+/// The Anti Alias mode used for renderering.
+/// </summary>
 enum AntiAliasingMode {
 	none = 0,
 	MSAA,
@@ -38,35 +43,43 @@ enum AntiAliasingMode {
 class Application
 {
 public:
-
 	//Default Constructor
 	Application();
-
 	//De-Constructor
 	~Application();
-
-	//Creates all major systems & passes them through their respective classes.
+	/// <summary>
+	/// Is called at the very start of the engines creation and sets up all major systems and passes them into their respective classes.
+	/// </summary>
 	void StartUp();
-
-	// Calls all start functions in scenes & scripts.
+	/// <summary>
+	/// The Engines start function calls all other systems start ups and gets them ready.
+	/// </summary>
 	void Start();
-
-	// Update basic scenes like Update(),FixedUpdate() & LateUpdate()
+	/// <summary>
+	/// Is called everyframe and is responsible for updating the engines systems & calulates the delta time values.
+	/// </summary>
 	void Update();
-
-	// Returns the opengl window.
+	/// <summary>
+	/// Gets a pointer to the current OpenGL Window.
+	/// </summary>
+	/// <returns>Pointer to Window.</returns>
 	GLFWwindow* GetWindow() { return m_GameWindow; }
-
-	// Updates all renderering in the engine such as game scenes to editors.
+	/// <summary>
+	/// Updates the current scene thats active & passes in the renderer being used. Also draws all the UI for the editor.
+	/// </summary>
 	void RenderAll();
-
-	// Quits the engine
+	/// <summary>
+	/// Calls the shutdown method and deletes all of the systems.
+	/// </summary>
 	void Quit();
-
-	//Is the app running or not.
+	/// <summary>
+	/// Returns if the engine is running or has closed.
+	/// </summary>
+	/// <returns></returns>
 	bool AppStatus() { return m_IsRunning; };
-
-	//Shutdown the app & Delete all systems if any.
+	/// <summary>
+	/// Starts the shutdown process & deletes all systems correctly.
+	/// </summary>
 	void ShutDown();
 
 	// These functions will take care of the external packages that the engine will soon support.
@@ -82,6 +95,8 @@ private:
 	void EditorHud();
 	void EditorSpacer(int _spaces);
 
+	void BeginSceneSystemAssigning();
+
 	EditorSelection m_EditorSelectType = eSprite;
 
 	EditorWindow m_WindowMode = Main;
@@ -91,6 +106,7 @@ private:
 	// Basics
 	void FolderCreation();
 	void ExternalResources();
+
 	void SceneSetUp();
 	void UpdateEditorMode();
 
@@ -110,7 +126,6 @@ private:
 
 	//Vertex Scenes
 	MyScene* m_Scene;
-	Scene2* m_SecondScene;
 	MyFirstScene* m_MyScene;
 
 	AntiAliasingMode m_AnitAliasing = none;
