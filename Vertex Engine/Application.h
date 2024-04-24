@@ -1,7 +1,6 @@
 #pragma once
 #include "Graphics.h"
 #include "MyScene.h"
-#include "Scene2.h"
 #include "Vertex2D.h"
 
 #include "VertexTransitions.h"
@@ -127,7 +126,6 @@ private:
 
 	//Vertex Scenes
 	MyScene* m_Scene;
-	Scene2* m_SecondScene;
 	MyFirstScene* m_MyScene;
 
 	AntiAliasingMode m_AnitAliasing = none;
