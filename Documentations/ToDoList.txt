@@ -8,8 +8,6 @@ Vertex Engine Developer TO DO LIST:
 
 
 -------------OPTIONAL TASKS / NON IMPORTANT TASKS------------------------------ 
-1) Create Flipbook Component
+1) Create Flipbook Component [COMPLETED]
 -
 2) If Possible remove the material from the gameobject & turn it into a componenet (Optional Task)
--
-3) 

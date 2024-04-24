@@ -21,13 +21,12 @@
 #define GL_SILENCE_DEPRECATION
 #pragma warning(disable : 4996);
 
-//==========================================
-Application::Application()
+Application::Application() // Creates the sound manager.
 {
 	m_SoundManager = createIrrKlangDevice();
 }
 
-Application::~Application()
+Application::~Application() //TODO: Automate this somehow if possible
 {
 	delete m_SceneManager;
 	m_SceneManager = nullptr;
@@ -44,7 +43,7 @@ Application::~Application()
 	m_SecondScene = nullptr;
 }
 
-void Application::StartUp()
+void Application::StartUp() 
 {
 	const char* description = new char[512];
 
@@ -209,6 +208,8 @@ void Application::StartUp()
 void Application::Start()
 {
 	SceneSetUp(); //Start setting up all scenes in engine.
+	BeginSceneSystemAssigning();
+
 
 	for (int i = 0; i < m_SceneManager->m_SceneList.size(); i++) {
 		m_SceneManager->m_SceneList.at(i)->GetAssets().AssignSoundSystem(m_SoundManager);
@@ -622,6 +623,7 @@ void Application::EditorMain() // Main Editor
 			m_EditorSelectType = eSprite;
 			m_SceneManager->SetActiveScene(currentScene);
 			DisplaySceneDrawer = false;
+
 		}
 	}
 
@@ -708,6 +710,18 @@ void Application::EditorSpacer(int _spaces)
 	}
 }
 
+void Application::BeginSceneSystemAssigning()
+{
+	for (int i = 0; i < m_SceneManager->m_SceneList.size(); i++)
+	{
+		m_SceneManager->m_SceneList.at(i)->GetAssets().AssignMode(m_Mode);
+		m_SceneManager->m_SceneList.at(i)->GetAssets().GiveWindow(m_GameWindow);
+		m_SceneManager->m_SceneList.at(i)->GetAssets().GiveSceneManager(m_SceneManager);
+	}
+
+	m_FinishedSceneSetUpStage = true;
+}
+
 void Application::RenderAll()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -750,21 +764,8 @@ void Application::Quit()
 void Application::SceneSetUp()
 {
 	m_SecondScene = new Scene2("Lil Chickens");
-
 	m_SceneManager->AddScene(m_SecondScene);
 
-	m_SceneManager->m_SceneList.at(1)->GetAssets().ConfigSetup();
-
-	// Give all scenes the editor mode & a pointer to the game window.
-
-	for (int i = 0; i < m_SceneManager->m_SceneList.size(); i++)
-	{
-		m_SceneManager->m_SceneList.at(i)->GetAssets().AssignMode(m_Mode);
-		m_SceneManager->m_SceneList.at(i)->GetAssets().GiveWindow(m_GameWindow);
-		m_SceneManager->m_SceneList.at(i)->GetAssets().GiveSceneManager(m_SceneManager);
-	}
-
-	m_FinishedSceneSetUpStage = true;
 }
 
 void Application::UpdateEditorMode()
