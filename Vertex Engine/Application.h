@@ -13,6 +13,8 @@
 #include "MyFirstScene.h"
 #include <irrKlang.h>
 
+#include "VertexWorkSpace.h"
+
 using namespace irrklang;
 
 /// <summary>
@@ -88,6 +90,8 @@ public:
 
 private:
 
+	void SetUpWorkSpaceScenes();
+
 	// Editor
 	void EditorMain();
 	void EditorAnimation();
@@ -129,6 +133,7 @@ private:
 	MyFirstScene* m_MyScene;
 
 	AntiAliasingMode m_AnitAliasing = none;
+	VertexWorkSpace m_WorkSpaceEditor;
 
 	//Delta Time 
 	float m_fps = 0;

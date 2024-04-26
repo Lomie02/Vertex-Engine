@@ -15,7 +15,7 @@ void SceneManager::SetUpWindow(GLFWwindow* _window)
 {
 	for (int i = 0; i < m_SceneList.size(); i++)
 	{
-		
+
 	}
 }
 
@@ -92,6 +92,17 @@ void SceneManager::EngineState(EditorMode _mode)
 	else {
 		m_IsAllowedToStartScenes = false;
 	}
+}
+
+void SceneManager::CleanUpSceneManagerAssets()
+{
+	for (VertexScene* Scenes : m_SceneList) {
+
+		delete Scenes;
+		Scenes = nullptr;
+	}
+
+	m_SceneList.clear();
 }
 
 void SceneManager::DestroyScenes() //TODO: Take care of this function or just remove it.

@@ -30,6 +30,8 @@ public:
 	 void DestroyScenesOnLoad(bool _state) { m_DestroyScenes = _state; }
 	 void EngineState(EditorMode _mode);
 
+	 void CleanUpSceneManagerAssets();
+
 private:
 	void DestroyScenes();
 
