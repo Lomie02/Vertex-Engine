@@ -20,4 +20,6 @@
 // OPEN EDITOR SETTINGS
 //==============================================
 #define USE_OPEN_EDITOR false
-#define USE_VERTEX_WORK_SPACE false	
+
+// Allows you to toggle between using the default scene setup process in application.cpp or the Vertex Workspace method for creating your scenes. 
+#define USE_VERTEX_WORK_SPACE true

@@ -8,7 +8,6 @@
 class SceneManager
 {
 public:
-
 	/// <summary>
 	/// Current active scenes start function gets called.
 	/// </summary>
