@@ -11,3 +11,12 @@ Vertex Engine Developer TO DO LIST:
 1) Create Flipbook Component [COMPLETED]
 -
 2) If Possible remove the material from the gameobject & turn it into a componenet (Optional Task)
+
+
+IMPORTANT NOTE TO SELF:
+
+- Remove all collision code from the Asset Manager & create a seperate system to deal with it.
+
+- Clean up all the register functions inside the asset manager & replace them with 1 function that will use templates.
+
+- Clean up the application.cpp & remove code that does not need to be there.

@@ -26,24 +26,18 @@ Application::Application() // Creates the sound manager.
 	m_SoundManager = createIrrKlangDevice();
 }
 
-Application::~Application() //TODO: Automate this somehow if possible
+Application::~Application()
 {
 	delete m_SceneManager;
 	m_SceneManager = nullptr;
 
 	delete m_Renderer;
 
-	delete m_Scene;
-	m_Scene = nullptr;
-
 	delete m_Settings;
 	m_Settings = nullptr;
-
-	delete m_SecondScene;
-	m_SecondScene = nullptr;
 }
 
-void Application::StartUp() 
+void Application::StartUp()
 {
 	const char* description = new char[512];
 
@@ -207,7 +201,14 @@ void Application::StartUp()
 
 void Application::Start()
 {
-	SceneSetUp(); //Start setting up all scenes in engine.
+	if (USE_VERTEX_WORK_SPACE) {
+		m_WorkSpaceEditor.SceneCreation();
+		SetUpWorkSpaceScenes(); // Set Up scenes from the workspace if being used.
+	}
+	else {
+		SceneSetUp(); //Start setting up all scenes in engine.
+	}
+
 	BeginSceneSystemAssigning();
 
 
@@ -267,6 +268,14 @@ void Application::Update()
 			m_SceneManager->GetCurrentScene()->GetAssets().ConfigurePhysics(m_TimeStep);
 			fixedDelta -= m_TimeStep;
 		}
+	}
+}
+
+void Application::SetUpWorkSpaceScenes()
+{
+	for (int i = 0; i < m_WorkSpaceEditor.GrabWorkSpaceScenes().size(); i++) {
+
+		m_SceneManager->AddScene(m_WorkSpaceEditor.GrabWorkSpaceScenes().at(i));
 	}
 }
 
@@ -370,7 +379,7 @@ void Application::EditorMain() // Main Editor
 				surfaceType = m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selectedSprite)->material.surface;
 				blendModeValue = m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selectedSprite)->material.TransparencyBlend;
 				if (ImGui::Combo("Surface Type", &surfaceType, surface, 2)) {
-					if (surfaceType ==0) {
+					if (surfaceType == 0) {
 						m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selectedSprite)->material.surface = Opaque;
 					}
 					else {
@@ -386,7 +395,7 @@ void Application::EditorMain() // Main Editor
 					if (blendModeValue == 0) {
 						m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selectedSprite)->material.TransparencyBlend = Alpha;
 					}
-					else if(blendModeValue == 1) {
+					else if (blendModeValue == 1) {
 
 						m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selectedSprite)->material.TransparencyBlend = Additive;
 					}
@@ -712,6 +721,11 @@ void Application::EditorSpacer(int _spaces)
 
 void Application::BeginSceneSystemAssigning()
 {
+	if (m_SceneManager->m_SceneList.size() == 0) {
+		std::cout << "VERTEX ERROR: No Scenes have been created! Auto shutdown begining." << std::endl;
+		ShutDown();
+	}
+
 	for (int i = 0; i < m_SceneManager->m_SceneList.size(); i++)
 	{
 		m_SceneManager->m_SceneList.at(i)->GetAssets().AssignMode(m_Mode);
@@ -763,9 +777,9 @@ void Application::Quit()
 //=============================================== Add your scenes Here
 void Application::SceneSetUp()
 {
-	m_SecondScene = new Scene2("Lil Chickens");
-	m_SceneManager->AddScene(m_SecondScene);
+	m_Scene = new MyScene("My Other Scene");
 
+	m_SceneManager->AddScene(m_Scene);
 }
 
 void Application::UpdateEditorMode()
@@ -807,7 +821,8 @@ void Application::ShutDown()
 	}
 
 	Cursor::Show(m_GameWindow);
-	m_SceneManager->GetCurrentScene()->GetAssets().ExecuteAll();
+
+	m_SceneManager->CleanUpSceneManagerAssets();
 	glfwSetInputMode(m_GameWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 }
 

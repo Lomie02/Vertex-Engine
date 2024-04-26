@@ -4,6 +4,7 @@
 #include "VertexRenderPackage.h"
 #include "VertexUIPackage.h"
 
+#include <type_traits>
 #include "Camera.h"
 #include "Animator.h"
 #include "BootUpContainer.h"
@@ -44,9 +45,24 @@ public:
 	void AssignSoundSystem(irrklang::ISoundEngine* _engine);
 	void BootUpAll(BootUpContainer* _settings);
 
+	/// <summary>
+	/// The Template Vesions
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
+	/// <param name="_object"></param>
+
+	template <typename T>
+	void Register(T) {
+		switch (sizeof(T)) {
+			case sizeof(GameObject*) :
+				std::cout << "The variable is of type GameObject.\n";
+				break;
+		}
+	}
+
 	// Register Functions
 	void Register(VertexComponent* _object); // Componenet Systens
-	void Register(GameObject* _object);// Normal Objects
+	//void Register(GameObject * _object);// Normal Objects
 	void Register(RigidBody* _object); // Physics object
 	void Register(Animator* _object); // TODO switch the animator to be a component
 	void Register(Button* _object); // Button
