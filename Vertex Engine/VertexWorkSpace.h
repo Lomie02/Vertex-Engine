@@ -13,10 +13,17 @@
 class VertexWorkSpace
 {
 public:
+	/// <summary>
+	/// Setup all your scenes for the engine to use.
+	/// </summary>
 	void SceneCreation();
-
+	/// <summary>
+	/// Allows the engine to grab your scenes used inside the workspace.
+	/// </summary>
+	/// <returns> Array of the VertexScenes.</returns>
 	std::vector<VertexScene*> GrabWorkSpaceScenes() { return m_SceneList; }
 private:
+
 	std::vector<VertexScene*> m_SceneList;
 	// Scene Objects
 	Scene2* m_MyScene;

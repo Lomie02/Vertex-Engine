@@ -11,14 +11,6 @@ void SceneManager::StartUpScenes()
 	}
 }
 
-void SceneManager::SetUpWindow(GLFWwindow* _window)
-{
-	for (int i = 0; i < m_SceneList.size(); i++)
-	{
-
-	}
-}
-
 /// <summary>
 /// Adds a scene to the scene manager so it can be recognized by the engine and its systems.
 /// </summary>
@@ -27,7 +19,6 @@ void SceneManager::AddScene(VertexScene* _scene)
 {
 	m_SceneList.push_back(_scene);
 }
-
 
 /// <summary>
 /// Updates all scenes in manager & passes through the delta time relative to the framerate.
@@ -74,11 +65,6 @@ void SceneManager::SetActiveScene(const char _scene[])
 	}
 }
 
-void SceneManager::EndSceneSetUpProcess(SceneManager* _sceneManager)
-{
-	//TODO: Either remove or do something with it, I cant remember why I added this here.
-}
-
 /// <summary>
 /// Sets the Engines current state such as if its in normal release mode or in editor testing modes.
 /// </summary>
@@ -103,11 +89,4 @@ void SceneManager::CleanUpSceneManagerAssets()
 	}
 
 	m_SceneList.clear();
-}
-
-void SceneManager::DestroyScenes() //TODO: Take care of this function or just remove it.
-{
-	for (int i = 0; i < m_SceneList.size(); i++)
-	{
-	}
 }
