@@ -92,11 +92,11 @@ void AssetManager::Register(VertexComponent* _object)
 	m_VertexComponentsList.push_back(_object);
 }
 
-//void AssetManager::Register(GameObject* _object)
-//{
-//	m_Objects.push_back(_object);
-//	m_PreviousLocations.push_back(&_object->transform);
-//}
+void AssetManager::Register(GameObject* _object)
+{
+	m_Objects.push_back(_object);
+	m_PreviousLocations.push_back(&_object->transform);
+}
 
 void AssetManager::Register(RigidBody* _object)
 {

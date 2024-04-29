@@ -113,7 +113,7 @@ void MyScene::Awake()
 	m_Manager.Register(m_MainCamera);
 	m_Manager.Register(m_MyText);
 
-	m_Manager.Register<GameObject*>(m_MansFace);
+	m_Manager.Register(m_MansFace);
 
 	m_MyText->text = "ANOMOLY CONTAINMENT";
 	m_MyText->ChangeFont("Open 24 Display St");
