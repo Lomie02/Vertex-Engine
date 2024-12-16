@@ -779,6 +779,7 @@ void Application::SceneSetUp()
 {
 	m_Scene = new MyScene("My Other Scene");
 
+	m_Scene->GiveWindow(m_GameWindow);
 	m_SceneManager->AddScene(m_Scene);
 }
 
