@@ -216,11 +216,14 @@ void Application::Start()
 		m_SceneManager->m_SceneList.at(i)->GetAssets().AssignSoundSystem(m_SoundManager);
 	}
 
-	if (m_Mode != PLAY) {
-		m_SceneManager->SetActiveScene(1);
-	}
-	else {
+	switch (m_Mode) {
+	case PLAY:
 		m_SceneManager->SetActiveScene(0);
+		break;
+
+	case EDITOR:
+		m_SceneManager->SetActiveScene(1);
+		break;
 	}
 
 	m_SceneManager->StartUpScenes();
@@ -736,6 +739,7 @@ void Application::BeginSceneSystemAssigning()
 	m_FinishedSceneSetUpStage = true;
 }
 
+
 void Application::RenderAll()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -769,6 +773,9 @@ void Application::RenderAll()
 	glfwPollEvents();
 }
 
+/// <summary>
+/// Quits the application.
+/// </summary>
 void Application::Quit()
 {
 	m_IsRunning = false;
@@ -783,6 +790,9 @@ void Application::SceneSetUp()
 	m_SceneManager->AddScene(m_Scene);
 }
 
+/// <summary>
+///  Updates the interface for the editor.
+/// </summary>
 void Application::UpdateEditorMode()
 {
 	if (m_Mode == EDITOR)

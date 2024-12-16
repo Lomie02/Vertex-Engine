@@ -17,7 +17,7 @@
 #define PROJECT_ICON "PowerIcon.png"
 
 // Change to true if your game is finished & the game will be put into play mode by itself.
-#define FINAL_BUILD false
+#define FINAL_BUILD true
 #define AUTO_DELETE_ASSET_POINTERS false
 
 // ============================================== 
