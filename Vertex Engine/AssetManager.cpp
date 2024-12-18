@@ -48,6 +48,9 @@ AssetManager::~AssetManager() // automatically delete all pointers when asset ma
 			m_AudioSources.at(i) = nullptr;
 		}
 
+		delete m_Vertex_Ui_Camera;
+		m_Vertex_Ui_Camera = nullptr;
+
 	}
 }
 
@@ -117,11 +120,6 @@ void AssetManager::Register(Button* _object)
 
 void AssetManager::CollisionCheck()
 {
-	if (m_Objects.size() == 1 || m_Objects.at(0) == nullptr)
-	{
-		return;
-	}
-
 	for (int i = 0; i < m_Objects.size(); i++)
 	{
 		for (int j = 1; j < m_Objects.size(); j++)
@@ -528,7 +526,7 @@ void AssetManager::TensionLayerSort()
 					}
 				}
 				m_Transparent = m_TransparentSortList;
-				
+
 			}
 			break;
 

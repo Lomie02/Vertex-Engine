@@ -261,9 +261,8 @@ void Application::Update()
 		fixedDelta += m_deltaTime;
 
 		if (m_FinishedSceneSetUpStage)
-			m_SceneManager->GetCurrentScene()->GetAssets().ConfigureSystems(); // Update asset managers systems
 
-		m_SceneManager->UpdateScenes(m_deltaTime); // Update regular loop
+			m_SceneManager->UpdateScenes(m_deltaTime); // Update regular loop
 
 		while (fixedDelta >= m_TimeStep)
 		{
@@ -271,6 +270,8 @@ void Application::Update()
 			m_SceneManager->GetCurrentScene()->GetAssets().ConfigurePhysics(m_TimeStep);
 			fixedDelta -= m_TimeStep;
 		}
+
+		m_SceneManager->GetCurrentScene()->GetAssets().ConfigureSystems(); // Update asset managers systems
 	}
 }
 
@@ -784,7 +785,7 @@ void Application::Quit()
 //=============================================== Add your scenes Here
 void Application::SceneSetUp()
 {
-	m_Scene = new MyScene("My Other Scene");
+	m_Scene = new Scene2("My Other Scene");
 
 	m_Scene->GiveWindow(m_GameWindow);
 	m_SceneManager->AddScene(m_Scene);

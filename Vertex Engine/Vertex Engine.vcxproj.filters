@@ -43,12 +43,6 @@
     <Filter Include="Scenes">
       <UniqueIdentifier>{4981d1c9-0070-421e-9676-a286c1e688bf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Scenes\Scene 1">
-      <UniqueIdentifier>{c485d1eb-0592-4f34-ae88-7def067b83af}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Scenes\Scene 1\Scene Scripts">
-      <UniqueIdentifier>{f9a8915c-d8e2-4e7b-a38a-33e324deded1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Physics">
       <UniqueIdentifier>{fdcdf32d-a9eb-4a8e-8d01-de39ca7bf57c}</UniqueIdentifier>
     </Filter>
@@ -137,9 +131,6 @@
     </ClCompile>
     <ClCompile Include="..\imgui\imgui_impl_glfw.cpp">
       <Filter>imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="MyScene.cpp">
-      <Filter>Scenes\Scene 1</Filter>
     </ClCompile>
     <ClCompile Include="Scene2.cpp">
       <Filter>Scenes\Chicken Scene</Filter>
@@ -304,9 +295,6 @@
     </ClInclude>
     <ClInclude Include="GameObject.h">
       <Filter>GameObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="MyScene.h">
-      <Filter>Scenes\Scene 1</Filter>
     </ClInclude>
     <ClInclude Include="Scene2.h">
       <Filter>Scenes\Chicken Scene</Filter>

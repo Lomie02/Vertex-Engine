@@ -183,7 +183,6 @@
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="MyFirstScene.cpp" />
-    <ClCompile Include="MyScene.cpp" />
     <ClCompile Include="NavAgent.cpp" />
     <ClCompile Include="NavigationGrid.cpp" />
     <ClCompile Include="Particle.cpp" />
@@ -244,7 +243,6 @@
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mime.h" />
     <ClInclude Include="MyFirstScene.h" />
-    <ClInclude Include="MyScene.h" />
     <ClInclude Include="NavAgent.h" />
     <ClInclude Include="NavigationGrid.h" />
     <ClInclude Include="Particle.h" />

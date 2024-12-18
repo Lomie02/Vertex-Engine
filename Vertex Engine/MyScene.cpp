@@ -34,77 +34,15 @@ void MyScene::Awake()
 	m_Static = new GameObject("Static");
 	m_MansFace = new GameObject("man");
 
+	m_InterfaceCamera = new Camera("Interface Camera");
+
 	m_SceneManager = GetAssets().GetSceneManager();
-	m_NavGrid = new NavigationGrid();
-	NavigationNode* nodes[11 * 11];
-
-	for (int y = 0; y < 11; y++) {
-		for (int x = 0; x < 11; x++) {
-			nodes[y * 11 + x] = m_NavGrid->AddNode(glm::vec2(100 + x * GRAPH_X, 100 + y * GRAPH_Y));
-			nodes[y * 11 + x]->m_IsEnabled = true;
-		}
-	}
-
-	nodes[17]->m_IsEnabled = false;
-	nodes[12]->m_IsEnabled = false;
-	nodes[13]->m_IsEnabled = false;
-	nodes[14]->m_IsEnabled = false;
-	nodes[23]->m_IsEnabled = false;
-	nodes[25]->m_IsEnabled = false;
-	nodes[20]->m_IsEnabled = false;
-	nodes[34]->m_IsEnabled = false;
-	nodes[33]->m_IsEnabled = false;
-	nodes[60]->m_IsEnabled = false;
-	nodes[63]->m_IsEnabled = false;
-	nodes[62]->m_IsEnabled = false;
-	nodes[51]->m_IsEnabled = false;
-	nodes[54]->m_IsEnabled = false;
-	nodes[40]->m_IsEnabled = false;
-	nodes[52]->m_IsEnabled = false;
-	nodes[80]->m_IsEnabled = false;
-	nodes[59]->m_IsEnabled = false;
-	nodes[79]->m_IsEnabled = false;
-	nodes[76]->m_IsEnabled = false;
-
-	for (int y = 0; y < 11; y++)
-	{
-		for (int x = 0; x < 11; x++)
-		{
-			NavigationNode** n = &nodes[y * 11 + x];
-
-
-			if (x < 10) {
-
-				m_NavGrid->AddConnection(*n, *(n + 1));
-			}
-
-			if (x > 0) {
-
-				m_NavGrid->AddConnection(*n, *(n - 1));
-			}
-
-			if (y < 10) {
-
-				m_NavGrid->AddConnection(*n, *(n + 11));
-			}
-
-			if (y > 0) {
-
-				m_NavGrid->AddConnection(*n, *(n - 11));
-			}
-		}
-	}
 
 	m_StaticAnimation = new Flipbook();
 	AssignTextures();
 	m_Manager.Register(m_StaticAnimation);
 
 	m_MyText = new Text();
-	m_Agent = new NavAgent(m_NavGrid);
-
-	m_Manager.Register(m_Agent);
-	m_Agent->transform.position.x = 1;
-	m_Agent->transform.position.y = 1;
 
 	m_Manager.Register(m_Static);
 	m_Manager.Register(m_MansFace);
@@ -114,6 +52,7 @@ void MyScene::Awake()
 	m_Manager.Register(m_MyText);
 
 	m_Manager.Register(m_MansFace);
+	m_Manager.RegisterUserInterfaceCamera(m_InterfaceCamera);
 
 	m_MyText->text = "ANOMOLY CONTAINMENT";
 	m_MyText->ChangeFont("Open 24 Display St");
@@ -139,14 +78,15 @@ void MyScene::Start()
 	m_StaticAnimation->AdjustClipPlaySpeed("static", 50);
 	m_StaticAnimation->Play();
 
-	m_Agent->material.baseTexture = ResourceManager::GetTexture("Face");
 	m_Static->material.surface = Transparent;
 	glClearColor(0.0f, 0.0f, 0.0f, 0);
 }
 
 void MyScene::Update(float delta)
 {
-
+	if (glfwGetKey(m_Window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+		glfwTerminate();
+	}
 }
 
 void MyScene::LateUpdate(float delta) //TODO: Automate all below

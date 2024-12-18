@@ -129,7 +129,7 @@ private:
 	bool m_FinishedSceneSetUpStage = false;
 
 	//Vertex Scenes
-	MyScene* m_Scene;
+	Scene2* m_Scene;
 	MyFirstScene* m_MyScene;
 
 	AntiAliasingMode m_AnitAliasing = none;

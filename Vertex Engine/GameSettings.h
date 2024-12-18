@@ -17,14 +17,14 @@
 #define PROJECT_ICON "PowerIcon.png"
 
 // Change to true if your game is finished & the game will be put into play mode by itself.
-#define FINAL_BUILD true
+#define FINAL_BUILD false
 #define AUTO_DELETE_ASSET_POINTERS false
 
 // ============================================== 
 //	SCREEN
 // ============================================== 
 
-#define FULLSCREEN false //Doesnt affect the Editor!
+#define FULLSCREEN true //Doesnt affect the Editor!
 #define VSYNC true
 
 #define BACKGROUND_COLOUR 0.1f, 0.1f, 0.1f, 0.1f
