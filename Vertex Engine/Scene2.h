@@ -34,7 +34,7 @@ private:
 
 	// Camaeras
 	Camera* m_MainCamera;
-	Camera* m_UserCamera;
+	Camera* m_UserInterfaceCamera;
 	Canvas* m_Canvas;
 	// GameObjects
 	GameObject* m_Object2;

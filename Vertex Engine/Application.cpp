@@ -162,7 +162,7 @@ void Application::StartUp()
 		m_Settings->m_UseDefaultRenderer = false;
 	}
 	m_Settings->m_AutoDeletePointers = AUTO_DELETE_ASSET_POINTERS;
-	m_Settings->m_TransparentSortingAlgo = BubbleSort;
+	m_Settings->m_TransparentSortingAlgo = Insertion_Sort;
 
 	if (m_Mode == EDITOR)
 	{

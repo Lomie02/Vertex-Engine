@@ -54,11 +54,19 @@ AssetManager::~AssetManager() // automatically delete all pointers when asset ma
 	}
 }
 
+/// <summary>
+/// Assign the audio engine.
+/// </summary>
+/// <param name="_engine"></param>
 void AssetManager::AssignSoundSystem(irrklang::ISoundEngine* _engine)
 {
 	m_SoundSystem = _engine;
 }
 
+/// <summary>
+/// Uses boot settings to keep renderers in check.
+/// </summary>
+/// <param name="_settings"></param>
 void AssetManager::BootUpAll(BootUpContainer* _settings)
 {
 	if (_settings != nullptr) {
@@ -72,7 +80,8 @@ void AssetManager::BootUpAll(BootUpContainer* _settings)
 			m_RendererToUse = Tension_2D;
 		}
 
-		switch (_settings->m_TransparentSortingAlgo) {
+		switch (_settings->m_TransparentSortingAlgo)
+		{
 		case BubbleSort:
 			m_SortingTransparentAlgo = BubbleSort;
 			std::cout << "VERTEX MESSAGE: Bubble Sort set as transparency layer sorting method." << std::endl;
@@ -90,27 +99,44 @@ void AssetManager::BootUpAll(BootUpContainer* _settings)
 	}
 }
 
+/// <summary>
+/// Register a Vertex Component.
+/// </summary>
+/// <param name="_object"></param>
 void AssetManager::Register(VertexComponent* _object)
 {
 	m_VertexComponentsList.push_back(_object);
 }
 
+/// <summary>
+/// Register GameObjects.
+/// </summary>
+/// <param name="_object"></param>
 void AssetManager::Register(GameObject* _object)
 {
 	m_Objects.push_back(_object);
 	m_PreviousLocations.push_back(&_object->transform);
 }
 
+//TODO: Replace with box2d
 void AssetManager::Register(RigidBody* _object)
 {
 	m_PhysicsObjects.push_back(_object);
 }
 
+/// <summary>
+/// Register an Animator
+/// </summary>
+/// <param name="_object"></param>
 void AssetManager::Register(Animator* _object)
 {
 	m_Animators.push_back(_object);
 }
 
+/// <summary>
+/// Register world button
+/// </summary>
+/// <param name="_object"></param>
 void AssetManager::Register(Button* _object)
 {
 	m_UiButtonObjects.push_back(_object);
@@ -118,6 +144,7 @@ void AssetManager::Register(Button* _object)
 
 //============================================================================
 
+// Remove & put into collison class
 void AssetManager::CollisionCheck()
 {
 	for (int i = 0; i < m_Objects.size(); i++)
@@ -148,6 +175,7 @@ void AssetManager::CollisionCheck()
 	}
 }
 
+//TODO: Move to seperate collision class
 bool AssetManager::OnTrigger(GameObject* A, GameObject* B)
 {
 	bool CollisionFound;
@@ -168,6 +196,9 @@ bool AssetManager::OnTrigger(GameObject* A, GameObject* B)
 	return false;
 }
 
+/// <summary>
+/// Configure all systems.
+/// </summary>
 void AssetManager::ConfigureSystems()
 {
 	if (!m_ShutDownManager) {
@@ -231,6 +262,10 @@ void AssetManager::ConfigureSystems()
 	CollisionCheck();
 }
 
+/// <summary>
+/// Assigns the renderer to its respected pipeline
+/// </summary>
+/// <param name="render"></param>
 void AssetManager::ConfigureRenderSystems(Vertex2D* render)
 {
 	if (m_RendererToUse == Vertex_2D)
@@ -242,6 +277,7 @@ void AssetManager::ConfigureRenderSystems(Vertex2D* render)
 	}
 }
 
+//TODO: Remove & replace with box2d
 void AssetManager::ConfigurePhysics(float fixedDelta)
 {
 	if (m_PhysicsObjects.size() > 0)
@@ -259,37 +295,65 @@ void AssetManager::ConfigurePhysics(float fixedDelta)
 	UpdateComponents(fixedDelta);
 }
 
+/// <summary>
+/// Register a Camera.
+/// </summary>
+/// <param name="camera"></param>
 void AssetManager::Register(Camera* camera)
 {
 	m_Cameras.push_back(camera);
 }
 
+/// <summary>
+/// Register World Text Objects
+/// </summary>
+/// <param name="_text"></param>
 void AssetManager::Register(Text* _text)
 {
 	m_UiTextObjects.push_back(_text);
 }
 
+/// <summary>
+/// Register a Volume (Post Processing Effects)
+/// </summary>
+/// <param name="_text"></param>
 void AssetManager::Register(Volume& _text)
 {
 	m_SceneVolume = _text;
 }
 
+/// <summary>
+/// Register NavAgents
+/// </summary>
+/// <param name="_nav"></param>
 void AssetManager::Register(NavAgent* _nav)
 {
 	m_NavList.push_back(_nav);
 }
 
+/// <summary>
+/// Changes the camera used for rendering if more than one exists.
+/// </summary>
+/// <param name="_index"></param>
 void AssetManager::SetActiveCamera(int _index)
 {
 	m_ActiveCamera = _index;
 }
 
+/// <summary>
+/// Register Audio Sources
+/// </summary>
+/// <param name="_audio"></param>
 void AssetManager::Register(AudioSource* _audio)
 {
 	m_AudioSources.push_back(_audio);
 }
 
-void AssetManager::Register(Canvas* _canvas)
+/// <summary>
+/// Register Canvas Interface Objects
+/// </summary>
+/// <param name="_canvas"></param>
+void AssetManager::Register(Canvas* _canvas) 
 {
 	m_CanvasList.push_back(_canvas);
 }
@@ -438,14 +502,6 @@ void AssetManager::TensionRendering(Vertex2D* m_Renderer)
 	// Render User Interface Objects
 	if (m_Vertex_Ui_Camera != nullptr && m_CanvasList.size() != 0) {
 
-		//  Render World Text
-		for (int i = 0; i < m_CanvasList.at(m_ActiveCanvasDisplay)->GetText().size(); i++)
-		{
-			if (m_CanvasList.at(m_ActiveCanvasDisplay)->GetText().at(i)->GetActive()) {
-				m_CanvasList.at(m_ActiveCanvasDisplay)->GetText().at(i)->ConfigureRenderSystems(m_Vertex_Ui_Camera->GetProjection());
-			}
-		}
-
 		// Render UI Buttons.
 		for (int i = 0; i < m_CanvasList.at(m_ActiveCanvasDisplay)->GetButtons().size(); i++)
 		{
@@ -465,6 +521,14 @@ void AssetManager::TensionRendering(Vertex2D* m_Renderer)
 
 			}
 		}
+		//  Render World Text
+		for (int i = 0; i < m_CanvasList.at(m_ActiveCanvasDisplay)->GetText().size(); i++)
+		{
+			if (m_CanvasList.at(m_ActiveCanvasDisplay)->GetText().at(i)->GetActive()) {
+				m_CanvasList.at(m_ActiveCanvasDisplay)->GetText().at(i)->ConfigureRenderSystems(m_Vertex_Ui_Camera->GetProjection());
+			}
+		}
+
 	}
 }
 
