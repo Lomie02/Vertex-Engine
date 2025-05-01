@@ -40,14 +40,12 @@ private:
 	Texture2D Dont;
 
 	AudioSource* m_SoundEffect;
-	NavigationGrid* m_NavGrid;
 	RigidBody* m_Body;
 	Volume m_MyVolume;
 
 	Text* m_MyText;
 	Button* m_Button;
 
-	NavAgent* m_Agent;
 	GameObject* m_LadysFace;
 	GameObject* m_MansFace;
 	GameObject* m_Static;
@@ -56,4 +54,5 @@ private:
 	Flipbook* m_StaticAnimation;
 	float counter;
 	Camera* m_MainCamera;
+	Camera* m_InterfaceCamera;
 };

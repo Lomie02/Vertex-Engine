@@ -43,12 +43,6 @@
     <Filter Include="Scenes">
       <UniqueIdentifier>{4981d1c9-0070-421e-9676-a286c1e688bf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Scenes\Scene 1">
-      <UniqueIdentifier>{c485d1eb-0592-4f34-ae88-7def067b83af}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Scenes\Scene 1\Scene Scripts">
-      <UniqueIdentifier>{f9a8915c-d8e2-4e7b-a38a-33e324deded1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Physics">
       <UniqueIdentifier>{fdcdf32d-a9eb-4a8e-8d01-de39ca7bf57c}</UniqueIdentifier>
     </Filter>
@@ -57,9 +51,6 @@
     </Filter>
     <Filter Include="Components">
       <UniqueIdentifier>{560fabd4-3f43-4762-9f34-f300331fba97}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Scenes\Scene 3">
-      <UniqueIdentifier>{f1d50b3a-5a3b-4e07-9bb3-97548b9d311d}</UniqueIdentifier>
     </Filter>
     <Filter Include="AI">
       <UniqueIdentifier>{94d98bff-9de2-40ec-924f-7b2711670c3f}</UniqueIdentifier>
@@ -138,9 +129,6 @@
     <ClCompile Include="..\imgui\imgui_impl_glfw.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
-    <ClCompile Include="MyScene.cpp">
-      <Filter>Scenes\Scene 1</Filter>
-    </ClCompile>
     <ClCompile Include="Scene2.cpp">
       <Filter>Scenes\Chicken Scene</Filter>
     </ClCompile>
@@ -167,9 +155,6 @@
     </ClCompile>
     <ClCompile Include="TestComponent.cpp">
       <Filter>Components</Filter>
-    </ClCompile>
-    <ClCompile Include="MyFirstScene.cpp">
-      <Filter>Scenes\Scene 3</Filter>
     </ClCompile>
     <ClCompile Include="PlayerController.cpp">
       <Filter>Components</Filter>
@@ -305,9 +290,6 @@
     <ClInclude Include="GameObject.h">
       <Filter>GameObjects</Filter>
     </ClInclude>
-    <ClInclude Include="MyScene.h">
-      <Filter>Scenes\Scene 1</Filter>
-    </ClInclude>
     <ClInclude Include="Scene2.h">
       <Filter>Scenes\Chicken Scene</Filter>
     </ClInclude>
@@ -340,9 +322,6 @@
     </ClInclude>
     <ClInclude Include="TestComponent.h">
       <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="MyFirstScene.h">
-      <Filter>Scenes\Scene 3</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>

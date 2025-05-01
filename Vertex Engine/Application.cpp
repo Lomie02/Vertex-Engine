@@ -35,6 +35,7 @@ Application::~Application()
 
 	delete m_Settings;
 	m_Settings = nullptr;
+	
 }
 
 void Application::StartUp()
@@ -162,7 +163,7 @@ void Application::StartUp()
 		m_Settings->m_UseDefaultRenderer = false;
 	}
 	m_Settings->m_AutoDeletePointers = AUTO_DELETE_ASSET_POINTERS;
-	m_Settings->m_TransparentSortingAlgo = BubbleSort;
+	m_Settings->m_TransparentSortingAlgo = Insertion_Sort;
 
 	if (m_Mode == EDITOR)
 	{
@@ -216,11 +217,14 @@ void Application::Start()
 		m_SceneManager->m_SceneList.at(i)->GetAssets().AssignSoundSystem(m_SoundManager);
 	}
 
-	if (m_Mode != PLAY) {
-		m_SceneManager->SetActiveScene(1);
-	}
-	else {
+	switch (m_Mode) {
+	case PLAY:
 		m_SceneManager->SetActiveScene(0);
+		break;
+
+	case EDITOR:
+		m_SceneManager->SetActiveScene(1);
+		break;
 	}
 
 	m_SceneManager->StartUpScenes();
@@ -258,9 +262,8 @@ void Application::Update()
 		fixedDelta += m_deltaTime;
 
 		if (m_FinishedSceneSetUpStage)
-			m_SceneManager->GetCurrentScene()->GetAssets().ConfigureSystems(); // Update asset managers systems
 
-		m_SceneManager->UpdateScenes(m_deltaTime); // Update regular loop
+			m_SceneManager->UpdateScenes(m_deltaTime); // Update regular loop
 
 		while (fixedDelta >= m_TimeStep)
 		{
@@ -268,6 +271,8 @@ void Application::Update()
 			m_SceneManager->GetCurrentScene()->GetAssets().ConfigurePhysics(m_TimeStep);
 			fixedDelta -= m_TimeStep;
 		}
+
+		m_SceneManager->GetCurrentScene()->GetAssets().ConfigureSystems(); // Update asset managers systems
 	}
 }
 
@@ -736,6 +741,7 @@ void Application::BeginSceneSystemAssigning()
 	m_FinishedSceneSetUpStage = true;
 }
 
+
 void Application::RenderAll()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -769,6 +775,9 @@ void Application::RenderAll()
 	glfwPollEvents();
 }
 
+/// <summary>
+/// Quits the application.
+/// </summary>
 void Application::Quit()
 {
 	m_IsRunning = false;
@@ -777,11 +786,15 @@ void Application::Quit()
 //=============================================== Add your scenes Here
 void Application::SceneSetUp()
 {
-	m_Scene = new MyScene("My Other Scene");
+	m_Scene = new Scene2("My Other Scene");
 
+	m_Scene->GiveWindow(m_GameWindow);
 	m_SceneManager->AddScene(m_Scene);
 }
 
+/// <summary>
+///  Updates the interface for the editor.
+/// </summary>
 void Application::UpdateEditorMode()
 {
 	if (m_Mode == EDITOR)

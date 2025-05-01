@@ -46,7 +46,7 @@ Scene2::~Scene2()
 void Scene2::Awake()
 {
 	m_Object2 = new GameObject("Chimken");
-	m_Object0 = new GameObject("Myring");
+	m_Object0 = new GameObject("Mr Chicken");
 
 	m_SceneManager = GetAssets().GetSceneManager();
 
@@ -55,8 +55,8 @@ void Scene2::Awake()
 
 	m_Object0->material.m_KeepAspect = true;
 
-	m_Object2->material.baseTexture = ResourceManager::LoadTexture("Builds/Textures/Chimken.png", "Chimken");
-	ResourceManager::LoadTexture("Builds/Textures/Chimken_01.png", "Chimken1");
+	m_Object2->material.baseTexture = ResourceManager::LoadTexture("Builds/Textures/Girl_01.png", "Chimken");
+	ResourceManager::LoadTexture("Builds/Textures/Girl_02.png", "Chimken1");
 
 	m_Object2->material.baseTexture = ResourceManager::GetTexture("Chimken1");
 
@@ -121,9 +121,9 @@ void Scene2::Awake()
 
 	m_Manager.Register(m_Canvas);
 
-	m_Title->m_FontSize = 90;
+	m_Title->m_FontSize = 24;
 
-	m_Title->ChangeFont("Open 24 Display St");
+	m_Title->ChangeFont("Arial");
 
 	m_Title->transform.position.x = -7;
 	m_Title->transform.position.y = 5;
@@ -149,6 +149,7 @@ void Scene2::Awake()
 	m_FlipbookAnimation->SetMaster(m_Object2);
 
 	m_IdleClip.m_Name = "Idle";
+	m_IdleClip.m_PlaySpeed = 0.05f;
 
 	StartFlipbookSetUp();
 	m_FlipbookAnimation->AddFrame(m_IdleClip);
@@ -184,8 +185,8 @@ void Scene2::Awake()
 	m_Animation->WrapMode(Loop);
 	m_Manager.Register(m_Animation);
 
-	m_UserCamera = new Camera("UserCamera");
-	m_Manager.RegisterUserInterfaceCamera(m_UserCamera);
+	m_UserInterfaceCamera = new Camera("UserCamera");
+	m_Manager.RegisterUserInterfaceCamera(m_UserInterfaceCamera);
 
 }
 
@@ -199,13 +200,13 @@ void Scene2::Start()
 	m_FlipbookAnimation->Play();
 	m_EggFlipBook->Play();
 
-	m_Title->text = "Gather Eggs!";
+	m_Title->text = "Vertex Engine 2";
 	m_Title->SetActive(true);
 
 	m_Animation->Play();
 	m_Object0->transform.position.x = -7;
 	m_Controller->SetWeight(0);
-	m_Controller->SetSpeed(20);
+	m_Controller->SetSpeed(5);
 }
 
 void Scene2::Update(float delta)
@@ -226,6 +227,9 @@ void Scene2::Update(float delta)
 	m_MainCamera->transform.position.x = glm::lerp(m_MainCamera->transform.position.x, m_Object0->transform.position.x, delta);
 	m_MainCamera->transform.position.y = glm::lerp(m_MainCamera->transform.position.y, m_Object0->transform.position.y, delta);
 
+	if (glfwGetKey(m_Window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+		glfwTerminate();
+	}
 }
 
 void Scene2::LateUpdate(float delta)

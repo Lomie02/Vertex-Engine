@@ -11,8 +11,8 @@
 #define PROJECT_DEVELOPER "Dylan Smith"
 #define PROJECT_COMPANY "Your Company"
 
-#define ENGINE_VERSION 1.13
-#define ENGINE_EDITION "Vertex Engine 2D"
+#define ENGINE_VERSION 2.00
+#define ENGINE_EDITION "Vertex Engine 2"
 
 #define PROJECT_ICON "PowerIcon.png"
 
@@ -24,7 +24,7 @@
 //	SCREEN
 // ============================================== 
 
-#define FULLSCREEN false //Doesnt affect the Editor!
+#define FULLSCREEN true //Doesnt affect the Editor!
 #define VSYNC true
 
 #define BACKGROUND_COLOUR 0.1f, 0.1f, 0.1f, 0.1f

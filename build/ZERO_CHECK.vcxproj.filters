@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="D:\Git\Vertex Engine\Vertex-Engine\build\CMakeFiles\1d311400e0ee1ea41378b9e3934ffacd\generate.stamp.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{0877B9AF-E27B-3A66-9B67-D4340AD43DB0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

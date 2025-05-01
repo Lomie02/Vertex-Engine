@@ -1,0 +1,3 @@
+D:/Git/Vertex Engine/Vertex-Engine/build/CMakeFiles/Vertex-Engine.dir
+D:/Git/Vertex Engine/Vertex-Engine/build/CMakeFiles/ALL_BUILD.dir
+D:/Git/Vertex Engine/Vertex-Engine/build/CMakeFiles/ZERO_CHECK.dir

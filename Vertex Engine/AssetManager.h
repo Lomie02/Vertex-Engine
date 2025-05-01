@@ -16,7 +16,7 @@
 #include "NavAgent.h"
 #include "irrKlang-64bit-1.6.0/include/irrKlang.h"
 #include "Canvas.h"
-
+#include "PhysicsScene.h"
 using namespace irrklang;
 
 enum Renderer {
@@ -38,6 +38,8 @@ public:
 		m_CameraGizmo.baseTexture = ResourceManager::GetTexture("Gizmo_Camera");
 		m_TransformGizmoX.baseTexture = ResourceManager::GetTexture("Gizmo_Cords");
 		m_CenterGizmo.baseTexture = ResourceManager::GetTexture("Gizmo_Center");
+
+		m_PhysicsScene = new PhysicsScene();
 	};
 
 	~AssetManager();
@@ -45,24 +47,10 @@ public:
 	void AssignSoundSystem(irrklang::ISoundEngine* _engine);
 	void BootUpAll(BootUpContainer* _settings);
 
-	/// <summary>
-	/// The Template Vesions
-	/// </summary>
-	/// <typeparam name="T"></typeparam>
-	/// <param name="_object"></param>
-
-	template <typename T>
-	void Register(T) {
-		switch (sizeof(T)) {
-			case sizeof(GameObject*) :
-				std::cout << "The variable is of type GameObject.\n";
-				break;
-		}
-	}
 
 	// Register Functions
 	void Register(VertexComponent* _object); // Componenet Systens
-	//void Register(GameObject * _object);// Normal Objects
+	void Register(GameObject* _object);// Normal Objects
 	void Register(RigidBody* _object); // Physics object
 	void Register(Animator* _object); // TODO switch the animator to be a component
 	void Register(Button* _object); // Button
@@ -131,6 +119,7 @@ private:
 	Volume m_SceneVolume;
 	SceneManager* m_SceneManager;
 
+	PhysicsScene* m_PhysicsScene;
 	std::vector<Canvas*> m_CanvasList;
 	int m_ActiveCanvasDisplay = 0;
 

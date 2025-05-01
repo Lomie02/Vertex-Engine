@@ -24,7 +24,7 @@ public:
 
 	Material EditTransition(int _index);
 private:
-	float m_TransitionSpeed = 5;
+	float m_TransitionSpeed = 2;
 	GLFWwindow* m_Window;
 	SceneManager* m_SceneManager;
 

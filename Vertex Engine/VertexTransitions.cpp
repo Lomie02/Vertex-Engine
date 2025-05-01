@@ -41,7 +41,7 @@ void VertexTransitions::Awake()
 
 	m_Transitions.at(0)->material.baseTexture = ResourceManager::GetTexture("VertexMainDisplay");
 	m_Transitions.at(0)->material.surface = Transparent;
-	m_TransitionSpeed = 5;
+	m_TransitionSpeed = 2;
 
 	m_MainCamera = new Camera("Transition Camera");
 
