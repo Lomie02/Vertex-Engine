@@ -51,6 +51,8 @@ AssetManager::~AssetManager() // automatically delete all pointers when asset ma
 		delete m_Vertex_Ui_Camera;
 		m_Vertex_Ui_Camera = nullptr;
 
+		delete m_PhysicsScene;
+		m_PhysicsScene = nullptr;
 	}
 }
 
@@ -280,17 +282,7 @@ void AssetManager::ConfigureRenderSystems(Vertex2D* render)
 //TODO: Remove & replace with box2d
 void AssetManager::ConfigurePhysics(float fixedDelta)
 {
-	if (m_PhysicsObjects.size() > 0)
-	{
-		for (int i = 0; i < m_PhysicsObjects.size(); i++)
-		{
-			if (m_PhysicsObjects.at(i)->m_Active)
-			{
-				m_PhysicsObjects.at(i)->transform.position += m_PhysicsObjects.at(i)->m_Velocity * fixedDelta;
-				m_PhysicsObjects.at(i)->ApplyForce(m_WorldGravity * m_PhysicsObjects.at(i)->GetMass() * fixedDelta);
-			}
-		}
-	}
+	m_PhysicsScene->FixedUpdate(fixedDelta);
 
 	UpdateComponents(fixedDelta);
 }

@@ -16,7 +16,7 @@
 #include "NavAgent.h"
 #include "irrKlang-64bit-1.6.0/include/irrKlang.h"
 #include "Canvas.h"
-
+#include "PhysicsScene.h"
 using namespace irrklang;
 
 enum Renderer {
@@ -38,6 +38,8 @@ public:
 		m_CameraGizmo.baseTexture = ResourceManager::GetTexture("Gizmo_Camera");
 		m_TransformGizmoX.baseTexture = ResourceManager::GetTexture("Gizmo_Cords");
 		m_CenterGizmo.baseTexture = ResourceManager::GetTexture("Gizmo_Center");
+
+		m_PhysicsScene = new PhysicsScene();
 	};
 
 	~AssetManager();
@@ -117,6 +119,7 @@ private:
 	Volume m_SceneVolume;
 	SceneManager* m_SceneManager;
 
+	PhysicsScene* m_PhysicsScene;
 	std::vector<Canvas*> m_CanvasList;
 	int m_ActiveCanvasDisplay = 0;
 

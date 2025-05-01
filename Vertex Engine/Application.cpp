@@ -35,6 +35,7 @@ Application::~Application()
 
 	delete m_Settings;
 	m_Settings = nullptr;
+	
 }
 
 void Application::StartUp()
