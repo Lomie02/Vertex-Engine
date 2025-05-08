@@ -207,6 +207,10 @@ void Scene2::Awake()
 	SetupButton();
 
 	m_Object2->AddComponent<DebugComp>();
+	m_Object2->AddComponent<DebugComp>();
+	m_Object2->AddComponent<DebugComp>();
+
+	std::cout << "Comp List: " << m_Object2->FindComponentsOfType<DebugComp>().size() << std::endl;
 
 	m_Manager.Register(m_Egg);
 	m_ButtonTest->SetActive(false);
