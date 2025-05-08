@@ -177,6 +177,7 @@
     <ClCompile Include="Clip.cpp" />
     <ClCompile Include="Collider.cpp" />
     <ClCompile Include="Cursor.cpp" />
+    <ClCompile Include="DebugComp.cpp" />
     <ClCompile Include="Flipbook.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="glad.c" />
@@ -207,7 +208,10 @@
     <ClCompile Include="VertexText2D.cpp" />
     <ClCompile Include="VertexTransitions.cpp" />
     <ClCompile Include="VertexWorkSpace.cpp" />
+    <ClCompile Include="vGameObject.cpp" />
     <ClCompile Include="Volume.cpp" />
+    <ClCompile Include="vTexture3D.cpp" />
+    <ClCompile Include="vTransform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\imgui\imconfig.h" />
@@ -232,6 +236,7 @@
     <ClInclude Include="Clip.h" />
     <ClInclude Include="Collider.h" />
     <ClInclude Include="Cursor.h" />
+    <ClInclude Include="DebugComp.h" />
     <ClInclude Include="Flipbook.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameSettings.h" />
@@ -270,7 +275,10 @@
     <ClInclude Include="VertexTransitions.h" />
     <ClInclude Include="VertexUIPackage.h" />
     <ClInclude Include="VertexWorkSpace.h" />
+    <ClInclude Include="vGameObject.h" />
     <ClInclude Include="Volume.h" />
+    <ClInclude Include="vTexture3D.h" />
+    <ClInclude Include="vTransform.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Vertex Engine 2D.rc" />

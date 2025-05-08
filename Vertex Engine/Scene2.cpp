@@ -64,7 +64,7 @@ void Scene2::Awake()
 	m_Object0->material.surface = Transparent;
 
 	// Egg Texture
-	ResourceManager::LoadTexture("Builds/Textures/Egg.png", "Egg");
+	ResourceManager::LoadTexture("Builds/Textures/Block.png", "Egg");
 	ResourceManager::LoadTexture("Builds/Textures/EggOpen.png", "EggOpen");
 	m_Egg->material.baseTexture = ResourceManager::GetTexture("Egg");
 	m_Egg->material.surface = Transparent;
@@ -104,7 +104,7 @@ void Scene2::Awake()
 	m_Sprite->material.m_KeepAspect = true;
 	m_Sprite->material.surface = Transparent;
 
-	m_Sprite->transform.position = glm::vec2(-18,-4);
+	m_Sprite->transform.position = glm::vec2(-18, -4);
 
 	m_Sprite->transform.size.x = 5;
 	m_Sprite->transform.size.y = 5;
@@ -147,7 +147,6 @@ void Scene2::Awake()
 
 	m_FlipbookAnimation->SetMaster(m_Object0);
 	m_FlipbookAnimation->SetMaster(m_Object2);
-
 	m_IdleClip.m_Name = "Idle";
 	m_IdleClip.m_PlaySpeed = 0.05f;
 
@@ -169,8 +168,45 @@ void Scene2::Awake()
 	m_Object2->material.colour.a = 1.0f;
 	m_Animation->AddKeyFrame();
 
+	m_MainCamera->transform.position.x = 6;
+
+	// ====================================== Bodies
+
+	m_Body = new RigidBody("Blud");
+	m_Decoy = new RigidBody("Blud");
+	m_BlockBody = new RigidBody("Block");
+
+	m_Body->material.baseTexture = ResourceManager::GetTexture("Egg");
+	m_BlockBody->material.baseTexture = ResourceManager::GetTexture("Egg");
+	m_BlockBody->material.baseTexture = ResourceManager::GetTexture("Egg");
+
+	m_Body->transform.position = glm::vec2(9, 0);
+	m_Decoy->transform.position = glm::vec2(2, 0);
+
+	m_BlockBody->transform.position = glm::vec2(6, -5);
+
+	m_BlockBody->SetMass(0);
+	m_Body->SetMass(1);
+	 
+	m_BlockBody->transform.SetSize(20.0f, 2.0f);
+	m_Decoy->transform.SetSize(2.0f, 2.0f);
+
+	m_Body->Init(new btBoxShape(btVector3(m_Body->transform.GetSize().x/ 2, m_Body->transform.GetSize().y / 2, 0.1f)), 1);
+	m_Decoy->Init(new btBoxShape(btVector3(m_Decoy->transform.GetSize().x * m_Decoy->transform.scale / 2, m_Decoy->transform.GetSize().y * m_Decoy->transform.scale / 2, 0.1f)), 1);
+	m_BlockBody->Init(new btBoxShape(btVector3(m_BlockBody->transform.GetSize().x / 2, m_BlockBody->transform.GetSize().y / 2, 0.1f)), 0);
+
+	m_Manager.Register(m_Body);
+	m_Manager.Register(m_Decoy);
+	m_Manager.Register(m_BlockBody);
+
+
+	m_Manager.SetWorldGravity(glm::vec3(0.f, -9.8f, 0.0f));
+
+	// ====================================== Bodies
 	//====================
 	SetupButton();
+
+	m_Object2->AddComponent<DebugComp>();
 
 	m_Manager.Register(m_Egg);
 	m_ButtonTest->SetActive(false);
@@ -207,25 +243,27 @@ void Scene2::Start()
 	m_Object0->transform.position.x = -7;
 	m_Controller->SetWeight(0);
 	m_Controller->SetSpeed(5);
+
 }
 
 void Scene2::Update(float delta)
 {
-	if (glfwGetKey(m_Window,GLFW_KEY_W) == GLFW_PRESS) {
-		m_Controller->MovePosition(glm::vec2(0,1), delta);
+	if (glfwGetKey(m_Window, GLFW_KEY_W) == GLFW_PRESS) {
+		m_Body->ApplyForce(glm::vec3(0, 1, 0) * 10.0f);
 	}
 	if (glfwGetKey(m_Window, GLFW_KEY_S) == GLFW_PRESS) {
-		m_Controller->MovePosition(glm::vec2(0, -1), delta);
+		m_Body->ApplyForce(glm::vec3(0, -1, 0) * 10.0f);
 	}
 	if (glfwGetKey(m_Window, GLFW_KEY_D) == GLFW_PRESS) {
-		m_Controller->MovePosition(glm::vec2(1, 0), delta);
-	}
+		m_Body->ApplyForce(glm::vec3(1, 0, 0) * 10.0f);
+	} 
 	if (glfwGetKey(m_Window, GLFW_KEY_A) == GLFW_PRESS) {
-		m_Controller->MovePosition(glm::vec2(-1, 0), delta);
+		m_Body->ApplyForce(glm::vec3(-1, 0, 0) * 10.0f);
 	}
 
-	m_MainCamera->transform.position.x = glm::lerp(m_MainCamera->transform.position.x, m_Object0->transform.position.x, delta);
-	m_MainCamera->transform.position.y = glm::lerp(m_MainCamera->transform.position.y, m_Object0->transform.position.y, delta);
+	if (glfwGetKey(m_Window, GLFW_KEY_SPACE) == GLFW_PRESS) {
+		m_Body->ApplyForce(m_Body->GetForward() * 50.0f);
+	}
 
 	if (glfwGetKey(m_Window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 		glfwTerminate();
@@ -238,6 +276,7 @@ void Scene2::LateUpdate(float delta)
 
 void Scene2::FixedUpdate(float fixedDelta)
 {
+	//std::cout << "Pos: " << m_Body->transform.position.x << " | " << m_Body->transform.position.y << std::endl;
 }
 
 void Scene2::StartFlipbookSetUp()

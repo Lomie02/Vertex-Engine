@@ -1,6 +1,6 @@
 #include "VertexAccessExplorer.h"
 
-bool VertexAccessExplorer::OpenURL(const wchar_t* path)
+bool VertexAccessExplorer:: OpenURL(const wchar_t* path)
 {
 	ShellExecute(0, 0, path, 0, 0, SW_HIDE);
 	return true;

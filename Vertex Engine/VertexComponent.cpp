@@ -1,9 +1,5 @@
 #include "VertexComponent.h"
 
-VertexComponent::VertexComponent()
-{
-}
-
 void VertexComponent::Start()
 {
 }

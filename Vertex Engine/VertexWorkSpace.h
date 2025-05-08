@@ -25,8 +25,7 @@ public:
 	std::vector<VertexScene*> GrabWorkSpaceScenes() { return m_SceneList; }
 
 private:
-
-	std::vector<VertexScene*> m_SceneList;
+	std::vector<VertexScene*> m_SceneList; //List of Vertex Scenes
 	// Scene Objects
 	Scene2* m_MyScene;
 };

@@ -18,7 +18,7 @@
 	- Updating Objects/ Componenets
 	- Collision Detection
 	- Physics
-	- Sound  
+	- Sound
 	- Layer Sorting
 	- Configuring System Updates
 */
@@ -123,7 +123,7 @@ void AssetManager::Register(GameObject* _object)
 //TODO: Replace with box2d
 void AssetManager::Register(RigidBody* _object)
 {
-	m_PhysicsObjects.push_back(_object);
+	m_PhysicsScene->Register(_object);
 }
 
 /// <summary>
@@ -270,12 +270,17 @@ void AssetManager::ConfigureSystems()
 /// <param name="render"></param>
 void AssetManager::ConfigureRenderSystems(Vertex2D* render)
 {
-	if (m_RendererToUse == Vertex_2D)
-	{
+	switch (m_RendererToUse) {
+	case Vertex_2D:
 		Vertex2dRendering(render);
-	}
-	else if (m_RendererToUse == Tension_2D) {
+		break;
+
+	case Tension_2D:
 		TensionRendering(render);
+		break;
+
+	case Violet_3D:
+		break;
 	}
 }
 
@@ -283,7 +288,6 @@ void AssetManager::ConfigureRenderSystems(Vertex2D* render)
 void AssetManager::ConfigurePhysics(float fixedDelta)
 {
 	m_PhysicsScene->FixedUpdate(fixedDelta);
-
 	UpdateComponents(fixedDelta);
 }
 
@@ -345,9 +349,14 @@ void AssetManager::Register(AudioSource* _audio)
 /// Register Canvas Interface Objects
 /// </summary>
 /// <param name="_canvas"></param>
-void AssetManager::Register(Canvas* _canvas) 
+void AssetManager::Register(Canvas* _canvas)
 {
 	m_CanvasList.push_back(_canvas);
+}
+
+void AssetManager::Register(vGameObject* _object)
+{
+	m_GameObjects3D.push_back(_object);
 }
 
 //Improve this to use the new Vertex Collsion System.
@@ -437,6 +446,7 @@ bool AssetManager::Raycast2D(glm::vec2 _pos, glm::vec2 _dir, GameObject& _out, f
 //Vertex Tension Renderer 
 void AssetManager::TensionRendering(Vertex2D* m_Renderer)
 {
+	m_Renderer->StartRenderFrameCycle();
 	if (m_SingleSortRenderering && !m_HasRendered) // Sort the transparent layers once only to save performance. Use if objects never change layers in engine.
 	{
 		TensionLayerSort();
@@ -466,6 +476,16 @@ void AssetManager::TensionRendering(Vertex2D* m_Renderer)
 						m_Cameras.at(m_ActiveCamera)->GetProjection(), m_Opaque.at(i)->layer);
 				}
 			}
+		}
+	}
+
+	for (int i = 0; i < m_PhysicsScene->Get2dObjects().size(); i++)
+	{
+		if (m_PhysicsScene->Get2dObjects().at(i)->GetActive())
+		{
+			m_Renderer->TensionDraw(m_PhysicsScene->Get2dObjects().at(i), m_PhysicsScene->Get2dObjects().at(i)->material, m_PhysicsScene->Get2dObjects().at(i)->transform.position,
+				m_PhysicsScene->Get2dObjects().at(i)->transform.size, m_PhysicsScene->Get2dObjects().at(i)->transform.rotation, m_PhysicsScene->Get2dObjects().at(i)->transform.scale,
+				m_Cameras.at(m_ActiveCamera)->GetProjection(), m_PhysicsScene->Get2dObjects().at(i)->layer);
 		}
 	}
 
@@ -520,8 +540,9 @@ void AssetManager::TensionRendering(Vertex2D* m_Renderer)
 				m_CanvasList.at(m_ActiveCanvasDisplay)->GetText().at(i)->ConfigureRenderSystems(m_Vertex_Ui_Camera->GetProjection());
 			}
 		}
-
 	}
+
+	m_CurrentRenderBatchesFromRenderer = m_Renderer->CurrentDrawCalls();
 }
 
 //Tension Renderers Layer Sorting
@@ -697,6 +718,17 @@ void AssetManager::Vertex2dRendering(Vertex2D* render)
 			{
 				m_UiTextObjects.at(i)->ConfigureRenderSystems(m_Cameras.at(m_ActiveCamera)->GetProjection());
 			}
+		}
+	}
+}
+
+void AssetManager::ConfigVioletSystems()
+{
+	for (auto* objects : m_GameObjects3D) {
+		for (auto& vComp : objects->GetEntireComponenetsList()) {
+			vComp->Update(1);
+			vComp->FixedUpdate(1);
+			vComp->LateUpdate(1);
 		}
 	}
 }
@@ -903,18 +935,21 @@ int AssetManager::Partition(std::vector<GameObject*> _list, int _start, int _end
 
 void AssetManager::UpdateComponents(float delta) //TODO: Update this system for the new Componenet system
 {
-	for (int i = 0; i < m_Animators.size(); i++) {
-		m_Animators.at(i)->Update(delta);
+	// Update Componenets
+	for (auto & comps : m_GameObjects3D) {
+		for (auto& data : comps->GetEntireComponenetsList()) {
+			data->Update(delta);
+			data->FixedUpdate(delta);
+			data->LateUpdate(delta);
+		}
 	}
 
-	for (auto test : m_VertexComponentsList) {
-		test->Update(delta);
-		test->FixedUpdate(delta);
-		test->LateUpdate(delta);
-	}
-
-	for (auto test : m_NavList) {
-		test->UpdateSystem(delta);
+	for (auto& comps : m_Objects) {
+		for (auto& data : comps->GetEntireComponenetList()) {
+			data->Update(delta);
+			data->FixedUpdate(delta);
+			data->LateUpdate(delta);
+		}
 	}
 }
 

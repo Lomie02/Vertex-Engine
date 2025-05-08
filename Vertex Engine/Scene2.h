@@ -6,7 +6,9 @@
 
 #include "AssetManager.h"
 #include "VertexGeneral.h"
+#include "bullet/btBulletDynamicsCommon.h"
 
+#include "DebugComp.h"
 class Scene2 : public VertexScene
 {
 public:
@@ -32,6 +34,10 @@ private:
 	SceneManager* m_SceneManager;
 	GLFWwindow* m_Window;
 
+	RigidBody* m_Body;
+	RigidBody* m_Decoy;
+	RigidBody* m_BlockBody;
+
 	// Camaeras
 	Camera* m_MainCamera;
 	Camera* m_UserInterfaceCamera;
@@ -41,6 +47,9 @@ private:
 	GameObject* m_Object0;
 	GameObject* m_Block;
 	GameObject* m_Egg;
+
+	DebugComp* m_Componenet;
+	vGameObject* m_GameObject;
 	
 	//User Interface
 	Text* m_Title;

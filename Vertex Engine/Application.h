@@ -13,10 +13,11 @@
 #include "MyFirstScene.h"
 #include <irrKlang.h>
 
+#include <chrono>
 #include "VertexWorkSpace.h"
 
 using namespace irrklang;
-
+using Clock = std::chrono::high_resolution_clock;
 /// <summary>
 /// The editor window that should be displayed.
 /// </summary>
@@ -136,11 +137,17 @@ private:
 	VertexWorkSpace m_WorkSpaceEditor;
 
 	//Delta Time 
-	float m_fps = 0;
+	float m_ApplicationFramesPerSecond = 0;
 	float m_frames = 0;
 	float m_deltaTime = 0;
 
 	float m_fpsInterval = 0;
 	float m_prevTime;
 	float m_TimeStep = 0.01f;
+
+	// Fps
+	int m_FramesPassed;
+	float m_FrameRateCounter;
+	int m_CurrentFramesPerSecond;
+
 };

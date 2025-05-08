@@ -35,6 +35,7 @@ public:
 	void ApplyGlobalMatrix(glm::mat4 _mat) { m_GlobalTransforms = _mat; }
 	void ApplyLocalMatrix(glm::mat4 _mat) { m_LocalTransforms = _mat; }
 
+
 private:
 	glm::mat4 m_GlobalTransforms = glm::mat4(1);
 	glm::mat4 m_LocalTransforms = glm::mat4(1);

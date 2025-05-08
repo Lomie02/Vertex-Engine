@@ -29,6 +29,14 @@ GameObject::GameObject(const char* _Name, bool active)
 	m_Collider = new Collider();
 }
 
+GameObject::~GameObject()
+{
+	for (auto& comps : m_Componenets) {
+		delete comps;
+		comps = nullptr;
+	}
+}
+
 GameObject::GameObject(const char* _Name)
 {
 	name = _Name;
