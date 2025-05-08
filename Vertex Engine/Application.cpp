@@ -35,7 +35,7 @@ Application::~Application()
 
 	delete m_Settings;
 	m_Settings = nullptr;
-	
+
 }
 
 void Application::StartUp()
@@ -140,7 +140,7 @@ void Application::StartUp()
 
 	m_Settings = new BootUpContainer();
 
-	m_fps = 0;
+	m_ApplicationFramesPerSecond = 0;
 	m_frames = 0;
 	m_deltaTime = 0;
 	m_fpsInterval = 0;
@@ -251,18 +251,16 @@ void Application::Update()
 		m_fpsInterval += m_deltaTime;
 		if (m_fpsInterval >= 1.0f)
 		{
-			m_fps = m_frames;
+			m_ApplicationFramesPerSecond = m_frames;
 			m_frames = 0;
 			m_fpsInterval -= 1.0f;
 		}
 
-		m_SceneManager->GetCurrentScene()->GetAssets().LogEvents(); // Log Positions for collsion
 
 		static float fixedDelta = 0.0f;
 		fixedDelta += m_deltaTime;
 
 		if (m_FinishedSceneSetUpStage)
-
 			m_SceneManager->UpdateScenes(m_deltaTime); // Update regular loop
 
 		while (fixedDelta >= m_TimeStep)

@@ -18,7 +18,7 @@ public:
 	Material(std::string _name);
 	Material(std::string _name, Shader& _shader);
 
-	void GetShader(Shader& _shader);
+	void SetShader(Shader& _shader);
 
 	Shader shader;
 	glm::vec4 colour = glm::vec4(1,0,0,1);

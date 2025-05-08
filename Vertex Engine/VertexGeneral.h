@@ -17,6 +17,9 @@
 #include "NavAgent.h"
 #include "NavigationGrid.h"
 #include "AudioSource.h"
+#include "RigidBody.h"
+
+#include "vGameObject.h"
 
 enum EditorMode {
 	EDITOR = 0,

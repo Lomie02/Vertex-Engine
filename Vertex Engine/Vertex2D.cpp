@@ -44,6 +44,8 @@ void Vertex2D::DrawSprite(Material& material, glm::vec2 position, glm::vec2 size
 	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_BLEND);
 	glDisable(GL_CULL_FACE);
+
+	CompletedDrawCall();
 }
 
 void Vertex2D::DrawSprite(GameObject* _object, Material& material, glm::vec3 position, glm::vec2 size, float rotate, float scale, glm::mat4 per)
@@ -92,6 +94,7 @@ void Vertex2D::DrawSprite(GameObject* _object, Material& material, glm::vec3 pos
 	//glDisable(GL_DEPTH_TEST);
 	glDisable(GL_BLEND);
 	glDisable(GL_CULL_FACE);
+	CompletedDrawCall();
 }
 
 void Vertex2D::TensionDraw(GameObject* _object, Material& material, glm::vec2 position, glm::vec2 size, float rotate, float scale, glm::mat4 per, int _RenderLayer)
@@ -166,7 +169,7 @@ void Vertex2D::TensionDraw(GameObject* _object, Material& material, glm::vec2 po
 		GeneralPivot = position + _object->transform.pivot;
 	}
 
-	//========================================== Main Render calulations for transforms.
+	//========================================== Main Render calulations for transforms 
 
 	model = glm::translate(model, glm::vec3(GeneralPivot, (float)_RenderLayer)); // position
 
@@ -193,6 +196,7 @@ void Vertex2D::TensionDraw(GameObject* _object, Material& material, glm::vec2 po
 	}
 	glDisable(GL_BLEND);
 	glDisable(GL_CULL_FACE);
+	CompletedDrawCall();
 }
 
 void Vertex2D::TensionParticle(ParticleSystem& system)
@@ -239,6 +243,7 @@ void Vertex2D::TensionTransparencyPass(std::vector<GameObject*> _list, glm::mat4
 		glDisable(GL_DEPTH_TEST);
 		glDisable(GL_BLEND);
 		glDisable(GL_CULL_FACE);
+		CompletedDrawCall();
 	}
 }
 
@@ -334,7 +339,7 @@ void Vertex2D::TensionSprite(Sprite* _sprite, glm::mat4 _pro) //TODO May redo th
 	}
 	glDisable(GL_BLEND);
 	glDisable(GL_CULL_FACE);
-
+	CompletedDrawCall();
 }
 
 void Vertex2D::Tension_Bind_FrameBuffer()

@@ -25,7 +25,7 @@
 // ============================================== 
 
 #define FULLSCREEN true //Doesnt affect the Editor!
-#define VSYNC true
+#define VSYNC false
 
 #define BACKGROUND_COLOUR 0.1f, 0.1f, 0.1f, 0.1f
 

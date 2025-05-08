@@ -21,7 +21,7 @@ Material::Material(std::string _name, Shader& _shader)
 	colour = glm::vec4(1, 1, 1,1);
 }
 
-void Material::GetShader(Shader& _shader)
+void Material::SetShader(Shader& _shader)
 {
 	shader = shader;
 }

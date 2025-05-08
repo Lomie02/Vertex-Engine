@@ -129,14 +129,8 @@
     <ClCompile Include="..\imgui\imgui_impl_glfw.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
-    <ClCompile Include="Scene2.cpp">
-      <Filter>Scenes\Chicken Scene</Filter>
-    </ClCompile>
     <ClCompile Include="Text.cpp">
       <Filter>UI</Filter>
-    </ClCompile>
-    <ClCompile Include="RigidBody.cpp">
-      <Filter>Physics</Filter>
     </ClCompile>
     <ClCompile Include="Material.cpp">
       <Filter>GameObjects</Filter>
@@ -209,6 +203,24 @@
     </ClCompile>
     <ClCompile Include="VertexWorkSpace.cpp">
       <Filter>Vertex Workspace</Filter>
+    </ClCompile>
+    <ClCompile Include="RigidBody.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="vTexture3D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="vGameObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="vTransform.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugComp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene2.cpp">
+      <Filter>Scenes\Chicken Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -394,6 +406,18 @@
     </ClInclude>
     <ClInclude Include="VertexWorkSpace.h">
       <Filter>Vertex Workspace</Filter>
+    </ClInclude>
+    <ClInclude Include="vTexture3D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="vGameObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="vTransform.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugComp.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

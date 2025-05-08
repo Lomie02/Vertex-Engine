@@ -19,14 +19,21 @@
 #include "PhysicsScene.h"
 using namespace irrklang;
 
+#include "vGameObject.h"
+
 enum Renderer {
 	Vertex_2D = 0, // Vertex Engines default renderer.
 	Tension_2D, //  Tension 2D is a more advanced version of Vertex 2D
+	Violet_3D,
 };
 
 /// <summary>
 /// The backbone of the engine is the Asset Manager. Each scene has their own asset manager that controls every aspect of the scene.
 /// </summary>
+/// 
+/// 
+
+
 class AssetManager
 {
 	friend class SceneManager;
@@ -47,7 +54,7 @@ public:
 	void AssignSoundSystem(irrklang::ISoundEngine* _engine);
 	void BootUpAll(BootUpContainer* _settings);
 
-
+	void SetWorldGravity(glm::vec3 _grav) { m_PhysicsScene->SetGravity(_grav); }
 	// Register Functions
 	void Register(VertexComponent* _object); // Componenet Systens
 	void Register(GameObject* _object);// Normal Objects
@@ -62,6 +69,10 @@ public:
 	void Register(AudioSource* _audio); // Audio
 	void Register(Canvas* _canvas); // Register Canvas
 
+	void Register(vGameObject* _object);
+
+	//========================================================================
+
 	void GiveWindow(GLFWwindow* _window) { m_Window = _window; }
 
 	void ConfigureSystems();
@@ -70,12 +81,14 @@ public:
 	void LogEvents();
 	void SetActiveCamera(int _index);
 
+	//========================================================================
 	// For the Editor to access.
 	std::vector<GameObject*> m_Objects;
 	std::vector<GameObject*> m_UiObjects;
 	std::vector<Camera*> m_Cameras;
 	std::vector<Animator*> m_Animators;
 
+	//========================================================================
 	bool MousePick(GameObject* _target);
 	bool Raycast2D(glm::vec2 _pos, glm::vec2 _dir, GameObject& _out, float length = 100.0f);
 
@@ -84,8 +97,9 @@ public:
 	// Tension 2D Functions
 	void TensionRendering(Vertex2D* m_Renderer);
 	void TensionLayerSort();
-
 	void Vertex2dRendering(Vertex2D* render);
+
+	void ConfigVioletSystems();
 
 	void ConfigSetup();
 	void ExecuteAll();
@@ -110,7 +124,17 @@ public:
 	void GiveSceneManager(SceneManager* _sceneManagerPtr) { m_SceneManager = _sceneManagerPtr; std::cout << "Scene Manager Given." << std::endl; }
 
 	SceneManager* GetSceneManager() { return m_SceneManager; }
+
+	// System Related Diagnostics
+	int GetDrawCallCount() { return m_CurrentRenderBatchesFromRenderer; }
+	void UpdateFramesPerSecond(float _index) { m_CurrentFramesPerSecond = _index; }
+	float GetFramesPerSecond() { return m_CurrentFramesPerSecond; }
+
+
 private:
+
+	int m_CurrentRenderBatchesFromRenderer = 0;
+	float m_CurrentFramesPerSecond = 0;
 
 	Camera* m_Vertex_Ui_Camera;
 	std::vector<AudioSource*> m_AudioSources;
@@ -118,6 +142,8 @@ private:
 	TransparencySorting m_SortingTransparentAlgo;
 	Volume m_SceneVolume;
 	SceneManager* m_SceneManager;
+
+	std::vector<vGameObject*> m_GameObjects3D;
 
 	PhysicsScene* m_PhysicsScene;
 	std::vector<Canvas*> m_CanvasList;

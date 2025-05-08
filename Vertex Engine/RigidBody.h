@@ -1,27 +1,42 @@
 #pragma once
 #include "glm.hpp"
 #include "GameObject.h"
+#include "bullet/btBulletDynamicsCommon.h"
+
 class RigidBody : public GameObject
 {
 public:
 	RigidBody(const char* _Name);
 	~RigidBody();
 
-	void ApplyForce(glm::vec2 _force);
-	void ApplyForceToActor(RigidBody* _body1, glm::vec2 _force);
+	void Init(btCollisionShape* _shape, float _mass);
+	void ApplyForce(glm::vec3 _force);
+	
+	btRigidBody* GetBody() { return m_Body; }
 
-	void ResolveCollision(RigidBody* _body1);
-	void SetVelocity(glm::vec2 _index);
-	void SetPosition(glm::vec2 _pos);
-
-	glm::vec2 GetPosition() {return transform.position;}
-
+	void SetMass(float _mass) { m_Mass = _mass; }
 	float GetMass() { return m_Mass; }
-	float GetOrientation() { return m_Orientation; }
-	glm::vec2 m_Velocity;
+
+	void ApplyTorque(glm::vec3 _torq);
+
+	btCollisionShape* GetCollider() { return m_ShapeData; }
+
+	void SetFriction(float _friction);
+	glm::vec3 GetForward();
+
+	void SetKimatics(bool _state);
+	bool IsKimatic() { return m_IsKimatic; }
 
 protected:
-	float m_Mass;
+
+	bool m_IsKimatic = false;
+	btRigidBody* m_Body;
+	glm::vec3 m_Forward;
+
+	btMotionState* m_Motion;
+	btCollisionShape* m_ShapeData;
+
+	float m_Mass = 1;
 	float m_Orientation;
 };
 

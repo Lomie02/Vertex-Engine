@@ -48,6 +48,9 @@ public:
 
 	std::map<char, Letters> m_Characters;
 
+	void StartRenderFrameCycle() { m_CurrentDrawCallsInFrame = 0; }
+	int CurrentDrawCalls() { return m_CurrentDrawCallsInFrame; }
+
 	void Load(std::string font, unsigned int fontSize);
 	void DrawText(std::string text, float x, float y, float scale);
 
@@ -69,11 +72,17 @@ public:
 	void Tension_Rescale_FrameBuffer(float width,float height);
 
 	void TensionVolume(Volume & _vol);
+	// Violet 3D Renderer
+
+	void VioletDraw();
 
 	Shader m_TextShader;
 	std::vector<glm::vec2> GetVertices() { return m_Vertices; }
 	glm::mat4 GetMatrixModel() { return m_ModelMatrix; }
 private:
+
+	int m_CurrentDrawCallsInFrame = 0;
+	void CompletedDrawCall() { m_CurrentDrawCallsInFrame++; }
 
 	Volume m_VertexVolume;
 	glm::mat4 m_ModelMatrix;
