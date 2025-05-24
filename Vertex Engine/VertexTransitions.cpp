@@ -39,7 +39,7 @@ void VertexTransitions::Awake()
 
 	ResourceManager::LoadTexture("Builds/Textures/VertexMainDisplay.png", "VertexMainDisplay");
 
-	m_Transitions.at(0)->material.baseTexture = ResourceManager::GetTexture("VertexMainDisplay");
+	m_Transitions.at(0)->material.AlbedoMap = ResourceManager::GetTexture("VertexMainDisplay");
 	m_Transitions.at(0)->material.surface = Transparent;
 	m_TransitionSpeed = 2;
 

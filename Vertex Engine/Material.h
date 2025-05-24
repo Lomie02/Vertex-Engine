@@ -5,12 +5,14 @@
 #include <string.h>
 #include "ResourceManager.h"
 
+#include "Material.h"
+#include "VertexComponent.h"
 enum Surface {
 	Opaque = 0,
 	Transparent,
 };
 
-class Material
+class Material : public VertexComponent
 {
 public:
 	Material();
@@ -21,11 +23,19 @@ public:
 	void SetShader(Shader& _shader);
 
 	Shader shader;
+	
+	// texture maps
+	Texture2D AlbedoMap;
+	Texture2D MetallicMap;
+	Texture2D RoughnessMap;
+	Texture2D NormalMap;
+
+
 	glm::vec4 colour = glm::vec4(1,0,0,1);
-	Texture2D baseTexture;
 	TransparentMode TransparencyBlend = Alpha;
 	Surface surface = Opaque;
 	bool glow = false;
+	
 	std::string name;
 	bool m_KeepAspect = false;
 	bool m_USeMipMaps = false;

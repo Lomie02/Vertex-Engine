@@ -10,6 +10,7 @@
 
 #include "Collider.h"
 #include <thread>
+#include "GameSettings.h"
 
 /*
 	The AssetManager is the engines way of knowing what exists in the game & what to do with the objects.
@@ -446,69 +447,101 @@ bool AssetManager::Raycast2D(glm::vec2 _pos, glm::vec2 _dir, GameObject& _out, f
 //Vertex Tension Renderer 
 void AssetManager::TensionRendering(Vertex2D* m_Renderer)
 {
-	m_Renderer->StartRenderFrameCycle();
-	if (m_SingleSortRenderering && !m_HasRendered) // Sort the transparent layers once only to save performance. Use if objects never change layers in engine.
-	{
-		TensionLayerSort();
-		m_HasRendered = true;
-	}
-	else if (!m_SingleSortRenderering) // Update the transparency layer sorting every frame. (Exspensive)
-	{
-		TensionLayerSort();
-	}
+	bool AllowedToRender = false;
 
-	m_Renderer->TensionVolume(m_SceneVolume);
+	for (Camera* cams : m_Cameras) {
 
-	// Render normal sprites.
-	for (int i = 0; i < m_Opaque.size(); i++)
-	{
-		if (m_Opaque.at(i)->GetActive())
+		if (cams->GetDisplay() != 0) {
+
+			if (cams->renderTexture) {
+				cams->renderTexture->Bind();
+				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+				glViewport(0, 0, cams->renderTexture->GetWidth(), cams->renderTexture->GetHeight());
+				AllowedToRender = true;
+			}
+		}
+		else
 		{
-			m_Renderer->TensionDraw(m_Opaque.at(i), m_Opaque.at(i)->material, m_Opaque.at(i)->transform.position,
-				m_Opaque.at(i)->transform.size, m_Opaque.at(i)->transform.rotation, m_Opaque.at(i)->transform.scale,
-				m_Cameras.at(m_ActiveCamera)->GetProjection(), m_Opaque.at(i)->layer);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			glBindFramebuffer(GL_FRAMEBUFFER, 0);
+			glViewport(0, 0, PROJECT_ASPECT_WIDTH, PROJECT_ASPECT_HEIGHT);
+			AllowedToRender = true;
+		}
 
-			if (m_Opaque.at(i)->GetMimes().size() > 1) // Render mimes
+
+		if (AllowedToRender) {
+
+
+			m_Renderer->StartRenderFrameCycle();
+			if (m_SingleSortRenderering && !m_HasRendered) // Sort the transparent layers once only to save performance. Use if objects never change layers in engine.
 			{
-				for (int m = 0; m < m_Opaque.at(i)->GetActiveMimesSize(); m++) {
-					m_Renderer->TensionDraw(m_Opaque.at(i), m_Opaque.at(i)->material, m_Opaque.at(i)->GetMimes().at(m).transform.position,
+				TensionLayerSort();
+				m_HasRendered = true;
+			}
+			else if (!m_SingleSortRenderering) // Update the transparency layer sorting every frame. (Exspensive)
+			{
+				TensionLayerSort();
+			}
+
+			m_Renderer->TensionVolume(m_SceneVolume);
+
+			// Render normal sprites.
+			for (int i = 0; i < m_Opaque.size(); i++)
+			{
+				if (m_Opaque.at(i)->GetActive())
+				{
+					m_Renderer->TensionDraw(m_Opaque.at(i), m_Opaque.at(i)->material, m_Opaque.at(i)->transform.position,
 						m_Opaque.at(i)->transform.size, m_Opaque.at(i)->transform.rotation, m_Opaque.at(i)->transform.scale,
-						m_Cameras.at(m_ActiveCamera)->GetProjection(), m_Opaque.at(i)->layer);
+						cams->GetProjection(), m_Opaque.at(i)->layer);
+
+					if (m_Opaque.at(i)->GetMimes().size() > 1) // Render mimes
+					{
+						for (int m = 0; m < m_Opaque.at(i)->GetActiveMimesSize(); m++) {
+							m_Renderer->TensionDraw(m_Opaque.at(i), m_Opaque.at(i)->material, m_Opaque.at(i)->GetMimes().at(m).transform.position,
+								m_Opaque.at(i)->transform.size, m_Opaque.at(i)->transform.rotation, m_Opaque.at(i)->transform.scale,
+								cams->GetProjection(), m_Opaque.at(i)->layer);
+						}
+					}
 				}
 			}
-		}
-	}
 
-	for (int i = 0; i < m_PhysicsScene->Get2dObjects().size(); i++)
-	{
-		if (m_PhysicsScene->Get2dObjects().at(i)->GetActive())
-		{
-			m_Renderer->TensionDraw(m_PhysicsScene->Get2dObjects().at(i), m_PhysicsScene->Get2dObjects().at(i)->material, m_PhysicsScene->Get2dObjects().at(i)->transform.position,
-				m_PhysicsScene->Get2dObjects().at(i)->transform.size, m_PhysicsScene->Get2dObjects().at(i)->transform.rotation, m_PhysicsScene->Get2dObjects().at(i)->transform.scale,
-				m_Cameras.at(m_ActiveCamera)->GetProjection(), m_PhysicsScene->Get2dObjects().at(i)->layer);
-		}
-	}
-
-	// Render transparent objects
-	for (int i = 0; i < m_Transparent.size(); i++)
-	{
-		if (m_Transparent.at(i)->GetActive()) {
-
-			m_Renderer->TensionDraw(m_Transparent.at(i), m_Transparent.at(i)->material, m_Transparent.at(i)->transform.position,
-				m_Transparent.at(i)->transform.size, m_Transparent.at(i)->transform.rotation, m_Transparent.at(i)->transform.scale,
-				m_Cameras.at(m_ActiveCamera)->GetProjection(), m_Transparent.at(i)->layer);
-
-			if (m_Transparent.at(i)->GetMimes().size() > 1)
+			for (int i = 0; i < m_PhysicsScene->Get2dObjects().size(); i++)
 			{
-				for (int m = 0; m < m_Transparent.at(i)->GetActiveMimesSize(); m++) {
-					m_Renderer->TensionDraw(m_Transparent.at(i), m_Transparent.at(i)->material, m_Transparent.at(i)->GetMimes().at(m).transform.position,
-						m_Transparent.at(i)->transform.size, m_Transparent.at(i)->transform.rotation, m_Transparent.at(i)->transform.scale,
-						m_Cameras.at(m_ActiveCamera)->GetProjection(), m_Transparent.at(i)->layer);
+				if (m_PhysicsScene->Get2dObjects().at(i)->GetActive())
+				{
+					m_Renderer->TensionDraw(m_PhysicsScene->Get2dObjects().at(i), m_PhysicsScene->Get2dObjects().at(i)->material, m_PhysicsScene->Get2dObjects().at(i)->transform.position,
+						m_PhysicsScene->Get2dObjects().at(i)->transform.size, m_PhysicsScene->Get2dObjects().at(i)->transform.rotation, m_PhysicsScene->Get2dObjects().at(i)->transform.scale,
+						cams->GetProjection(), m_PhysicsScene->Get2dObjects().at(i)->layer);
 				}
 			}
+
+			// Render transparent objects
+			for (int i = 0; i < m_Transparent.size(); i++)
+			{
+				if (m_Transparent.at(i)->GetActive()) {
+
+					m_Renderer->TensionDraw(m_Transparent.at(i), m_Transparent.at(i)->material, m_Transparent.at(i)->transform.position,
+						m_Transparent.at(i)->transform.size, m_Transparent.at(i)->transform.rotation, m_Transparent.at(i)->transform.scale,
+						cams->GetProjection(), m_Transparent.at(i)->layer);
+
+					if (m_Transparent.at(i)->GetMimes().size() > 1)
+					{
+						for (int m = 0; m < m_Transparent.at(i)->GetActiveMimesSize(); m++) {
+							m_Renderer->TensionDraw(m_Transparent.at(i), m_Transparent.at(i)->material, m_Transparent.at(i)->GetMimes().at(m).transform.position,
+								m_Transparent.at(i)->transform.size, m_Transparent.at(i)->transform.rotation, m_Transparent.at(i)->transform.scale,
+								cams->GetProjection(), m_Transparent.at(i)->layer);
+						}
+					}
+				}
+			}
+
+			if (cams->renderTexture) {
+				cams->renderTexture->UnBind();
+			}
+
+			AllowedToRender = false;
 		}
 	}
-
 	// TODO: Implement the canvas system into the UI rendering instead.
 
 	// Render User Interface Objects
@@ -540,9 +573,12 @@ void AssetManager::TensionRendering(Vertex2D* m_Renderer)
 				m_CanvasList.at(m_ActiveCanvasDisplay)->GetText().at(i)->ConfigureRenderSystems(m_Vertex_Ui_Camera->GetProjection());
 			}
 		}
-	}
 
-	m_CurrentRenderBatchesFromRenderer = m_Renderer->CurrentDrawCalls();
+
+		// Unbind Cameras Render Texture.
+
+		m_CurrentRenderBatchesFromRenderer = m_Renderer->CurrentDrawCalls();
+	}
 }
 
 //Tension Renderers Layer Sorting
@@ -859,6 +895,14 @@ GameObject* AssetManager::FindObjectWithComponent(VertexComponent& _ref)
 	return nullptr;
 }
 
+void AssetManager::BeginVertexRenderTextureBindings()
+{
+}
+
+void AssetManager::CompleteVertexRenderTextureBindings()
+{
+}
+
 /// <summary>
 /// Updates all components attached to a gameobject.
 /// </summary>
@@ -936,7 +980,7 @@ int AssetManager::Partition(std::vector<GameObject*> _list, int _start, int _end
 void AssetManager::UpdateComponents(float delta) //TODO: Update this system for the new Componenet system
 {
 	// Update Componenets
-	for (auto & comps : m_GameObjects3D) {
+	for (auto& comps : m_GameObjects3D) {
 		for (auto& data : comps->GetEntireComponenetsList()) {
 			data->Update(delta);
 			data->FixedUpdate(delta);

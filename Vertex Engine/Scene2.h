@@ -40,6 +40,7 @@ private:
 
 	// Camaeras
 	Camera* m_MainCamera;
+	Camera* m_RenderCamera;
 	Camera* m_UserInterfaceCamera;
 	Canvas* m_Canvas;
 	// GameObjects
@@ -74,5 +75,7 @@ private:
 
 	float m_TitleTimer = 0;
 	float m_Duration = 0.5f;
+
+	RenderTexture* m_TexureRender;
 };
 

@@ -6,7 +6,7 @@
 #include "GameSettings.h"
 #include <string>
 #include "ext.hpp"
-
+#include "RenderTexture.h"
 enum LensMode {
 	Ortho = 0,
 	Perspective,
@@ -38,7 +38,15 @@ public:
 	float farClip = 100.0f;
 	float nearClip = -0.1f;
 	float zoom = 0.1;
+
+	RenderTexture* renderTexture = nullptr;
+
+	void SetDisplay(int _index);
+	int GetDisplay() { return m_DisplayScreen; }
+
 private:
+
+	int m_DisplayScreen = 0;
 
 	glm::vec3 m_CameraPos = glm::vec3(0, 0, 0);
 	glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);

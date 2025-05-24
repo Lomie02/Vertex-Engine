@@ -26,5 +26,5 @@ void Button::SetOffset(glm::vec2 _offset)
 void Button::BeginSetUp()
 {
 	m_Text->text = "Button";
-	material.baseTexture = ResourceManager::GetTexture("UI_Button");
+	material.AlbedoMap = ResourceManager::GetTexture("UI_Button");
 }
