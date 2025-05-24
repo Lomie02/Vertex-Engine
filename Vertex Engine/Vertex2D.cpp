@@ -35,7 +35,7 @@ void Vertex2D::DrawSprite(Material& material, glm::vec2 position, glm::vec2 size
 	this->m_Shader.SetVector4f("Colour", material.colour);
 
 	glActiveTexture(GL_TEXTURE0);
-	material.baseTexture.Bind();
+	material.AlbedoMap.Bind();
 
 	glBindVertexArray(this->m_quadVAO);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
@@ -85,7 +85,7 @@ void Vertex2D::DrawSprite(GameObject* _object, Material& material, glm::vec3 pos
 	this->m_Shader.SetVector4f("Colour", material.colour);
 
 	glActiveTexture(GL_TEXTURE0);
-	material.baseTexture.Bind();
+	material.AlbedoMap.Bind();
 
 	glBindVertexArray(this->m_quadVAO);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
@@ -185,7 +185,7 @@ void Vertex2D::TensionDraw(GameObject* _object, Material& material, glm::vec2 po
 	this->m_Shader.SetVector4f("Colour", material.colour);
 
 	glActiveTexture(GL_TEXTURE0);
-	material.baseTexture.Bind();
+	material.AlbedoMap.Bind();
 
 	glBindVertexArray(this->m_quadVAO);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
@@ -234,7 +234,7 @@ void Vertex2D::TensionTransparencyPass(std::vector<GameObject*> _list, glm::mat4
 		this->m_Shader.SetVector4f("Colour", _list.at(i)->material.colour);
 
 		glActiveTexture(GL_TEXTURE0);
-		_list.at(i)->material.baseTexture.Bind();
+		_list.at(i)->material.AlbedoMap.Bind();
 
 		glBindVertexArray(this->m_quadVAO);
 		glDrawArrays(GL_TRIANGLES, 0, 6);
@@ -328,7 +328,7 @@ void Vertex2D::TensionSprite(Sprite* _sprite, glm::mat4 _pro) //TODO May redo th
 	this->m_Shader.SetVector4f("Colour", _sprite->material.colour);
 
 	glActiveTexture(GL_TEXTURE0);
-	_sprite->material.baseTexture.Bind();
+	_sprite->material.AlbedoMap.Bind();
 
 	glBindVertexArray(this->m_quadVAO);
 	glDrawArrays(GL_TRIANGLES, 0, 6);

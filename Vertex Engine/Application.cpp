@@ -331,6 +331,9 @@ void Application::EditorMain() // Main Editor
 				ImGui::Checkbox("Active", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selectedSprite)->m_Active);
 				ImGui::InputInt("Layer", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selectedSprite)->layer, 2);
 
+				ImGui::Spacing();
+				ImGui::Image((void*)(intptr_t)m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Cameras.at(1)->renderTexture->GetTexture(),ImVec2(640,360), ImVec2(0,1), ImVec2(1,0));
+
 				//===================================== Position
 
 				if (ImGui::Button("X")) {

@@ -4,7 +4,9 @@
 class DebugComp : public VertexComponent
 {
 public:
-	DebugComp() {};
+	DebugComp() { Start(); };
+
+	void Start() override;
 	 void Update(float delta) override;
 
 };

@@ -55,3 +55,15 @@ void Camera::SetFieldOfView(float _fov)
 
 	m_FieldofView = _fov;
 }
+
+void Camera::SetDisplay(int _index)
+{
+	m_DisplayScreen = _index;
+
+	// Keep the display within range of screen 0-9
+	if (m_DisplayScreen < 0)
+		m_DisplayScreen = 0;
+	if(m_DisplayScreen > 9)
+		m_DisplayScreen = 9;
+
+}

@@ -42,9 +42,9 @@ public:
 	AssetManager()
 	{
 		m_ActiveCamera = 0;
-		m_CameraGizmo.baseTexture = ResourceManager::GetTexture("Gizmo_Camera");
-		m_TransformGizmoX.baseTexture = ResourceManager::GetTexture("Gizmo_Cords");
-		m_CenterGizmo.baseTexture = ResourceManager::GetTexture("Gizmo_Center");
+		m_CameraGizmo.AlbedoMap = ResourceManager::GetTexture("Gizmo_Camera");
+		m_TransformGizmoX.AlbedoMap = ResourceManager::GetTexture("Gizmo_Cords");
+		m_CenterGizmo.AlbedoMap = ResourceManager::GetTexture("Gizmo_Center");
 
 		m_PhysicsScene = new PhysicsScene();
 	};
@@ -129,6 +129,10 @@ public:
 	int GetDrawCallCount() { return m_CurrentRenderBatchesFromRenderer; }
 	void UpdateFramesPerSecond(float _index) { m_CurrentFramesPerSecond = _index; }
 	float GetFramesPerSecond() { return m_CurrentFramesPerSecond; }
+
+	// Rendering Systems
+	void BeginVertexRenderTextureBindings();
+	void CompleteVertexRenderTextureBindings();
 
 
 private:

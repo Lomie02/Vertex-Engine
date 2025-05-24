@@ -55,10 +55,10 @@ void Scene2::Awake()
 
 	m_Object0->material.m_KeepAspect = true;
 
-	m_Object2->material.baseTexture = ResourceManager::LoadTexture("Builds/Textures/Girl_01.png", "Chimken");
+	m_Object2->material.AlbedoMap = ResourceManager::LoadTexture("Builds/Textures/Girl_01.png", "Chimken");
 	ResourceManager::LoadTexture("Builds/Textures/Girl_02.png", "Chimken1");
 
-	m_Object2->material.baseTexture = ResourceManager::GetTexture("Chimken1");
+	m_Object2->material.AlbedoMap = ResourceManager::GetTexture("Chimken1");
 
 	m_Object2->material.surface = Transparent;
 	m_Object0->material.surface = Transparent;
@@ -66,7 +66,7 @@ void Scene2::Awake()
 	// Egg Texture
 	ResourceManager::LoadTexture("Builds/Textures/Block.png", "Egg");
 	ResourceManager::LoadTexture("Builds/Textures/EggOpen.png", "EggOpen");
-	m_Egg->material.baseTexture = ResourceManager::GetTexture("Egg");
+	m_Egg->material.AlbedoMap = ResourceManager::GetTexture("Egg");
 	m_Egg->material.surface = Transparent;
 
 	m_Egg->transform.position.x = -4;
@@ -76,9 +76,10 @@ void Scene2::Awake()
 
 	m_Object0->transform.position.x = 3;
 	m_Object0->layer = 1;
+	m_Object0->transform.SetSize(5, -5);
 	m_Object2->layer = 3;
 
-	m_Object0->material.baseTexture = ResourceManager::GetTexture("Chimken");
+	m_Object0->material.AlbedoMap = ResourceManager::GetTexture("Chimken");
 	m_Manager.Register(m_Object2);
 	m_Manager.Register(m_Object0);
 
@@ -100,7 +101,7 @@ void Scene2::Awake()
 
 	//========================================
 	m_Sprite = new Sprite("EggIcon");
-	m_Sprite->material.baseTexture = ResourceManager::GetTexture("Egg");
+	m_Sprite->material.AlbedoMap = ResourceManager::GetTexture("Egg");
 	m_Sprite->material.m_KeepAspect = true;
 	m_Sprite->material.surface = Transparent;
 
@@ -176,9 +177,9 @@ void Scene2::Awake()
 	m_Decoy = new RigidBody("Blud");
 	m_BlockBody = new RigidBody("Block");
 
-	m_Body->material.baseTexture = ResourceManager::GetTexture("Egg");
-	m_BlockBody->material.baseTexture = ResourceManager::GetTexture("Egg");
-	m_BlockBody->material.baseTexture = ResourceManager::GetTexture("Egg");
+	m_Body->material.AlbedoMap = ResourceManager::GetTexture("Egg");
+	m_BlockBody->material.AlbedoMap = ResourceManager::GetTexture("Egg");
+	m_BlockBody->material.AlbedoMap = ResourceManager::GetTexture("Egg");
 
 	m_Body->transform.position = glm::vec2(9, 0);
 	m_Decoy->transform.position = glm::vec2(2, 0);
@@ -199,14 +200,28 @@ void Scene2::Awake()
 	m_Manager.Register(m_Decoy);
 	m_Manager.Register(m_BlockBody);
 
-
 	m_Manager.SetWorldGravity(glm::vec3(0.f, -9.8f, 0.0f));
 
 	// ====================================== Bodies
 	//====================
 	SetupButton();
 
+	m_RenderCamera = new Camera("Bongo");
+	m_TexureRender = new RenderTexture(1270, 720);
+
+	m_RenderCamera->SetDisplay(1);
+
+	m_RenderCamera->renderTexture = m_TexureRender;
+
+	m_Manager.Register(m_RenderCamera);
+
 	m_Object2->AddComponent<DebugComp>();
+	m_Object2->AddComponent<DebugComp>();
+	m_Object2->AddComponent<DebugComp>();
+
+	m_Object0->material.AlbedoMap.ID = m_TexureRender->GetTexture();
+
+	std::cout << "Comp List: " << m_Object2->FindComponentsOfType<DebugComp>().size() << std::endl;
 
 	m_Manager.Register(m_Egg);
 	m_ButtonTest->SetActive(false);

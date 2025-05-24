@@ -136,14 +136,14 @@ void Flipbook::Update(float delta)
 				switch (m_MasterMode) {
 				case Singular:
 
-					m_Master->material.baseTexture = m_AnimationClips.at(m_ActiveAnimation).m_Frames.at(m_CurrentFrame);
+					m_Master->material.AlbedoMap = m_AnimationClips.at(m_ActiveAnimation).m_Frames.at(m_CurrentFrame);
 					m_CurrentFrame++;
 					break;
 				case Multiple:
 
 					for (int i = 0; i < m_MasterFamily.size(); i++) {
 
-						m_MasterFamily.at(i)->material.baseTexture = m_AnimationClips.at(m_ActiveAnimation).m_Frames.at(m_CurrentFrame);
+						m_MasterFamily.at(i)->material.AlbedoMap = m_AnimationClips.at(m_ActiveAnimation).m_Frames.at(m_CurrentFrame);
 					}
 					m_CurrentFrame++;
 					break;

@@ -31,7 +31,7 @@ public:
 	void SetParent(GameObject* _object);
 	void RemoveParent();
 
-	GameObject* GetParent() { return m_Parent; } 
+	GameObject* GetParent() { return m_Parent; }
 	void SetChild(GameObject* _child);
 	void RemoveChild();
 	void ConfigureSystems();
@@ -47,6 +47,21 @@ public:
 	int GetActiveMimesSize() { return m_MimesAmount; }
 	glm::vec2 GetVelocity() { return m_Velocity; }
 	void SetVelocity(glm::vec2 _vel) { m_Velocity += _vel; }
+
+
+	template<typename T>
+	std::vector<T*> FindComponentsOfType() {
+
+		std::vector<T*> comps;
+		for (auto temp : m_Componenets) {
+			if (T* cast = dynamic_cast<T*>(temp))
+			{
+				comps.push_back(cast);
+
+			}
+		}
+		return comps;
+	}
 
 	template<typename T, typename... Args>
 	T* AddComponent(Args&&... args) {
@@ -118,7 +133,7 @@ public:
 
 	class Vertex2D;
 private:
-	
+
 	std::vector<VertexComponent*> m_Componenets;
 
 	std::vector<MimeProfile> m_Mimes = std::vector<MimeProfile>(10);

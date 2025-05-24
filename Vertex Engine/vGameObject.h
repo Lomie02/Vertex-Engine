@@ -25,6 +25,17 @@ public:
 
 	// Componenet Commands
 
+	template<typename T>
+	std::vector<T*> FindComponentsOfType() {
+
+		std::vector<T*> comps;
+		for (auto temp : m_Componenets) {
+			if (T* cast = dynamic_cast<T*>(temp))
+				comps.push_back(cast);
+		}
+		return comps;
+	}
+
 	/// <summary>
 	/// Add already existing componenets.
 	/// </summary>

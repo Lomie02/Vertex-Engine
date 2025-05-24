@@ -10,6 +10,7 @@ GameObject::GameObject()
 	transform.localPosition.x = 0;
 
 	material = Material("Mat");
+	AddComponent<Material>(material);
 	transform.size.x = 5;
 	transform.size.y = 5;
 
@@ -23,6 +24,8 @@ GameObject::GameObject(const char* _Name, bool active)
 	transform.localPosition.x = 0;
 
 	material = Material("Mat");
+	AddComponent<Material>(material);
+
 	transform.size.x = 5;
 	transform.size.y = 5;
 
@@ -133,8 +136,8 @@ void GameObject::MaterialConfigure()
 {
 	if (material.m_KeepAspect)
 	{
-		transform.size.x = material.baseTexture.Width;
-		transform.size.y = material.baseTexture.Height;
+		transform.size.x = material.AlbedoMap.Width;
+		transform.size.y = material.AlbedoMap.Height;
 	}
 }
 
