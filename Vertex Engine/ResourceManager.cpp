@@ -17,7 +17,7 @@
 // Instantiate static variables
 std::map<std::string, Texture2D>    ResourceManager::Textures;
 std::map<std::string, Shader>       ResourceManager::Shaders;
-std::vector<const char*> ResourceManager::m_ConsoleCommandLib;
+
 
 Shader ResourceManager::LoadShader(const char* vShaderFile, const char* fShaderFile, const char* gShaderFile, std::string name)
 {
@@ -102,7 +102,7 @@ Shader ResourceManager::loadShaderFromFile(const char* vShaderFile, const char* 
 	}
 	catch (std::exception e)
 	{
-		std::cout << "ERROR::SHADER: Failed to read shader files" << std::endl;
+		VERTEX_ERROR("Shader " + std::string(vShaderFile) + " failed to read. Please check spelling or corrupt files.");
 	}
 	const char* vShaderCode = vertexCode.c_str();
 	const char* fShaderCode = fragmentCode.c_str();
@@ -133,7 +133,7 @@ Texture2D ResourceManager::loadTextureFromFile(const char* file)
 	}
 	else {
 
-		std::cout << "VERTEX ERROR: Texture failed to load: " << file << std::endl;
+		VERTEX_ERROR("Texture " + std::string(file) + " failed to read. Please check spelling or corrupt files.");
 	}
 
 	texture.Generate(width, height, data);

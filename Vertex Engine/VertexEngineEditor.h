@@ -3,6 +3,7 @@
 #include "ImGuiGeneral.h"
 #include "SceneManager.h"
 
+#include "Debug.h"
 #include "ImGuizmo.h"
 
 class VertexEngineEditor

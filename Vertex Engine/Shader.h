@@ -9,6 +9,7 @@
 #ifndef SHADER_H
 #define SHADER_H
 
+#include "Debug.h"
 #include <string>
 
 #include "glad.h"

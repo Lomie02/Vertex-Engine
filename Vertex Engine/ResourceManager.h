@@ -19,6 +19,7 @@
 #include "shader.h"
 #include <vector>
 
+#include "Debug.h"
 
 // A static singleton ResourceManager class that hosts several
 // functions to load Textures and Shaders. Each loaded texture
@@ -32,7 +33,7 @@ public:
 
 	static std::map<std::string, Shader>    Shaders;
 	static std::map<std::string, Texture2D> Textures;
-	static std::vector<const char*> m_ConsoleCommandLib;
+	
 	// loads (and generates) a shader program from file loading vertex, fragment (and geometry) shader's source code. If gShaderFile is not nullptr, it also loads a geometry shader
 	static Shader    LoadShader(const char* vShaderFile, const char* fShaderFile, const char* gShaderFile, std::string name);
 	// retrieves a stored sader
@@ -48,8 +49,7 @@ public:
 	// Checks if a shader is registered.
 	static bool DoesShaderExist(const char* _shaderName);
 
-	static void Log(const char* _logData) { m_ConsoleCommandLib.push_back(_logData); }
-	static std::vector<const char*> GetDebugLogs() {return m_ConsoleCommandLib;};
+	
 private:
 	// private constructor, that is we do not want any actual resource manager objects. Its members and functions should be publicly available (static).
 	ResourceManager() { }

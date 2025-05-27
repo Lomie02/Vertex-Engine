@@ -357,6 +357,7 @@ void VertexEngineEditor::RenderEditorDesk()
 
 			ImGui::SetDragDropPayload("TEXTURE", name.c_str(), strlen(name.c_str()) + 1);
 			ImGui::Text("Dragging: %s", name.c_str());
+			ImGui::Image (texture.ID, ImVec2(64, 64));
 
 			ImGui::EndDragDropSource();
 		}
@@ -413,7 +414,7 @@ void VertexEngineEditor::RenderDockingTaskBar()
 	}
 	if (ImGui::Button("STOP"))
 	{
-		ResourceManager::Log("Test Stop");
+		VERTEX_LOG("Stop Test");
 		if (m_EditorMode == EDITOR_PLAY || m_EditorMode == EDITOR_PAUSED) {
 
 			m_EditorMode = EDITOR;
@@ -436,14 +437,13 @@ void VertexEngineEditor::RenderGameCommandConsole()
 {
 	ImGui::Begin("Console");
 
-	if (ImGui::Button("Clear")) { ResourceManager::m_ConsoleCommandLib.clear(); }
+	if (ImGui::Button("Clear")) { Debug::m_ConsoleCommandLib.clear(); }
 
 	VertexSpacer(2);
 
 	int iter = 0;
-	for (auto logs : ResourceManager::GetDebugLogs()) {
-		std::string fullLog = std::string("Vertex Log: ") + logs;
-		ImGui::Text(fullLog.c_str());
+	for (auto logs : Debug::GetDebugLogs()) {
+		ImGui::Text(logs.c_str());
 	}
 
 	ImGui::End();

@@ -180,8 +180,6 @@ void Application::StartUp()
 		m_VertexEditor = new VertexEngineEditor();
 		m_VertexEditor->CreateEditorLayout(m_GameWindow, m_SceneManager);
 		m_VertexEditor->GiveEditorMode(m_Mode);
-		//glViewport(299.973f, 349.968f, 1280, 720);
-		//glEnable(GL_SCISSOR_TEST);
 
 		std::cout << "Vertex Message: Editor Succeded." << std::endl;
 	}

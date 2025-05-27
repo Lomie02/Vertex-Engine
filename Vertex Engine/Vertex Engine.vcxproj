@@ -184,6 +184,7 @@
     <ClCompile Include="Clip.cpp" />
     <ClCompile Include="Collider.cpp" />
     <ClCompile Include="Cursor.cpp" />
+    <ClCompile Include="Debug.cpp" />
     <ClCompile Include="DebugComp.cpp" />
     <ClCompile Include="Flipbook.cpp" />
     <ClCompile Include="GameObject.cpp" />
@@ -252,6 +253,7 @@
     <ClInclude Include="Clip.h" />
     <ClInclude Include="Collider.h" />
     <ClInclude Include="Cursor.h" />
+    <ClInclude Include="Debug.h" />
     <ClInclude Include="DebugComp.h" />
     <ClInclude Include="Flipbook.h" />
     <ClInclude Include="GameObject.h" />

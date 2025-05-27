@@ -17,6 +17,8 @@
 #include "VertexWorkSpace.h"
 #include "VertexEngineEditor.h"
 #include "AssetPipelineManager.h"
+#include "Debug.h"
+
 using namespace irrklang;
 using Clock = std::chrono::high_resolution_clock;
 /// <summary>
