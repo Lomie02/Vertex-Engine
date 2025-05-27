@@ -71,6 +71,8 @@ public:
 
 	void Register(vGameObject* _object);
 
+	void RegisterGameObjectNew();
+
 	//========================================================================
 
 	void GiveWindow(GLFWwindow* _window) { m_Window = _window; }

@@ -1,6 +1,6 @@
 #include "RenderTexture.h"
-
-RenderTexture::RenderTexture(unsigned int _height, unsigned int _width)
+#include <iostream>
+RenderTexture::RenderTexture(unsigned int _width, unsigned int _height)
 {
 	m_Height = _height;
 	m_Width = _width;
@@ -12,6 +12,9 @@ RenderTexture::RenderTexture(unsigned int _height, unsigned int _width)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
 	glGenFramebuffers(1, &m_Fbo);
 	glBindFramebuffer(GL_FRAMEBUFFER, m_Fbo);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_Texture, 0);
@@ -20,6 +23,10 @@ RenderTexture::RenderTexture(unsigned int _height, unsigned int _width)
 	glBindRenderbuffer(GL_RENDERBUFFER, m_DepthBuff);
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, m_Width, m_Height);
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_DepthBuff);
+
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+		std::cout << "VERTEX ERROR: RENDER TEXTURE IS NOT COMPLETE IN FRAMEBUFFER." << std::endl;
+	}
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }

@@ -130,6 +130,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)GLFW; $(SolutionDir)glm;$(SolutionDir)stb;$(SolutionDir)imgui;</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -159,17 +160,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\imgui\GraphEditor.cpp" />
+    <ClCompile Include="..\imgui\ImCurveEdit.cpp" />
+    <ClCompile Include="..\imgui\ImGradient.cpp" />
     <ClCompile Include="..\imgui\imgui.cpp" />
+    <ClCompile Include="..\imgui\ImGuizmo.cpp" />
     <ClCompile Include="..\imgui\imgui_demo.cpp" />
     <ClCompile Include="..\imgui\imgui_draw.cpp" />
     <ClCompile Include="..\imgui\imgui_impl_glfw.cpp" />
     <ClCompile Include="..\imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="..\imgui\imgui_tables.cpp" />
     <ClCompile Include="..\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="..\imgui\ImSequencer.cpp" />
     <ClCompile Include="AnimationClip.cpp" />
     <ClCompile Include="Animator.cpp" />
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="AssetManager.cpp" />
+    <ClCompile Include="AssetPipelineManager.cpp" />
     <ClCompile Include="AudioSource.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Camera.cpp" />
@@ -204,6 +211,7 @@
     <ClCompile Include="Vertex2D.cpp" />
     <ClCompile Include="VertexAccessExplorer.cpp" />
     <ClCompile Include="VertexComponent.cpp" />
+    <ClCompile Include="VertexEngineEditor.cpp" />
     <ClCompile Include="VertexPrefs.cpp" />
     <ClCompile Include="VertexScene.cpp" />
     <ClCompile Include="VertexText2D.cpp" />
@@ -215,20 +223,27 @@
     <ClCompile Include="vTransform.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\imgui\GraphEditor.h" />
     <ClInclude Include="..\imgui\imconfig.h" />
+    <ClInclude Include="..\imgui\ImCurveEdit.h" />
+    <ClInclude Include="..\imgui\ImGradient.h" />
     <ClInclude Include="..\imgui\imgui.h" />
+    <ClInclude Include="..\imgui\ImGuizmo.h" />
     <ClInclude Include="..\imgui\imgui_impl_glfw.h" />
     <ClInclude Include="..\imgui\imgui_impl_opengl3.h" />
     <ClInclude Include="..\imgui\imgui_impl_opengl3_loader.h" />
     <ClInclude Include="..\imgui\imgui_internal.h" />
+    <ClInclude Include="..\imgui\ImSequencer.h" />
     <ClInclude Include="..\imgui\imstb_rectpack.h" />
     <ClInclude Include="..\imgui\imstb_textedit.h" />
+    <ClInclude Include="..\imgui\ImZoomSlider.h" />
     <ClInclude Include="..\stb\stb_image.h" />
     <ClInclude Include="AdvancedSettings.h" />
     <ClInclude Include="AnimationClip.h" />
     <ClInclude Include="Animator.h" />
     <ClInclude Include="Application.h" />
     <ClInclude Include="AssetManager.h" />
+    <ClInclude Include="AssetPipelineManager.h" />
     <ClInclude Include="AudioSource.h" />
     <ClInclude Include="BootUpContainer.h" />
     <ClInclude Include="Button.h" />
@@ -243,6 +258,7 @@
     <ClInclude Include="GameSettings.h" />
     <ClInclude Include="glad.h" />
     <ClInclude Include="Graphics.h" />
+    <ClInclude Include="ImGuiGeneral.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="khrplatform.h" />
     <ClInclude Include="Material.h" />
@@ -269,6 +285,7 @@
     <ClInclude Include="Vertex2D.h" />
     <ClInclude Include="VertexAccessExplorer.h" />
     <ClInclude Include="VertexComponent.h" />
+    <ClInclude Include="VertexEngineEditor.h" />
     <ClInclude Include="VertexGeneral.h" />
     <ClInclude Include="VertexPrefs.h" />
     <ClInclude Include="VertexRenderPackage.h" />

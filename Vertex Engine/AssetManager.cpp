@@ -336,7 +336,7 @@ void AssetManager::SetActiveCamera(int _index)
 {
 	m_ActiveCamera = _index;
 }
-
+ 
 /// <summary>
 /// Register Audio Sources
 /// </summary>
@@ -358,6 +358,12 @@ void AssetManager::Register(Canvas* _canvas)
 void AssetManager::Register(vGameObject* _object)
 {
 	m_GameObjects3D.push_back(_object);
+}
+
+void AssetManager::RegisterGameObjectNew()
+{
+	GameObject* temp = new GameObject("GameObject");
+	m_Objects.push_back(temp);
 }
 
 //Improve this to use the new Vertex Collsion System.

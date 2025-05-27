@@ -36,6 +36,11 @@ Application::~Application()
 	delete m_Settings;
 	m_Settings = nullptr;
 
+	if (m_VertexEditor != nullptr) {
+		delete m_VertexEditor;
+		m_VertexEditor = nullptr;
+	}
+
 }
 
 void Application::StartUp()
@@ -49,7 +54,7 @@ void Application::StartUp()
 	}
 	char other[] = PROJECT_NAME;
 
-	char name[150] = "Vertex Engine | Editor | Project: ";
+	char name[150] = "Vertex Engine 2 | Editor | Project: ";
 
 	strcat(name, other);
 
@@ -165,24 +170,19 @@ void Application::StartUp()
 	m_Settings->m_AutoDeletePointers = AUTO_DELETE_ASSET_POINTERS;
 	m_Settings->m_TransparentSortingAlgo = Insertion_Sort;
 
-	if (m_Mode == EDITOR)
+	/*
+		CREATE THE VERTEX EDITOR
+	*/
+
+	if (m_Mode == EDITOR && !FINAL_BUILD)
 	{
 		m_EditorFullScreen = false;
-		IMGUI_CHECKVERSION();
-		ImGui::CreateContext();
-		ImGuiIO& io = ImGui::GetIO(); (void)io;
-
-		ImGui_ImplGlfw_InitForOpenGL(m_GameWindow, true);
-		ImGui_ImplOpenGL3_Init("#version 330");
-
-		ImGui::StyleColorsDark();
-
-		//Commented out to test a new editor desigh
-
+		m_VertexEditor = new VertexEngineEditor();
+		m_VertexEditor->CreateEditorLayout(m_GameWindow, m_SceneManager);
+		m_VertexEditor->GiveEditorMode(m_Mode);
 		//glViewport(299.973f, 349.968f, 1280, 720);
 		//glEnable(GL_SCISSOR_TEST);
 
-		UpdateEditorMode();
 		std::cout << "Vertex Message: Editor Succeded." << std::endl;
 	}
 
@@ -194,6 +194,7 @@ void Application::StartUp()
 	std::cout << "Vertex Message: Start Up Succeded." << std::endl;
 
 	ExternalResources(); //Load External files.
+
 
 	m_SceneManager->EngineState(m_Mode);
 
@@ -228,6 +229,11 @@ void Application::Start()
 	}
 
 	m_SceneManager->StartUpScenes();
+
+	if (m_Mode == EDITOR) {
+		AssetPipelineManager::ScanFolderForTextures();
+		m_VertexEditor->PopulateDesk();
+	}
 
 	std::cout << "Vertex Message: Start Succeded." << std::endl;
 }
@@ -332,7 +338,7 @@ void Application::EditorMain() // Main Editor
 				ImGui::InputInt("Layer", &m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Objects.at(selectedSprite)->layer, 2);
 
 				ImGui::Spacing();
-				ImGui::Image((void*)(intptr_t)m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Cameras.at(1)->renderTexture->GetTexture(),ImVec2(640,360), ImVec2(0,1), ImVec2(1,0));
+				//ImGui::Image((void*)(intptr_t)m_SceneManager->m_SceneList.at(m_SceneManager->GetActiveScene())->GetAssets().m_Cameras.at(1)->renderTexture->GetTexture(), ImVec2(640, 360), ImVec2(0, 1), ImVec2(1, 0));
 
 				//===================================== Position
 
@@ -756,7 +762,10 @@ void Application::RenderAll()
 
 	if (m_Mode == EDITOR && !m_EditorFullScreen || m_Mode == EDITOR_PLAY && !m_EditorFullScreen || m_Mode == EDITOR_PAUSED && !m_EditorFullScreen)
 	{
-		switch (m_WindowMode)
+
+		m_VertexEditor->RenderEditorDisplays();
+
+		/*switch (m_WindowMode)
 		{
 		case Main:
 			EditorMain();
@@ -769,7 +778,7 @@ void Application::RenderAll()
 		case HudEditor:
 			EditorHud();
 			break;
-		}
+		}*/
 	}
 
 	glfwSwapBuffers(m_GameWindow);
@@ -829,9 +838,7 @@ void Application::ShutDown()
 {
 	if (m_Mode == EDITOR || m_Mode == EDITOR_PLAY)
 	{
-		ImGui_ImplOpenGL3_Shutdown();
-		ImGui_ImplGlfw_Shutdown();
-		ImGui::DestroyContext();
+		m_VertexEditor->CleanUpGui();
 	}
 
 	Cursor::Show(m_GameWindow);
@@ -858,5 +865,7 @@ void Application::FolderCreation()
 
 void Application::ExternalResources() // Load all your external files such as textures, fonts & audio files.
 {
+	AssetPipelineManager::Init();
+
 	ResourceManager::LoadTexture("Builds/Textures/UI_Button.png", "UI_Button");
 }

@@ -72,3 +72,8 @@
 // =============================================
 
 #define CAMERA_DISTANCE_RENDER_LIMIT 10.0f
+
+//=============================================
+// Directorys & Files.
+//=============================================
+constexpr auto ASSET_DIRECTORY = "D:\Git\Vertex Engine\Vertex-Engine\Vertex Engine\Builds";;

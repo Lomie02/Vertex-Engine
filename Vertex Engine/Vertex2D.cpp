@@ -144,43 +144,9 @@ void Vertex2D::TensionDraw(GameObject* _object, Material& material, glm::vec2 po
 	}
 
 	//=======================================
-	//glm::mat4 model = glm::mat4(1.0f);
-
-	glm::mat4 model = glm::mat4(1);
-
-	// Pivots & Transform calulations,=.
-	glm::vec2 ImageOffset;
-
-	ImageOffset.x = _object->transform.size.x / 2;
-	ImageOffset.y = _object->transform.size.y / 2;
-
-	position.x -= ImageOffset.x;
-	position.y += ImageOffset.y;
-
-	glm::vec2 GeneralPivot;
-	Transform ParentsTransform;
-
-	if (_object->GetParent() != nullptr) { // If there is a parent then combine the 
-		ParentsTransform = _object->GetParent()->transform;
-
-		GeneralPivot = ParentsTransform.position + _object->transform.localPosition;
-	}
-	else {// If no parent then use objects pivot & position.
-		GeneralPivot = position + _object->transform.pivot;
-	}
-
-	//========================================== Main Render calulations for transforms 
-
-	model = glm::translate(model, glm::vec3(GeneralPivot, (float)_RenderLayer)); // position
-
-	model = glm::translate(model, glm::vec3(0.5f * size.x, 0.5f * -size.y, 0.0f)); // Position
-	model = glm::rotate(model, glm::radians(rotate), glm::vec3(0.0f, 0.0f, 1.0f)); // Rotation
-	model = glm::translate(model, glm::vec3(-0.5f * size.x, -0.5f * -size.y, 0.0f));
-
-	model = glm::scale(model, glm::vec3(size.x * scale, -size.y * scale, 1.0f));
 	this->m_Shader.SetVector3f("lights", glm::vec3(1.0, 1.0, 1.0));
 
-	this->m_Shader.SetMatrix4("model", model);
+	this->m_Shader.SetMatrix4("model", _object->GetWorldModelMat());
 	this->m_Shader.SetMatrix4("pro", per);
 	this->m_Shader.SetVector4f("Colour", material.colour);
 

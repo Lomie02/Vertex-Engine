@@ -35,11 +35,14 @@ public:
 	float GetFieldOfView() { return m_FieldofView; };
 	glm::mat4 GetProjectionAlone() { return m_ProjectionMat; }
 
-	float farClip = 100.0f;
+	float farClip = 10.0f;
 	float nearClip = -0.1f;
 	float zoom = 0.1;
 
 	RenderTexture* renderTexture = nullptr;
+
+	void SetAspectRatio(float _aspect) {m_AspectRatio = _aspect;}
+	glm::mat4 GetViewMatrix() { return m_ViewMat; }
 
 	void SetDisplay(int _index);
 	int GetDisplay() { return m_DisplayScreen; }
@@ -47,6 +50,7 @@ public:
 private:
 
 	int m_DisplayScreen = 0;
+	float m_AspectRatio = (float)PROJECT_ASPECT_WIDTH / (float)PROJECT_ASPECT_HEIGHT;
 
 	glm::vec3 m_CameraPos = glm::vec3(0, 0, 0);
 	glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
