@@ -17,7 +17,9 @@
 
 #include "Texture2D.h"
 #include "shader.h"
+#include <vector>
 
+#include "Debug.h"
 
 // A static singleton ResourceManager class that hosts several
 // functions to load Textures and Shaders. Each loaded texture
@@ -27,26 +29,34 @@
 class ResourceManager
 {
 public:
-    // resource storage
-    static std::map<std::string, Shader>    Shaders;
-    static std::map<std::string, Texture2D> Textures;
-    // loads (and generates) a shader program from file loading vertex, fragment (and geometry) shader's source code. If gShaderFile is not nullptr, it also loads a geometry shader
-    static Shader    LoadShader(const char* vShaderFile, const char* fShaderFile, const char* gShaderFile, std::string name);
-    // retrieves a stored sader
-    static Shader    GetShader(std::string name);
-    // loads (and generates) a texture from file
-    static Texture2D LoadTexture(const char* file, std::string name);
-    // retrieves a stored texture
-    static Texture2D GetTexture(std::string name);
-    // properly de-allocates all loaded resources
-    static void      Clear();
+	// resource storage
+
+	static std::map<std::string, Shader>    Shaders;
+	static std::map<std::string, Texture2D> Textures;
+	
+	// loads (and generates) a shader program from file loading vertex, fragment (and geometry) shader's source code. If gShaderFile is not nullptr, it also loads a geometry shader
+	static Shader    LoadShader(const char* vShaderFile, const char* fShaderFile, const char* gShaderFile, std::string name);
+	// retrieves a stored sader
+	static Shader    GetShader(std::string name);
+	// loads (and generates) a texture from file
+	static Texture2D LoadTexture(const char* file, std::string name);
+	// retrieves a stored texture
+	static Texture2D GetTexture(std::string name);
+	// properly de-allocates all loaded resources
+	static void      Clear();
+	// Checks if a Texure is already registered.
+	static bool DoesTextureExist(const char* _textureName);
+	// Checks if a shader is registered.
+	static bool DoesShaderExist(const char* _shaderName);
+
+	
 private:
-    // private constructor, that is we do not want any actual resource manager objects. Its members and functions should be publicly available (static).
-    ResourceManager() { }
-    // loads and generates a shader from file
-    static Shader    loadShaderFromFile(const char* vShaderFile, const char* fShaderFile, const char* gShaderFile = nullptr);
-    // loads a single texture from file
-    static Texture2D loadTextureFromFile(const char* file);
+	// private constructor, that is we do not want any actual resource manager objects. Its members and functions should be publicly available (static).
+	ResourceManager() { }
+	// loads and generates a shader from file
+	static Shader    loadShaderFromFile(const char* vShaderFile, const char* fShaderFile, const char* gShaderFile = nullptr);
+	// loads a single texture from file
+	static Texture2D loadTextureFromFile(const char* file);
 };
 
 #endif

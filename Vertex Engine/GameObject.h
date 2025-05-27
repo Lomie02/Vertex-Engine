@@ -25,6 +25,8 @@ public:
 	Material material;
 	Transform transform;
 
+	std::vector<GameObject*> GetChildren() { return m_Children; }
+
 	const char* name = "GameObject";
 	bool m_Active;
 
@@ -33,7 +35,7 @@ public:
 
 	GameObject* GetParent() { return m_Parent; }
 	void SetChild(GameObject* _child);
-	void RemoveChild();
+	void RemoveChild(GameObject* _child);
 	void ConfigureSystems();
 	Collider* GetCollider() { return m_Collider; }
 
@@ -47,6 +49,15 @@ public:
 	int GetActiveMimesSize() { return m_MimesAmount; }
 	glm::vec2 GetVelocity() { return m_Velocity; }
 	void SetVelocity(glm::vec2 _vel) { m_Velocity += _vel; }
+
+	glm::mat4 GetWorldModelMat()const {
+		if (m_Parent) {
+			return m_Parent->GetWorldModelMat() * transform.GetLocalModelMat();
+		}
+		else {
+			return transform.GetLocalModelMat();
+		}
+	}
 
 
 	template<typename T>

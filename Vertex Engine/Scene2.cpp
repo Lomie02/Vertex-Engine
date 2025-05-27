@@ -134,6 +134,7 @@ void Scene2::Awake()
 	m_Title->material.colour.g = 1;
 	m_Title->material.colour.b = 1;
 
+
 	// Setup animation test
 
 	m_FlipbookAnimation = new Flipbook();
@@ -207,10 +208,11 @@ void Scene2::Awake()
 	SetupButton();
 
 	m_RenderCamera = new Camera("Bongo");
-	m_TexureRender = new RenderTexture(1270, 720);
+	m_TexureRender = new RenderTexture(1920, 1080);
 
 	m_RenderCamera->SetDisplay(1);
-
+	m_MainCamera->zoom = 20;
+	m_RenderCamera->zoom = 20;
 	m_RenderCamera->renderTexture = m_TexureRender;
 
 	m_Manager.Register(m_RenderCamera);

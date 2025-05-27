@@ -9,6 +9,7 @@ bool VertexAccessExplorer:: OpenURL(const wchar_t* path)
 bool VertexAccessExplorer::OpenProgram(std::string _name)
 {
 	const char* path = _name.data();
+
 	if (system(path)) {
 		return true;
 	}

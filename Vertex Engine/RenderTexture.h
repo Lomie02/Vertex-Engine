@@ -3,7 +3,7 @@
 class RenderTexture
 {
 public:
-	RenderTexture(unsigned int _height, unsigned int _width);
+	RenderTexture(unsigned int _width, unsigned int _height);
 	~RenderTexture();
 
 	void UpScaleImage(unsigned int _height, unsigned int _width);

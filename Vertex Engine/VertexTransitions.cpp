@@ -53,7 +53,7 @@ void VertexTransitions::Awake()
 	m_TransitionObject->transform.size.x = 1920;
 	m_TransitionObject->transform.size.y = 1080;
 
-	m_MainCamera->zoom = 0.002f;
+	m_MainCamera->zoom = 100.0f;
 }
 
 void VertexTransitions::Start()

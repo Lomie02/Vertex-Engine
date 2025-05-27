@@ -15,6 +15,9 @@
 
 #include <chrono>
 #include "VertexWorkSpace.h"
+#include "VertexEngineEditor.h"
+#include "AssetPipelineManager.h"
+#include "Debug.h"
 
 using namespace irrklang;
 using Clock = std::chrono::high_resolution_clock;
@@ -90,6 +93,7 @@ public:
 	void UpdateExternal();
 
 private:
+	VertexEngineEditor* m_VertexEditor = nullptr;
 
 	void SetUpWorkSpaceScenes();
 

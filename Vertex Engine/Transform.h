@@ -1,7 +1,10 @@
 #pragma once
 #include "glm.hpp"
+#include <vector>
 
 class Transform {
+	class GameObject;
+
 public:
 	glm::vec2 position;
 	glm::vec2 pivot;
@@ -35,8 +38,21 @@ public:
 	void ApplyGlobalMatrix(glm::mat4 _mat) { m_GlobalTransforms = _mat; }
 	void ApplyLocalMatrix(glm::mat4 _mat) { m_LocalTransforms = _mat; }
 
+	void SetLayer(int _layer) { m_RenderLayer = _layer; }
 
+	//==================================== New Transform Data
+	glm::mat4 GetModelMatrixEditable() { return m_TransformModelMatrix; }
+
+	glm::mat4 GetLocalModelMat() const;
+	glm::mat4 GetWorldModelMat(const GameObject* _obj) const;
+	glm::mat4 m_TransformModelMatrix = glm::mat4(1.0f);
 private:
+	int m_RenderLayer;
+
+	glm::uvec2 m_LastPosition;
+	glm::uvec2 m_LastSize;
+
+	bool m_IsDirty = true;
 	glm::mat4 m_GlobalTransforms = glm::mat4(1);
 	glm::mat4 m_LocalTransforms = glm::mat4(1);
 };
