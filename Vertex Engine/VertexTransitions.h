@@ -35,7 +35,8 @@ private:
 	std::vector<GameObject*> m_Transitions;
 
 	Volume m_PPA;
+	GameObject* m_MainCamera;
 
-	Camera* m_MainCamera;
+	Camera* m_CamComp;
 	bool m_LerpColour;
 };

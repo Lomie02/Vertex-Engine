@@ -38,11 +38,12 @@ private:
 	RigidBody* m_Decoy;
 	RigidBody* m_BlockBody;
 
+	Camera* m_CamMain;
+	Camera* m_CamRender;
+
 	// Camaeras
-	Camera* m_MainCamera;
-	Camera* m_RenderCamera;
-	Camera* m_UserInterfaceCamera;
-	Canvas* m_Canvas;
+	GameObject* m_Camera01;
+	GameObject* m_Camera02;
 	// GameObjects
 	GameObject* m_Object2;
 	GameObject* m_Object0;

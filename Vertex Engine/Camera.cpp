@@ -1,5 +1,15 @@
 #include "Camera.h"
 #include "GameSettings.h"
+#include "GameObject.h"
+#include "vGameObject.h"
+
+void Camera::Start()
+{
+}
+
+void Camera::Update(float delta)
+{
+}
 
 glm::mat4 Camera::GetProjection()
 {
@@ -11,7 +21,7 @@ glm::mat4 Camera::GetProjection()
 	}
 
 	
-	if (m_LensMode == Ortho) {
+	if (m_LensMode == LensMode::Ortho) {
 
 		if (zoom < 0.0f) {
 			zoom = 0.001;
@@ -25,7 +35,7 @@ glm::mat4 Camera::GetProjection()
 
 		m_ProjectionMat = glm::ortho(-zoom * m_AspectRatio, zoom * m_AspectRatio, -zoom, zoom, nearClip, farClip);
 
-		glm::mat4 mTransform = glm::translate(glm::mat4(1.0f), glm::vec3(transform.position, 10)) * glm::rotate(glm::mat4(1.0f), transform.rotation, glm::vec3(0, 0, 1));
+		glm::mat4 mTransform = glm::translate(glm::mat4(1.0f), glm::vec3(partner2d->transform.position, 10)) * glm::rotate(glm::mat4(1.0f), partner2d->transform.rotation, glm::vec3(0, 0, 1));
 
 		m_ViewMat = glm::inverse(mTransform);
 
@@ -35,7 +45,7 @@ glm::mat4 Camera::GetProjection()
 	}
 	else
 	{
-		m_CameraPos = glm::vec3(transform.position, -50);
+		m_CameraPos = glm::vec3(partner2d->transform.position, -50);
 		glm::vec3 cameraDirection = glm::normalize(m_CameraPos - cameraTarget);
 
 		glm::vec3 cameraRight = glm::normalize(glm::cross(up, cameraDirection));
@@ -43,7 +53,7 @@ glm::mat4 Camera::GetProjection()
 
 		m_ProjectionMat = glm::perspective(glm::radians(m_FieldofView), m_AspectRatio, nearClip, farClip);
 
-		m_ViewMat = glm::translate(m_ViewMat, glm::vec3(transform.position, -20));
+		m_ViewMat = glm::translate(m_ViewMat, glm::vec3(partner2d->transform.position, -20));
 
 		//m_ViewMat = glm::lookAt(m_CameraPos, m_CameraPos + cameraFront, cameraUp);
 

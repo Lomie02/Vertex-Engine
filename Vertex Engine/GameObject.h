@@ -102,7 +102,7 @@ public:
 	/// <returns></returns>
 	template<typename T>
 	T* GetComponenet() {
-		if (m_Componenets.empty) return;
+		if (m_Componenets.size() == 0) return nullptr;
 		for (auto& comp : m_Componenets) {
 			if (T* object = dynamic_cast<T*>(comp)) {
 				return object;

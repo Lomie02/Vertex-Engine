@@ -98,49 +98,23 @@ void VertexEngineEditor::UpdateEditorColours()
 
 void VertexEngineEditor::RenderEditorGameView()
 {
+	if (m_ApplicationCentralSceneManager->m_SceneList.at(m_ApplicationCentralSceneManager->GetActiveScene())->GetAssets().GetMainCamera() == nullptr) { VERTEX_ERROR("FAILED TO CREATE GAME VIEW. NO CAMERAS."); return; }
+
+	Camera* cameraCache = m_ApplicationCentralSceneManager->m_SceneList.at(m_ApplicationCentralSceneManager->GetActiveScene())->GetAssets().GetMainCamera()->GetComponenet<Camera>();
+
 	ImGui::Begin("Game View");
-
-	ImVec2 screenSize = ImGui::GetContentRegionAvail();
-
-	if (m_ApplicationCentralSceneManager->m_SceneList.at(m_ApplicationCentralSceneManager->GetActiveScene())->GetAssets().m_Cameras.at(0)->renderTexture == nullptr) {
-		m_ApplicationCentralSceneManager->m_SceneList.at(m_ApplicationCentralSceneManager->GetActiveScene())->GetAssets().m_Cameras.at(0)->renderTexture = m_GameViewRenderTexture;
-	}
-
-	float imageAspect = (float)m_ApplicationCentralSceneManager->m_SceneList.at(m_ApplicationCentralSceneManager->GetActiveScene())->GetAssets().m_Cameras.at(1)->renderTexture->GetWidth() /
-		(float)m_ApplicationCentralSceneManager->m_SceneList.at(m_ApplicationCentralSceneManager->GetActiveScene())->GetAssets().m_Cameras.at(1)->renderTexture->GetHeight();
-	float windowAspect = screenSize.x / screenSize.y;
-
-	ImVec2 ImageSize = screenSize;
-
-	if (windowAspect > imageAspect) {
-		ImageSize.x = screenSize.y * imageAspect;
-	}
-	else {
-		ImageSize.y = screenSize.x / imageAspect;
-	}
-
-
-
-	ImGui::Image(m_ApplicationCentralSceneManager->m_SceneList.at(m_ApplicationCentralSceneManager->GetActiveScene())->GetAssets().m_Cameras.at(0)->renderTexture->GetTexture()
-		, ImageSize,
-		ImVec2(0, 1), ImVec2(1, 0)
-	);
-
-	ImGui::End();
-}
-
-void VertexEngineEditor::RenderEditorSceneView()
-{
-	ImGui::Begin("Scene View");
-	//==============================================
-	// Calculate View Port.
-	//==============================================
 
 	ImVec2 screenSize = ImGui::GetContentRegionAvail();
 	ImVec2 screenSizeA = ImGui::GetContentRegionAvail();
 
-	float imageAspect = (float)m_ApplicationCentralSceneManager->m_SceneList.at(m_ApplicationCentralSceneManager->GetActiveScene())->GetAssets().m_Cameras.at(1)->renderTexture->GetWidth() /
-		(float)m_ApplicationCentralSceneManager->m_SceneList.at(m_ApplicationCentralSceneManager->GetActiveScene())->GetAssets().m_Cameras.at(1)->renderTexture->GetHeight();
+
+	if (cameraCache->renderTexture == nullptr) {
+		cameraCache->renderTexture = m_GameViewRenderTexture;
+		cameraCache->SetDisplay(2);
+	}
+
+	float imageAspect = (float)cameraCache->renderTexture->GetWidth() /
+		(float)cameraCache->renderTexture->GetHeight();
 	float windowAspect = screenSize.x / screenSize.y;
 
 	ImVec2 ImageSize = screenSize;
@@ -153,7 +127,44 @@ void VertexEngineEditor::RenderEditorSceneView()
 	}
 
 	ImGui::Image(
-		m_ApplicationCentralSceneManager->m_SceneList.at(m_ApplicationCentralSceneManager->GetActiveScene())->GetAssets().m_Cameras.at(1)->renderTexture->GetTexture(),
+		cameraCache->renderTexture->GetTexture(),
+		ImageSize,
+		ImVec2(0, 1),
+		ImVec2(1, 0)
+	);
+
+	ImGui::End();
+}
+
+void VertexEngineEditor::RenderEditorSceneView()
+{
+	if (m_ApplicationCentralSceneManager->m_SceneList.at(m_ApplicationCentralSceneManager->GetActiveScene())->GetAssets().GetMainCamera() == nullptr) { VERTEX_ERROR("FAILED TO CREATE SCENE VIEW. NO CAMERAS."); return; }
+	ImGui::Begin("Scene View");
+	//==============================================
+	// Calculate View Port.
+	//==============================================
+
+
+
+	Camera* cameraCache = m_ApplicationCentralSceneManager->m_SceneList.at(m_ApplicationCentralSceneManager->GetActiveScene())->GetAssets().GetMainCamera()->GetComponenet<Camera>();
+	ImVec2 screenSize = ImGui::GetContentRegionAvail();
+	ImVec2 screenSizeA = ImGui::GetContentRegionAvail();
+
+	float imageAspect = (float)cameraCache->renderTexture->GetWidth() /
+		(float)cameraCache->renderTexture->GetHeight();
+	float windowAspect = screenSize.x / screenSize.y;
+
+	ImVec2 ImageSize = screenSize;
+
+	if (windowAspect > imageAspect) {
+		ImageSize.x = screenSize.y * imageAspect;
+	}
+	else {
+		ImageSize.y = screenSize.x / imageAspect;
+	}
+
+	ImGui::Image(
+		cameraCache->renderTexture->GetTexture(),
 		ImageSize,
 		ImVec2(0, 1),
 		ImVec2(1, 0)
@@ -196,8 +207,8 @@ void VertexEngineEditor::RenderEditorSceneView()
 
 		glm::mat4 mod = m_SelectedGameObject->transform.GetLocalModelMat();
 
-		ImGuizmo::Manipulate(glm::value_ptr(m_ApplicationCentralSceneManager->m_SceneList.at(m_ApplicationCentralSceneManager->GetActiveScene())->GetAssets().m_Cameras.at(1)->GetViewMatrix()),
-			glm::value_ptr(m_ApplicationCentralSceneManager->m_SceneList.at(m_ApplicationCentralSceneManager->GetActiveScene())->GetAssets().m_Cameras.at(1)->GetProjection()),
+		ImGuizmo::Manipulate(glm::value_ptr(cameraCache->GetViewMatrix()),
+			glm::value_ptr(cameraCache->GetProjection()),
 			ImGuizmo::TRANSLATE, ImGuizmo::WORLD, glm::value_ptr(mod));
 
 	}
@@ -261,11 +272,22 @@ void VertexEngineEditor::RenderEditorInspector()
 		for (auto& comp : m_SelectedGameObject->GetEntireComponenetList()) {
 			iter++;
 			ImGui::PushID(iter);
-			if (ImGui::CollapsingHeader("Debug Component", ImGuiTreeNodeFlags_DefaultOpen)) {
-				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.7f, 0, 0, 1));
-				ImGui::Text("COMPONENET_NOT_COMPLETE");
-				ImGui::PopStyleColor(1);
+
+			if (Camera* cam = dynamic_cast<Camera*>(comp)) {
+				if (ImGui::CollapsingHeader("Camera", ImGuiTreeNodeFlags_DefaultOpen)) {
+					ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.7f, 0, 0, 1));
+					ImGui::Text("COMPONENET_NOT_COMPLETE");
+					ImGui::PopStyleColor(1);
+				}
 			}
+			else if (DebugComp* deb = dynamic_cast<DebugComp*>(comp)) {
+				if (ImGui::CollapsingHeader("Debug Component", ImGuiTreeNodeFlags_DefaultOpen)) {
+					ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.7f, 0, 0, 1));
+					ImGui::Text("COMPONENET_NOT_COMPLETE");
+					ImGui::PopStyleColor(1);
+				}
+			}
+
 			ImGui::PopID();
 		}
 
@@ -296,7 +318,13 @@ void VertexEngineEditor::RenderEditorInspector()
 			if (ImGui::MenuItem("Rigidbody")) {
 				m_SelectedGameObject->AddComponent<DebugComp>();
 			}
-
+			// Camera
+			if (ImGui::MenuItem("Camera")) {
+				if (m_SelectedGameObject->GetComponenet<Camera>() == nullptr)
+					m_SelectedGameObject->AddComponent<Camera>();
+				else
+					VERTEX_WARNING("Failed to add Componenet Camera. " + std::string(m_SelectedGameObject->name) + " Already has one.");
+			}
 
 			ImGui::EndPopup();
 		}
@@ -357,7 +385,7 @@ void VertexEngineEditor::RenderEditorDesk()
 
 			ImGui::SetDragDropPayload("TEXTURE", name.c_str(), strlen(name.c_str()) + 1);
 			ImGui::Text("Dragging: %s", name.c_str());
-			ImGui::Image (texture.ID, ImVec2(64, 64));
+			ImGui::Image(texture.ID, ImVec2(64, 64));
 
 			ImGui::EndDragDropSource();
 		}
@@ -415,6 +443,7 @@ void VertexEngineEditor::RenderDockingTaskBar()
 	if (ImGui::Button("STOP"))
 	{
 		VERTEX_LOG("Stop Test");
+
 		if (m_EditorMode == EDITOR_PLAY || m_EditorMode == EDITOR_PAUSED) {
 
 			m_EditorMode = EDITOR;

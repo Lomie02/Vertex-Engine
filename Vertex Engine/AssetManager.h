@@ -16,6 +16,7 @@
 #include "NavAgent.h"
 #include "irrKlang-64bit-1.6.0/include/irrKlang.h"
 #include "Canvas.h"
+#include "glm.hpp"
 #include "PhysicsScene.h"
 using namespace irrklang;
 
@@ -136,7 +137,7 @@ public:
 	void BeginVertexRenderTextureBindings();
 	void CompleteVertexRenderTextureBindings();
 
-
+	GameObject* GetMainCamera();
 private:
 
 	int m_CurrentRenderBatchesFromRenderer = 0;
