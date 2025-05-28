@@ -186,7 +186,7 @@ void Application::StartUp()
 
 	for (int i = 0; i < m_SceneManager->m_SceneList.size(); i++)
 	{
-		m_SceneManager->m_SceneList.at(i)->GetAssets().BootUpAll(m_Settings);
+		m_SceneManager->m_SceneList.at(i)->GetAssets()->BootUpAll(m_Settings);
 	}
 
 	std::cout << "Vertex Message: Start Up Succeded." << std::endl;
@@ -213,7 +213,7 @@ void Application::Start()
 
 
 	for (int i = 0; i < m_SceneManager->m_SceneList.size(); i++) {
-		m_SceneManager->m_SceneList.at(i)->GetAssets().AssignSoundSystem(m_SoundManager);
+		m_SceneManager->m_SceneList.at(i)->GetAssets()->AssignSoundSystem(m_SoundManager);
 	}
 
 	switch (m_Mode) {
@@ -269,11 +269,11 @@ void Application::Update()
 		while (fixedDelta >= m_TimeStep)
 		{
 			m_SceneManager->UpdateFixedScenes(m_TimeStep); // Add timestep to Fixed & Late Update Loop.
-			m_SceneManager->GetCurrentScene()->GetAssets().ConfigurePhysics(m_TimeStep);
+			m_SceneManager->GetCurrentScene()->GetAssets()->ConfigurePhysics(m_TimeStep);
 			fixedDelta -= m_TimeStep;
 		}
 
-		m_SceneManager->GetCurrentScene()->GetAssets().ConfigureSystems(); // Update asset managers systems
+		m_SceneManager->GetCurrentScene()->GetAssets()->ConfigureSystems(); // Update asset managers systems
 	}
 }
 
@@ -309,9 +309,9 @@ void Application::BeginSceneSystemAssigning()
 
 	for (int i = 0; i < m_SceneManager->m_SceneList.size(); i++)
 	{
-		m_SceneManager->m_SceneList.at(i)->GetAssets().AssignMode(m_Mode);
-		m_SceneManager->m_SceneList.at(i)->GetAssets().GiveWindow(m_GameWindow);
-		m_SceneManager->m_SceneList.at(i)->GetAssets().GiveSceneManager(m_SceneManager);
+		m_SceneManager->m_SceneList.at(i)->GetAssets()->AssignMode(m_Mode);
+		m_SceneManager->m_SceneList.at(i)->GetAssets()->GiveWindow(m_GameWindow);
+		m_SceneManager->m_SceneList.at(i)->GetAssets()->GiveSceneManager(m_SceneManager);
 	}
 
 	m_FinishedSceneSetUpStage = true;
@@ -322,11 +322,11 @@ void Application::RenderAll()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	m_SceneManager->GetCurrentScene()->GetAssets().ConfigureRenderSystems(m_Renderer);
+	m_SceneManager->GetCurrentScene()->GetAssets()->ConfigureRenderSystems(m_Renderer);
 
 	if (m_Mode != PLAY)
 	{
-		m_SceneManager->GetCurrentScene()->GetAssets().Gizmos(m_Renderer);
+		m_SceneManager->GetCurrentScene()->GetAssets()->Gizmos(m_Renderer);
 	}
 
 	if (m_Mode == EDITOR && !m_EditorFullScreen || m_Mode == EDITOR_PLAY && !m_EditorFullScreen || m_Mode == EDITOR_PAUSED && !m_EditorFullScreen)

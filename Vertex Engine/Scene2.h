@@ -23,7 +23,7 @@ public:
 	virtual void FixedUpdate(float fixedDelta);
 
 	void GiveWindow(GLFWwindow* window) { m_Window = window; }
-	AssetManager GetAssets() { return m_Manager; }
+	AssetManager* GetAssets() { return m_Manager; }
 
 	void StartFlipbookSetUp();
 

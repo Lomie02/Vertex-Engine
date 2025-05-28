@@ -116,8 +116,12 @@ void AssetManager::Register(VertexComponent* _object)
 /// <param name="_object"></param>
 void AssetManager::Register(GameObject* _object)
 {
-	m_Objects.push_back(_object);
-	m_PreviousLocations.push_back(&_object->transform);
+	if (_object) {
+		m_Objects.push_back(_object);
+		VERTEX_ERROR("Failed To Register. Object was nullptr.");
+	}
+	else {
+	}
 }
 
 //TODO: Replace with box2d
@@ -335,7 +339,7 @@ void AssetManager::SetActiveCamera(int _index)
 {
 	m_ActiveCamera = _index;
 }
- 
+
 /// <summary>
 /// Register Audio Sources
 /// </summary>

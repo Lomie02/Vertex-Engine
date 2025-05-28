@@ -48,10 +48,10 @@ void VertexTransitions::Awake()
 	m_Transitions.at(0)->material.surface = Transparent;
 	m_TransitionSpeed = 2;
 
-	m_Manager.Register(m_MainCamera);
+	m_Manager->Register(m_MainCamera);
 	m_Timer = m_TransitionSpeed;
 
-	m_Manager.Register(m_TransitionObject);
+	m_Manager->Register(m_TransitionObject);
 
 	m_TransitionObject->transform.size.x = 1920;
 	m_TransitionObject->transform.size.y = 1080;
@@ -62,7 +62,7 @@ void VertexTransitions::Awake()
 void VertexTransitions::Start()
 {
 	m_PPA.ChromaticAberation.ChromaticEnabled = false;
-	m_Manager.Register(m_PPA);
+	m_Manager->Register(m_PPA);
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 }
 
@@ -106,7 +106,7 @@ void VertexTransitions::LateUpdate(float delta)
 
 void VertexTransitions::Rendering(Vertex2D* renderer)
 {
-	m_Manager.ConfigureRenderSystems(renderer);
+	m_Manager->ConfigureRenderSystems(renderer);
 }
 
 Material VertexTransitions::EditTransition(int _index)

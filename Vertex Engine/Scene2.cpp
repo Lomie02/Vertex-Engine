@@ -57,7 +57,7 @@ void Scene2::Awake()
 	m_Camera01->AddComponent<Camera>();
 	m_Camera02->AddComponent<Camera>();
 
-	m_SceneManager = GetAssets().GetSceneManager();
+	m_SceneManager = GetAssets()->GetSceneManager();
 
 	m_Egg = new GameObject("Egg");
 	m_Controller = new PlayerController();
@@ -89,15 +89,15 @@ void Scene2::Awake()
 	m_Object2->layer = 3;
 
 	m_Object0->material.AlbedoMap = ResourceManager::GetTexture("Chimken");
-	m_Manager.Register(m_Object2);
-	m_Manager.Register(m_Object0);
+	m_Manager->Register(m_Object2);
+	m_Manager->Register(m_Object0);
 
 
-	m_Manager.Register(m_Camera01);
+	m_Manager->Register(m_Camera01);
 
 	m_ButtonTest = new Button("Goofy Button");
 
-	m_Manager.Register(m_ButtonTest);
+	m_Manager->Register(m_ButtonTest);
 
 	m_Title = new Text();
 	m_CounterText = new Text();
@@ -138,8 +138,8 @@ void Scene2::Awake()
 	m_FlipbookAnimation = new Flipbook();
 	m_EggFlipBook = new Flipbook();
 
-	m_Manager.Register(m_FlipbookAnimation);
-	m_Manager.Register(m_EggFlipBook);
+	m_Manager->Register(m_FlipbookAnimation);
+	m_Manager->Register(m_EggFlipBook);
 
 	m_EggFlipBook->SetMaster(m_Egg);
 
@@ -193,11 +193,11 @@ void Scene2::Awake()
 	m_Decoy->Init(new btBoxShape(btVector3(m_Decoy->transform.GetSize().x * m_Decoy->transform.scale / 2, m_Decoy->transform.GetSize().y * m_Decoy->transform.scale / 2, 0.1f)), 1);
 	m_BlockBody->Init(new btBoxShape(btVector3(m_BlockBody->transform.GetSize().x / 2, m_BlockBody->transform.GetSize().y / 2, 0.1f)), 0);
 
-	m_Manager.Register(m_Body);
-	m_Manager.Register(m_Decoy);
-	m_Manager.Register(m_BlockBody);
+	m_Manager->Register(m_Body);
+	m_Manager->Register(m_Decoy);
+	m_Manager->Register(m_BlockBody);
 
-	m_Manager.SetWorldGravity(glm::vec3(0.f, -9.8f, 0.0f));
+	m_Manager->SetWorldGravity(glm::vec3(0.f, -9.8f, 0.0f));
 
 	// ====================================== Bodies
 	//====================
@@ -214,8 +214,8 @@ void Scene2::Awake()
 	m_CamRender->zoom = 20;
 	m_CamRender->renderTexture = m_TexureRender;
 
-	m_Manager.Register(m_Camera01);
-	m_Manager.Register(m_Camera02);
+	m_Manager->Register(m_Camera01);
+	m_Manager->Register(m_Camera02);
 
 	m_Object2->AddComponent<DebugComp>();
 	m_Object2->AddComponent<DebugComp>();
@@ -225,24 +225,24 @@ void Scene2::Awake()
 
 	std::cout << "Comp List: " << m_Object2->FindComponentsOfType<DebugComp>().size() << std::endl;
 
-	m_Manager.Register(m_Egg);
+	m_Manager->Register(m_Egg);
 	m_ButtonTest->SetActive(false);
 
 	m_Controller->AssignPlayer(m_Object0);
-	m_Manager.Register(m_Controller);
+	m_Manager->Register(m_Controller);
 
 	// ANimator Setup
 	m_Egg->material.m_KeepAspect = true;
 	m_Egg->material.TransparencyBlend = Alpha;
 
 	m_Animation->WrapMode(Loop);
-	m_Manager.Register(m_Animation);
+	m_Manager->Register(m_Animation);
 
 }
 
 void Scene2::Start()
 {
-	m_Manager.GiveWindow(m_Window);
+	m_Manager->GiveWindow(m_Window);
 	glClearColor(0.3, 0.3, 0.3, 1.0);
 
 	m_FlipbookAnimation->AdjustClipPlaySpeed("Idle", 20);
