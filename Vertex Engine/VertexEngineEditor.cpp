@@ -138,15 +138,12 @@ void VertexEngineEditor::RenderEditorGameView()
 
 void VertexEngineEditor::RenderEditorSceneView()
 {
-	if (m_ApplicationCentralSceneManager->m_SceneList.at(m_ApplicationCentralSceneManager->GetActiveScene())->GetAssets()->GetMainCamera() == nullptr) { VERTEX_ERROR("FAILED TO CREATE SCENE VIEW. NO CAMERAS."); return; }
 	ImGui::Begin("Scene View");
 	//==============================================
 	// Calculate View Port.
 	//==============================================
 
-
-
-	Camera* cameraCache = m_ApplicationCentralSceneManager->m_SceneList.at(m_ApplicationCentralSceneManager->GetActiveScene())->GetAssets()->GetMainCamera()->GetComponenet<Camera>();
+	 Camera* cameraCache = m_ApplicationCentralSceneManager->m_SceneList.at(m_ApplicationCentralSceneManager->GetActiveScene())->GetAssets()->GetEditorCamera()->GetComponenet<Camera>();
 	ImVec2 screenSize = ImGui::GetContentRegionAvail();
 	ImVec2 screenSizeA = ImGui::GetContentRegionAvail();
 
@@ -165,7 +162,7 @@ void VertexEngineEditor::RenderEditorSceneView()
 
 	ImGui::Image(
 		cameraCache->renderTexture->GetTexture(),
-		ImageSize,
+		ImVec2(1920,1080),
 		ImVec2(0, 1),
 		ImVec2(1, 0)
 	);
@@ -173,6 +170,22 @@ void VertexEngineEditor::RenderEditorSceneView()
 	//===============================================================
 	// Drag & Drop
 	//===============================================================
+	if (ImGui::IsKeyPressed(ImGuiKey_MouseLeft)) {
+
+		ImVec2 ImagePos = ImGui::GetCursorScreenPos();
+		ImVec2 mouse = ImGui::GetMousePos();
+		ImVec2 min = ImagePos;
+		ImVec2 max = ImVec2(min.x + 1080, min.y + 1080);
+
+		if (mouse.x >= min.x && mouse.x < max.x && mouse.y >= min.y && mouse.y < max.y) {
+			int localX = (int)(mouse.x - min.x);
+			int localY = (int)(mouse.y - min.y);
+
+			localY = (int)1080 - localY;
+
+			m_SelectedGameObject = m_ApplicationCentralSceneManager->m_SceneList.at(m_ApplicationCentralSceneManager->GetActiveScene())->GetAssets()->EditorPicker(glm::vec2(localX, localY));
+		}
+	}
 
 	if (ImGui::BeginDragDropTarget()) {
 		if (const ImGuiPayload* gameObjectPayload = ImGui::AcceptDragDropPayload("GAMEOBJECTS")) {
@@ -185,18 +198,10 @@ void VertexEngineEditor::RenderEditorSceneView()
 	ImVec2 screenPos = ImGui::GetCursorScreenPos();
 
 	if (m_SelectedGameObject) {
+		ImGuizmo::SetOrthographic(true);
 
 		ImGuizmo::SetDrawlist();
-		ImGuizmo::SetRect(screenPos.x, screenPos.y, ImageSize.x, ImageSize.y);
-
-		glm::mat4 model = glm::mat4(1.0f);
-
-		model = glm::translate(model, glm::vec3(m_SelectedGameObject->transform.position, 0));
-		model = glm::translate(model, glm::vec3(0.5f * m_SelectedGameObject->transform.size.x, 0.5f * -m_SelectedGameObject->transform.size.y, 0.0f));
-		model = glm::rotate(model, glm::radians(m_SelectedGameObject->transform.rotation), glm::vec3(0.0f, 0.0f, 1.0f));
-		model = glm::translate(model, glm::vec3(-0.5f * m_SelectedGameObject->transform.size.x, -0.5f * -m_SelectedGameObject->transform.size.y, 0.0f));
-
-		model = glm::scale(model, glm::vec3(m_SelectedGameObject->transform.size.x * m_SelectedGameObject->transform.scale, -m_SelectedGameObject->transform.size.y * m_SelectedGameObject->transform.scale, 1.0f));
+		ImGuizmo::SetRect(screenPos.x, screenPos.y,1920, 1080);
 
 		float dummy[16] = {
 			1,0,0,0,
@@ -205,11 +210,11 @@ void VertexEngineEditor::RenderEditorSceneView()
 			0,0,0,1
 		};
 
-		glm::mat4 mod = m_SelectedGameObject->transform.GetLocalModelMat();
+		glm::mat4 mod = m_SelectedGameObject->GetWorldModelMat();
 
 		ImGuizmo::Manipulate(glm::value_ptr(cameraCache->GetViewMatrix()),
 			glm::value_ptr(cameraCache->GetProjection()),
-			ImGuizmo::TRANSLATE, ImGuizmo::WORLD, glm::value_ptr(mod));
+			ImGuizmo::TRANSLATE, ImGuizmo::LOCAL, glm::value_ptr(mod));
 
 	}
 	ImGui::End();
@@ -222,7 +227,9 @@ void VertexEngineEditor::RenderEditorInspector()
 	if (m_SelectedGameObject) {
 
 		ImGui::Text(m_SelectedGameObject->name);
+		ImGui::Text("ID: "); ImGui::SameLine(); ImGui::Text( std::to_string(m_SelectedGameObject->GetUniqueIdentity()).c_str());
 		ImGui::SameLine();
+
 		VertexSpacer();
 		ImGui::Checkbox("Active", &m_SelectedGameObject->m_Active);
 
@@ -275,9 +282,40 @@ void VertexEngineEditor::RenderEditorInspector()
 
 			if (Camera* cam = dynamic_cast<Camera*>(comp)) {
 				if (ImGui::CollapsingHeader("Camera", ImGuiTreeNodeFlags_DefaultOpen)) {
-					ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.7f, 0, 0, 1));
-					ImGui::Text("COMPONENET_NOT_COMPLETE");
-					ImGui::PopStyleColor(1);
+					// vars
+					Camera* camData = m_SelectedGameObject->GetComponenet<Camera>();
+					const char* lensModes[] = { "Ortho", "Projection" };
+					static int projectionMode = (int)camData->GetLens();
+
+					//Projection Mode
+					ImGui::Text("Lens Mode"); ImGui::SameLine();
+					if (ImGui::Combo("##lensMode", &projectionMode, lensModes, IM_ARRAYSIZE(lensModes))) {
+						if (projectionMode == 0) {
+							camData->SetLens(LensMode::Ortho);
+						}
+						else {
+							camData->SetLens(LensMode::Perspective);
+						}
+					}
+					// Near Clipping
+					ImGui::Text("Near Clip"); ImGui::SameLine();
+					ImGui::InputFloat("##nearClip", &camData->nearClip);
+					// Far Clipping
+					ImGui::Text("Far Clip"); ImGui::SameLine();
+					ImGui::InputFloat("##farClip", &camData->farClip);
+					// Zoom
+					if (camData->GetLens() == LensMode::Ortho) {
+						ImGui::Text("Zoom Clip"); ImGui::SameLine();
+						ImGui::InputFloat("##zoomCamera", &camData->zoom);
+
+					}
+					// DisPlays 
+					ImGui::Text("Display"); ImGui::SameLine();
+					static int display = camData->GetDisplay();
+					if (ImGui::InputInt("##camDisplay", &display)) {
+						camData->SetDisplay(display);
+					}
+
 				}
 			}
 			else if (DebugComp* deb = dynamic_cast<DebugComp*>(comp)) {
@@ -315,15 +353,12 @@ void VertexEngineEditor::RenderEditorInspector()
 			if (ImGui::MenuItem("Comp")) {
 				m_SelectedGameObject->AddComponent<DebugComp>();
 			}
-			if (ImGui::MenuItem("Rigidbody")) {
-				m_SelectedGameObject->AddComponent<DebugComp>();
-			}
 			// Camera
 			if (ImGui::MenuItem("Camera")) {
 				if (m_SelectedGameObject->GetComponenet<Camera>() == nullptr)
 					m_SelectedGameObject->AddComponent<Camera>();
 				else
-					VERTEX_WARNING("Failed to add Componenet Camera. " + std::string(m_SelectedGameObject->name) + " Already has one.");
+					VERTEX_WARNING("Only one Camera componet per object. " + std::string(m_SelectedGameObject->name) + " Already has one.");
 			}
 
 			ImGui::EndPopup();
@@ -342,11 +377,7 @@ void VertexEngineEditor::RenderEditorInheritList()
 	ImGui::Begin("Hierachy");
 
 	if (ImGui::Button("Create")) {
-		GameObject* temp = new GameObject("Game");
-
-		VERTEX_LOG(std::to_string(m_ApplicationCentralSceneManager->m_SceneList.at(m_ApplicationCentralSceneManager->GetActiveScene())->GetAssets()->m_Objects.size()));
-		m_ApplicationCentralSceneManager->m_SceneList.at(m_ApplicationCentralSceneManager->GetActiveScene())->GetAssets()->Register(temp);
-		VERTEX_LOG(std::to_string(m_ApplicationCentralSceneManager->m_SceneList.at(m_ApplicationCentralSceneManager->GetActiveScene())->GetAssets()->m_Objects.size()));
+		m_ApplicationCentralSceneManager->m_SceneList.at(m_ApplicationCentralSceneManager->GetActiveScene())->GetAssets()->RegisterGameObjectNew();
 	}
 
 	for (int i = 0; i < m_ApplicationCentralSceneManager->m_SceneList.at(m_ApplicationCentralSceneManager->GetActiveScene())->GetAssets()->m_Objects.size(); i++) {
@@ -354,7 +385,22 @@ void VertexEngineEditor::RenderEditorInheritList()
 			RenderGameObjectNodes(m_ApplicationCentralSceneManager->m_SceneList.at(m_ApplicationCentralSceneManager->GetActiveScene())->GetAssets()->m_Objects[i], m_SelectedGameObject);
 	}
 
+	VertexSpacer();
+	// Parenting Drag & Drop
 
+	ImVec2 screenSize = ImGui::GetContentRegionAvail();
+	ImGui::Dummy(ImVec2(screenSize.x, screenSize.y));
+
+	// Unparent zone
+	if (ImGui::BeginDragDropTarget()) {
+		if (const ImGuiPayload* gameObjectPayload = ImGui::AcceptDragDropPayload("OBJECT_RE_PARENT")) {
+			GameObject* object = *(GameObject**)gameObjectPayload->Data;
+			if (object && object->GetParent()) {
+				object->GetParent()->RemoveChild(object);
+			}
+		}
+		ImGui::EndDragDropTarget();
+	}
 
 	ImGui::End();
 }
@@ -396,6 +442,8 @@ void VertexEngineEditor::RenderEditorDesk()
 
 			ImGui::EndDragDropSource();
 		}
+
+
 
 	}
 
@@ -503,10 +551,57 @@ void VertexEngineEditor::RenderGameObjectNodes(GameObject* _obj, GameObject*& se
 		m_SelectedGameObject = _obj;
 	}
 
+	if (ImGui::BeginPopupContextItem()) {
+		if (ImGui::Button("Rename")) { // Rename Object
+
+		}
+
+		if (ImGui::Button("Create Empty Parent")) { // Create Empty Parent Object
+			m_ApplicationCentralSceneManager->m_SceneList.at(m_ApplicationCentralSceneManager->GetActiveScene())->GetAssets()->RegisterGameObjectNew(nullptr, _obj);
+		}
+
+		if (ImGui::Button("Delete")) { // Delete the gameobject from the engine.
+			m_ApplicationCentralSceneManager->m_SceneList.at(m_ApplicationCentralSceneManager->GetActiveScene())->GetAssets()->UnRegister(_obj);
+		}
+
+		ImGui::EndPopup();
+	}
+
+	// Drag & drop unparent.
+	if (ImGui::BeginDragDropTarget()) {
+		if (const ImGuiPayload* gameObjectPayload = ImGui::AcceptDragDropPayload("OBJECT_RE_PARENT")) {
+			GameObject* object = *(GameObject**)gameObjectPayload->Data;
+			if (object && !IsChildOf(object, _obj)) {
+				_obj->SetChild(object);
+			}
+		}
+		ImGui::EndDragDropTarget();
+	}
+
+	if (ImGui::BeginDragDropSource()) {
+
+		ImGui::SetDragDropPayload("OBJECT_RE_PARENT", &_obj, sizeof(GameObject*));
+		ImGui::Text("Dragging: %s", _obj->name);
+
+		ImGui::EndDragDropSource();
+	}
+
+
+	// Draw objects children
 	if (open) {
 		for (GameObject* child : _obj->GetChildren())
 			RenderGameObjectNodes(child, selection);
 		ImGui::TreePop();
 	}
 
+}
+
+bool VertexEngineEditor::IsChildOf(GameObject* _parent, GameObject* _child)
+{
+	while (_child) {
+		if (_child == _parent)
+			return true;
+		_child = _child->GetParent();
+	}
+	return false;
 }

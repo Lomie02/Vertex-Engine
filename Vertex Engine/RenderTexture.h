@@ -1,5 +1,7 @@
 #pragma once
+#include <iostream>
 #include "Graphics.h"
+#include "glm.hpp"
 class RenderTexture
 {
 public:
@@ -16,6 +18,8 @@ public:
 
 	unsigned int GetWidth() const { return m_Width; }
 	unsigned int GetHeight() const { return m_Height; }
+
+	glm::u8vec4 ReadPixels(int _x, int _y) const;
 
 private:
 	GLuint m_Fbo = 0;

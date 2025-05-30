@@ -148,6 +148,7 @@ void Vertex2D::TensionDraw(GameObject* _object, Material& material, glm::vec2 po
 
 	this->m_Shader.SetMatrix4("model", _object->GetWorldModelMat());
 	this->m_Shader.SetMatrix4("pro", per);
+	this->m_Shader.SetInteger("picking", 0);
 	this->m_Shader.SetVector4f("Colour", material.colour);
 
 	glActiveTexture(GL_TEXTURE0);
@@ -325,6 +326,33 @@ void Vertex2D::Tension_Rescale_FrameBuffer(float width, float height)
 void Vertex2D::TensionVolume(Volume& _vol)
 {
 	m_VertexVolume = _vol;
+}
+
+void Vertex2D::VertexEngineColourPickRender(GameObject* _object, Material& material, glm::vec2 position, glm::vec2 size, float rotate, float scale, glm::mat4 per, int _RenderLayer)
+{
+	glDisable(GL_BLEND);
+	glDisable(GL_DEPTH_TEST);
+
+	this->m_Shader = _object->material.shader;
+	uint32_t id = _object->GetUniqueIdentity();
+	glm::vec4 colour = _object->GetColourPickerCol();
+
+	this->m_Shader.Use();
+
+	//=======================================
+
+	this->m_Shader.SetMatrix4("model", _object->GetWorldModelMat());
+	this->m_Shader.SetInteger("picking", 1);
+	this->m_Shader.SetMatrix4("pro", per);
+	this->m_Shader.SetVector4f("idColour", colour);
+	this->m_Shader.SetVector4f("Colour", material.colour);
+
+	glActiveTexture(GL_TEXTURE0);
+	material.AlbedoMap.Bind();
+
+	glBindVertexArray(this->m_quadVAO);
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+	glBindVertexArray(0);
 }
 
 void Vertex2D::DrawLine(glm::vec2 _start, glm::vec2 _end, Material& _mat)

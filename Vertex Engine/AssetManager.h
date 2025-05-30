@@ -38,10 +38,18 @@ enum Renderer {
 class AssetManager
 {
 	friend class SceneManager;
+	friend class VertexEngineEditor;
 public:
 
 	AssetManager()
 	{
+		m_EditorCamera = new GameObject("EditorCamera");
+		m_EditorColourPicker = new RenderTexture(PROJECT_ASPECT_WIDTH, PROJECT_ASPECT_HEIGHT);
+		m_EditorCamera->AddComponent<Camera>();
+		m_EditorCamera->GetComponenet<Camera>()->renderTexture = m_EditorColourPicker;
+		m_EditorCamera->GetComponenet<Camera>()->SetDisplay(8);
+		m_EditorCamera->GetComponenet<Camera>()->zoom = 20;
+
 		m_ActiveCamera = 0;
 		m_CameraGizmo.AlbedoMap = ResourceManager::GetTexture("Gizmo_Camera");
 		m_TransformGizmoX.AlbedoMap = ResourceManager::GetTexture("Gizmo_Cords");
@@ -72,7 +80,7 @@ public:
 
 	void Register(vGameObject* _object);
 
-	void RegisterGameObjectNew();
+	void RegisterGameObjectNew(GameObject* _parent = nullptr, GameObject* _child = nullptr);
 
 	//========================================================================
 
@@ -137,8 +145,14 @@ public:
 	void BeginVertexRenderTextureBindings();
 	void CompleteVertexRenderTextureBindings();
 
+
 	GameObject* GetMainCamera();
 private:
+	GameObject* GetEditorCamera() { return m_EditorCamera; }
+	GameObject* EditorPicker(glm::vec2 _mouse);
+
+	GameObject* m_EditorCamera;
+	RenderTexture* m_EditorColourPicker;
 
 	int m_CurrentRenderBatchesFromRenderer = 0;
 	float m_CurrentFramesPerSecond = 0;

@@ -76,6 +76,9 @@ public:
 
 	void VioletDraw();
 
+	// Vertex Colour Picking Buffer
+	void VertexEngineColourPickRender(GameObject* _object, Material& material, glm::vec2 position, glm::vec2 size = glm::vec2(10.0f, 10.0f), float rotate = 0.0f, float scale = 1.0f, glm::mat4 per = glm::mat4(1.0f), int _RenderLayer = 0);
+
 	Shader m_TextShader;
 	std::vector<glm::vec2> GetVertices() { return m_Vertices; }
 	glm::mat4 GetMatrixModel() { return m_ModelMatrix; }

@@ -23,6 +23,8 @@ uniform float r = 5;
 float near = 0.1;
 float far = 100.0f;
 vec3 worldSpaceNormals;
+uniform int picking;
+uniform vec4 idColour;
 
 float LinearizeDepth(float depth)
 {
@@ -73,8 +75,15 @@ void main()
 			}
 			else // Normal Rendering
 			{
-					color = vec4(Colour) * texture(image, TexCoords);
+				if(picking == 1)
+				{
+					vec4 tex = texture(image, TexCoords);
+					if(tex.a < 0.1) discard;
+					color = idColour;
 				
+				}else{
+					color = vec4(Colour) * texture(image, TexCoords);
+				}
 			}
 		}
 		

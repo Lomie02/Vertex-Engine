@@ -53,6 +53,12 @@ AssetManager::~AssetManager() // automatically delete all pointers when asset ma
 
 		delete m_PhysicsScene;
 		m_PhysicsScene = nullptr;
+
+		delete m_EditorColourPicker;
+		m_EditorColourPicker = nullptr;
+
+		delete m_EditorCamera;
+		m_EditorCamera = nullptr;
 	}
 }
 
@@ -363,10 +369,31 @@ void AssetManager::Register(vGameObject* _object)
 	m_GameObjects3D.push_back(_object);
 }
 
-void AssetManager::RegisterGameObjectNew()
+void AssetManager::RegisterGameObjectNew(GameObject* _parent, GameObject* _child)
 {
 	GameObject* temp = new GameObject("GameObject");
-	m_Objects.push_back(temp);
+	temp->material.AlbedoMap = ResourceManager::GetTexture("Girl_01");
+	temp->transform.size.x = 5;
+
+	if (_parent) {
+		temp->SetParent(_parent);
+	}
+	if (_child) {
+		temp->SetChild(_child);
+	}
+
+	switch (temp->material.surface) {
+	case Opaque:
+		m_Opaque.push_back(temp);
+		break;
+	case Transparent:
+		m_Transparent.push_back(temp);
+		break;
+	}
+
+	temp->material.surface = Opaque;
+	temp->transform.size.y = 5;
+	Register(temp);
 }
 
 //Improve this to use the new Vertex Collsion System.
@@ -456,6 +483,49 @@ bool AssetManager::Raycast2D(glm::vec2 _pos, glm::vec2 _dir, GameObject& _out, f
 //Vertex Tension Renderer 
 void AssetManager::TensionRendering(Vertex2D* m_Renderer)
 {
+	// Render Colour Picking 
+
+	m_EditorCamera->GetComponenet<Camera>()->renderTexture->Bind();
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glViewport(0, 0, m_EditorCamera->GetComponenet<Camera>()->renderTexture->GetWidth(), m_EditorCamera->GetComponenet<Camera>()->renderTexture->GetHeight());
+
+	// Sorting 
+
+	m_Renderer->StartRenderFrameCycle();
+	if (m_SingleSortRenderering && !m_HasRendered) // Sort the transparent layers once only to save performance. Use if objects never change layers in engine.
+	{
+		TensionLayerSort();
+		m_HasRendered = true;
+	}
+	else if (!m_SingleSortRenderering) // Update the transparency layer sorting every frame. (Exspensive)
+	{
+		TensionLayerSort();
+	}
+
+	for (int i = 0; i < m_Opaque.size(); i++)
+	{
+		if (m_Opaque.at(i)->GetActive())
+		{
+			m_Renderer->VertexEngineColourPickRender(m_Opaque.at(i), m_Opaque.at(i)->material, m_Opaque.at(i)->transform.position,
+				m_Opaque.at(i)->transform.size, m_Opaque.at(i)->transform.rotation, m_Opaque.at(i)->transform.scale,
+				m_EditorCamera->GetComponenet<Camera>()->GetProjection(), m_Opaque.at(i)->layer);
+		}
+	}
+
+	for (int i = 0; i < m_Transparent.size(); i++)
+	{
+		if (m_Transparent.at(i)->GetActive()) {
+
+			m_Renderer->VertexEngineColourPickRender(m_Transparent.at(i), m_Transparent.at(i)->material, m_Transparent.at(i)->transform.position,
+				m_Transparent.at(i)->transform.size, m_Transparent.at(i)->transform.rotation, m_Transparent.at(i)->transform.scale,
+				m_EditorCamera->GetComponenet<Camera>()->GetProjection(), m_Transparent.at(i)->layer);
+
+		}
+	}
+
+	m_EditorCamera->GetComponenet<Camera>()->renderTexture->UnBind();
+
+	// Render Normal Scene ============================
 	bool AllowedToRender = false;
 
 	// Create a list that has all the camera components
@@ -485,6 +555,7 @@ void AssetManager::TensionRendering(Vertex2D* m_Renderer)
 			AllowedToRender = true;
 		}
 
+		//Bind Editor Camera
 
 		if (AllowedToRender) {
 
@@ -778,15 +849,51 @@ void AssetManager::ExecuteAll()
 void AssetManager::UnRegister(GameObject* _target)
 {
 	if (_target == nullptr) {
-		std::cout << "VERTEX WARNING: " << "Failed to UnRegister GameObject." << std::endl;
+		VERTEX_ERROR("Failed to UnRegister GameObject.");
 	}
 	else
 	{
+		// Remove from GameObject list
 		for (int i = 0; i < m_Objects.size(); i++)
 		{
 			if (m_Objects.at(i) == _target)
 			{
+				m_Objects.at(i)->RemoveParent();
+				delete m_Objects.at(i);
+				m_Objects.at(i) = nullptr;
+
 				m_Objects.erase(m_Objects.begin() + i);
+
+			}
+		}
+
+		// Remove from render lists.
+
+		bool removedFromRenderList = false;
+
+		for (int i = 0; i < m_Opaque.size(); i++)
+		{
+			if (m_Opaque.at(i) == _target)
+			{
+				delete m_Opaque.at(i);
+				m_Opaque.at(i) = nullptr;
+
+				m_Opaque.erase(m_Opaque.begin() + i);
+				removedFromRenderList = true;
+			}
+		}
+
+		if (!removedFromRenderList) {
+
+			for (int i = 0; i < m_Transparent.size(); i++)
+			{
+				if (m_Transparent.at(i) == _target)
+				{
+					delete m_Transparent.at(i);
+					m_Transparent.at(i) = nullptr;
+
+					m_Transparent.erase(m_Transparent.begin() + i);
+				}
 			}
 		}
 	}
@@ -860,6 +967,24 @@ void AssetManager::BeginVertexRenderTextureBindings()
 
 void AssetManager::CompleteVertexRenderTextureBindings()
 {
+}
+
+GameObject* AssetManager::EditorPicker(glm::vec2 _mouse)
+{
+	glm::u8vec4 pixels = m_EditorColourPicker->ReadPixels(_mouse.x, _mouse.y);
+
+	uint32_t objectId = (pixels.r) | (pixels.g << 8) | (pixels.b << 16);
+
+	if (objectId == 0)
+		return nullptr;
+	VERTEX_LOG("PICK| " + std::to_string(objectId));
+
+	for (GameObject* selected : m_Objects) {
+		if (selected->GetUniqueIdentity() == objectId)
+			return selected;
+	}
+
+	return nullptr;
 }
 
 GameObject* AssetManager::GetMainCamera()

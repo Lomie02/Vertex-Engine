@@ -39,6 +39,7 @@ public:
 
 	RenderTexture* renderTexture = nullptr;
 
+	LensMode GetLens() { return m_LensMode; }
 	void SetAspectRatio(float _aspect) {m_AspectRatio = _aspect;}
 	glm::mat4 GetViewMatrix() { return m_ViewMat; }
 

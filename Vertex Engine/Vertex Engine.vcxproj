@@ -188,6 +188,7 @@
     <ClCompile Include="DebugComp.cpp" />
     <ClCompile Include="Flipbook.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="GameUniqueIdentityAsset.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Material.cpp" />
@@ -258,6 +259,7 @@
     <ClInclude Include="Flipbook.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameSettings.h" />
+    <ClInclude Include="GameUniqueIdentityAsset.h" />
     <ClInclude Include="glad.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="ImGuiGeneral.h" />
@@ -306,6 +308,9 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="Builds\Textures\Icons\app.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Builds\Shaders\sprite.frag" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

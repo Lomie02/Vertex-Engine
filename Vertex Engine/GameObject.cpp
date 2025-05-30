@@ -1,5 +1,6 @@
 #include "GameObject.h"
-
+#include "GameUniqueIdentityAsset.h"
+#include "Random.h"
 GameObject::GameObject()
 {
 	name = "GameObject";
@@ -13,7 +14,7 @@ GameObject::GameObject()
 	AddComponent<Material>(material);
 	transform.size.x = 5;
 	transform.size.y = 5;
-
+	GenerateIds();
 }
 
 GameObject::GameObject(const char* _Name, bool active)
@@ -30,6 +31,7 @@ GameObject::GameObject(const char* _Name, bool active)
 	transform.size.y = 5;
 
 	m_Collider = new Collider();
+	GenerateIds();
 }
 
 GameObject::~GameObject()
@@ -38,6 +40,25 @@ GameObject::~GameObject()
 		delete comps;
 		comps = nullptr;
 	}
+}
+
+glm::vec4 GameObject::ColourIDConversion(uint16_t _id)
+{
+	return glm::vec4(
+		(uint8_t)(_id & 0xFF) / 255.0f,
+		(uint8_t)((_id >> 8) & 0xFF) / 225.0f,
+		(uint8_t)((_id >> 16) & 0xFF) / 255.0f,
+		1.0f
+	);
+}
+
+uint32_t GameObject::IdColourConversion(const glm::vec4& _col)
+{
+	uint8_t r = static_cast<uint8_t>(_col.r * 255.0f);
+	uint8_t g = static_cast<uint8_t>(_col.g * 255.0f);
+	uint8_t b = static_cast<uint8_t>(_col.b * 255.0f);
+
+	return (r) | (g << 8) | (b << 16);
 }
 
 GameObject::GameObject(const char* _Name)
@@ -52,6 +73,8 @@ GameObject::GameObject(const char* _Name)
 	m_Collider = new Collider();
 	transform.size.x = 5;
 	transform.size.y = 5;
+
+	GenerateIds();
 }
 
 void GameObject::SetParent(GameObject* _object)
@@ -128,6 +151,12 @@ MimeProfile GameObject::InstanceEditMime(std::string _name)
 	}
 
 	return MimeProfile();
+}
+
+void GameObject::GenerateIds()
+{
+	m_ObjectUniqueIdentitfier = GameUniqueIdentityAsset::GenerateUniqueIdenityIndex();
+	colourPickerColour = ColourIDConversion(m_ObjectUniqueIdentitfier);
 }
 
 void GameObject::MaterialConfigure()
