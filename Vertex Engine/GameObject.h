@@ -12,12 +12,15 @@
 
 class GameObject
 {
-
+	friend class VertexEngineEditor;
 public:
 	GameObject();
 	GameObject(const char* _Name);
 	GameObject(const char* _Name, bool active);
 	~GameObject();
+
+	glm::vec4 ColourIDConversion(uint16_t _id);
+	uint32_t IdColourConversion(const glm::vec4& _col);
 
 	void SetActive(bool _active) { m_Active = _active; }
 	bool GetActive() { return m_Active; }
@@ -102,7 +105,7 @@ public:
 	/// <returns></returns>
 	template<typename T>
 	T* GetComponenet() {
-		if (m_Componenets.empty) return;
+		if (m_Componenets.size() == 0) return nullptr;
 		for (auto& comp : m_Componenets) {
 			if (T* object = dynamic_cast<T*>(comp)) {
 				return object;
@@ -143,8 +146,14 @@ public:
 	std::vector<VertexComponent*> GetEntireComponenetList() { return m_Componenets; }
 
 	class Vertex2D;
+
+	glm::vec4 GetColourPickerCol() { return colourPickerColour; }
+	uint32_t GetUniqueIdentity() { return m_ObjectUniqueIdentitfier; }
 private:
 
+	void GenerateIds();
+	uint32_t m_ObjectUniqueIdentitfier;
+	glm::vec4 colourPickerColour;
 	std::vector<VertexComponent*> m_Componenets;
 
 	std::vector<MimeProfile> m_Mimes = std::vector<MimeProfile>(10);

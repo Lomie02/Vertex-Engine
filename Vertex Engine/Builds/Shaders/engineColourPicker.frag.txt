@@ -1,0 +1,17 @@
+#version 330 core
+in vec2 v_uv;
+out vec4 colour;
+
+uniform sampler2D u_texture;
+uniform vec4 colourId;
+
+void main(){
+vec4 tex = texture(u_texture, v_uv);
+
+if(text.a < 0.1)
+discard;
+
+
+colour = colourId;
+
+}

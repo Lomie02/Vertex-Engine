@@ -15,7 +15,7 @@ public:
 	virtual void LateUpdate(float delta);
 	virtual void FixedUpdate(float fixedDelta);
 
-	AssetManager GetAssets() { return m_Manager; }
+	AssetManager* GetAssets() { return m_Manager; }
 
 private:
 

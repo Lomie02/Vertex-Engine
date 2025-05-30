@@ -2,7 +2,6 @@
 #include <iostream>
 #include "ResourceManager.h"
 #include <Windows.h>
-#include "glm.hpp"
 #include "glad.h"
 
 #include "GameSettings.h"
@@ -54,6 +53,12 @@ AssetManager::~AssetManager() // automatically delete all pointers when asset ma
 
 		delete m_PhysicsScene;
 		m_PhysicsScene = nullptr;
+
+		delete m_EditorColourPicker;
+		m_EditorColourPicker = nullptr;
+
+		delete m_EditorCamera;
+		m_EditorCamera = nullptr;
 	}
 }
 
@@ -117,8 +122,12 @@ void AssetManager::Register(VertexComponent* _object)
 /// <param name="_object"></param>
 void AssetManager::Register(GameObject* _object)
 {
-	m_Objects.push_back(_object);
-	m_PreviousLocations.push_back(&_object->transform);
+	if (_object) {
+		m_Objects.push_back(_object);
+		VERTEX_ERROR("Failed To Register. Object was nullptr.");
+	}
+	else {
+	}
 }
 
 //TODO: Replace with box2d
@@ -336,7 +345,7 @@ void AssetManager::SetActiveCamera(int _index)
 {
 	m_ActiveCamera = _index;
 }
- 
+
 /// <summary>
 /// Register Audio Sources
 /// </summary>
@@ -360,10 +369,31 @@ void AssetManager::Register(vGameObject* _object)
 	m_GameObjects3D.push_back(_object);
 }
 
-void AssetManager::RegisterGameObjectNew()
+void AssetManager::RegisterGameObjectNew(GameObject* _parent, GameObject* _child)
 {
 	GameObject* temp = new GameObject("GameObject");
-	m_Objects.push_back(temp);
+	temp->material.AlbedoMap = ResourceManager::GetTexture("Girl_01");
+	temp->transform.size.x = 5;
+
+	if (_parent) {
+		temp->SetParent(_parent);
+	}
+	if (_child) {
+		temp->SetChild(_child);
+	}
+
+	switch (temp->material.surface) {
+	case Opaque:
+		m_Opaque.push_back(temp);
+		break;
+	case Transparent:
+		m_Transparent.push_back(temp);
+		break;
+	}
+
+	temp->material.surface = Opaque;
+	temp->transform.size.y = 5;
+	Register(temp);
 }
 
 //Improve this to use the new Vertex Collsion System.
@@ -453,11 +483,62 @@ bool AssetManager::Raycast2D(glm::vec2 _pos, glm::vec2 _dir, GameObject& _out, f
 //Vertex Tension Renderer 
 void AssetManager::TensionRendering(Vertex2D* m_Renderer)
 {
+	// Render Colour Picking 
+
+	m_EditorCamera->GetComponenet<Camera>()->renderTexture->Bind();
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glViewport(0, 0, m_EditorCamera->GetComponenet<Camera>()->renderTexture->GetWidth(), m_EditorCamera->GetComponenet<Camera>()->renderTexture->GetHeight());
+
+	// Sorting 
+
+	m_Renderer->StartRenderFrameCycle();
+	if (m_SingleSortRenderering && !m_HasRendered) // Sort the transparent layers once only to save performance. Use if objects never change layers in engine.
+	{
+		TensionLayerSort();
+		m_HasRendered = true;
+	}
+	else if (!m_SingleSortRenderering) // Update the transparency layer sorting every frame. (Exspensive)
+	{
+		TensionLayerSort();
+	}
+
+	for (int i = 0; i < m_Opaque.size(); i++)
+	{
+		if (m_Opaque.at(i)->GetActive())
+		{
+			m_Renderer->VertexEngineColourPickRender(m_Opaque.at(i), m_Opaque.at(i)->material, m_Opaque.at(i)->transform.position,
+				m_Opaque.at(i)->transform.size, m_Opaque.at(i)->transform.rotation, m_Opaque.at(i)->transform.scale,
+				m_EditorCamera->GetComponenet<Camera>()->GetProjection(), m_Opaque.at(i)->layer);
+		}
+	}
+
+	for (int i = 0; i < m_Transparent.size(); i++)
+	{
+		if (m_Transparent.at(i)->GetActive()) {
+
+			m_Renderer->VertexEngineColourPickRender(m_Transparent.at(i), m_Transparent.at(i)->material, m_Transparent.at(i)->transform.position,
+				m_Transparent.at(i)->transform.size, m_Transparent.at(i)->transform.rotation, m_Transparent.at(i)->transform.scale,
+				m_EditorCamera->GetComponenet<Camera>()->GetProjection(), m_Transparent.at(i)->layer);
+
+		}
+	}
+
+	m_EditorCamera->GetComponenet<Camera>()->renderTexture->UnBind();
+
+	// Render Normal Scene ============================
 	bool AllowedToRender = false;
 
-	for (Camera* cams : m_Cameras) {
+	// Create a list that has all the camera components
+	std::vector<Camera*> cameraComps;
+	for (int i = 0; i < m_Objects.size(); i++) {
+		if (m_Objects[i]->GetComponenet<Camera>()) {
+			cameraComps.push_back(m_Objects[i]->GetComponenet<Camera>());
+		}
+	}
 
-		if (cams->GetDisplay() != 0) {
+	for (Camera* cams : cameraComps) {
+
+		if (cams->GetDisplay() != 0) { //TODO: Change this to allow display 0 cameras to have render textures for Editor use only.
 
 			if (cams->renderTexture) {
 				cams->renderTexture->Bind();
@@ -474,6 +555,7 @@ void AssetManager::TensionRendering(Vertex2D* m_Renderer)
 			AllowedToRender = true;
 		}
 
+		//Bind Editor Camera
 
 		if (AllowedToRender) {
 
@@ -548,7 +630,7 @@ void AssetManager::TensionRendering(Vertex2D* m_Renderer)
 			AllowedToRender = false;
 		}
 	}
-	// TODO: Implement the canvas system into the UI rendering instead.
+	// TODO: Remove all this
 
 	// Render User Interface Objects
 	if (m_Vertex_Ui_Camera != nullptr && m_CanvasList.size() != 0) {
@@ -664,16 +746,28 @@ void AssetManager::TensionLayerSort()
 // Vertex Default 2D renderer.
 void AssetManager::Vertex2dRendering(Vertex2D* render)
 {
+	bool IsAllowedToRender = false;
+	GameObject* MainCamera = new GameObject();
+	for (int i = 0; i < m_Objects.size(); i++) {
+		if (m_Objects[i]->GetComponenet<Camera>() && m_Objects[i]->GetComponenet<Camera>()->GetDisplay() == 0 && m_Objects[i]->GetActive()) {
+			MainCamera = m_Objects[i];
+			IsAllowedToRender = true;
+			break;
+		}
+	}
+
+	if (!IsAllowedToRender || !MainCamera) return;
+
 	if (m_Objects.size() > 0)
 	{
 		for (int i = 0; i < m_Objects.size(); i++)
 		{
-			float WithinDistance = glm::distance(m_Objects.at(i)->transform.position, m_Cameras.at(m_ActiveCamera)->transform.position);
+			float WithinDistance = glm::distance(m_Objects.at(i)->transform.position, MainCamera->transform.position);
 
 			if (m_Objects.at(i)->m_Active == true && WithinDistance < CAMERA_DISTANCE_RENDER_LIMIT)
 			{
 				render->DrawSprite(m_Objects.at(i)->material, m_Objects.at(i)->transform.position, m_Objects.at(i)->transform.size, m_Objects.at(i)->transform.rotation, m_Objects.at(i)->transform.scale, m_Cameras.at(m_ActiveCamera)->GetProjection());
-				m_Cameras.at(m_ActiveCamera)->ConfigureSystems();
+				MainCamera->ConfigureSystems();
 				m_Objects.at(i)->ConfigureSystems();
 			}
 		}
@@ -709,59 +803,8 @@ void AssetManager::Vertex2dRendering(Vertex2D* render)
 		}
 	}*/
 
-	if (m_PhysicsObjects.size() > 0)
-	{
-		for (int i = 0; i < m_PhysicsObjects.size(); i++)
-		{
-			float WithinDistance = glm::distance(m_PhysicsObjects.at(i)->transform.position, m_Cameras.at(m_ActiveCamera)->transform.position);
-			if (m_PhysicsObjects.at(i)->m_Active == true && WithinDistance < CAMERA_DISTANCE_RENDER_LIMIT)
-			{
-				render->DrawSprite(m_PhysicsObjects.at(i)->material, m_PhysicsObjects.at(i)->transform.position, m_PhysicsObjects.at(i)->transform.size, m_PhysicsObjects.at(i)->transform.rotation, m_PhysicsObjects.at(i)->transform.scale, m_Cameras.at(m_ActiveCamera)->GetProjection());
-				m_PhysicsObjects.at(i)->ConfigureSystems();
-			}
-		}
-	}
-
-	//============================================== Render UI Last
-
-	if (m_UiObjects.size() > 0)
-	{
-		for (int i = 0; i < m_UiObjects.size(); i++)
-		{
-			float WithinDistance = glm::distance(m_UiObjects.at(i)->transform.position, m_Cameras.at(m_ActiveCamera)->transform.position);
-			if (m_UiObjects.at(i)->m_Active == true && WithinDistance < CAMERA_DISTANCE_RENDER_LIMIT)
-			{
-				m_UiObjects.at(i)->ConfigureSystems();
-				render->DrawSprite(m_UiObjects.at(i)->material, m_UiObjects.at(i)->transform.position, m_UiObjects.at(i)->transform.size, m_UiObjects.at(i)->transform.rotation, m_UiObjects.at(i)->transform.scale, m_Cameras.at(m_ActiveCamera)->GetProjection());
-			}
-		}
-	}
-
-
-	if (m_UiButtonObjects.size() > 0)
-	{
-		for (int i = 0; i < m_UiButtonObjects.size(); i++)
-		{
-			float WithinDistance = glm::distance(m_UiButtonObjects.at(i)->transform.position, m_Cameras.at(m_ActiveCamera)->transform.position);
-			if (m_UiButtonObjects.at(i)->m_Active == true && WithinDistance < CAMERA_DISTANCE_RENDER_LIMIT)
-			{
-				m_UiButtonObjects.at(i)->ConfigureSystems();
-				render->DrawSprite(m_UiButtonObjects.at(i)->material, m_UiButtonObjects.at(i)->transform.position, m_UiButtonObjects.at(i)->transform.size, m_UiButtonObjects.at(i)->transform.rotation, m_UiButtonObjects.at(i)->transform.scale, m_Cameras.at(m_ActiveCamera)->GetProjection());
-				m_UiButtonObjects.at(i)->ConfigureCustoms(m_Cameras.at(m_ActiveCamera)->GetProjection());
-			}
-		}
-	}
-
-	if (m_UiTextObjects.size() > 0)
-	{
-		for (int i = 0; i < m_UiTextObjects.size(); i++)
-		{
-			if (m_UiTextObjects.at(i)->m_Active)
-			{
-				m_UiTextObjects.at(i)->ConfigureRenderSystems(m_Cameras.at(m_ActiveCamera)->GetProjection());
-			}
-		}
-	}
+	delete MainCamera;
+	MainCamera = nullptr;
 }
 
 void AssetManager::ConfigVioletSystems()
@@ -806,15 +849,51 @@ void AssetManager::ExecuteAll()
 void AssetManager::UnRegister(GameObject* _target)
 {
 	if (_target == nullptr) {
-		std::cout << "VERTEX WARNING: " << "Failed to UnRegister GameObject." << std::endl;
+		VERTEX_ERROR("Failed to UnRegister GameObject.");
 	}
 	else
 	{
+		// Remove from GameObject list
 		for (int i = 0; i < m_Objects.size(); i++)
 		{
 			if (m_Objects.at(i) == _target)
 			{
+				m_Objects.at(i)->RemoveParent();
+				delete m_Objects.at(i);
+				m_Objects.at(i) = nullptr;
+
 				m_Objects.erase(m_Objects.begin() + i);
+
+			}
+		}
+
+		// Remove from render lists.
+
+		bool removedFromRenderList = false;
+
+		for (int i = 0; i < m_Opaque.size(); i++)
+		{
+			if (m_Opaque.at(i) == _target)
+			{
+				delete m_Opaque.at(i);
+				m_Opaque.at(i) = nullptr;
+
+				m_Opaque.erase(m_Opaque.begin() + i);
+				removedFromRenderList = true;
+			}
+		}
+
+		if (!removedFromRenderList) {
+
+			for (int i = 0; i < m_Transparent.size(); i++)
+			{
+				if (m_Transparent.at(i) == _target)
+				{
+					delete m_Transparent.at(i);
+					m_Transparent.at(i) = nullptr;
+
+					m_Transparent.erase(m_Transparent.begin() + i);
+				}
 			}
 		}
 	}
@@ -823,25 +902,6 @@ void AssetManager::UnRegister(GameObject* _target)
 // Render all gizmos in editor
 void AssetManager::Gizmos(Vertex2D* render)
 {
-	if (m_Cameras.size() > 0)
-	{
-		for (int i = 0; i < m_Cameras.size(); i++)
-		{
-			if (m_Cameras.at(i)->m_Active == true && i != m_ActiveCamera)
-			{
-				float HalfSpaceX = m_Cameras.at(i)->transform.size.x / 2;
-				float HalfSpaceY = m_Cameras.at(i)->transform.size.y / 2;
-
-				Transform NewPosition;
-				NewPosition.position.x = (m_Cameras.at(i)->transform.position.x - HalfSpaceX);
-				NewPosition.position.y = (m_Cameras.at(i)->transform.position.y - HalfSpaceY);
-
-				render->DrawSprite(m_CameraGizmo, glm::vec3(NewPosition.position, -5.0f), glm::vec2(136, 98), 0, 0.01f, m_Cameras.at(m_ActiveCamera)->GetProjection());
-			}
-		}
-	}
-
-	render->DrawSprite(m_CenterGizmo, glm::vec2(0, 0), glm::vec2(50, 50), 0, 0.01f, m_Cameras.at(m_ActiveCamera)->GetProjection());
 
 }
 
@@ -907,6 +967,35 @@ void AssetManager::BeginVertexRenderTextureBindings()
 
 void AssetManager::CompleteVertexRenderTextureBindings()
 {
+}
+
+GameObject* AssetManager::EditorPicker(glm::vec2 _mouse)
+{
+	glm::u8vec4 pixels = m_EditorColourPicker->ReadPixels(_mouse.x, _mouse.y);
+
+	uint32_t objectId = (pixels.r) | (pixels.g << 8) | (pixels.b << 16);
+
+	if (objectId == 0)
+		return nullptr;
+	VERTEX_LOG("PICK| " + std::to_string(objectId));
+
+	for (GameObject* selected : m_Objects) {
+		if (selected->GetUniqueIdentity() == objectId)
+			return selected;
+	}
+
+	return nullptr;
+}
+
+GameObject* AssetManager::GetMainCamera()
+{
+	for (int i = 0; i < m_Objects.size(); i++) {
+		if (m_Objects[i]->GetComponenet<Camera>() && m_Objects[i]->GetActive()) {
+			return m_Objects[i];
+			break;
+		}
+	}
+	return nullptr;
 }
 
 /// <summary>

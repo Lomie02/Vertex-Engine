@@ -1,5 +1,6 @@
 #include "DebugComp.h"
 #include <iostream>
+#include "GameObject.h"
 
 void DebugComp::Start()
 {

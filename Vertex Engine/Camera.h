@@ -1,32 +1,30 @@
 #pragma once
 #include "Graphics.h"
-#include "GameObject.h"
 #include "ext.hpp"
 
 #include "GameSettings.h"
 #include <string>
 #include "ext.hpp"
 #include "RenderTexture.h"
-enum LensMode {
+#include "VertexComponent.h"
+enum class LensMode {
 	Ortho = 0,
 	Perspective,
 };
 
-/// <summary>
-/// Camera class used for rendering perspective
-/// </summary>
-class Camera : public GameObject
+//TODO: Camera class needs to be converted to a component instead of a GameObject.
+
+class Camera : public VertexComponent
 {
 public:
-	Camera() : GameObject("Camera")
+	Camera()
 	{
+		Start();
 		m_ViewProjection = m_ProjectionMat * m_ViewMat;
 	}
 
-	Camera(const char* _Name) : GameObject(_Name)
-	{
-		m_ViewProjection = m_ProjectionMat * m_ViewMat;
-	}
+	void Start() override;
+	void Update(float delta) override;
 
 	void SetLens(LensMode _mode) { m_LensMode = _mode; }
 	glm::mat4 GetProjection();
@@ -41,6 +39,7 @@ public:
 
 	RenderTexture* renderTexture = nullptr;
 
+	LensMode GetLens() { return m_LensMode; }
 	void SetAspectRatio(float _aspect) {m_AspectRatio = _aspect;}
 	glm::mat4 GetViewMatrix() { return m_ViewMat; }
 
@@ -65,7 +64,7 @@ private:
 	glm::mat4 m_ProjectionMat;
 	glm::mat4 m_ViewMat;
 	glm::mat4 m_ViewProjection;
-	LensMode m_LensMode = Ortho;
+	LensMode m_LensMode = LensMode::Ortho;
 
 };
 

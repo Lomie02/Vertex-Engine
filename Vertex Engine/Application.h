@@ -17,7 +17,7 @@
 #include "VertexWorkSpace.h"
 #include "VertexEngineEditor.h"
 #include "AssetPipelineManager.h"
-#include "Debug.h"
+#include "Debug.h" 
 
 using namespace irrklang;
 using Clock = std::chrono::high_resolution_clock;
@@ -87,6 +87,9 @@ public:
 	/// Starts the shutdown process & deletes all systems correctly.
 	/// </summary>
 	void ShutDown();
+
+	EditorMode GetCurrentEditorMode() { return m_Mode; }
+	void SetEditorMode(EditorMode _mode) { m_Mode = _mode; };
 
 	// These functions will take care of the external packages that the engine will soon support.
 	void StartExternal();

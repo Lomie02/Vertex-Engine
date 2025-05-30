@@ -1,5 +1,5 @@
 #include "RenderTexture.h"
-#include <iostream>
+#include <algorithm>
 RenderTexture::RenderTexture(unsigned int _width, unsigned int _height)
 {
 	m_Height = _height;
@@ -74,4 +74,20 @@ void RenderTexture::Bind()
 void RenderTexture::UnBind()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+glm::u8vec4 RenderTexture::ReadPixels(int _x, int _y) const
+{
+	glm::u8vec4 pixel(0);
+
+	_x = std::clamp(_x, 0, (int)GetWidth() - 1);
+	_y = std::clamp(_y, 0, (int)GetHeight() - 1);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, m_Fbo);
+	glReadBuffer(GL_COLOR_ATTACHMENT0);
+	glReadPixels(_x,_y, 1,1, GL_RGBA, GL_UNSIGNED_BYTE, &pixel);
+	
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	return pixel;
 }
