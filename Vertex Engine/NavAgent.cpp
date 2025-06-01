@@ -19,7 +19,7 @@ void NavAgent::UpdateSystem(float delta)
 
 		if (m_Path.size() < 1) {
 
-			m_StartNode = m_PathFindingSystem->GetNodePosition(transform.position);
+			m_StartNode = m_PathFindingSystem->GetNodePosition(transform->position);
 			m_EndNode = m_PathFindingSystem->GetNode(5);
 			m_PathFindingSystem->NavigatePathSearch(m_StartNode, m_EndNode, m_Path);
 			m_TimeAlongPath = 0;
@@ -44,7 +44,7 @@ void NavAgent::UpdateSystem(float delta)
 			}
 			else
 			{
-				transform.position = (*elem)->transform * (1 - TimeThroughNode) + (*next)->transform * (TimeThroughNode);
+				transform->position = (*elem)->transform * (1 - TimeThroughNode) + (*next)->transform * (TimeThroughNode);
 			}
 		}
 	}

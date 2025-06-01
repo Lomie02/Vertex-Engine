@@ -11,3 +11,11 @@ void DebugComp::Update(float delta)
 {
 	std::cout << "Componenet Updated" << std::endl;
 }
+
+void DebugComp::RenderEditorDisplay()
+{
+	if (ImGui::CollapsingHeader("Debug", ImGuiTreeNodeFlags_DefaultOpen)) {
+		ImGui::Text("Test Debug Componenet");
+		ImGui::Button("Button");
+	}
+}

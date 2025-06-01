@@ -6,7 +6,7 @@ Text::Text() : GameObject("Text_1")
 {
 	m_Text = new VertexText2D(PROJECT_RESOLUTION);
 	material.colour = glm::vec4(0, 0, 0, 1);
-	transform.scale = 0.03f;
+	transform->scale = 0.03f;
 	ConfigureSystems();
 }
 
@@ -27,7 +27,7 @@ void Text::ChangeFont(std::string _name)
 
 void Text::ConfigureRenderSystems(glm::mat4 _camera)
 {
-	m_Text->Text2D(text,transform.position.x, transform.position.y, transform.scale, material.colour,_camera);
+	m_Text->Text2D(text,transform->position.x, transform->position.y, transform->scale, material.colour,_camera);
 }
 
 void Text::ConfigureSystems()

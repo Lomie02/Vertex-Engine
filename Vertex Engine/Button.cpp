@@ -14,8 +14,8 @@ void Button::ConfigureCustoms(glm::mat4 _camera)
 	m_Text->ConfigureRenderSystems(_camera);
 	m_Text->text = text;
 
-	m_Text->transform.position.x = transform.GetCenter().x + m_Offset.x;
-	m_Text->transform.position.y = transform.GetCenter().y + m_Offset.y;
+	m_Text->transform->position.x = transform->GetCenter().x + m_Offset.x;
+	m_Text->transform->position.y = transform->GetCenter().y + m_Offset.y;
 }
 
 void Button::SetOffset(glm::vec2 _offset)

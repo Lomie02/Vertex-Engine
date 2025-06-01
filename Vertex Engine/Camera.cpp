@@ -35,7 +35,7 @@ glm::mat4 Camera::GetProjection()
 
 		m_ProjectionMat = glm::ortho(-zoom * m_AspectRatio, zoom * m_AspectRatio, -zoom, zoom, nearClip, farClip);
 
-		glm::mat4 mTransform = glm::translate(glm::mat4(1.0f), glm::vec3(partner2d->transform.position, 10)) * glm::rotate(glm::mat4(1.0f), partner2d->transform.rotation, glm::vec3(0, 0, 1));
+		glm::mat4 mTransform = glm::translate(glm::mat4(1.0f), glm::vec3(partner2d->transform->position, 10)) * glm::rotate(glm::mat4(1.0f), partner2d->transform->rotation, glm::vec3(0, 0, 1));
 
 		m_ViewMat = glm::inverse(mTransform);
 
@@ -45,7 +45,7 @@ glm::mat4 Camera::GetProjection()
 	}
 	else
 	{
-		m_CameraPos = glm::vec3(partner2d->transform.position, -50);
+		m_CameraPos = glm::vec3(partner2d->transform->position, -50);
 		glm::vec3 cameraDirection = glm::normalize(m_CameraPos - cameraTarget);
 
 		glm::vec3 cameraRight = glm::normalize(glm::cross(up, cameraDirection));
@@ -53,7 +53,7 @@ glm::mat4 Camera::GetProjection()
 
 		m_ProjectionMat = glm::perspective(glm::radians(m_FieldofView), m_AspectRatio, nearClip, farClip);
 
-		m_ViewMat = glm::translate(m_ViewMat, glm::vec3(partner2d->transform.position, -20));
+		m_ViewMat = glm::translate(m_ViewMat, glm::vec3(partner2d->transform->position, -20));
 
 		//m_ViewMat = glm::lookAt(m_CameraPos, m_CameraPos + cameraFront, cameraUp);
 
@@ -85,4 +85,42 @@ void Camera::SetDisplay(int _index)
 	if(m_DisplayScreen > 9)
 		m_DisplayScreen = 9;
 
+}
+
+void Camera::RenderEditorDisplay()
+{
+	if (ImGui::CollapsingHeader("Camera", ImGuiTreeNodeFlags_DefaultOpen)) {
+		// vars
+		const char* lensModes[] = { "Ortho", "Projection" };
+		static int projectionMode = (int)this->GetLens();
+
+		//Projection Mode
+		ImGui::Text("Lens Mode"); ImGui::SameLine();
+		if (ImGui::Combo("##lensMode", &projectionMode, lensModes, IM_ARRAYSIZE(lensModes))) {
+			if (projectionMode == 0) {
+				this->SetLens(LensMode::Ortho);
+			}
+			else {
+				this->SetLens(LensMode::Perspective);
+			}
+		}
+		// Near Clipping
+		ImGui::Text("Near Clip"); ImGui::SameLine();
+		ImGui::InputFloat("##nearClip", &this->nearClip);
+		// Far Clipping
+		ImGui::Text("Far Clip"); ImGui::SameLine();
+		ImGui::InputFloat("##farClip", &this->farClip);
+		// Zoom
+		if (this->GetLens() == LensMode::Ortho) {
+			ImGui::Text("Zoom Clip"); ImGui::SameLine();
+			ImGui::InputFloat("##zoomCamera", &this->zoom);
+
+		}
+		// DisPlays 
+		ImGui::Text("Display"); ImGui::SameLine();
+		static int display = this->GetDisplay();
+		if (ImGui::InputInt("##camDisplay", &display)) {
+			this->SetDisplay(display);
+		}
+	}
 }

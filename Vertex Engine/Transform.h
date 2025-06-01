@@ -1,9 +1,8 @@
 #pragma once
 #include "glm.hpp"
 #include <vector>
-
-class Transform {
-	class GameObject;
+#include "VertexComponent.h"
+class Transform : public VertexComponent {
 
 public:
 	glm::vec2 position;
@@ -46,6 +45,8 @@ public:
 	glm::mat4 GetLocalModelMat() const;
 	glm::mat4 GetWorldModelMat(const GameObject* _obj) const;
 	glm::mat4 m_TransformModelMatrix = glm::mat4(1.0f);
+
+	void RenderEditorDisplay() override;
 private:
 	int m_RenderLayer;
 
