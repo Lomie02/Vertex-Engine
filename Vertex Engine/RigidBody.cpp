@@ -2,7 +2,7 @@
 
 RigidBody::RigidBody(const char* _Name)
 {
-	transform.SetSize(5,5);
+	transform->SetSize(5,5);
 }
 
 RigidBody::~RigidBody()
@@ -25,7 +25,7 @@ void RigidBody::Init(btCollisionShape* _shape, float _mass)
 
 	btTransform tran;
 	tran.setIdentity();
-	tran.setOrigin(btVector3(transform.position.x, transform.position.y, 0));
+	tran.setOrigin(btVector3(transform->position.x, transform->position.y, 0));
 
 	m_Motion = new btDefaultMotionState(tran);
 	btRigidBody::btRigidBodyConstructionInfo rbInfo(m_Mass, m_Motion, m_ShapeData, inetria);

@@ -24,7 +24,7 @@ public:
 
 	void ClearClip();
 
-	void AddKeyframe(Transform _frame);
+	void AddKeyframe(Transform* _frame);
 	void AddKeyframe(Material _frame);
 	void RemoveKeyframe(int keyframe, glm::vec2 _frame);
 	void PLaySpeed(float _speed);

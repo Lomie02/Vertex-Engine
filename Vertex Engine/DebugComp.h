@@ -7,7 +7,7 @@ public:
 	DebugComp() { Start(); };
 
 	void Start() override;
-	 void Update(float delta) override;
-
+	void Update(float delta) override;
+	void RenderEditorDisplay() override;
 };
 

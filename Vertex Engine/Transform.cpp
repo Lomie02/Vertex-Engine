@@ -79,3 +79,39 @@ glm::mat4 Transform::GetWorldModelMat(const GameObject* _obj) const
 {
 	return glm::mat4();
 }
+
+void Transform::RenderEditorDisplay()
+{
+	ImGui::PushStyleColor(ImGuiCol_Header, ImVec4(0, 0.5f, 0, 1));
+	ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0, 0.5f, 0, 1));
+	if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen)) {
+
+
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1, 0.0f, 0, 1));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.5f, 0.0f, 0, 1));
+
+		// ============================= Transform Positions
+		// X Axis
+		ImGui::Button("X");
+		ImGui::SameLine();
+		ImGui::SetNextItemWidth(50.0f);
+		ImGui::InputFloat("##Position X Axis", &this->position.x, -0.5f);
+		ImGui::PopStyleColor(2);
+
+		// Y Axis
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0f, 1, 0, 1));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.0f, 0.5f, 0, 1));
+
+		ImGui::SameLine();
+		ImGui::Button("Y");
+		ImGui::SameLine();
+		ImGui::SetNextItemWidth(50.0f);
+		ImGui::InputFloat("##Position Y Axis", &this->position.y);
+		ImGui::PopStyleColor(2);
+
+		ImGui::Text("Scale");
+		ImGui::SameLine();
+		ImGui::InputFloat("##Scale", &this->scale);
+	}
+	ImGui::PopStyleColor(2);
+}

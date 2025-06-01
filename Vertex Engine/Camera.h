@@ -40,12 +40,13 @@ public:
 	RenderTexture* renderTexture = nullptr;
 
 	LensMode GetLens() { return m_LensMode; }
-	void SetAspectRatio(float _aspect) {m_AspectRatio = _aspect;}
+	void SetAspectRatio(float _aspect) { m_AspectRatio = _aspect; }
 	glm::mat4 GetViewMatrix() { return m_ViewMat; }
 
 	void SetDisplay(int _index);
 	int GetDisplay() { return m_DisplayScreen; }
 
+	void RenderEditorDisplay() override;
 private:
 
 	int m_DisplayScreen = 0;

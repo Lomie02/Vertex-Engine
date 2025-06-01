@@ -26,7 +26,7 @@ public:
 	bool GetActive() { return m_Active; }
 
 	Material material;
-	Transform transform;
+	Transform* transform;
 
 	std::vector<GameObject*> GetChildren() { return m_Children; }
 
@@ -55,10 +55,10 @@ public:
 
 	glm::mat4 GetWorldModelMat()const {
 		if (m_Parent) {
-			return m_Parent->GetWorldModelMat() * transform.GetLocalModelMat();
+			return m_Parent->GetWorldModelMat() * transform->GetLocalModelMat();
 		}
 		else {
-			return transform.GetLocalModelMat();
+			return transform->GetLocalModelMat();
 		}
 	}
 
@@ -71,7 +71,6 @@ public:
 			if (T* cast = dynamic_cast<T*>(temp))
 			{
 				comps.push_back(cast);
-
 			}
 		}
 		return comps;

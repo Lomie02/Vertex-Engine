@@ -65,7 +65,7 @@ void ParticleSystem::RespawnParticle(Particle& _particle, GameObject& _targert, 
 {
     float random = Random::RandomFloatRange(50, 100) / 2;
     float rColour = 0.5f + Random::RandomFloatRange(0, 100) / 100;
-    _particle.transform.position = _targert.transform.position, +random + _offset;
+    _particle.transform.position = _targert.transform->position, +random + _offset;
     _particle.material = glm::vec4(rColour, rColour, rColour, 1.0f);
     _particle.m_LifeTime = 1.0f;
     _particle.m_Velocity = _targert.GetVelocity() * 0.1f;

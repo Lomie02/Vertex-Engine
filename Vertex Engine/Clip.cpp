@@ -15,11 +15,11 @@ void Clip::ClearClip()
 	m_Frames.clear();
 }
 
-void Clip::AddKeyframe(Transform _frame)
+void Clip::AddKeyframe(Transform* _frame)
 {
-	m_Frames.push_back(_frame.position);
-	m_FramesSizes.push_back(_frame.size);
-	m_FramesRotations.push_back(_frame.rotation);
+	m_Frames.push_back(_frame->position);
+	m_FramesSizes.push_back(_frame->size);
+	m_FramesRotations.push_back(_frame->rotation);
 }
 
 void Clip::AddKeyframe(Material _frame)

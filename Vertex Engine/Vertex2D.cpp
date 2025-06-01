@@ -65,7 +65,7 @@ void Vertex2D::DrawSprite(GameObject* _object, Material& material, glm::vec3 pos
 
 	if (_object->GetParent() != nullptr)
 	{
-		model = glm::translate(model, glm::vec3(_object->GetParent()->transform.position.x, _object->GetParent()->transform.position.y, 0.0f));
+		model = glm::translate(model, glm::vec3(_object->GetParent()->transform->position.x, _object->GetParent()->transform->position.y, 0.0f));
 		model = glm::rotate(model, glm::radians(rotate), glm::vec3(0.0f, 0.0f, 1.0f));
 		model = glm::translate(model, glm::vec3(-0.5f * size.x, -0.5f * -size.y, 0.0f));
 
@@ -187,16 +187,7 @@ void Vertex2D::TensionTransparencyPass(std::vector<GameObject*> _list, glm::mat4
 {
 	for (int i = _list.size(); i > 0; i--) {
 
-		glm::mat4 model = glm::mat4(1.0f);
-
-		model = glm::translate(model, glm::vec3(_list.at(i)->transform.position, _list.at(i)->layer));
-
-		model = glm::translate(model, glm::vec3(0.5f * _list.at(i)->transform.size.x, 0.5f * -_list.at(i)->transform.size.y, 0.0f));
-		model = glm::rotate(model, glm::radians(0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-		model = glm::translate(model, glm::vec3(-0.5f * _list.at(i)->transform.size.x, -0.5f * -_list.at(i)->transform.size.y, 0.0f));
-
-		model = glm::scale(model, glm::vec3(_list.at(i)->transform.size.x * _list.at(i)->transform.scale, -_list.at(i)->transform.size.y * _list.at(i)->transform.scale, 1.0f));
-		this->m_Shader.SetMatrix4("model", model);
+		this->m_Shader.SetMatrix4("model", _list.at(i)->GetWorldModelMat());
 		this->m_Shader.SetMatrix4("pro", per);
 		this->m_Shader.SetVector4f("Colour", _list.at(i)->material.colour);
 

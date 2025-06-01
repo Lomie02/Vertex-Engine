@@ -3,43 +3,53 @@
 #include "Random.h"
 GameObject::GameObject()
 {
+	GenerateIds();
 	name = "GameObject";
 	m_Active = true;
-
 	m_Collider = new Collider();
-	transform.localPosition.y = 0;
-	transform.localPosition.x = 0;
+
+	AddComponent<Transform>();
+	transform = GetComponenet<Transform>();
+	
+	transform->localPosition.y = 0;
+	transform->localPosition.x = 0;
 
 	material = Material("Mat");
 	AddComponent<Material>(material);
-	transform.size.x = 5;
-	transform.size.y = 5;
-	GenerateIds();
+
+	transform->size.x = 5;
+	transform->size.y = 5;
+
 }
 
 GameObject::GameObject(const char* _Name, bool active)
 {
+	GenerateIds();
 	name = _Name;
 	m_Active = active;
-	transform.localPosition.y = 0;
-	transform.localPosition.x = 0;
+	AddComponent<Transform>();
+	transform = GetComponenet<Transform>();
+	
+	transform->localPosition.y = 0;
+	transform->localPosition.x = 0;
 
 	material = Material("Mat");
 	AddComponent<Material>(material);
 
-	transform.size.x = 5;
-	transform.size.y = 5;
+	transform->size.x = 5;
+	transform->size.y = 5;
 
 	m_Collider = new Collider();
-	GenerateIds();
 }
 
 GameObject::~GameObject()
 {
 	for (auto& comps : m_Componenets) {
+
 		delete comps;
 		comps = nullptr;
 	}
+	m_Componenets.clear();
 }
 
 glm::vec4 GameObject::ColourIDConversion(uint16_t _id)
@@ -63,18 +73,20 @@ uint32_t GameObject::IdColourConversion(const glm::vec4& _col)
 
 GameObject::GameObject(const char* _Name)
 {
+	GenerateIds();
 	name = _Name;
 	m_Active = true;
-	transform.localPosition.y = 0;
-	transform.localPosition.x = 0;
+	AddComponent<Transform>();
+	transform = GetComponenet<Transform>();
 
+	transform->localPosition.y = 0;
+	transform->localPosition.x = 0;
 
 	material = Material("Mat");
 	m_Collider = new Collider();
-	transform.size.x = 5;
-	transform.size.y = 5;
+	transform->size.x = 5;
+	transform->size.y = 5;
 
-	GenerateIds();
 }
 
 void GameObject::SetParent(GameObject* _object)
@@ -121,7 +133,7 @@ void GameObject::RemoveChild(GameObject* _child)
 void GameObject::ConfigureSystems()
 {
 	MaterialConfigure();
-	transform.SetLayer(layer);
+	transform->SetLayer(layer);
 	/*if (m_Parent) {
 		glm::mat4 ParentTransform = glm::translate(m_Parent->transform.rotation, m_Parent->transform.position);
 	}*/
@@ -163,8 +175,8 @@ void GameObject::MaterialConfigure()
 {
 	if (material.m_KeepAspect)
 	{
-		transform.size.x = material.AlbedoMap.Width;
-		transform.size.y = material.AlbedoMap.Height;
+		transform->size.x = material.AlbedoMap.Width;
+		transform->size.y = material.AlbedoMap.Height;
 	}
 }
 

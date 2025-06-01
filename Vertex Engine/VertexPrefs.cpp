@@ -39,13 +39,13 @@ void VertexPrefs::SaveTransform(GameObject* _target)
 	std::ofstream Ypos("Builds/Data/0x021_0KAW/" + ObjectsName + "y1" + ".txt");
 	if (Xpos.is_open())
 	{
-		Xpos << _target->transform.position.x;
+		Xpos << _target->transform->position.x;
 		Xpos.close();
 	}
 
 	if (Ypos.is_open())
 	{
-		Ypos << _target->transform.position.y;
+		Ypos << _target->transform->position.y;
 		Ypos.close();
 
 	}

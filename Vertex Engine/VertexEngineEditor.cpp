@@ -238,40 +238,7 @@ void VertexEngineEditor::RenderEditorInspector()
 		ImGui::InputInt("##Layers", &m_SelectedGameObject->layer, 2);
 		VertexSpacer();
 
-		ImGui::PushStyleColor(ImGuiCol_Header, ImVec4(0, 0.5f, 0, 1));
-		ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0, 0.5f, 0, 1));
-		if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen)) {
-
-
-			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1, 0.0f, 0, 1));
-			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.5f, 0.0f, 0, 1));
-
-			// ============================= Transform Positions
-			// X Axis
-			ImGui::Button("X");
-			ImGui::SameLine();
-			ImGui::SetNextItemWidth(50.0f);
-			ImGui::InputFloat("##Position X Axis", &m_SelectedGameObject->transform.position.x, -0.5f);
-			ImGui::PopStyleColor(2);
-
-			// Y Axis
-			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0f, 1, 0, 1));
-			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.0f, 0.5f, 0, 1));
-
-			ImGui::SameLine();
-			ImGui::Button("Y");
-			ImGui::SameLine();
-			ImGui::SetNextItemWidth(50.0f);
-			ImGui::InputFloat("##Position Y Axis", &m_SelectedGameObject->transform.position.y);
-			VertexSpacer();
-			ImGui::PopStyleColor(2);
-
-			VertexSpacer();
-			ImGui::Text("Scale");
-			ImGui::SameLine();
-			ImGui::InputFloat("##Scale", &m_SelectedGameObject->transform.scale);
-		}
-		ImGui::PopStyleColor(2);
+		
 
 		VertexSpacer(3);
 
@@ -280,51 +247,7 @@ void VertexEngineEditor::RenderEditorInspector()
 			iter++;
 			ImGui::PushID(iter);
 
-			if (Camera* cam = dynamic_cast<Camera*>(comp)) {
-				if (ImGui::CollapsingHeader("Camera", ImGuiTreeNodeFlags_DefaultOpen)) {
-					// vars
-					Camera* camData = m_SelectedGameObject->GetComponenet<Camera>();
-					const char* lensModes[] = { "Ortho", "Projection" };
-					static int projectionMode = (int)camData->GetLens();
-
-					//Projection Mode
-					ImGui::Text("Lens Mode"); ImGui::SameLine();
-					if (ImGui::Combo("##lensMode", &projectionMode, lensModes, IM_ARRAYSIZE(lensModes))) {
-						if (projectionMode == 0) {
-							camData->SetLens(LensMode::Ortho);
-						}
-						else {
-							camData->SetLens(LensMode::Perspective);
-						}
-					}
-					// Near Clipping
-					ImGui::Text("Near Clip"); ImGui::SameLine();
-					ImGui::InputFloat("##nearClip", &camData->nearClip);
-					// Far Clipping
-					ImGui::Text("Far Clip"); ImGui::SameLine();
-					ImGui::InputFloat("##farClip", &camData->farClip);
-					// Zoom
-					if (camData->GetLens() == LensMode::Ortho) {
-						ImGui::Text("Zoom Clip"); ImGui::SameLine();
-						ImGui::InputFloat("##zoomCamera", &camData->zoom);
-
-					}
-					// DisPlays 
-					ImGui::Text("Display"); ImGui::SameLine();
-					static int display = camData->GetDisplay();
-					if (ImGui::InputInt("##camDisplay", &display)) {
-						camData->SetDisplay(display);
-					}
-
-				}
-			}
-			else if (DebugComp* deb = dynamic_cast<DebugComp*>(comp)) {
-				if (ImGui::CollapsingHeader("Debug Component", ImGuiTreeNodeFlags_DefaultOpen)) {
-					ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.7f, 0, 0, 1));
-					ImGui::Text("COMPONENET_NOT_COMPLETE");
-					ImGui::PopStyleColor(1);
-				}
-			}
+			comp->RenderEditorDisplay();
 
 			ImGui::PopID();
 		}

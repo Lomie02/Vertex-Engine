@@ -154,60 +154,6 @@ void AssetManager::Register(Button* _object)
 	m_UiButtonObjects.push_back(_object);
 }
 
-//============================================================================
-
-// Remove & put into collison class
-void AssetManager::CollisionCheck()
-{
-	for (int i = 0; i < m_Objects.size(); i++)
-	{
-		for (int j = 1; j < m_Objects.size(); j++)
-		{
-			if (j != i) // Check that the 2 objects are not the same objects.
-			{
-				Transform Object1;
-				Transform Object2;
-
-				Object1 = m_Objects.at(i)->transform;
-				Object2 = m_Objects.at(j)->transform;
-
-				if (Object1.position.x < Object2.position.x + Object2.size.x
-					&& Object1.position.x + Object1.size.x > Object2.position.x
-					&& Object1.position.y < Object2.position.y + Object2.size.y &&
-					Object1.position.y + Object1.size.y > Object2.position.y)
-				{
-					m_Objects.at(i)->transform.position.x = m_PreviousLocations.at(i)->position.x;
-					m_Objects.at(i)->transform.position.y = m_PreviousLocations.at(i)->position.y;
-
-					m_Objects.at(j)->transform.position.x = m_PreviousLocations.at(j)->position.x;
-					m_Objects.at(j)->transform.position.y = m_PreviousLocations.at(j)->position.y;
-				}
-			}
-		}
-	}
-}
-
-//TODO: Move to seperate collision class
-bool AssetManager::OnTrigger(GameObject* A, GameObject* B)
-{
-	bool CollisionFound;
-
-	Transform Object1;
-	Transform Object2;
-
-	Object1 = A->transform;
-	Object2 = B->transform;
-
-	if (Object1.position.x < Object2.position.x + Object2.size.x
-		&& Object1.position.x + Object1.size.x > Object2.position.x
-		&& Object1.position.y < Object2.position.y + Object2.size.y &&
-		Object1.position.y + Object1.size.y > Object2.position.y)
-	{
-		return true;
-	}
-	return false;
-}
-
 /// <summary>
 /// Configure all systems.
 /// </summary>
@@ -224,54 +170,7 @@ void AssetManager::ConfigureSystems()
 			m_ShutDownManager = true;
 			std::cout << "!-VERTEX ERROR: NO ACTIVE CAMERAS IN SCENE-! \n Please register all cameras to a AssetManager." << std::endl;
 		}
-
-		if (m_UiButtonObjects.size() > 0 && m_Window != nullptr)
-		{
-			if (glfwGetMouseButton(m_Window, GLFW_MOUSE_BUTTON_1) == GLFW_PRESS)
-			{
-				for (int i = 0; i < m_UiButtonObjects.size(); i++)
-				{
-					//============================================================================
-					ConfigureMouse();
-
-					Transform button = m_UiButtonObjects.at(i)->transform;
-					mouse.size.x = 1;
-					mouse.size.y = 1;
-
-					if (button.position.x < mouse.position.x + mouse.size.x
-						&& button.position.x + button.size.x > mouse.position.x
-						&& button.position.y < mouse.position.y + mouse.size.y &&
-						button.position.y + button.size.y > mouse.position.y)
-					{
-						m_UiButtonObjects.at(i)->PressEvent();
-					}
-
-				}
-
-				for (int i = 0; i < m_Objects.size(); i++)
-				{
-					//============================================================================
-					ConfigureMouse();
-
-					Transform ObjectsPosition = m_Objects.at(i)->transform;
-					mouse.size.x = 1;
-					mouse.size.y = 1;
-
-					if (ObjectsPosition.position.x < mouse.position.x + mouse.size.x
-						&& ObjectsPosition.position.x + ObjectsPosition.size.x > mouse.position.x
-						&& ObjectsPosition.position.y < mouse.position.y + mouse.size.y &&
-						ObjectsPosition.position.y + ObjectsPosition.size.y > mouse.position.y)
-					{
-						m_Objects.at(i)->transform.position.x = mouse.position.x;
-						m_Objects.at(i)->transform.position.y = -mouse.position.y;
-					}
-
-				}
-			}
-		}
 	}
-
-	CollisionCheck();
 }
 
 /// <summary>
@@ -373,7 +272,7 @@ void AssetManager::RegisterGameObjectNew(GameObject* _parent, GameObject* _child
 {
 	GameObject* temp = new GameObject("GameObject");
 	temp->material.AlbedoMap = ResourceManager::GetTexture("Girl_01");
-	temp->transform.size.x = 5;
+	temp->transform->size.x = 5;
 
 	if (_parent) {
 		temp->SetParent(_parent);
@@ -392,92 +291,8 @@ void AssetManager::RegisterGameObjectNew(GameObject* _parent, GameObject* _child
 	}
 
 	temp->material.surface = Opaque;
-	temp->transform.size.y = 5;
+	temp->transform->size.y = 5;
 	Register(temp);
-}
-
-//Improve this to use the new Vertex Collsion System.
-bool AssetManager::MousePick(GameObject* _target)
-{
-	if (m_Objects.size() > 0)
-	{
-		for (int i = 0; i < m_Objects.size(); i++)
-		{
-			if (_target->name == m_Objects.at(i)->name)
-			{
-				//============================================================================
-				ConfigureMouse();
-
-				bool colX = m_UiButtonObjects.at(i)->transform.position.x + m_UiButtonObjects.at(i)->transform.size.x >= mouse.position.x
-					&& mouse.position.x + 0.2f >= m_UiButtonObjects.at(i)->transform.position.x;
-
-				bool colY = m_UiButtonObjects.at(i)->transform.position.y + m_UiButtonObjects.at(i)->transform.size.y >= mouse.position.y
-					&& mouse.position.y + 0.2f >= m_UiButtonObjects.at(i)->transform.position.y;
-
-				//============================================================================
-
-				if (colX && colY)
-				{
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-	return false;
-}
-
-//TODO: Fix/Improve Raycasting
-bool AssetManager::Raycast2D(glm::vec2 _pos, glm::vec2 _dir, GameObject& _out, float length)
-{
-	GameObject* Ray = new GameObject();
-
-	Ray->transform.position = _pos;
-
-	if (_dir.x <= -1) {
-		_dir.x = -1;
-	}
-	else if (_dir.x >= 1) {
-
-		_dir.x = 1;
-	}
-
-	if (_dir.y <= -1) {
-		_dir.y = -1;
-	}
-	else if (_dir.y >= 1) {
-
-		_dir.y = 1;
-	}
-
-	for (int j = 0; j < length; j++)
-	{
-		Ray->transform.position += _dir;
-
-		for (int i = 0; i < m_Objects.size(); i++)
-		{
-			bool colX = m_Objects.at(i)->transform.position.x + m_Objects.at(i)->transform.size.x >= Ray->transform.position.x
-				&& Ray->transform.position.x + 0.2f >= m_Objects.at(i)->transform.position.x;
-
-			bool colY = m_Objects.at(i)->transform.position.y + m_Objects.at(i)->transform.size.y >= Ray->transform.position.y
-				&& Ray->transform.position.y + 0.2f >= m_Objects.at(i)->transform.position.y;
-
-			if (colX && colY)
-			{
-				delete Ray;
-				Ray = nullptr;
-
-				_out = *m_Objects.at(i);
-
-				return true;
-			}
-		}
-	}
-
-	delete Ray;
-	Ray = nullptr;
-
-	return false;
 }
 
 //Vertex Tension Renderer 
@@ -506,8 +321,8 @@ void AssetManager::TensionRendering(Vertex2D* m_Renderer)
 	{
 		if (m_Opaque.at(i)->GetActive())
 		{
-			m_Renderer->VertexEngineColourPickRender(m_Opaque.at(i), m_Opaque.at(i)->material, m_Opaque.at(i)->transform.position,
-				m_Opaque.at(i)->transform.size, m_Opaque.at(i)->transform.rotation, m_Opaque.at(i)->transform.scale,
+			m_Renderer->VertexEngineColourPickRender(m_Opaque.at(i), m_Opaque.at(i)->material, m_Opaque.at(i)->transform->position,
+				m_Opaque.at(i)->transform->size, m_Opaque.at(i)->transform->rotation, m_Opaque.at(i)->transform->scale,
 				m_EditorCamera->GetComponenet<Camera>()->GetProjection(), m_Opaque.at(i)->layer);
 		}
 	}
@@ -516,8 +331,8 @@ void AssetManager::TensionRendering(Vertex2D* m_Renderer)
 	{
 		if (m_Transparent.at(i)->GetActive()) {
 
-			m_Renderer->VertexEngineColourPickRender(m_Transparent.at(i), m_Transparent.at(i)->material, m_Transparent.at(i)->transform.position,
-				m_Transparent.at(i)->transform.size, m_Transparent.at(i)->transform.rotation, m_Transparent.at(i)->transform.scale,
+			m_Renderer->VertexEngineColourPickRender(m_Transparent.at(i), m_Transparent.at(i)->material, m_Transparent.at(i)->transform->position,
+				m_Transparent.at(i)->transform->size, m_Transparent.at(i)->transform->rotation, m_Transparent.at(i)->transform->scale,
 				m_EditorCamera->GetComponenet<Camera>()->GetProjection(), m_Transparent.at(i)->layer);
 
 		}
@@ -578,15 +393,15 @@ void AssetManager::TensionRendering(Vertex2D* m_Renderer)
 			{
 				if (m_Opaque.at(i)->GetActive())
 				{
-					m_Renderer->TensionDraw(m_Opaque.at(i), m_Opaque.at(i)->material, m_Opaque.at(i)->transform.position,
-						m_Opaque.at(i)->transform.size, m_Opaque.at(i)->transform.rotation, m_Opaque.at(i)->transform.scale,
+					m_Renderer->TensionDraw(m_Opaque.at(i), m_Opaque.at(i)->material, m_Opaque.at(i)->transform->position,
+						m_Opaque.at(i)->transform->size, m_Opaque.at(i)->transform->rotation, m_Opaque.at(i)->transform->scale,
 						cams->GetProjection(), m_Opaque.at(i)->layer);
 
 					if (m_Opaque.at(i)->GetMimes().size() > 1) // Render mimes
 					{
 						for (int m = 0; m < m_Opaque.at(i)->GetActiveMimesSize(); m++) {
 							m_Renderer->TensionDraw(m_Opaque.at(i), m_Opaque.at(i)->material, m_Opaque.at(i)->GetMimes().at(m).transform.position,
-								m_Opaque.at(i)->transform.size, m_Opaque.at(i)->transform.rotation, m_Opaque.at(i)->transform.scale,
+								m_Opaque.at(i)->transform->size, m_Opaque.at(i)->transform->rotation, m_Opaque.at(i)->transform->scale,
 								cams->GetProjection(), m_Opaque.at(i)->layer);
 						}
 					}
@@ -597,8 +412,8 @@ void AssetManager::TensionRendering(Vertex2D* m_Renderer)
 			{
 				if (m_PhysicsScene->Get2dObjects().at(i)->GetActive())
 				{
-					m_Renderer->TensionDraw(m_PhysicsScene->Get2dObjects().at(i), m_PhysicsScene->Get2dObjects().at(i)->material, m_PhysicsScene->Get2dObjects().at(i)->transform.position,
-						m_PhysicsScene->Get2dObjects().at(i)->transform.size, m_PhysicsScene->Get2dObjects().at(i)->transform.rotation, m_PhysicsScene->Get2dObjects().at(i)->transform.scale,
+					m_Renderer->TensionDraw(m_PhysicsScene->Get2dObjects().at(i), m_PhysicsScene->Get2dObjects().at(i)->material, m_PhysicsScene->Get2dObjects().at(i)->transform->position,
+						m_PhysicsScene->Get2dObjects().at(i)->transform->size, m_PhysicsScene->Get2dObjects().at(i)->transform->rotation, m_PhysicsScene->Get2dObjects().at(i)->transform->scale,
 						cams->GetProjection(), m_PhysicsScene->Get2dObjects().at(i)->layer);
 				}
 			}
@@ -608,15 +423,15 @@ void AssetManager::TensionRendering(Vertex2D* m_Renderer)
 			{
 				if (m_Transparent.at(i)->GetActive()) {
 
-					m_Renderer->TensionDraw(m_Transparent.at(i), m_Transparent.at(i)->material, m_Transparent.at(i)->transform.position,
-						m_Transparent.at(i)->transform.size, m_Transparent.at(i)->transform.rotation, m_Transparent.at(i)->transform.scale,
+					m_Renderer->TensionDraw(m_Transparent.at(i), m_Transparent.at(i)->material, m_Transparent.at(i)->transform->position,
+						m_Transparent.at(i)->transform->size, m_Transparent.at(i)->transform->rotation, m_Transparent.at(i)->transform->scale,
 						cams->GetProjection(), m_Transparent.at(i)->layer);
 
 					if (m_Transparent.at(i)->GetMimes().size() > 1)
 					{
 						for (int m = 0; m < m_Transparent.at(i)->GetActiveMimesSize(); m++) {
 							m_Renderer->TensionDraw(m_Transparent.at(i), m_Transparent.at(i)->material, m_Transparent.at(i)->GetMimes().at(m).transform.position,
-								m_Transparent.at(i)->transform.size, m_Transparent.at(i)->transform.rotation, m_Transparent.at(i)->transform.scale,
+								m_Transparent.at(i)->transform->size, m_Transparent.at(i)->transform->rotation, m_Transparent.at(i)->transform->scale,
 								cams->GetProjection(), m_Transparent.at(i)->layer);
 						}
 					}
@@ -629,43 +444,6 @@ void AssetManager::TensionRendering(Vertex2D* m_Renderer)
 
 			AllowedToRender = false;
 		}
-	}
-	// TODO: Remove all this
-
-	// Render User Interface Objects
-	if (m_Vertex_Ui_Camera != nullptr && m_CanvasList.size() != 0) {
-
-		// Render UI Buttons.
-		for (int i = 0; i < m_CanvasList.at(m_ActiveCanvasDisplay)->GetButtons().size(); i++)
-		{
-			if (m_CanvasList.at(m_ActiveCanvasDisplay)->GetButtons().at(i)->GetActive()) {
-				m_Renderer->TensionDraw(m_CanvasList.at(m_ActiveCanvasDisplay)->GetButtons().at(i), m_CanvasList.at(m_ActiveCanvasDisplay)->GetButtons().at(i)->material, m_CanvasList.at(m_ActiveCanvasDisplay)->GetButtons().at(i)->transform.position,
-					m_CanvasList.at(m_ActiveCanvasDisplay)->GetButtons().at(i)->transform.size, m_CanvasList.at(m_ActiveCanvasDisplay)->GetButtons().at(i)->transform.rotation, m_CanvasList.at(m_ActiveCanvasDisplay)->GetButtons().at(i)->transform.scale,
-					m_Vertex_Ui_Camera->GetProjection(), m_CanvasList.at(m_ActiveCanvasDisplay)->GetButtons().at(i)->layer);
-				m_CanvasList.at(m_ActiveCanvasDisplay)->GetButtons().at(i)->ConfigureCustoms(m_Vertex_Ui_Camera->GetProjection());
-			}
-		}
-
-		for (int i = 0; i < m_CanvasList.at(m_ActiveCamera)->GetSprites().size(); i++) {
-			if (m_CanvasList.at(m_ActiveCanvasDisplay)->GetSprites().at(i)->GetActive())
-			{
-				//std::cout << "Sprite Position: " << m_CanvasList.at(m_ActiveCanvasDisplay)->GetSprites().at(i)->transform.position.x << " | " << m_CanvasList.at(m_ActiveCanvasDisplay)->GetSprites().at(i)->transform.position.y << std::endl;
-				m_Renderer->TensionSprite(m_CanvasList.at(m_ActiveCanvasDisplay)->GetSprites().at(i), m_Vertex_Ui_Camera->GetProjection());
-
-			}
-		}
-		//  Render World Text
-		for (int i = 0; i < m_CanvasList.at(m_ActiveCanvasDisplay)->GetText().size(); i++)
-		{
-			if (m_CanvasList.at(m_ActiveCanvasDisplay)->GetText().at(i)->GetActive()) {
-				m_CanvasList.at(m_ActiveCanvasDisplay)->GetText().at(i)->ConfigureRenderSystems(m_Vertex_Ui_Camera->GetProjection());
-			}
-		}
-
-
-		// Unbind Cameras Render Texture.
-
-		m_CurrentRenderBatchesFromRenderer = m_Renderer->CurrentDrawCalls();
 	}
 }
 
@@ -762,11 +540,11 @@ void AssetManager::Vertex2dRendering(Vertex2D* render)
 	{
 		for (int i = 0; i < m_Objects.size(); i++)
 		{
-			float WithinDistance = glm::distance(m_Objects.at(i)->transform.position, MainCamera->transform.position);
+			float WithinDistance = glm::distance(m_Objects.at(i)->transform->position, MainCamera->transform->position);
 
 			if (m_Objects.at(i)->m_Active == true && WithinDistance < CAMERA_DISTANCE_RENDER_LIMIT)
 			{
-				render->DrawSprite(m_Objects.at(i)->material, m_Objects.at(i)->transform.position, m_Objects.at(i)->transform.size, m_Objects.at(i)->transform.rotation, m_Objects.at(i)->transform.scale, m_Cameras.at(m_ActiveCamera)->GetProjection());
+				render->DrawSprite(m_Objects.at(i)->material, m_Objects.at(i)->transform->position, m_Objects.at(i)->transform->size, m_Objects.at(i)->transform->rotation, m_Objects.at(i)->transform->scale, m_Cameras.at(m_ActiveCamera)->GetProjection());
 				MainCamera->ConfigureSystems();
 				m_Objects.at(i)->ConfigureSystems();
 			}
@@ -821,13 +599,6 @@ void AssetManager::ConfigVioletSystems()
 //TODO: Remove this or improve it
 void AssetManager::ConfigSetup()
 {
-	for (int i = 0; i < m_Objects.size(); i++)
-	{
-		m_Objects.at(i)->layer = VertexPrefs::GetInt(m_Objects.at(i)->name);
-		m_Objects.at(i)->transform.position = VertexPrefs::GetTransform(m_Objects.at(i)->name).position;
-	}
-
-	//VertexPrefs::GetFile("Scene_data", m_Objects);
 }
 
 //TODO: Remove this or improve it
@@ -869,7 +640,7 @@ void AssetManager::UnRegister(GameObject* _target)
 
 		// Remove from render lists.
 
-		bool removedFromRenderList = false;
+		/*bool removedFromRenderList = false;
 
 		for (int i = 0; i < m_Opaque.size(); i++)
 		{
@@ -895,7 +666,7 @@ void AssetManager::UnRegister(GameObject* _target)
 					m_Transparent.erase(m_Transparent.begin() + i);
 				}
 			}
-		}
+		}*/
 	}
 }
 
@@ -1130,14 +901,5 @@ void AssetManager::ConfigureMouse() //TODO: FInd out how to convert the Y cords.
 // Log special events like last objects position & button tracking
 void AssetManager::LogEvents()
 {
-	for (int i = 0; i < m_Objects.size(); i++)
-	{
-		m_PreviousLocations.at(i)->PreviousPosition.x = m_Objects.at(i)->transform.position.x;
-		m_PreviousLocations.at(i)->PreviousPosition.y = m_Objects.at(i)->transform.position.y;
-	}
-
-	for (int i = 0; i < m_UiButtonObjects.size(); i++)
-	{
-		m_UiButtonObjects.at(i)->CloseEvent();
-	}
+	
 }
