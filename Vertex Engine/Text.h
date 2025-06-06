@@ -1,8 +1,9 @@
 #pragma once
 #include "VertexRenderPackage.h"
-#include "GameObject.h"
 #include "Camera.h"
-class Text : public GameObject
+#include "RectTransform.h"
+#include "VertexComponent.h"
+class Text : public VertexComponent
 {
 public:
 	Text();
@@ -12,6 +13,8 @@ public:
 
 	void ChangeFont(std::string _path);
 	void ConfigureRenderSystems(glm::mat4 _camera);
+
+	void RenderEditorDisplay() override;
 private:
 
 	std::string m_FontName = "arial.ttf";
@@ -20,4 +23,6 @@ private:
 	
 	void ConfigureSystems();
 	VertexText2D* m_Text;
+
+	RectTransform* ParentRect;
 };

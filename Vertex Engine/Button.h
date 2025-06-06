@@ -11,29 +11,21 @@ class Button : public GameObject
 public:
 	Button() : GameObject()
 	{ 
-		m_Text = new Text();
-		m_Text->SetParent(this);
 
 		BeginSetUp();
 	}
 	Button(const char* Name) : GameObject(Name)
 	{ 
-		m_Text = new Text();
-		m_Text->SetParent(this);
 
 		BeginSetUp();
 	}
 	Button(const char* Name, std::string _text) : GameObject(Name)
 	{
-		m_Text = new Text();
-		m_Text->SetParent(this);
 
 		BeginSetUp();
 	}
 	Button(const char* Name, bool active) : GameObject(Name, active)
 	{ 
-		m_Text = new Text();
-		m_Text->SetParent(this);
 
 		BeginSetUp();
 	}

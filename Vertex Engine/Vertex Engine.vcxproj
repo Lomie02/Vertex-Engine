@@ -197,9 +197,11 @@
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="PhysicsScene.cpp" />
     <ClCompile Include="PlayerController.cpp" />
+    <ClCompile Include="RectTransform.cpp" />
     <ClCompile Include="RenderTexture.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="RigidBody.cpp" />
+    <ClCompile Include="RuntimeAsset.cpp" />
     <ClCompile Include="Scene2.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Shader.cpp" />
@@ -273,11 +275,13 @@
     <ClInclude Include="PhysicsScene.h" />
     <ClInclude Include="PlayerController.h" />
     <ClInclude Include="Random.h" />
+    <ClInclude Include="RectTransform.h" />
     <ClInclude Include="RenderTexture.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="resource1.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="RigidBody.h" />
+    <ClInclude Include="RuntimeAsset.h" />
     <ClInclude Include="Scene2.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Shader.h" />
@@ -285,6 +289,7 @@
     <ClInclude Include="TestComponent.h" />
     <ClInclude Include="Text.h" />
     <ClInclude Include="Texture2D.h" />
+    <ClInclude Include="Time.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Vertex2D.h" />
     <ClInclude Include="VertexAccessExplorer.h" />

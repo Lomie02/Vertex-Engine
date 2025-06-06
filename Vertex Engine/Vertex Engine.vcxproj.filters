@@ -213,9 +213,6 @@
     <ClCompile Include="vGameObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="vTransform.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="DebugComp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -250,6 +247,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GameUniqueIdentityAsset.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RectTransform.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="vTransform.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RuntimeAsset.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -483,6 +489,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GameUniqueIdentityAsset.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Time.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RectTransform.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RuntimeAsset.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

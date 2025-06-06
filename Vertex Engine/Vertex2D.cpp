@@ -1,4 +1,5 @@
 #include "Vertex2D.h"
+#include "RectTransform.h"
 Vertex2D::Vertex2D(Shader& shader)
 {
 	this->m_Shader = shader;
@@ -63,9 +64,9 @@ void Vertex2D::DrawSprite(GameObject* _object, Material& material, glm::vec3 pos
 
 	model = glm::translate(model, glm::vec3(position));
 
-	if (_object->GetParent() != nullptr)
+	if (_object->transform->GetParent() != nullptr)
 	{
-		model = glm::translate(model, glm::vec3(_object->GetParent()->transform->position.x, _object->GetParent()->transform->position.y, 0.0f));
+		model = glm::translate(model, glm::vec3(_object->transform->GetParent()->position.x, _object->transform->GetParent()->position.y, 0.0f));
 		model = glm::rotate(model, glm::radians(rotate), glm::vec3(0.0f, 0.0f, 1.0f));
 		model = glm::translate(model, glm::vec3(-0.5f * size.x, -0.5f * -size.y, 0.0f));
 
@@ -146,9 +147,10 @@ void Vertex2D::TensionDraw(GameObject* _object, Material& material, glm::vec2 po
 	//=======================================
 	this->m_Shader.SetVector3f("lights", glm::vec3(1.0, 1.0, 1.0));
 
-	this->m_Shader.SetMatrix4("model", _object->GetWorldModelMat());
+	this->m_Shader.SetMatrix4("model", _object->transform->GetWorldModelMat());
 	this->m_Shader.SetMatrix4("pro", per);
 	this->m_Shader.SetInteger("picking", 0);
+	this->m_Shader.SetInteger("NoTexture", 0);
 	this->m_Shader.SetVector4f("Colour", material.colour);
 
 	glActiveTexture(GL_TEXTURE0);
@@ -187,9 +189,10 @@ void Vertex2D::TensionTransparencyPass(std::vector<GameObject*> _list, glm::mat4
 {
 	for (int i = _list.size(); i > 0; i--) {
 
-		this->m_Shader.SetMatrix4("model", _list.at(i)->GetWorldModelMat());
+		this->m_Shader.SetMatrix4("model", _list.at(i)->transform->GetWorldModelMat());
 		this->m_Shader.SetMatrix4("pro", per);
 		this->m_Shader.SetVector4f("Colour", _list.at(i)->material.colour);
+		this->m_Shader.SetInteger("NoTexture", 0);
 
 		glActiveTexture(GL_TEXTURE0);
 		_list.at(i)->material.AlbedoMap.Bind();
@@ -280,6 +283,7 @@ void Vertex2D::TensionSprite(Sprite* _sprite, glm::mat4 _pro) //TODO May redo th
 
 	model = glm::scale(model, glm::vec3(_sprite->transform.size.x * _sprite->transform.scale, -_sprite->transform.size.y * _sprite->transform.scale, 1.0f));
 	this->m_Shader.SetVector3f("lights", glm::vec3(1.0, 1.0, 1.0));
+	this->m_Shader.SetInteger("NoTexture", 0);
 
 	this->m_Shader.SetMatrix4("model", model);
 	this->m_Shader.SetMatrix4("pro", _pro);
@@ -319,6 +323,35 @@ void Vertex2D::TensionVolume(Volume& _vol)
 	m_VertexVolume = _vol;
 }
 
+void Vertex2D::TensionInterfaceDraw(GameObject* _element, bool _IsColourPick) //TODO: Allow the renderer to examine for UI based Componenets
+{
+	glDisable(GL_BLEND);
+	glDisable(GL_DEPTH_TEST);
+
+	this->m_Shader = _element->material.shader;
+	uint32_t id = _element->GetUniqueIdentity();
+	glm::vec4 colour = _element->GetColourPickerCol();
+
+	this->m_Shader.Use();
+
+	//=======================================
+
+	this->m_Shader.SetMatrix4("model", _element->GetComponenet<RectTransform>()->GetWorldMatrix());
+	this->m_Shader.SetInteger("picking", 0);
+	this->m_Shader.SetInteger("NoTexture", 1);
+
+	this->m_Shader.SetMatrix4("pro", glm::ortho(0.0f, static_cast<float>(1920), static_cast<float>(1080), 0.0f, -0.100f, 10.0f));
+	this->m_Shader.SetVector4f("idColour", colour);
+	this->m_Shader.SetVector4f("Colour", colour);
+
+	glActiveTexture(GL_TEXTURE0);
+	_element->material.AlbedoMap.Bind();
+
+	glBindVertexArray(this->m_quadVAO);
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+	glBindVertexArray(0);
+}
+
 void Vertex2D::VertexEngineColourPickRender(GameObject* _object, Material& material, glm::vec2 position, glm::vec2 size, float rotate, float scale, glm::mat4 per, int _RenderLayer)
 {
 	glDisable(GL_BLEND);
@@ -332,7 +365,7 @@ void Vertex2D::VertexEngineColourPickRender(GameObject* _object, Material& mater
 
 	//=======================================
 
-	this->m_Shader.SetMatrix4("model", _object->GetWorldModelMat());
+	this->m_Shader.SetMatrix4("model", _object->transform->GetWorldModelMat());
 	this->m_Shader.SetInteger("picking", 1);
 	this->m_Shader.SetMatrix4("pro", per);
 	this->m_Shader.SetVector4f("idColour", colour);

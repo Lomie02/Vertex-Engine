@@ -144,13 +144,14 @@ private:
 	VertexWorkSpace m_WorkSpaceEditor;
 
 	//Delta Time 
-	float m_ApplicationFramesPerSecond = 0;
+	/*float m_ApplicationFramesPerSecond = 0;
 	float m_frames = 0;
-	float m_deltaTime = 0;
+	float m_UnScaledDelta = 0;
 
 	float m_fpsInterval = 0;
 	float m_prevTime;
 	float m_TimeStep = 0.01f;
+	float m_TimeScale;*/
 
 	// Fps
 	int m_FramesPassed;

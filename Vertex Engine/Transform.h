@@ -31,29 +31,60 @@ public:
 	void ClearTransforms() { position = glm::vec2(0, 0); rotation = 0.0f; pivot = glm::vec2(0, 0); }
 	void ApplyTransform() { position += pivot; pivot = glm::vec2(0, 0); } // Test feature.
 
-	glm::mat4 GetGlobalMatrix() {  return m_GlobalTransforms; }
-	glm::mat4 GetLocalMatrix() { return m_LocalTransforms; }
-
-	void ApplyGlobalMatrix(glm::mat4 _mat) { m_GlobalTransforms = _mat; }
-	void ApplyLocalMatrix(glm::mat4 _mat) { m_LocalTransforms = _mat; }
-
 	void SetLayer(int _layer) { m_RenderLayer = _layer; }
 
 	//==================================== New Transform Data
 	glm::mat4 GetModelMatrixEditable() { return m_TransformModelMatrix; }
 
-	glm::mat4 GetLocalModelMat() const;
-	glm::mat4 GetWorldModelMat(const GameObject* _obj) const;
+	glm::mat4 GetLocalModelMat() ;
 	glm::mat4 m_TransformModelMatrix = glm::mat4(1.0f);
 
 	void RenderEditorDisplay() override;
+
+
+	glm::mat4 GetWorldModelMat()  {
+
+		if (HasChanged()) ValidateDirtyTransforms();
+
+		if (m_Parent) {
+			
+			m_WorldMatrix = m_Parent->GetWorldModelMat() * m_LocalModel;
+			return m_WorldMatrix;
+		}
+		else {
+
+			m_WorldMatrix = m_LocalModel;
+			return m_WorldMatrix;
+		}
+	}
+
+	Transform* GetParent() { return m_Parent; }
+
+	void SetParent(Transform* _parent);
+	void RemoveParent();
+	void SetChild(Transform* _child);
+	void RemoveChild(Transform* _child);
+
+	bool IsChildOf(const Transform* _child) const;
+	void LateUpdate(float delta) override;
+	std::vector<Transform*> GetChildren() { return m_Children; }
+
 private:
+
+	bool HasChanged();
+	void ValidateDirtyTransforms(bool _forceValidate = false);
+
 	int m_RenderLayer;
 
-	glm::uvec2 m_LastPosition;
-	glm::uvec2 m_LastSize;
+	Transform* m_Parent;
+	std::vector<Transform*> m_Children;
 
-	bool m_IsDirty = true;
-	glm::mat4 m_GlobalTransforms = glm::mat4(1);
-	glm::mat4 m_LocalTransforms = glm::mat4(1);
+	glm::vec2 m_LastPosition;
+	glm::vec2 m_LastSize;
+	float m_LastScale;
+	float m_LastRotation;
+
+	bool m_IsDirty = false;
+	glm::mat4 m_LocalModel = glm::mat4(1.0f);
+	glm::mat4 m_WorldMatrix = glm::mat4(1.0f);
 };

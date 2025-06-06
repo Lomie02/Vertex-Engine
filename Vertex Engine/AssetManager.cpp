@@ -10,6 +10,7 @@
 #include "Collider.h"
 #include <thread>
 #include "GameSettings.h"
+#include "RectTransform.h"
 
 /*
 	The AssetManager is the engines way of knowing what exists in the game & what to do with the objects.
@@ -57,8 +58,16 @@ AssetManager::~AssetManager() // automatically delete all pointers when asset ma
 		delete m_EditorColourPicker;
 		m_EditorColourPicker = nullptr;
 
-		delete m_EditorCamera;
-		m_EditorCamera = nullptr;
+		if (m_EditorCamera) {
+			delete m_EditorCamera;
+			m_EditorCamera = nullptr;
+		}
+
+		if (m_UiRenderTexture) {
+			delete m_UiRenderTexture;
+			m_UiRenderTexture = nullptr;
+		}
+
 	}
 }
 
@@ -124,9 +133,9 @@ void AssetManager::Register(GameObject* _object)
 {
 	if (_object) {
 		m_Objects.push_back(_object);
-		VERTEX_ERROR("Failed To Register. Object was nullptr.");
 	}
 	else {
+		VERTEX_ERROR("Failed To Register. Object was nullptr.");
 	}
 }
 
@@ -268,17 +277,17 @@ void AssetManager::Register(vGameObject* _object)
 	m_GameObjects3D.push_back(_object);
 }
 
-void AssetManager::RegisterGameObjectNew(GameObject* _parent, GameObject* _child)
+GameObject* AssetManager::RegisterGameObjectNew(GameObject* _parent, GameObject* _child)
 {
 	GameObject* temp = new GameObject("GameObject");
 	temp->material.AlbedoMap = ResourceManager::GetTexture("Girl_01");
 	temp->transform->size.x = 5;
 
 	if (_parent) {
-		temp->SetParent(_parent);
+		temp->transform->SetParent(_parent->transform);
 	}
 	if (_child) {
-		temp->SetChild(_child);
+		temp->transform->SetChild(_child->transform);
 	}
 
 	switch (temp->material.surface) {
@@ -293,6 +302,8 @@ void AssetManager::RegisterGameObjectNew(GameObject* _parent, GameObject* _child
 	temp->material.surface = Opaque;
 	temp->transform->size.y = 5;
 	Register(temp);
+
+	return temp;
 }
 
 //Vertex Tension Renderer 
@@ -300,45 +311,10 @@ void AssetManager::TensionRendering(Vertex2D* m_Renderer)
 {
 	// Render Colour Picking 
 
-	m_EditorCamera->GetComponenet<Camera>()->renderTexture->Bind();
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glViewport(0, 0, m_EditorCamera->GetComponenet<Camera>()->renderTexture->GetWidth(), m_EditorCamera->GetComponenet<Camera>()->renderTexture->GetHeight());
+	if (m_EditorCamera)
+		BeginColourPickEditor(m_Renderer);
 
-	// Sorting 
-
-	m_Renderer->StartRenderFrameCycle();
-	if (m_SingleSortRenderering && !m_HasRendered) // Sort the transparent layers once only to save performance. Use if objects never change layers in engine.
-	{
-		TensionLayerSort();
-		m_HasRendered = true;
-	}
-	else if (!m_SingleSortRenderering) // Update the transparency layer sorting every frame. (Exspensive)
-	{
-		TensionLayerSort();
-	}
-
-	for (int i = 0; i < m_Opaque.size(); i++)
-	{
-		if (m_Opaque.at(i)->GetActive())
-		{
-			m_Renderer->VertexEngineColourPickRender(m_Opaque.at(i), m_Opaque.at(i)->material, m_Opaque.at(i)->transform->position,
-				m_Opaque.at(i)->transform->size, m_Opaque.at(i)->transform->rotation, m_Opaque.at(i)->transform->scale,
-				m_EditorCamera->GetComponenet<Camera>()->GetProjection(), m_Opaque.at(i)->layer);
-		}
-	}
-
-	for (int i = 0; i < m_Transparent.size(); i++)
-	{
-		if (m_Transparent.at(i)->GetActive()) {
-
-			m_Renderer->VertexEngineColourPickRender(m_Transparent.at(i), m_Transparent.at(i)->material, m_Transparent.at(i)->transform->position,
-				m_Transparent.at(i)->transform->size, m_Transparent.at(i)->transform->rotation, m_Transparent.at(i)->transform->scale,
-				m_EditorCamera->GetComponenet<Camera>()->GetProjection(), m_Transparent.at(i)->layer);
-
-		}
-	}
-
-	m_EditorCamera->GetComponenet<Camera>()->renderTexture->UnBind();
+	BeginColourPickInterface(m_Renderer);
 
 	// Render Normal Scene ============================
 	bool AllowedToRender = false;
@@ -391,7 +367,7 @@ void AssetManager::TensionRendering(Vertex2D* m_Renderer)
 			// Render normal sprites.
 			for (int i = 0; i < m_Opaque.size(); i++)
 			{
-				if (m_Opaque.at(i)->GetActive())
+				if (m_Opaque.at(i)->GetActive() && m_Opaque.at(i)->GetComponenet<RectTransform>() == nullptr)
 				{
 					m_Renderer->TensionDraw(m_Opaque.at(i), m_Opaque.at(i)->material, m_Opaque.at(i)->transform->position,
 						m_Opaque.at(i)->transform->size, m_Opaque.at(i)->transform->rotation, m_Opaque.at(i)->transform->scale,
@@ -421,7 +397,7 @@ void AssetManager::TensionRendering(Vertex2D* m_Renderer)
 			// Render transparent objects
 			for (int i = 0; i < m_Transparent.size(); i++)
 			{
-				if (m_Transparent.at(i)->GetActive()) {
+				if (m_Transparent.at(i)->GetActive() && m_Transparent.at(i)->GetComponenet<RectTransform>() == nullptr) {
 
 					m_Renderer->TensionDraw(m_Transparent.at(i), m_Transparent.at(i)->material, m_Transparent.at(i)->transform->position,
 						m_Transparent.at(i)->transform->size, m_Transparent.at(i)->transform->rotation, m_Transparent.at(i)->transform->scale,
@@ -435,6 +411,20 @@ void AssetManager::TensionRendering(Vertex2D* m_Renderer)
 								cams->GetProjection(), m_Transparent.at(i)->layer);
 						}
 					}
+				}
+			}
+
+			// Render UI Componenets
+			// TODO: make ui elements register to a map for faster loading
+			for (int i = 0; i < m_Objects.size(); i++)
+			{
+				if (m_Objects.at(i)->GetActive())
+				{
+					if (m_Objects.at(i)->GetComponenet<RectTransform>())
+						m_Renderer->TensionInterfaceDraw(m_Objects.at(i));
+
+					if (m_Objects.at(i)->GetComponenet<Text>())
+						m_Objects.at(i)->GetComponenet<Text>()->ConfigureRenderSystems(glm::ortho(0.0f, static_cast<float>(1920), static_cast<float>(1080), 0.0f, -0.100f, 10.0f));
 				}
 			}
 
@@ -551,36 +541,6 @@ void AssetManager::Vertex2dRendering(Vertex2D* render)
 		}
 	}
 
-	/*if (m_Objects.size() > 0)
-	{
-		for (int i = 0; i < m_Objects.size(); i++)
-		{
-			float WithinDistance = glm::distance(m_Objects.at(i)->transform.position, m_Cameras.at(m_ActiveCamera)->transform.position);
-
-			if (m_Objects.at(i)->m_Active == true && WithinDistance < CAMERA_DISTANCE_RENDER_LIMIT && m_Objects.at(i)->material.surface == Opaque)
-			{
-				render->DrawSprite(m_Objects.at(i)->material, m_Objects.at(i)->transform.position, m_Objects.at(i)->transform.size, m_Objects.at(i)->transform.rotation, m_Objects.at(i)->transform.scale, m_Cameras.at(m_ActiveCamera)->GetProjection());
-				m_Cameras.at(m_ActiveCamera)->ConfigureSystems();
-				m_Objects.at(i)->ConfigureSystems();
-			}
-		}
-	}
-
-	if (m_Objects.size() > 0)
-	{
-		for (int i = 0; i < m_Objects.size(); i++)
-		{
-			float WithinDistance = glm::distance(m_Objects.at(i)->transform.position, m_Cameras.at(m_ActiveCamera)->transform.position);
-
-			if (m_Objects.at(i)->m_Active == true && WithinDistance < CAMERA_DISTANCE_RENDER_LIMIT && m_Objects.at(i)->material.surface == Transparent)
-			{
-				render->DrawSprite(m_Objects.at(i)->material, m_Objects.at(i)->transform.position, m_Objects.at(i)->transform.size, m_Objects.at(i)->transform.rotation, m_Objects.at(i)->transform.scale, m_Cameras.at(m_ActiveCamera)->GetProjection());
-				m_Cameras.at(m_ActiveCamera)->ConfigureSystems();
-				m_Objects.at(i)->ConfigureSystems();
-			}
-		}
-	}*/
-
 	delete MainCamera;
 	MainCamera = nullptr;
 }
@@ -629,7 +589,7 @@ void AssetManager::UnRegister(GameObject* _target)
 		{
 			if (m_Objects.at(i) == _target)
 			{
-				m_Objects.at(i)->RemoveParent();
+				m_Objects.at(i)->transform->RemoveParent();
 				delete m_Objects.at(i);
 				m_Objects.at(i) = nullptr;
 
@@ -748,14 +708,8 @@ GameObject* AssetManager::EditorPicker(glm::vec2 _mouse)
 
 	if (objectId == 0)
 		return nullptr;
-	VERTEX_LOG("PICK| " + std::to_string(objectId));
 
-	for (GameObject* selected : m_Objects) {
-		if (selected->GetUniqueIdentity() == objectId)
-			return selected;
-	}
-
-	return nullptr;
+	return m_GameObjectRegister[objectId];
 }
 
 GameObject* AssetManager::GetMainCamera()
@@ -767,6 +721,81 @@ GameObject* AssetManager::GetMainCamera()
 		}
 	}
 	return nullptr;
+}
+
+GameObject* AssetManager::GetUserInterfacePicker(glm::vec2 _mouse)
+{
+	glm::u8vec4 pixels = m_UiRenderTexture->ReadPixels(_mouse.x, _mouse.y);
+
+	uint32_t objectId = (pixels.r) | (pixels.g << 8) | (pixels.b << 16);
+
+	if (objectId == 0)
+		return nullptr;
+
+	return m_GameObjectRegister[objectId];
+}
+
+void AssetManager::BeginColourPickEditor(Vertex2D* m_Renderer)
+{
+	m_EditorCamera->GetComponenet<Camera>()->renderTexture->Bind();
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glViewport(0, 0, m_EditorCamera->GetComponenet<Camera>()->renderTexture->GetWidth(), m_EditorCamera->GetComponenet<Camera>()->renderTexture->GetHeight());
+
+	// Sorting 
+
+	m_Renderer->StartRenderFrameCycle();
+	if (m_SingleSortRenderering && !m_HasRendered) // Sort the transparent layers once only to save performance. Use if objects never change layers in engine.
+	{
+		TensionLayerSort();
+		m_HasRendered = true;
+	}
+	else if (!m_SingleSortRenderering) // Update the transparency layer sorting every frame. (Exspensive)
+	{
+		TensionLayerSort();
+	}
+
+	for (int i = 0; i < m_Opaque.size(); i++)
+	{
+		if (m_Opaque.at(i)->GetActive())
+		{
+			m_Renderer->VertexEngineColourPickRender(m_Opaque.at(i), m_Opaque.at(i)->material, m_Opaque.at(i)->transform->position,
+				m_Opaque.at(i)->transform->size, m_Opaque.at(i)->transform->rotation, m_Opaque.at(i)->transform->scale,
+				m_EditorCamera->GetComponenet<Camera>()->GetProjection(), m_Opaque.at(i)->layer);
+		}
+	}
+
+	for (int i = 0; i < m_Transparent.size(); i++)
+	{
+		if (m_Transparent.at(i)->GetActive()) {
+
+			m_Renderer->VertexEngineColourPickRender(m_Transparent.at(i), m_Transparent.at(i)->material, m_Transparent.at(i)->transform->position,
+				m_Transparent.at(i)->transform->size, m_Transparent.at(i)->transform->rotation, m_Transparent.at(i)->transform->scale,
+				m_EditorCamera->GetComponenet<Camera>()->GetProjection(), m_Transparent.at(i)->layer);
+
+		}
+	}
+
+
+	m_EditorCamera->GetComponenet<Camera>()->renderTexture->UnBind();
+}
+
+void AssetManager::BeginColourPickInterface(Vertex2D* m_Renderer)
+{
+	m_UiRenderTexture->Bind();
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glViewport(0, 0, m_UiRenderTexture->GetWidth(), m_UiRenderTexture->GetHeight());
+
+	for (int i = 0; i < m_Objects.size(); i++)
+	{
+		if (m_Objects.at(i)->GetActive())
+		{
+			if (m_Objects.at(i)->GetComponenet<RectTransform>())
+				m_Renderer->TensionInterfaceDraw(m_Objects.at(i), true);
+
+		}
+	}
+
+	m_UiRenderTexture->UnBind();
 }
 
 /// <summary>
@@ -848,9 +877,9 @@ void AssetManager::UpdateComponents(float delta) //TODO: Update this system for 
 	// Update Componenets
 	for (auto& comps : m_GameObjects3D) {
 		for (auto& data : comps->GetEntireComponenetsList()) {
-			data->Update(delta);
-			data->FixedUpdate(delta);
-			data->LateUpdate(delta);
+			data->Update(Time::GetDeltaTime());
+			data->FixedUpdate(Time::GetFixedDeltaTime());
+			data->LateUpdate(Time::GetDeltaTime());
 		}
 	}
 
@@ -901,5 +930,5 @@ void AssetManager::ConfigureMouse() //TODO: FInd out how to convert the Y cords.
 // Log special events like last objects position & button tracking
 void AssetManager::LogEvents()
 {
-	
+
 }

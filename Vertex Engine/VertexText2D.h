@@ -20,7 +20,7 @@ public:
     Shader TextShader;
     VertexText2D(unsigned int width, unsigned int height);
     void Load(std::string font, unsigned int fontSize);
-    void Text2D(std::string text, float x, float y, float scale, glm::vec4 color = glm::vec4(1.0f), glm::mat4 _camera = glm::mat4(1.0f));
+    void Text2D(std::string text, float x, float y, glm::vec2 scale, glm::vec4 color = glm::vec4(1.0f), glm::mat4 _camera = glm::mat4(1.0f));
 private:
     unsigned int VAO, VBO;
 };

@@ -26,6 +26,8 @@ vec3 worldSpaceNormals;
 uniform int picking;
 uniform vec4 idColour;
 
+uniform int NoTexture;
+
 float LinearizeDepth(float depth)
 {
 	float z = depth * 2.0 - 1.0;
@@ -82,7 +84,12 @@ void main()
 					color = idColour;
 				
 				}else{
-					color = vec4(Colour) * texture(image, TexCoords);
+					if(NoTexture == 1){
+						color = Colour;
+					}
+					else{
+						color = vec4(Colour) * texture(image, TexCoords);
+					}
 				}
 			}
 		}

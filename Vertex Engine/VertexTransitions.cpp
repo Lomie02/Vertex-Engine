@@ -1,4 +1,5 @@
 #include "VertexTransitions.h"
+#include "RectTransform.h"
 /*
 	NOTE:
 		This is the test version for the Vertex Transition screens & will be updated in the future to support more transition images ontop of 1 gameobject.
@@ -40,6 +41,8 @@ void VertexTransitions::Awake()
 	m_MainCamera->AddComponent<Camera>();
 	m_CamComp = m_MainCamera->GetComponenet<Camera>();
 
+	m_TransitionObject->AddComponent<RectTransform>();
+
 	m_Transitions.push_back(m_TransitionObject);
 
 	ResourceManager::LoadTexture("Builds/Textures/VertexMainDisplay.png", "VertexMainDisplay");
@@ -70,7 +73,7 @@ void VertexTransitions::Update(float delta)
 {
 	if (!m_LerpColour) {
 
-		m_Timer -= 0.5f * delta;
+		m_Timer -= 0.5f * Time::GetUnscaledDeltaTime();
 
 		if (m_Timer <= 0) {
 
@@ -80,7 +83,7 @@ void VertexTransitions::Update(float delta)
 
 	if (m_LerpColour && m_Transitions.at(0)->material.colour.a >= 0)
 	{
-		m_Transitions.at(0)->material.colour.a -= m_FadeDuration * delta;
+		m_Transitions.at(0)->material.colour.a -= m_FadeDuration * Time::GetUnscaledDeltaTime();;
 
 		if (m_Transitions.at(0)->material.colour.a < 0)
 		{

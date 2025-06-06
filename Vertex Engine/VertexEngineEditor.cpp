@@ -2,7 +2,7 @@
 #include "DebugComp.h"
 #include <cstdint>
 
-
+#include "RectTransform.h"
 
 void VertexEngineEditor::CreateEditorLayout(GLFWwindow* _GameWindow, SceneManager* _scenesManager)
 {
@@ -143,7 +143,7 @@ void VertexEngineEditor::RenderEditorSceneView()
 	// Calculate View Port.
 	//==============================================
 
-	 Camera* cameraCache = m_ApplicationCentralSceneManager->m_SceneList.at(m_ApplicationCentralSceneManager->GetActiveScene())->GetAssets()->GetEditorCamera()->GetComponenet<Camera>();
+	Camera* cameraCache = m_ApplicationCentralSceneManager->m_SceneList.at(m_ApplicationCentralSceneManager->GetActiveScene())->GetAssets()->GetEditorCamera()->GetComponenet<Camera>();
 	ImVec2 screenSize = ImGui::GetContentRegionAvail();
 	ImVec2 screenSizeA = ImGui::GetContentRegionAvail();
 
@@ -162,7 +162,7 @@ void VertexEngineEditor::RenderEditorSceneView()
 
 	ImGui::Image(
 		cameraCache->renderTexture->GetTexture(),
-		ImVec2(1920,1080),
+		ImVec2(1920, 1080),
 		ImVec2(0, 1),
 		ImVec2(1, 0)
 	);
@@ -201,7 +201,7 @@ void VertexEngineEditor::RenderEditorSceneView()
 		ImGuizmo::SetOrthographic(true);
 
 		ImGuizmo::SetDrawlist();
-		ImGuizmo::SetRect(screenPos.x, screenPos.y,1920, 1080);
+		ImGuizmo::SetRect(screenPos.x, screenPos.y, 1920, 1080);
 
 		float dummy[16] = {
 			1,0,0,0,
@@ -210,7 +210,7 @@ void VertexEngineEditor::RenderEditorSceneView()
 			0,0,0,1
 		};
 
-		glm::mat4 mod = m_SelectedGameObject->GetWorldModelMat();
+		glm::mat4 mod = m_SelectedGameObject->transform->GetWorldModelMat();
 
 		ImGuizmo::Manipulate(glm::value_ptr(cameraCache->GetViewMatrix()),
 			glm::value_ptr(cameraCache->GetProjection()),
@@ -227,7 +227,29 @@ void VertexEngineEditor::RenderEditorInspector()
 	if (m_SelectedGameObject) {
 
 		ImGui::Text(m_SelectedGameObject->name);
-		ImGui::Text("ID: "); ImGui::SameLine(); ImGui::Text( std::to_string(m_SelectedGameObject->GetUniqueIdentity()).c_str());
+		ImGui::SameLine();
+
+		if (ImGui::Button("Edit")) {
+
+			ImGui::OpenPopup("Rename");
+		}
+
+
+		//TODO: causes name to change to a bunch of "?????"
+		if (ImGui::BeginPopup("Rename")) {
+
+			static char newText[15] = "";
+			ImGui::InputText("##name", newText, IM_ARRAYSIZE(newText));
+
+			if (ImGui::Button("Confirm")) {
+				m_SelectedGameObject->name = std::string(newText).c_str();
+			}
+
+			ImGui::EndPopup();
+
+		}
+
+		ImGui::Text("ID: "); ImGui::SameLine(); ImGui::Text(std::to_string(m_SelectedGameObject->GetUniqueIdentity()).c_str());
 		ImGui::SameLine();
 
 		VertexSpacer();
@@ -236,9 +258,6 @@ void VertexEngineEditor::RenderEditorInspector()
 		ImGui::Text("Layers");
 		ImGui::SameLine();
 		ImGui::InputInt("##Layers", &m_SelectedGameObject->layer, 2);
-		VertexSpacer();
-
-		
 
 		VertexSpacer(3);
 
@@ -276,6 +295,18 @@ void VertexEngineEditor::RenderEditorInspector()
 			if (ImGui::MenuItem("Comp")) {
 				m_SelectedGameObject->AddComponent<DebugComp>();
 			}
+
+			if (ImGui::MenuItem("Rect Transform")) {
+				m_SelectedGameObject->AddComponent<RectTransform>();
+			}
+
+			if (ImGui::MenuItem("Text")) {
+				if (m_SelectedGameObject->GetComponenet<RectTransform>() == nullptr)
+					m_SelectedGameObject->AddComponent<RectTransform>();
+
+				m_SelectedGameObject->AddComponent<Text>();
+			}
+
 			// Camera
 			if (ImGui::MenuItem("Camera")) {
 				if (m_SelectedGameObject->GetComponenet<Camera>() == nullptr)
@@ -300,12 +331,33 @@ void VertexEngineEditor::RenderEditorInheritList()
 	ImGui::Begin("Hierachy");
 
 	if (ImGui::Button("Create")) {
-		m_ApplicationCentralSceneManager->m_SceneList.at(m_ApplicationCentralSceneManager->GetActiveScene())->GetAssets()->RegisterGameObjectNew();
+		ImGui::OpenPopup("CreateMenu");
+	}
+
+	// Create button
+	if (ImGui::BeginPopup("CreateMenu")) {
+		if (ImGui::MenuItem("Empty GameObject")) {
+			m_ApplicationCentralSceneManager->m_SceneList.at(m_ApplicationCentralSceneManager->GetActiveScene())->GetAssets()->RegisterGameObjectNew();
+		}
+
+		// Create rect ransform object
+		if (ImGui::MenuItem("Empty UI Element")) {
+			GameObject* temp = m_ApplicationCentralSceneManager->m_SceneList.at(m_ApplicationCentralSceneManager->GetActiveScene())->GetAssets()->RegisterGameObjectNew();
+			temp->AddComponent<RectTransform>();
+		}
+
+		// Create a default camera
+		if (ImGui::MenuItem("Camera")) {
+			GameObject* temp = m_ApplicationCentralSceneManager->m_SceneList.at(m_ApplicationCentralSceneManager->GetActiveScene())->GetAssets()->RegisterGameObjectNew();
+			temp->AddComponent<Camera>();
+		}
+
+		ImGui::EndPopup();
 	}
 
 	for (int i = 0; i < m_ApplicationCentralSceneManager->m_SceneList.at(m_ApplicationCentralSceneManager->GetActiveScene())->GetAssets()->m_Objects.size(); i++) {
-		if (m_ApplicationCentralSceneManager->m_SceneList.at(m_ApplicationCentralSceneManager->GetActiveScene())->GetAssets()->m_Objects[i]->GetParent() == nullptr)
-			RenderGameObjectNodes(m_ApplicationCentralSceneManager->m_SceneList.at(m_ApplicationCentralSceneManager->GetActiveScene())->GetAssets()->m_Objects[i], m_SelectedGameObject);
+		if (m_ApplicationCentralSceneManager->m_SceneList.at(m_ApplicationCentralSceneManager->GetActiveScene())->GetAssets()->m_Objects[i]->transform->GetParent() == nullptr)
+			RenderGameObjectNodes(m_ApplicationCentralSceneManager->m_SceneList.at(m_ApplicationCentralSceneManager->GetActiveScene())->GetAssets()->m_Objects[i]->transform, m_SelectedGameObject);
 	}
 
 	VertexSpacer();
@@ -318,8 +370,8 @@ void VertexEngineEditor::RenderEditorInheritList()
 	if (ImGui::BeginDragDropTarget()) {
 		if (const ImGuiPayload* gameObjectPayload = ImGui::AcceptDragDropPayload("OBJECT_RE_PARENT")) {
 			GameObject* object = *(GameObject**)gameObjectPayload->Data;
-			if (object && object->GetParent()) {
-				object->GetParent()->RemoveChild(object);
+			if (object && object->transform->GetParent()) {
+				object->transform->RemoveParent();
 			}
 		}
 		ImGui::EndDragDropTarget();
@@ -458,20 +510,20 @@ void VertexEngineEditor::RenderGameCommandConsole()
 	ImGui::End();
 }
 
-void VertexEngineEditor::RenderGameObjectNodes(GameObject* _obj, GameObject*& selection)
+void VertexEngineEditor::RenderGameObjectNodes(Transform* _obj, GameObject*& selection)
 {
 	ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
 
-	if (selection == _obj)
+	if (selection == _obj->partner2d)
 		flags |= ImGuiTreeNodeFlags_Selected;
 
 	if (_obj->GetChildren().empty())
 		flags |= ImGuiTreeNodeFlags_Selected;
 
-	bool open = ImGui::TreeNodeEx((void*)_obj, flags, "%s", _obj->name);
+	bool open = ImGui::TreeNodeEx((void*)_obj, flags, "%s", _obj->partner2d->name);
 
 	if (ImGui::IsItemClicked()) {
-		m_SelectedGameObject = _obj;
+		m_SelectedGameObject = _obj->partner2d;
 	}
 
 	if (ImGui::BeginPopupContextItem()) {
@@ -480,11 +532,12 @@ void VertexEngineEditor::RenderGameObjectNodes(GameObject* _obj, GameObject*& se
 		}
 
 		if (ImGui::Button("Create Empty Parent")) { // Create Empty Parent Object
-			m_ApplicationCentralSceneManager->m_SceneList.at(m_ApplicationCentralSceneManager->GetActiveScene())->GetAssets()->RegisterGameObjectNew(nullptr, _obj);
+
+			m_ApplicationCentralSceneManager->m_SceneList.at(m_ApplicationCentralSceneManager->GetActiveScene())->GetAssets()->RegisterGameObjectNew(nullptr, _obj->partner2d);
 		}
 
 		if (ImGui::Button("Delete")) { // Delete the gameobject from the engine.
-			m_ApplicationCentralSceneManager->m_SceneList.at(m_ApplicationCentralSceneManager->GetActiveScene())->GetAssets()->UnRegister(_obj);
+			m_ApplicationCentralSceneManager->m_SceneList.at(m_ApplicationCentralSceneManager->GetActiveScene())->GetAssets()->UnRegister(_obj->partner2d);
 		}
 
 		ImGui::EndPopup();
@@ -494,8 +547,11 @@ void VertexEngineEditor::RenderGameObjectNodes(GameObject* _obj, GameObject*& se
 	if (ImGui::BeginDragDropTarget()) {
 		if (const ImGuiPayload* gameObjectPayload = ImGui::AcceptDragDropPayload("OBJECT_RE_PARENT")) {
 			GameObject* object = *(GameObject**)gameObjectPayload->Data;
-			if (object && !IsChildOf(object, _obj)) {
-				_obj->SetChild(object);
+			if (object && !object->transform->IsChildOf(_obj)) {
+				if (object->GetComponenet<RectTransform>())
+					object->GetComponenet<RectTransform>()->SetParent(_obj->partner2d, true);
+				else
+					_obj->SetChild(object->transform);
 			}
 		}
 		ImGui::EndDragDropTarget();
@@ -503,28 +559,17 @@ void VertexEngineEditor::RenderGameObjectNodes(GameObject* _obj, GameObject*& se
 
 	if (ImGui::BeginDragDropSource()) {
 
-		ImGui::SetDragDropPayload("OBJECT_RE_PARENT", &_obj, sizeof(GameObject*));
-		ImGui::Text("Dragging: %s", _obj->name);
+		ImGui::SetDragDropPayload("OBJECT_RE_PARENT", &_obj->partner2d, sizeof(GameObject*));
+		ImGui::Text("Dragging: %s", _obj->partner2d->name);
 
 		ImGui::EndDragDropSource();
 	}
 
-
 	// Draw objects children
 	if (open) {
-		for (GameObject* child : _obj->GetChildren())
+		for (Transform* child : _obj->GetChildren())
 			RenderGameObjectNodes(child, selection);
 		ImGui::TreePop();
 	}
 
-}
-
-bool VertexEngineEditor::IsChildOf(GameObject* _parent, GameObject* _child)
-{
-	while (_child) {
-		if (_child == _parent)
-			return true;
-		_child = _child->GetParent();
-	}
-	return false;
 }

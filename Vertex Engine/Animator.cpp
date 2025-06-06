@@ -107,7 +107,7 @@ void Animator::Update(float delta)
 			else if (m_CurrentFrame >= m_AnimationClip.at(m_CurrentClip).Length() && m_AnimationClip.at(m_CurrentClip).GetWrapMode() == Loop)
 			{
 				m_CurrentFrame = 0;
-				if (m_Master->GetParent() == nullptr)
+				if (m_Master->transform->GetParent() == nullptr)
 				{
 					m_Master->transform->position = m_AnimationClip.at(m_CurrentClip).GetFrame(0);
 				}
@@ -121,7 +121,7 @@ void Animator::Update(float delta)
 				m_Reverse = true;
 				m_CurrentFrame = m_AnimationClip.at(m_CurrentClip).Length() - 1;
 
-				if (m_Master->GetParent() == nullptr)
+				if (m_Master->transform->GetParent() == nullptr)
 				{
 					m_Master->transform->position = m_AnimationClip.at(m_CurrentClip).GetFrame(m_AnimationClip.at(m_CurrentClip).Length() - 1);
 				}
@@ -136,7 +136,7 @@ void Animator::Update(float delta)
 		{
 			if (m_CurrentFrame < m_AnimationClip.at(m_CurrentClip).Length() && !m_Reverse)
 			{
-				if (m_Master->GetParent() == nullptr)
+				if (m_Master->transform->GetParent() == nullptr)
 				{
 					m_Master->transform->position = glm::lerp(m_Master->transform->position, m_AnimationClip.at(m_CurrentClip).GetFrame(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * delta);
 					m_Master->transform->size = glm::lerp(m_Master->transform->size, m_AnimationClip.at(m_CurrentClip).GetFrameSize(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * delta);
@@ -162,7 +162,7 @@ void Animator::Update(float delta)
 			}
 			if (m_Reverse && m_CurrentFrame >= 0)
 			{
-				if (m_Master->GetParent() == nullptr)
+				if (m_Master->transform->GetParent() == nullptr)
 				{
 					m_Master->transform->position = glm::lerp(m_Master->transform->position, m_AnimationClip.at(m_CurrentClip).GetFrame(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * delta);
 					m_Master->transform->size = glm::lerp(m_Master->transform->size, m_AnimationClip.at(m_CurrentClip).GetFrameSize(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * delta);

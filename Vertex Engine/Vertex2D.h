@@ -72,6 +72,7 @@ public:
 	void Tension_Rescale_FrameBuffer(float width,float height);
 
 	void TensionVolume(Volume & _vol);
+	void TensionInterfaceDraw(GameObject* _element, bool _IsColourPick = false);
 	// Violet 3D Renderer
 
 	void VioletDraw();
