@@ -62,7 +62,7 @@ public:
 
 	// Tension Functions
 	void TensionBoot(Shader& shader) { m_ParticleShader = shader; }
-	void TensionDraw(GameObject* _object ,Material& material, glm::vec2 position, glm::vec2 size = glm::vec2(10.0f, 10.0f), float rotate = 0.0f, float scale = 1.0f, glm::mat4 per = glm::mat4(1.0f), int _RenderLayer = 0);
+	void TensionDraw(GameObject* _object, glm::mat4 per);
 	void TensionParticle(ParticleSystem& system);
 	void TensionTransparencyPass(std::vector<GameObject*> _list, glm::mat4 per);
 	void TensionSprite(Sprite* _sprite, glm::mat4 _pro);
@@ -96,6 +96,8 @@ private:
 	Shader m_Shader;
 	Shader m_ParticleShader;
 	GLuint m_quadVAO;
+
+	Material* DefaultSpriteMat;
 
 	void SetUpData();
 };

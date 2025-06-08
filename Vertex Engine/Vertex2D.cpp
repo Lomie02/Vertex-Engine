@@ -1,13 +1,19 @@
 #include "Vertex2D.h"
 #include "RectTransform.h"
+#include "SpriteRenderer.h"
 Vertex2D::Vertex2D(Shader& shader)
 {
+	DefaultSpriteMat = new Material("VertexDefaultSpriteMaterial");
+
 	this->m_Shader = shader;
 	this->SetUpData();
 }
 
 Vertex2D::~Vertex2D()
 {
+	delete DefaultSpriteMat;
+	DefaultSpriteMat = nullptr;
+
 	glDeleteVertexArrays(1, &this->m_quadVAO);
 }
 
@@ -96,66 +102,115 @@ void Vertex2D::DrawSprite(GameObject* _object, Material& material, glm::vec3 pos
 	CompletedDrawCall();
 }
 
-void Vertex2D::TensionDraw(GameObject* _object, Material& material, glm::vec2 position, glm::vec2 size, float rotate, float scale, glm::mat4 per, int _RenderLayer)
+void Vertex2D::TensionDraw(GameObject* _object, glm::mat4 per)
 {
 	//glEnable(GL_CULL_FACE);
 
-	if (material.surface == Transparent)
-	{
-		glEnable(GL_BLEND);
+	bool m_UseSpriteRendererData = false;
 
-		switch (material.TransparencyBlend) {
-		case Alpha:
-			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-			break;
-		case Additive:
-			glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-			break;
+	// See if a gameobject has a Sprite Renderer component attached. If it does, render with the comp data instead of default materials. 
+	if (_object->GetComponenet<SpriteRenderer>())
+		m_UseSpriteRendererData = true;
 
-		case Screen:
-			glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_COLOR);
-			break;
+	switch (m_UseSpriteRendererData) {
+	case true:
+
+		if (DefaultSpriteMat->surface == Transparent)
+		{
+			glEnable(GL_BLEND);
+
+			switch (_object->material.TransparencyBlend) {
+			case Alpha:
+				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+				break;
+			case Additive:
+				glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+				break;
+
+			case Screen:
+				glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_COLOR);
+				break;
+			}
 		}
+		if (USE_DEPTH_TESTING) {
+			glEnable(GL_DEPTH_TEST);
+			glDepthFunc(GL_LESS);
+		}
+		this->m_Shader = DefaultSpriteMat->shader;
+
+		this->m_Shader.Use();
+
+		if (RENDER_DEPTH_TEST == false) {
+			this->m_Shader.SetInteger("UseDepth", 0);
+		}
+		else {
+
+			this->m_Shader.SetInteger("UseDepth", 1);
+		}
+
+
+		this->m_Shader.SetMatrix4("model", _object->transform->GetWorldModelMat());
+		this->m_Shader.SetMatrix4("pro", per);
+		this->m_Shader.SetInteger("picking", 0);
+		this->m_Shader.SetInteger("NoTexture", 0);
+		this->m_Shader.SetVector4f("Colour", _object->GetComponenet<SpriteRenderer>()->Colour);
+
+		glActiveTexture(GL_TEXTURE0);
+		DefaultSpriteMat->AlbedoMap = _object->GetComponenet<SpriteRenderer>()->Sprite;
+
+		DefaultSpriteMat->AlbedoMap.Bind();
+
+		break;
+
+	case false: // Normal rendering without sprite comp
+
+		if (_object->material.surface == Transparent)
+		{
+			glEnable(GL_BLEND);
+
+			switch (_object->material.TransparencyBlend) {
+			case Alpha:
+				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+				break;
+			case Additive:
+				glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+				break;
+
+			case Screen:
+				glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_COLOR);
+				break;
+			}
+		}
+		if (USE_DEPTH_TESTING) {
+			glEnable(GL_DEPTH_TEST);
+			glDepthFunc(GL_LESS);
+		}
+		this->m_Shader = _object->material.shader;
+
+		this->m_Shader.Use();
+
+		if (RENDER_DEPTH_TEST == false) {
+			this->m_Shader.SetInteger("UseDepth", 0);
+		}
+		else {
+
+			this->m_Shader.SetInteger("UseDepth", 1);
+		}
+
+
+		this->m_Shader.SetMatrix4("model", _object->transform->GetWorldModelMat());
+		this->m_Shader.SetMatrix4("pro", per);
+		this->m_Shader.SetInteger("picking", 0);
+		this->m_Shader.SetInteger("NoTexture", 0);
+		this->m_Shader.SetVector4f("Colour", _object->material.colour);
+
+		glActiveTexture(GL_TEXTURE0);
+		_object->material.AlbedoMap.Bind();
+		break;
 	}
-	if (USE_DEPTH_TESTING) {
-		glEnable(GL_DEPTH_TEST);
-		glDepthFunc(GL_LESS);
-	}
-	this->m_Shader = material.shader;
+	
 
-	this->m_Shader.Use();
-
-	if (RENDER_DEPTH_TEST == false) {
-		this->m_Shader.SetInteger("UseDepth", 0);
-	}
-	else {
-
-		this->m_Shader.SetInteger("UseDepth", 1);
-	}
-
-	// Vertex Filters.
-	if (m_VertexVolume.ChromaticAberation.ChromaticEnabled) {
-		this->m_Shader.SetInteger("UseChromatic", 1);
-		this->m_Shader.SetFloat("ChromaticOffset", m_VertexVolume.ChromaticAberation.ChromaticIntensity);
-	}
-	if (m_VertexVolume.Invert.InvertedEnabled) {
-		this->m_Shader.SetFloat("UseInvert", 1);
-	}
-
-	//=======================================
-	this->m_Shader.SetVector3f("lights", glm::vec3(1.0, 1.0, 1.0));
-
-	this->m_Shader.SetMatrix4("model", _object->transform->GetWorldModelMat());
-	this->m_Shader.SetMatrix4("pro", per);
-	this->m_Shader.SetInteger("picking", 0);
-	this->m_Shader.SetInteger("NoTexture", 0);
-	this->m_Shader.SetVector4f("Colour", material.colour);
-
-	glActiveTexture(GL_TEXTURE0);
-	material.AlbedoMap.Bind();
-
-	glBindVertexArray(this->m_quadVAO);
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	PrepareRender();
 
 	if (USE_DEPTH_TESTING) {
 		glDisable(GL_DEPTH_TEST);
@@ -394,25 +449,6 @@ void Vertex2D::SetUpData()
 	unsigned int VBO;
 	unsigned int EBO;
 
-	//m_Vertices.push_back(glm::vec2(0.0f, 1.0f));
-	//m_Vertices.push_back(glm::vec2(0.0f, 1.0f));
-
-	//m_Vertices.push_back(glm::vec2(1.0f, 0.0f));
-	//m_Vertices.push_back(glm::vec2(1.0f, 0.0f));
-
-	//m_Vertices.push_back(glm::vec2(0.0f, 0.0f));
-	//m_Vertices.push_back(glm::vec2(0.0f, 0.0f));
-
-	//m_Vertices.push_back(glm::vec2(0.0f, 1.0f));
-	//m_Vertices.push_back(glm::vec2(0.0f, 1.0f));
-
-	//m_Vertices.push_back(glm::vec2(1.0f, 1.0f));
-	//m_Vertices.push_back(glm::vec2(1.0f, 1.0f));
-
-	//m_Vertices.push_back(glm::vec2(1.0f, 0.0f));
-	//m_Vertices.push_back(glm::vec2(1.0f, 0.0f));
-
-	//float vertices[24];
 	float vertices3D[] = {
 		-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
 		0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
@@ -424,14 +460,6 @@ void Vertex2D::SetUpData()
 	unsigned int indices[] = {
 		0,1,2,2,3,0
 	};
-
-	//int m_CurrentVertice = 0;
-	//for (int i = 0; i < 24; i += 2)
-	//{
-	//	vertices[i] = m_Vertices.at(m_CurrentVertice).x;
-	//	vertices[i + 1] = m_Vertices.at(m_CurrentVertice).y;
-	//	m_CurrentVertice++;
-	//}
 
 	glGenVertexArrays(1, &this->m_quadVAO);
 	glGenBuffers(1, &VBO);

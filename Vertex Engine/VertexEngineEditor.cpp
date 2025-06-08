@@ -202,7 +202,7 @@ void VertexEngineEditor::RenderEditorSceneView()
 		ImGuizmo::SetOrthographic(true);
 
 		ImGuizmo::SetDrawlist();
-		ImGuizmo::SetRect(screenPos.x, screenPos.y, 1920, 1080);
+		ImGuizmo::SetRect(screenPos.x, screenPos.y, 640, 360);
 
 		float dummy[16] = {
 			1,0,0,0,
@@ -317,7 +317,6 @@ void VertexEngineEditor::RenderEditorInspector()
 				if (m_SelectedGameObject->GetComponenet<SpriteRenderer>() == nullptr)
 					m_SelectedGameObject->AddComponent<SpriteRenderer>();
 
-				m_SelectedGameObject->AddComponent<Text>();
 			}
 
 			// Camera

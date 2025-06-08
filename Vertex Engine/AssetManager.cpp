@@ -11,6 +11,7 @@
 #include <thread>
 #include "GameSettings.h"
 #include "RectTransform.h"
+#include "SpriteRenderer.h"
 
 /*
 	The AssetManager is the engines way of knowing what exists in the game & what to do with the objects.
@@ -369,18 +370,7 @@ void AssetManager::TensionRendering(Vertex2D* m_Renderer)
 			{
 				if (m_Opaque.at(i)->GetActive() && m_Opaque.at(i)->GetComponenet<RectTransform>() == nullptr)
 				{
-					m_Renderer->TensionDraw(m_Opaque.at(i), m_Opaque.at(i)->material, m_Opaque.at(i)->transform->position,
-						m_Opaque.at(i)->transform->size, m_Opaque.at(i)->transform->rotation, m_Opaque.at(i)->transform->scale,
-						cams->GetProjection(), m_Opaque.at(i)->layer);
-
-					if (m_Opaque.at(i)->GetMimes().size() > 1) // Render mimes
-					{
-						for (int m = 0; m < m_Opaque.at(i)->GetActiveMimesSize(); m++) {
-							m_Renderer->TensionDraw(m_Opaque.at(i), m_Opaque.at(i)->material, m_Opaque.at(i)->GetMimes().at(m).transform.position,
-								m_Opaque.at(i)->transform->size, m_Opaque.at(i)->transform->rotation, m_Opaque.at(i)->transform->scale,
-								cams->GetProjection(), m_Opaque.at(i)->layer);
-						}
-					}
+					m_Renderer->TensionDraw(m_Opaque.at(i), cams->GetProjection());
 				}
 			}
 
@@ -388,9 +378,7 @@ void AssetManager::TensionRendering(Vertex2D* m_Renderer)
 			{
 				if (m_PhysicsScene->Get2dObjects().at(i)->GetActive())
 				{
-					m_Renderer->TensionDraw(m_PhysicsScene->Get2dObjects().at(i), m_PhysicsScene->Get2dObjects().at(i)->material, m_PhysicsScene->Get2dObjects().at(i)->transform->position,
-						m_PhysicsScene->Get2dObjects().at(i)->transform->size, m_PhysicsScene->Get2dObjects().at(i)->transform->rotation, m_PhysicsScene->Get2dObjects().at(i)->transform->scale,
-						cams->GetProjection(), m_PhysicsScene->Get2dObjects().at(i)->layer);
+					m_Renderer->TensionDraw(m_PhysicsScene->Get2dObjects().at(i), cams->GetProjection());
 				}
 			}
 
@@ -399,16 +387,12 @@ void AssetManager::TensionRendering(Vertex2D* m_Renderer)
 			{
 				if (m_Transparent.at(i)->GetActive() && m_Transparent.at(i)->GetComponenet<RectTransform>() == nullptr) {
 
-					m_Renderer->TensionDraw(m_Transparent.at(i), m_Transparent.at(i)->material, m_Transparent.at(i)->transform->position,
-						m_Transparent.at(i)->transform->size, m_Transparent.at(i)->transform->rotation, m_Transparent.at(i)->transform->scale,
-						cams->GetProjection(), m_Transparent.at(i)->layer);
+					m_Renderer->TensionDraw(m_Transparent.at(i),cams->GetProjection());
 
 					if (m_Transparent.at(i)->GetMimes().size() > 1)
 					{
 						for (int m = 0; m < m_Transparent.at(i)->GetActiveMimesSize(); m++) {
-							m_Renderer->TensionDraw(m_Transparent.at(i), m_Transparent.at(i)->material, m_Transparent.at(i)->GetMimes().at(m).transform.position,
-								m_Transparent.at(i)->transform->size, m_Transparent.at(i)->transform->rotation, m_Transparent.at(i)->transform->scale,
-								cams->GetProjection(), m_Transparent.at(i)->layer);
+							m_Renderer->TensionDraw(m_Transparent.at(i),cams->GetProjection());
 						}
 					}
 				}
