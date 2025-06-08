@@ -374,6 +374,7 @@ void AssetManager::TensionRendering(Vertex2D* m_Renderer)
 				}
 			}
 
+			//TODO: Remove this when Rigidbodies become componenets.
 			for (int i = 0; i < m_PhysicsScene->Get2dObjects().size(); i++)
 			{
 				if (m_PhysicsScene->Get2dObjects().at(i)->GetActive())

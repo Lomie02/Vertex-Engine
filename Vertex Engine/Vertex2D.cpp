@@ -115,7 +115,7 @@ void Vertex2D::TensionDraw(GameObject* _object, glm::mat4 per)
 	switch (m_UseSpriteRendererData) {
 	case true:
 
-		if (DefaultSpriteMat->surface == Transparent)
+		if (_object->GetComponenet<SpriteRenderer>()->Colour.w < 1); // auto detect if transparent
 		{
 			glEnable(GL_BLEND);
 

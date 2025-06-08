@@ -3,7 +3,11 @@
 #include "ResourceManager.h"
 SpriteRenderer::SpriteRenderer()
 {
+	// Get the default sprite testure.
 	Sprite = ResourceManager::GetTexture("UI_Button");
+
+	// Set full white with no Alpha.
+	Colour = glm::vec4(1, 1, 1, 1);
 
 	// PPU pass
 	if (partner2d) {
@@ -19,17 +23,19 @@ void SpriteRenderer::RenderEditorDisplay()
 	if (ImGui::CollapsingHeader("Sprite Renderer", ImGuiTreeNodeFlags_DefaultOpen)) {
 
 		// ============================= Transform Positions
-
+		static bool isTransparent;
 		// X Axis
 		ImVec2 screenSize = ImGui::GetContentRegionAvail();
 
 		ImGui::Image(Sprite.ID, ImVec2(64, 64)); ImGui::SameLine;
 		ImGui::Dummy(ImVec2(screenSize.x, 1));
 
-		ImGui::InputFloat("R",&this->Colour.x);
-		ImGui::InputFloat("G",&this->Colour.y);
-		ImGui::InputFloat("B",&this->Colour.z);
-		ImGui::InputFloat("A",&this->Colour.w);
+		ImGui::Spacing();
+
+		ImGui::InputFloat("R", &this->Colour.x);
+		ImGui::InputFloat("G", &this->Colour.y);
+		ImGui::InputFloat("B", &this->Colour.z);
+		ImGui::InputFloat("A", &this->Colour.w);
 
 	}
 	ImGui::PopStyleColor(2);
