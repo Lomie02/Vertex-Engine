@@ -1,6 +1,10 @@
 #include "GameObject.h"
 #include "GameUniqueIdentityAsset.h"
 #include "Random.h"
+#include "gtx/matrix_decompose.hpp"
+#include "RectTransform.h"
+
+#define GLM_ENABLE_EXPERIMENTAL
 GameObject::GameObject()
 {
 	GenerateIds();
@@ -10,7 +14,7 @@ GameObject::GameObject()
 
 	AddComponent<Transform>();
 	transform = GetComponenet<Transform>();
-	
+
 	transform->localPosition.y = 0;
 	transform->localPosition.x = 0;
 
@@ -29,7 +33,7 @@ GameObject::GameObject(const char* _Name, bool active)
 	m_Active = active;
 	AddComponent<Transform>();
 	transform = GetComponenet<Transform>();
-	
+
 	transform->localPosition.y = 0;
 	transform->localPosition.x = 0;
 
@@ -87,47 +91,6 @@ GameObject::GameObject(const char* _Name)
 	transform->size.x = 5;
 	transform->size.y = 5;
 
-}
-
-void GameObject::SetParent(GameObject* _object)
-{
-	if (m_Parent == _object) return;
-
-	if (m_Parent)
-	{
-		auto& sib = m_Parent->m_Children;
-		sib.erase(std::remove(sib.begin(), sib.end(), this), sib.end());
-	}
-
-	m_Parent = _object;
-
-	if (_object)
-	{
-		m_Parent->m_Children.push_back(this);
-	}
-}
-
-void GameObject::RemoveParent()
-{
-	if (m_Parent)
-	{
-		auto& sib = m_Parent->m_Children;
-		sib.erase(std::remove(sib.begin(), sib.end(), this), sib.end());
-	}
-}
-
-void GameObject::SetChild(GameObject* _child)
-{
-	if (_child) {
-		_child->SetParent(this);
-	}
-}
-
-void GameObject::RemoveChild(GameObject* _child)
-{
-	if (_child && _child->m_Parent == this) {
-		_child->SetParent(nullptr);
-	}
 }
 
 void GameObject::ConfigureSystems()

@@ -1,5 +1,6 @@
 #version 330 core
-layout (location = 0) in vec4 vertex;
+layout (location = 0) in vec3 vertex;
+layout (location = 1) in vec2 texCord;
 
 out vec2 TexCoords;
 
@@ -9,8 +10,8 @@ out vec3 _worldNormals;
 
 void main()
 {
-    TexCoords = vertex.zw;
+    TexCoords = texCord;
 	_worldNormals = (model * vec4(1.0,1.0,1.0, 0.0)).xyz;
 	
-    gl_Position = pro * model * vec4(vertex.xy, 0.0, 1.0);
+    gl_Position = pro * model * vec4(vertex, 1.0);
 }

@@ -81,7 +81,7 @@ void VertexText2D::Load(std::string font, unsigned int fontSize)
     FT_Done_FreeType(ft);
 }
 
-void VertexText2D::Text2D(std::string text, float x, float y, float scale, glm::vec4 color, glm::mat4 _camera)
+void VertexText2D::Text2D(std::string text, float x, float y, glm::vec2 scale, glm::vec4 color, glm::mat4 _camera)
 {
     // activate corresponding render state	
     this->TextShader.Use();
@@ -99,11 +99,11 @@ void VertexText2D::Text2D(std::string text, float x, float y, float scale, glm::
     {
         Character ch = Characters[*c];
 
-        float xpos = x + ch.Bearing.x * scale;
-        float ypos = y - (this->Characters['H'].Bearing.y - ch.Bearing.y) * scale;
+        float xpos = x + ch.Bearing.x * scale.x;
+        float ypos = y - (this->Characters['H'].Bearing.y - ch.Bearing.y) * scale.y;
 
-        float w = ch.Size.x * scale;
-        float h = ch.Size.y * scale;
+        float w = ch.Size.x * scale.x;
+        float h = ch.Size.y * scale.y;
 
         // update VBO for each character
         float vertices[6][4] = {
@@ -124,7 +124,7 @@ void VertexText2D::Text2D(std::string text, float x, float y, float scale, glm::
         // render quad
         glDrawArrays(GL_TRIANGLES, 0, 6);
         // now advance cursors for next glyph
-        x += (ch.Advance >> 6) * scale; // bitshift by 6 to get value in pixels (1/64th times 2^6 = 64)
+        x += (ch.Advance >> 6) * scale.x; // bitshift by 6 to get value in pixels (1/64th times 2^6 = 64)
     }
     glBindVertexArray(0);
     glBindTexture(GL_TEXTURE_2D, 0);

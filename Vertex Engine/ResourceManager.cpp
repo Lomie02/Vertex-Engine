@@ -116,8 +116,9 @@ Shader ResourceManager::loadShaderFromFile(const char* vShaderFile, const char* 
 Texture2D ResourceManager::loadTextureFromFile(const char* file)
 {
 	Texture2D texture;
-
 	int width, height, nrChannels;
+
+	stbi_set_flip_vertically_on_load(true);
 	unsigned char* data = stbi_load(file, &width, &height, &nrChannels, 0);
 
 

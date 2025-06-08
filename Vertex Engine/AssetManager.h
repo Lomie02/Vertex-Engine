@@ -21,6 +21,7 @@
 using namespace irrklang;
 
 #include "vGameObject.h"
+#include <unordered_map>
 
 enum Renderer {
 	Vertex_2D = 0, // Vertex Engines default renderer.
@@ -44,6 +45,8 @@ public:
 	AssetManager()
 	{
 		m_EditorCamera = new GameObject("EditorCamera");
+
+		m_UiRenderTexture = new RenderTexture(PROJECT_ASPECT_WIDTH, PROJECT_ASPECT_HEIGHT);
 		m_EditorColourPicker = new RenderTexture(PROJECT_ASPECT_WIDTH, PROJECT_ASPECT_HEIGHT);
 		m_EditorCamera->AddComponent<Camera>();
 		m_EditorCamera->GetComponenet<Camera>()->renderTexture = m_EditorColourPicker;
@@ -80,7 +83,7 @@ public:
 
 	void Register(vGameObject* _object);
 
-	void RegisterGameObjectNew(GameObject* _parent = nullptr, GameObject* _child = nullptr);
+	GameObject* RegisterGameObjectNew(GameObject* _parent = nullptr, GameObject* _child = nullptr);
 
 	//========================================================================
 
@@ -142,11 +145,17 @@ public:
 	void BeginVertexRenderTextureBindings();
 	void CompleteVertexRenderTextureBindings();
 
-
 	GameObject* GetMainCamera();
 private:
+	GameObject* GetUserInterfacePicker(glm::vec2 _mouse);
+	void BeginColourPickEditor(Vertex2D* m_Renderer);
+	void BeginColourPickInterface(Vertex2D* m_Renderer);
+
 	GameObject* GetEditorCamera() { return m_EditorCamera; }
 	GameObject* EditorPicker(glm::vec2 _mouse);
+
+	std::unordered_map<uint32_t, GameObject*> m_GameObjectRegister;
+	RenderTexture* m_UiRenderTexture;
 
 	GameObject* m_EditorCamera;
 	RenderTexture* m_EditorColourPicker;

@@ -114,23 +114,9 @@ void Scene2::Awake()
 	m_Sprite->transform.size.y = 5;
 	//======================================== Counter Text
 
-	m_CounterText->m_FontSize = 17;
-	m_CounterText->material.colour = glm::vec4(1, 1, 1, 1);
-	m_CounterText->text = "0";
-	m_CounterText->transform->position = glm::vec2(-15, -5);
 	//========================================
 
-	m_Title->m_FontSize = 24;
-
 	m_Title->ChangeFont("Arial");
-
-	m_Title->transform->position.x = -7;
-	m_Title->transform->position.y = 5;
-	m_Title->text = "";
-
-	m_Title->material.colour.r = 1;
-	m_Title->material.colour.g = 1;
-	m_Title->material.colour.b = 1;
 
 
 	// Setup animation test
@@ -235,6 +221,8 @@ void Scene2::Awake()
 	m_Egg->material.m_KeepAspect = true;
 	m_Egg->material.TransparencyBlend = Alpha;
 
+	Time::SetTimeScale(2.0f);
+
 	m_Animation->WrapMode(Loop);
 	m_Manager->Register(m_Animation);
 
@@ -249,9 +237,6 @@ void Scene2::Start()
 
 	m_FlipbookAnimation->Play();
 	m_EggFlipBook->Play();
-
-	m_Title->text = "Vertex Engine 2";
-	m_Title->SetActive(true);
 
 	m_Animation->Play();
 	m_Object0->transform->position.x = -7;

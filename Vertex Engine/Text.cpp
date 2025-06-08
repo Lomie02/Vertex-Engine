@@ -1,12 +1,12 @@
 #include "Text.h"
 #include "ResourceManager.h"
 #include "GameSettings.h"
-
-Text::Text() : GameObject("Text_1")
+Text::Text()
 {
 	m_Text = new VertexText2D(PROJECT_RESOLUTION);
-	material.colour = glm::vec4(0, 0, 0, 1);
-	transform->scale = 0.03f;
+	if (partner2d)
+		ParentRect = partner2d->GetComponenet<RectTransform>();
+	ChangeFont("Arial");
 	ConfigureSystems();
 }
 
@@ -27,11 +27,23 @@ void Text::ChangeFont(std::string _name)
 
 void Text::ConfigureRenderSystems(glm::mat4 _camera)
 {
-	m_Text->Text2D(text,transform->position.x, transform->position.y, transform->scale, material.colour,_camera);
+	if (partner2d)
+		m_Text->Text2D(text, partner2d->GetComponenet<RectTransform>()->anchoredPosition.x, partner2d->GetComponenet<RectTransform>()->anchoredPosition.y, partner2d->GetComponenet<RectTransform>()->scale, partner2d->material.colour, _camera);
+}
+
+void Text::RenderEditorDisplay()
+{
+	if (ImGui::CollapsingHeader("Text", ImGuiTreeNodeFlags_DefaultOpen)) {
+		ImGui::Text("Text: "); ImGui::SameLine();
+		ImGui::Text(text.c_str());
+
+		ImGui::Spacing();
+
+		ImGui::InputInt("Font Size", &m_FontSize);
+	}
 }
 
 void Text::ConfigureSystems()
 {
-
 	m_Text->Load(m_FontPath + m_FontName, m_FontSize);
 }

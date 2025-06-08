@@ -20,6 +20,7 @@
 #include "RigidBody.h"
 
 #include "vGameObject.h"
+#include "Time.h"
 
 enum EditorMode {
 	EDITOR = 0,

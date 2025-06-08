@@ -17,7 +17,7 @@
 
 #include "VertexPrefs.h"
 #include "VertexAccessExplorer.h"
-
+#include "Time.h"
 #define GL_SILENCE_DEPRECATION
 #pragma warning(disable : 4996);
 
@@ -145,12 +145,13 @@ void Application::StartUp()
 
 	m_Settings = new BootUpContainer();
 
-	m_ApplicationFramesPerSecond = 0;
+	/*m_ApplicationFramesPerSecond = 0;
 	m_frames = 0;
-	m_deltaTime = 0;
+	m_UnScaledDelta = 0;
 	m_fpsInterval = 0;
-	m_prevTime = (float)glfwGetTime();
+	m_prevTime = (float)glfwGetTime();*/
 
+	Time::PrepareDeltaCalculations();
 	FolderCreation();
 
 	m_TransitionScene = new VertexTransitions("Transitions");
@@ -240,37 +241,42 @@ void Application::Update()
 {
 	if (m_Mode == PLAY || m_Mode == EDITOR_PLAY) {
 
-		double currTime = (float)glfwGetTime();
-		m_deltaTime = currTime - m_prevTime;
-		m_prevTime = currTime;
+		//double currTime = (float)glfwGetTime();
+		//m_UnScaledDelta = currTime - m_prevTime;
+		//m_prevTime = currTime;
 
-		if (m_Mode == EDITOR_PLAY && Input::GetKeyDown(m_GameWindow, GLFW_KEY_ESCAPE))
-		{
-			m_Mode = EDITOR_PLAY;
-			Cursor::Show(m_GameWindow);
-		}
+		//if (m_Mode == EDITOR_PLAY && Input::GetKeyDown(m_GameWindow, GLFW_KEY_ESCAPE))
+		//{
+		//	m_Mode = EDITOR_PLAY;
+		//	Cursor::Show(m_GameWindow);
+		//}
 
-		// Calulate delta time
-		m_frames++;
-		m_fpsInterval += m_deltaTime;
-		if (m_fpsInterval >= 1.0f)
-		{
-			m_ApplicationFramesPerSecond = m_frames;
-			m_frames = 0;
-			m_fpsInterval -= 1.0f;
-		}
+		//// Calulate delta time
+		//m_frames++;
+		//m_fpsInterval += m_UnScaledDelta;
+		//if (m_fpsInterval >= 1.0f)
+		//{
+		//	m_ApplicationFramesPerSecond = m_frames;
+		//	m_frames = 0;
+		//	m_fpsInterval -= 1.0f;
+		//}
 
-		static float fixedDelta = 0.0f;
-		fixedDelta += m_deltaTime;
+		//static float fixedDelta = 0.0f;
+		//fixedDelta += m_UnScaledDelta * m_TimeScale;
+
+		//float unscaledDelta = m_UnScaledDelta;
+		//float deltaTime = m_UnScaledDelta * m_TimeScale;
+
+		Time::ConfigureDeltaTime();
 
 		if (m_FinishedSceneSetUpStage)
-			m_SceneManager->UpdateScenes(m_deltaTime); // Update regular loop
+			m_SceneManager->UpdateScenes(Time::GetDeltaTime()); // Update regular loop
 
-		while (fixedDelta >= m_TimeStep)
+		while (Time::GetFixedDeltaTime() >= Time::GetTimeStep())
 		{
-			m_SceneManager->UpdateFixedScenes(m_TimeStep); // Add timestep to Fixed & Late Update Loop.
-			m_SceneManager->GetCurrentScene()->GetAssets()->ConfigurePhysics(m_TimeStep);
-			fixedDelta -= m_TimeStep;
+			m_SceneManager->UpdateFixedScenes(Time::GetTimeStep()); // Add timestep to Fixed & Late Update Loop.
+			m_SceneManager->GetCurrentScene()->GetAssets()->ConfigurePhysics(Time::GetTimeStep());
+			Time::ResetFixedDelta();
 		}
 
 		m_SceneManager->GetCurrentScene()->GetAssets()->ConfigureSystems(); // Update asset managers systems
@@ -331,23 +337,7 @@ void Application::RenderAll()
 
 	if (m_Mode == EDITOR && !m_EditorFullScreen || m_Mode == EDITOR_PLAY && !m_EditorFullScreen || m_Mode == EDITOR_PAUSED && !m_EditorFullScreen)
 	{
-
 		m_VertexEditor->RenderEditorDisplays();
-
-		/*switch (m_WindowMode)
-		{
-		case Main:
-			EditorMain();
-			break;
-
-		case Animation:
-			EditorAnimation();
-			break;
-
-		case HudEditor:
-			EditorHud();
-			break;
-		}*/
 	}
 
 	glfwSwapBuffers(m_GameWindow);
@@ -369,38 +359,6 @@ void Application::SceneSetUp()
 
 	m_Scene->GiveWindow(m_GameWindow);
 	m_SceneManager->AddScene(m_Scene);
-}
-
-/// <summary>
-///  Updates the interface for the editor.
-/// </summary>
-void Application::UpdateEditorMode()
-{
-	if (m_Mode == EDITOR)
-	{
-		ImGuiStyle* style = &ImGui::GetStyle();
-		style->Colors[ImGuiCol_WindowBg] = ImVec4(EDITOR_BACKGROUND);
-		style->Colors[ImGuiCol_MenuBarBg] = ImVec4(EDITOR_MENU);
-		style->Colors[ImGuiCol_TitleBg] = ImVec4(EDITOR_TABS);
-
-		style->Colors[ImGuiCol_TitleBgActive] = ImVec4(EDITOR_TABS_SELECT);
-		style->Colors[ImGuiCol_Tab] = ImVec4(EDITOR_TABS_SELECT);
-		style->Colors[ImGuiCol_Button] = ImVec4(EDITOR_MENU);
-		style->Colors[ImGuiCol_ButtonHovered] = ImVec4(EDITOR_BUTTONS_SELECT);
-
-	}
-	else if (m_Mode == EDITOR_PLAY)
-	{
-		ImGuiStyle* style1 = &ImGui::GetStyle();
-		style1->Colors[ImGuiCol_WindowBg] = ImVec4(PLAY_MODE_COLOUR);
-		style1->Colors[ImGuiCol_MenuBarBg] = ImVec4(PLAY_MODE_COLOUR);
-		style1->Colors[ImGuiCol_TitleBg] = ImVec4(PLAY_MODE_COLOUR);
-
-		style1->Colors[ImGuiCol_TitleBgActive] = ImVec4(PLAY_MODE_COLOUR);
-		style1->Colors[ImGuiCol_Tab] = ImVec4(PLAY_MODE_COLOUR);
-		style1->Colors[ImGuiCol_Button] = ImVec4(PLAY_MODE_COLOUR);
-		style1->Colors[ImGuiCol_ButtonHovered] = ImVec4(PLAY_MODE_COLOUR);
-	}
 }
 
 void Application::ShutDown()

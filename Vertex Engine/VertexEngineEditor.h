@@ -53,9 +53,8 @@ private:
 	void RenderEditorDesk(); // Desk
 
 	void RenderGameCommandConsole();
-	void RenderGameObjectNodes(GameObject* _obj, GameObject*& selection);
+	void RenderGameObjectNodes(Transform* _obj, GameObject*& selection);
 
-	bool IsChildOf(GameObject* _parent, GameObject* _child);
 	float m_DeskPanelItemMultiplier = 0.4f;
 	void RenderDockingTaskBar();
 	SceneManager* m_ApplicationCentralSceneManager;
