@@ -192,8 +192,6 @@
     <ClCompile Include="glad.c" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Material.cpp" />
-    <ClCompile Include="NavAgent.cpp" />
-    <ClCompile Include="NavigationGrid.cpp" />
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="PhysicsScene.cpp" />
     <ClCompile Include="PlayerController.cpp" />
@@ -270,8 +268,6 @@
     <ClInclude Include="khrplatform.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mime.h" />
-    <ClInclude Include="NavAgent.h" />
-    <ClInclude Include="NavigationGrid.h" />
     <ClInclude Include="Particle.h" />
     <ClInclude Include="PhysicsScene.h" />
     <ClInclude Include="PlayerController.h" />

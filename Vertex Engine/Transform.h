@@ -2,34 +2,24 @@
 #include "glm.hpp"
 #include <vector>
 #include "VertexComponent.h"
+#include "gtx/quaternion.hpp"
 class Transform : public VertexComponent {
 
 public:
-	glm::vec2 position;
-	glm::vec2 pivot;
+	glm::vec3 position;
+	glm::vec3 pivot;
 
-	glm::vec2 PreviousPosition;
-
-	// Local
-	glm::vec2 localPosition;
+	glm::vec3 scale;
 	
-	glm::vec2 size;
-	float scale = 1.0f;
-	float localScale = 0.5f;
-	
-	float rotation;
-	float localRotation;
+	glm::quat rotation;
 
 	void SetSize(float x, float y);
-	glm::vec2 GetSize() {return size;}
+	glm::vec2 GetSize() {return scale;}
 
 	void Reset();
 
 	glm::vec2 GetCenter();
 	float GetSizeFromCentre(glm::vec2 _axis);
-
-	void ClearTransforms() { position = glm::vec2(0, 0); rotation = 0.0f; pivot = glm::vec2(0, 0); }
-	void ApplyTransform() { position += pivot; pivot = glm::vec2(0, 0); } // Test feature.
 
 	void ApplyMatrix(glm::mat4 _mat) { m_LocalModel = _mat; }
 
@@ -81,10 +71,11 @@ private:
 	Transform* m_Parent;
 	std::vector<Transform*> m_Children;
 
-	glm::vec2 m_LastPosition;
-	glm::vec2 m_LastSize;
-	float m_LastScale;
-	float m_LastRotation;
+	glm::vec3 m_EulerAngle;
+
+	glm::vec3 m_LastPosition;
+	glm::vec3 m_LastSize;
+	glm::quat m_LastRotation;
 
 	bool m_IsDirty = false;
 	glm::mat4 m_LocalModel = glm::mat4(1.0f);

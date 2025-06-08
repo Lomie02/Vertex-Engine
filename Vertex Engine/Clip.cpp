@@ -18,7 +18,7 @@ void Clip::ClearClip()
 void Clip::AddKeyframe(Transform* _frame)
 {
 	m_Frames.push_back(_frame->position);
-	m_FramesSizes.push_back(_frame->size);
+	m_FramesSizes.push_back(_frame->scale);
 	m_FramesRotations.push_back(_frame->rotation);
 }
 
@@ -39,12 +39,12 @@ int Clip::Length()
 	return m_ClipLength;
 }
 
-glm::vec2 Clip::GetFrame(int _index)
+glm::vec3 Clip::GetFrame(int _index)
 {
 	return m_Frames.at(_index);
 }
 
-glm::vec2 Clip::GetFrameSize(int _index)
+glm::vec3 Clip::GetFrameSize(int _index)
 {
 	return m_FramesSizes.at(_index);
 }
@@ -56,7 +56,7 @@ glm::vec4 Clip::GetFrameColour(int _index)
 
 float Clip::GetFrameRot(int _index)
 {
-	return m_FramesRotations.at(_index);
+	return 0.0f;
 }
 
 void Clip::PLaySpeed(float _speed)

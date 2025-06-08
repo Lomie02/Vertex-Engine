@@ -15,14 +15,12 @@ GameObject::GameObject()
 	AddComponent<Transform>();
 	transform = GetComponenet<Transform>();
 
-	transform->localPosition.y = 0;
-	transform->localPosition.x = 0;
-
 	material = Material("Mat");
 	AddComponent<Material>(material);
 
-	transform->size.x = 5;
-	transform->size.y = 5;
+	transform->scale.x = 5;
+	transform->scale.y = 5;
+	transform->scale.z = 5;
 
 }
 
@@ -34,14 +32,12 @@ GameObject::GameObject(const char* _Name, bool active)
 	AddComponent<Transform>();
 	transform = GetComponenet<Transform>();
 
-	transform->localPosition.y = 0;
-	transform->localPosition.x = 0;
-
 	material = Material("Mat");
 	AddComponent<Material>(material);
 
-	transform->size.x = 5;
-	transform->size.y = 5;
+	transform->scale.x = 5;
+	transform->scale.y = 5;
+	transform->scale.z = 5;
 
 	m_Collider = new Collider();
 }
@@ -83,13 +79,12 @@ GameObject::GameObject(const char* _Name)
 	AddComponent<Transform>();
 	transform = GetComponenet<Transform>();
 
-	transform->localPosition.y = 0;
-	transform->localPosition.x = 0;
 
 	material = Material("Mat");
 	m_Collider = new Collider();
-	transform->size.x = 5;
-	transform->size.y = 5;
+	transform->scale.x = 5;
+	transform->scale.y = 5;
+	transform->scale.z = 5;
 
 }
 
@@ -109,7 +104,7 @@ void GameObject::ConfigureSystems()
 	}*/
 }
 
-void GameObject::InstanceMime(std::string _name, glm::vec2 _pos)
+void GameObject::InstanceMime(std::string _name, glm::vec3 _pos)
 {
 	m_Mimes.at(m_MimesAmount).Name = _name;
 	m_Mimes.at(m_MimesAmount).transform.position = _pos;
@@ -138,8 +133,8 @@ void GameObject::MaterialConfigure()
 {
 	if (material.m_KeepAspect)
 	{
-		transform->size.x = material.AlbedoMap.Width;
-		transform->size.y = material.AlbedoMap.Height;
+		transform->scale.x = material.AlbedoMap.Width;
+		transform->scale.y = material.AlbedoMap.Height;
 	}
 }
 

@@ -37,13 +37,11 @@ public:
 	std::string Tag = "Untagged";
 	int layer;
 
-	void InstanceMime(std::string _name, glm::vec2 _pos);
+	void InstanceMime(std::string _name, glm::vec3 _pos);
 	MimeProfile InstanceEditMime(std::string _name);
 	std::vector<MimeProfile> GetMimes() { return m_Mimes; }
 
 	int GetActiveMimesSize() { return m_MimesAmount; }
-	glm::vec2 GetVelocity() { return m_Velocity; }
-	void SetVelocity(glm::vec2 _vel) { m_Velocity += _vel; }
 
 	template<typename T>
 	std::vector<T*> FindComponentsOfType() {

@@ -241,10 +241,6 @@ void AssetManager::Register(Volume& _text)
 /// Register NavAgents
 /// </summary>
 /// <param name="_nav"></param>
-void AssetManager::Register(NavAgent* _nav)
-{
-	m_NavList.push_back(_nav);
-}
 
 /// <summary>
 /// Changes the camera used for rendering if more than one exists.
@@ -282,7 +278,7 @@ GameObject* AssetManager::RegisterGameObjectNew(GameObject* _parent, GameObject*
 {
 	GameObject* temp = new GameObject("GameObject");
 	temp->material.AlbedoMap = ResourceManager::GetTexture("Girl_01");
-	temp->transform->size.x = 5;
+	temp->transform->scale.x = 5;
 
 	if (_parent) {
 		temp->transform->SetParent(_parent->transform);
@@ -301,7 +297,7 @@ GameObject* AssetManager::RegisterGameObjectNew(GameObject* _parent, GameObject*
 	}
 
 	temp->material.surface = Opaque;
-	temp->transform->size.y = 5;
+	temp->transform->scale.y = 5;
 	Register(temp);
 
 	return temp;
@@ -438,17 +434,6 @@ void AssetManager::TensionLayerSort()
 		}
 	}
 
-	for (int i = 0; i < m_NavList.size(); i++)
-	{
-		if (m_NavList.at(i)->material.surface == Opaque) {
-			m_Opaque.push_back(m_NavList.at(i));
-		}
-		else if (m_NavList.at(i)->material.surface == Transparent) {
-
-			m_Transparent.push_back(m_NavList.at(i));
-		}
-	}
-
 	if (TENSION_TRANSPARENT_LAYER_SORTING) {
 
 		// Local vars are here so the compilier doesnt cry
@@ -509,25 +494,6 @@ void AssetManager::Vertex2dRendering(Vertex2D* render)
 		}
 	}
 
-	if (!IsAllowedToRender || !MainCamera) return;
-
-	if (m_Objects.size() > 0)
-	{
-		for (int i = 0; i < m_Objects.size(); i++)
-		{
-			float WithinDistance = glm::distance(m_Objects.at(i)->transform->position, MainCamera->transform->position);
-
-			if (m_Objects.at(i)->m_Active == true && WithinDistance < CAMERA_DISTANCE_RENDER_LIMIT)
-			{
-				render->DrawSprite(m_Objects.at(i)->material, m_Objects.at(i)->transform->position, m_Objects.at(i)->transform->size, m_Objects.at(i)->transform->rotation, m_Objects.at(i)->transform->scale, m_Cameras.at(m_ActiveCamera)->GetProjection());
-				MainCamera->ConfigureSystems();
-				m_Objects.at(i)->ConfigureSystems();
-			}
-		}
-	}
-
-	delete MainCamera;
-	MainCamera = nullptr;
 }
 
 void AssetManager::ConfigVioletSystems()
@@ -743,9 +709,7 @@ void AssetManager::BeginColourPickEditor(Vertex2D* m_Renderer)
 	{
 		if (m_Opaque.at(i)->GetActive())
 		{
-			m_Renderer->VertexEngineColourPickRender(m_Opaque.at(i), m_Opaque.at(i)->material, m_Opaque.at(i)->transform->position,
-				m_Opaque.at(i)->transform->size, m_Opaque.at(i)->transform->rotation, m_Opaque.at(i)->transform->scale,
-				m_EditorCamera->GetComponenet<Camera>()->GetProjection(), m_Opaque.at(i)->layer);
+			m_Renderer->VertexEngineColourPickRender(m_Opaque.at(i),m_EditorCamera->GetComponenet<Camera>()->GetProjection());
 		}
 	}
 
@@ -753,9 +717,7 @@ void AssetManager::BeginColourPickEditor(Vertex2D* m_Renderer)
 	{
 		if (m_Transparent.at(i)->GetActive()) {
 
-			m_Renderer->VertexEngineColourPickRender(m_Transparent.at(i), m_Transparent.at(i)->material, m_Transparent.at(i)->transform->position,
-				m_Transparent.at(i)->transform->size, m_Transparent.at(i)->transform->rotation, m_Transparent.at(i)->transform->scale,
-				m_EditorCamera->GetComponenet<Camera>()->GetProjection(), m_Transparent.at(i)->layer);
+			m_Renderer->VertexEngineColourPickRender(m_Transparent.at(i), m_EditorCamera->GetComponenet<Camera>()->GetProjection());
 
 		}
 	}

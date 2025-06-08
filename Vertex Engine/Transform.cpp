@@ -5,28 +5,25 @@
 
 void Transform::SetSize(float x, float y)
 {
-	size.x = x * scale;
-	size.y = y * scale;
+	scale.x = x;
+	scale.y = y;
 }
 
 void Transform::Reset()
 {
 	position.x = 0;
 	position.y = 0;
+	position.z = 0;
 
-	rotation = 0;
-	size.x = 100 * scale;
-	size.y = -100 * scale;
-
-	scale = 0.5f;
+	rotation = glm::quat(glm::vec3(0,0,0));
 }
 
 glm::vec2 Transform::GetCenter()
 {
 	glm::vec2 Centre{};
 
-	Centre.x = position.x - size.x / 2;
-	Centre.y = position.y + size.y / 2;
+	Centre.x = position.x - scale.x / 2;
+	Centre.y = position.y + scale.y / 2;
 
 	return Centre;
 }
@@ -35,11 +32,11 @@ float Transform::GetSizeFromCentre(glm::vec2 _axis)
 {
 	if (_axis.x == 1)
 	{
-		return size.x / 2;
+		return scale.x / 2;
 	}
 	else if (_axis.y == 1) {
 
-		return size.y / 2;
+		return scale.y / 2;
 	}
 
 	return 0.0f;
@@ -81,16 +78,37 @@ void Transform::RenderEditorDisplay()
 		ImGui::InputFloat("##Position Y Axis", &this->position.y);
 		ImGui::PopStyleColor(2);
 
+		ImGui::SameLine();
+		ImGui::Button("Z");
+		ImGui::SameLine();
+		ImGui::SetNextItemWidth(50.0f);
+		ImGui::InputFloat("##Position Z Axis", &this->position.z);
+
 		ImGui::Text("Scale");
 		ImGui::SameLine();
-		ImGui::InputFloat("##Scale", &this->scale);
-
-		ImGui::Text("Size");
-		ImGui::InputFloat("##sizeX", &this->size.x);
-		ImGui::InputFloat("##sizeY", &this->size.y);
+		ImGui::InputFloat("##ScaleX", &this->scale.x);
+		ImGui::InputFloat("##ScaleY", &this->scale.y);
+		ImGui::InputFloat("##ScaleZ", &this->scale.z);
 
 		ImGui::Text("Rotation");
-		ImGui::InputFloat("##rot", &this->rotation);
+
+		ImGui::Button("X");
+		ImGui::SameLine();
+		ImGui::SetNextItemWidth(50.0f);
+		ImGui::InputFloat("##rotX", &this->m_EulerAngle.x);
+
+		ImGui::Button("Y");
+		ImGui::SameLine();
+		ImGui::SetNextItemWidth(50.0f);
+		ImGui::InputFloat("##rotY", &this->m_EulerAngle.y);
+
+		ImGui::Button("Z");
+		ImGui::SameLine();
+		ImGui::SetNextItemWidth(50.0f);
+		ImGui::InputFloat("##rotZ", &this->m_EulerAngle.z);
+
+		rotation = glm::quat(glm::radians(m_EulerAngle));
+
 	}
 	ImGui::PopStyleColor(2);
 }
@@ -176,14 +194,13 @@ void Transform::LateUpdate(float delta)
 
 bool Transform::HasChanged()
 {
-	if (m_LastPosition.x != position.x || m_LastPosition.y != position.y ||
-		m_LastRotation != rotation || m_LastScale != scale ||
-		m_LastSize.x != size.x || m_LastSize.y != size.y)
+	if (m_LastPosition.x != position.x || m_LastPosition.y != position.y || m_LastPosition.z != position.z ||
+		m_LastRotation.x != rotation.x || m_LastRotation.y != rotation.y || m_LastRotation.z != rotation.z ||
+		m_LastSize.x != scale.x || m_LastSize.y != scale.y || m_LastSize.z != scale.z)
 	{
 		m_LastPosition = position;
 		m_LastRotation = rotation;
-		m_LastScale = scale;
-		m_LastSize = size;
+		m_LastSize = scale;
 
 		m_IsDirty = true;
 		return true;
@@ -199,38 +216,16 @@ void Transform::ValidateDirtyTransforms(bool _forceValidate)
 		if (!m_IsDirty) return;
 	}
 
-	glm::vec2 ImageOffset;
-	glm::vec2 pos = position;
-
-	ImageOffset.x = size.x / 2;
-	ImageOffset.y = size.y / 2;
-
-	pos.x -= ImageOffset.x;
-	pos.y += ImageOffset.y;
-
-	glm::vec2 GeneralPivot;
-	Transform ParentsTransform;
-
 	//========================================================
 
+	glm::mat4 trans = glm::translate(glm::mat4(1.0f), position); // position
+	glm::mat4 rot = glm::toMat4(rotation); // Rotation
+	glm::mat4 Scale = glm::scale(glm::mat4(1.0f), scale); // Scale
 
-	//========================================================
-	GeneralPivot = pos + pivot;
-
-	glm::mat4 model = glm::mat4(1.0f);
-
-	model = glm::translate(model, glm::vec3(GeneralPivot, (float)m_RenderLayer)); // position
-
-	model = glm::translate(model, glm::vec3(0.5f * size.x, 0.5f * -size.y, 0.0f)); // Position
-	model = glm::rotate(model, glm::radians(rotation), glm::vec3(0.0f, 0.0f, 1.0f)); // Rotation
-	model = glm::translate(model, glm::vec3(-0.5f * size.x, -0.5f * -size.y, 0.0f));
-
-	model = glm::scale(model, glm::vec3(size.x * scale, size.y * scale, 1.0f));
-
-	m_LocalModel = model;
+	m_LocalModel = trans * rot * Scale;
 
 	if (m_Parent) {
-		m_Parent->ValidateDirtyTransforms();
+		//m_Parent->ValidateDirtyTransforms();
 		m_WorldMatrix = m_Parent->GetWorldModelMat() * m_LocalModel;
 	}
 	else {

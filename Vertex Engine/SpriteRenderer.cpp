@@ -11,8 +11,8 @@ SpriteRenderer::SpriteRenderer()
 
 	// PPU pass
 	if (partner2d) {
-		partner2d->transform->size.x = Sprite.Width / 60;
-		partner2d->transform->size.y = Sprite.Height / 60;
+		partner2d->transform->scale.x = Sprite.Width / 60.0f;
+		partner2d->transform->scale.y = Sprite.Height / 60.0f;
 	}
 }
 

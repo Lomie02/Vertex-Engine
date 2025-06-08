@@ -6,6 +6,7 @@ out vec2 TexCoords;
 
 uniform mat4 model;
 uniform mat4 pro;
+uniform mat4 view;
 out vec3 _worldNormals;
 
 void main()

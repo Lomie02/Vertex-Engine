@@ -56,8 +56,8 @@ void VertexTransitions::Awake()
 
 	m_Manager->Register(m_TransitionObject);
 
-	m_TransitionObject->transform->size.x = 1920;
-	m_TransitionObject->transform->size.y = 1080;
+	m_TransitionObject->transform->scale.x = 1920;
+	m_TransitionObject->transform->scale.y = 1080;
 
 	m_CamComp->zoom = 100.0f;
 }

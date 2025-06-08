@@ -311,8 +311,8 @@ void Vertex2D::TensionSprite(Sprite* _sprite, glm::mat4 _pro) //TODO May redo th
 	// Pivots & Transform calulations,=.
 	glm::vec2 ImageOffset;
 
-	ImageOffset.x = _sprite->transform.size.x / 2;
-	ImageOffset.y = _sprite->transform.size.y / 2;
+	ImageOffset.x = _sprite->transform.scale.x / 2;
+	ImageOffset.y = _sprite->transform.scale.y / 2;
 
 	//TODO: Offset causes sprites position to change.
 
@@ -326,17 +326,9 @@ void Vertex2D::TensionSprite(Sprite* _sprite, glm::mat4 _pro) //TODO May redo th
 
 	//========================================== Main Render calulations for transforms.
 
-	model = glm::translate(model, glm::vec3(_sprite->transform.position, 0)); // position
-
-	model = glm::translate(model, glm::vec3(0.5f * _sprite->transform.size.x, 0.5f * -_sprite->transform.size.y, 0.0f)); // Position
-	model = glm::rotate(model, glm::radians(_sprite->transform.rotation), glm::vec3(0.0f, 0.0f, 1.0f)); // Rotation
-	model = glm::translate(model, glm::vec3(-0.5f * _sprite->transform.size.x, -0.5f * -_sprite->transform.size.y, 0.0f));
-
-	model = glm::scale(model, glm::vec3(_sprite->transform.size.x * _sprite->transform.scale, -_sprite->transform.size.y * _sprite->transform.scale, 1.0f));
 	this->m_Shader.SetVector3f("lights", glm::vec3(1.0, 1.0, 1.0));
 	this->m_Shader.SetInteger("NoTexture", 0);
 
-	this->m_Shader.SetMatrix4("model", model);
 	this->m_Shader.SetMatrix4("pro", _pro);
 	this->m_Shader.SetVector4f("Colour", _sprite->material.colour);
 
@@ -399,7 +391,7 @@ void Vertex2D::TensionInterfaceDraw(GameObject* _element, bool _IsColourPick) //
 	PrepareRender();
 }
 
-void Vertex2D::VertexEngineColourPickRender(GameObject* _object, Material& material, glm::vec2 position, glm::vec2 size, float rotate, float scale, glm::mat4 per, int _RenderLayer)
+void Vertex2D::VertexEngineColourPickRender(GameObject* _object, glm::mat4 per)
 {
 	glDisable(GL_BLEND);
 	glDisable(GL_DEPTH_TEST);
@@ -416,10 +408,10 @@ void Vertex2D::VertexEngineColourPickRender(GameObject* _object, Material& mater
 	this->m_Shader.SetInteger("picking", 1);
 	this->m_Shader.SetMatrix4("pro", per);
 	this->m_Shader.SetVector4f("idColour", colour);
-	this->m_Shader.SetVector4f("Colour", material.colour);
+	this->m_Shader.SetVector4f("Colour", _object->material.colour);
 
 	glActiveTexture(GL_TEXTURE0);
-	material.AlbedoMap.Bind();
+	_object->material.AlbedoMap.Bind();
 
 	glBindVertexArray(this->m_quadVAO);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);

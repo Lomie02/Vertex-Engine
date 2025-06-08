@@ -183,12 +183,6 @@
     <ClCompile Include="Volume.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="NavigationGrid.cpp">
-      <Filter>AI</Filter>
-    </ClCompile>
-    <ClCompile Include="NavAgent.cpp">
-      <Filter>AI</Filter>
-    </ClCompile>
     <ClCompile Include="Particle.cpp">
       <Filter>Components</Filter>
     </ClCompile>
@@ -427,12 +421,6 @@
     </ClInclude>
     <ClInclude Include="Random.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="NavigationGrid.h">
-      <Filter>AI</Filter>
-    </ClInclude>
-    <ClInclude Include="NavAgent.h">
-      <Filter>AI</Filter>
     </ClInclude>
     <ClInclude Include="VertexAccessExplorer.h">
       <Filter>Header Files</Filter>

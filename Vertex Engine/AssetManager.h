@@ -13,7 +13,6 @@
 #include "VertexGeneral.h"
 #include <irrKlang.h>
 #include "Mime.h"
-#include "NavAgent.h"
 #include "irrKlang-64bit-1.6.0/include/irrKlang.h"
 #include "Canvas.h"
 #include "glm.hpp"
@@ -77,7 +76,6 @@ public:
 	void Register(Camera* camera); // Cameras
 	void Register(Text* _text); // Text objects
 	void Register(Volume& _text); // Volumes Post Processing
-	void Register(NavAgent* _nav); // AI 
 	void Register(AudioSource* _audio); // Audio
 	void Register(Canvas* _canvas); // Register Canvas
 
@@ -178,7 +176,6 @@ private:
 
 	std::vector<VertexComponent*> m_VertexComponentsList;
 	std::vector<GameObject*> m_TransParentList;
-	std::vector<NavAgent*> m_NavList;
 	EditorMode m_OperatingMode;
 
 	char m_ScenesName[30] = "s";
