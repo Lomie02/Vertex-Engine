@@ -39,8 +39,7 @@ void Vertex2D::DrawSprite(Material& material, glm::vec2 position, glm::vec2 size
 	material.AlbedoMap.Bind();
 
 	glBindVertexArray(this->m_quadVAO);
-	glDrawArrays(GL_TRIANGLES, 0, 6);
-	glBindVertexArray(0);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_BLEND);
@@ -89,8 +88,7 @@ void Vertex2D::DrawSprite(GameObject* _object, Material& material, glm::vec3 pos
 	material.AlbedoMap.Bind();
 
 	glBindVertexArray(this->m_quadVAO);
-	glDrawArrays(GL_TRIANGLES, 0, 6);
-	glBindVertexArray(0);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 	//glDisable(GL_DEPTH_TEST);
 	glDisable(GL_BLEND);
@@ -157,8 +155,7 @@ void Vertex2D::TensionDraw(GameObject* _object, Material& material, glm::vec2 po
 	material.AlbedoMap.Bind();
 
 	glBindVertexArray(this->m_quadVAO);
-	glDrawArrays(GL_TRIANGLES, 0, 6);
-	glBindVertexArray(0);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 	if (USE_DEPTH_TESTING) {
 		glDisable(GL_DEPTH_TEST);
@@ -198,8 +195,7 @@ void Vertex2D::TensionTransparencyPass(std::vector<GameObject*> _list, glm::mat4
 		_list.at(i)->material.AlbedoMap.Bind();
 
 		glBindVertexArray(this->m_quadVAO);
-		glDrawArrays(GL_TRIANGLES, 0, 6);
-		glBindVertexArray(0);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 		glDisable(GL_DEPTH_TEST);
 		glDisable(GL_BLEND);
@@ -292,9 +288,7 @@ void Vertex2D::TensionSprite(Sprite* _sprite, glm::mat4 _pro) //TODO May redo th
 	glActiveTexture(GL_TEXTURE0);
 	_sprite->material.AlbedoMap.Bind();
 
-	glBindVertexArray(this->m_quadVAO);
-	glDrawArrays(GL_TRIANGLES, 0, 6);
-	glBindVertexArray(0);
+	PrepareRender();
 
 	if (USE_DEPTH_TESTING) {
 		glDisable(GL_DEPTH_TEST);
@@ -347,9 +341,7 @@ void Vertex2D::TensionInterfaceDraw(GameObject* _element, bool _IsColourPick) //
 	glActiveTexture(GL_TEXTURE0);
 	_element->material.AlbedoMap.Bind();
 
-	glBindVertexArray(this->m_quadVAO);
-	glDrawArrays(GL_TRIANGLES, 0, 6);
-	glBindVertexArray(0);
+	PrepareRender();
 }
 
 void Vertex2D::VertexEngineColourPickRender(GameObject* _object, Material& material, glm::vec2 position, glm::vec2 size, float rotate, float scale, glm::mat4 per, int _RenderLayer)
@@ -375,8 +367,15 @@ void Vertex2D::VertexEngineColourPickRender(GameObject* _object, Material& mater
 	material.AlbedoMap.Bind();
 
 	glBindVertexArray(this->m_quadVAO);
-	glDrawArrays(GL_TRIANGLES, 0, 6);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
+
+}
+
+void Vertex2D::PrepareRender()
+{
+	glBindVertexArray(this->m_quadVAO);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
 
 void Vertex2D::DrawLine(glm::vec2 _start, glm::vec2 _end, Material& _mat)
@@ -393,43 +392,66 @@ void Vertex2D::DrawLine(glm::vec2 _start, glm::vec2 _end, Material& _mat)
 void Vertex2D::SetUpData()
 {
 	unsigned int VBO;
+	unsigned int EBO;
 
-	m_Vertices.push_back(glm::vec2(0.0f, 1.0f));
-	m_Vertices.push_back(glm::vec2(0.0f, 1.0f));
+	//m_Vertices.push_back(glm::vec2(0.0f, 1.0f));
+	//m_Vertices.push_back(glm::vec2(0.0f, 1.0f));
 
-	m_Vertices.push_back(glm::vec2(1.0f, 0.0f));
-	m_Vertices.push_back(glm::vec2(1.0f, 0.0f));
+	//m_Vertices.push_back(glm::vec2(1.0f, 0.0f));
+	//m_Vertices.push_back(glm::vec2(1.0f, 0.0f));
 
-	m_Vertices.push_back(glm::vec2(0.0f, 0.0f));
-	m_Vertices.push_back(glm::vec2(0.0f, 0.0f));
+	//m_Vertices.push_back(glm::vec2(0.0f, 0.0f));
+	//m_Vertices.push_back(glm::vec2(0.0f, 0.0f));
 
-	m_Vertices.push_back(glm::vec2(0.0f, 1.0f));
-	m_Vertices.push_back(glm::vec2(0.0f, 1.0f));
+	//m_Vertices.push_back(glm::vec2(0.0f, 1.0f));
+	//m_Vertices.push_back(glm::vec2(0.0f, 1.0f));
 
-	m_Vertices.push_back(glm::vec2(1.0f, 1.0f));
-	m_Vertices.push_back(glm::vec2(1.0f, 1.0f));
+	//m_Vertices.push_back(glm::vec2(1.0f, 1.0f));
+	//m_Vertices.push_back(glm::vec2(1.0f, 1.0f));
 
-	m_Vertices.push_back(glm::vec2(1.0f, 0.0f));
-	m_Vertices.push_back(glm::vec2(1.0f, 0.0f));
+	//m_Vertices.push_back(glm::vec2(1.0f, 0.0f));
+	//m_Vertices.push_back(glm::vec2(1.0f, 0.0f));
 
-	float vertices[24];
-	int m_CurrentVertice = 0;
-	for (int i = 0; i < 24; i += 2)
-	{
-		vertices[i] = m_Vertices.at(m_CurrentVertice).x;
-		vertices[i + 1] = m_Vertices.at(m_CurrentVertice).y;
-		m_CurrentVertice++;
-	}
+	//float vertices[24];
+	float vertices3D[] = {
+		-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+		0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+		0.5f, 0.5f, 0.0f, 1.0f, 1.0f,
+		-0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
+
+	};
+
+	unsigned int indices[] = {
+		0,1,2,2,3,0
+	};
+
+	//int m_CurrentVertice = 0;
+	//for (int i = 0; i < 24; i += 2)
+	//{
+	//	vertices[i] = m_Vertices.at(m_CurrentVertice).x;
+	//	vertices[i + 1] = m_Vertices.at(m_CurrentVertice).y;
+	//	m_CurrentVertice++;
+	//}
 
 	glGenVertexArrays(1, &this->m_quadVAO);
 	glGenBuffers(1, &VBO);
+	glGenBuffers(1, &EBO);
+
+	glBindVertexArray(m_quadVAO);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices3D), vertices3D, GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
 	glBindVertexArray(this->m_quadVAO);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 }

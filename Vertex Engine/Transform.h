@@ -31,6 +31,8 @@ public:
 	void ClearTransforms() { position = glm::vec2(0, 0); rotation = 0.0f; pivot = glm::vec2(0, 0); }
 	void ApplyTransform() { position += pivot; pivot = glm::vec2(0, 0); } // Test feature.
 
+	void ApplyMatrix(glm::mat4 _mat) { m_LocalModel = _mat; }
+
 	void SetLayer(int _layer) { m_RenderLayer = _layer; }
 
 	//==================================== New Transform Data

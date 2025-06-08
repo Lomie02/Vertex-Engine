@@ -3,6 +3,7 @@
 #include <cstdint>
 
 #include "RectTransform.h"
+#include "SpriteRenderer.h"
 
 void VertexEngineEditor::CreateEditorLayout(GLFWwindow* _GameWindow, SceneManager* _scenesManager)
 {
@@ -210,11 +211,16 @@ void VertexEngineEditor::RenderEditorSceneView()
 			0,0,0,1
 		};
 
+
 		glm::mat4 mod = m_SelectedGameObject->transform->GetWorldModelMat();
 
 		ImGuizmo::Manipulate(glm::value_ptr(cameraCache->GetViewMatrix()),
 			glm::value_ptr(cameraCache->GetProjection()),
 			ImGuizmo::TRANSLATE, ImGuizmo::LOCAL, glm::value_ptr(mod));
+
+		if (ImGuizmo::IsUsing()) {
+			m_SelectedGameObject->transform->ApplyMatrix(mod);
+		}
 
 	}
 	ImGui::End();
@@ -307,6 +313,13 @@ void VertexEngineEditor::RenderEditorInspector()
 				m_SelectedGameObject->AddComponent<Text>();
 			}
 
+			if (ImGui::MenuItem("Sprite Renderer")) {
+				if (m_SelectedGameObject->GetComponenet<SpriteRenderer>() == nullptr)
+					m_SelectedGameObject->AddComponent<SpriteRenderer>();
+
+				m_SelectedGameObject->AddComponent<Text>();
+			}
+
 			// Camera
 			if (ImGui::MenuItem("Camera")) {
 				if (m_SelectedGameObject->GetComponenet<Camera>() == nullptr)
@@ -350,6 +363,11 @@ void VertexEngineEditor::RenderEditorInheritList()
 		if (ImGui::MenuItem("Camera")) {
 			GameObject* temp = m_ApplicationCentralSceneManager->m_SceneList.at(m_ApplicationCentralSceneManager->GetActiveScene())->GetAssets()->RegisterGameObjectNew();
 			temp->AddComponent<Camera>();
+		}
+
+		if (ImGui::MenuItem("Sprite")) {
+			GameObject* temp = m_ApplicationCentralSceneManager->m_SceneList.at(m_ApplicationCentralSceneManager->GetActiveScene())->GetAssets()->RegisterGameObjectNew();
+			temp->AddComponent<SpriteRenderer>();
 		}
 
 		ImGui::EndPopup();
@@ -403,7 +421,7 @@ void VertexEngineEditor::RenderEditorDesk()
 
 		// Display Textures that the engine has registered
 
-		ImGui::ImageButton(name.c_str(), texture.ID, ImVec2(256 * m_DeskPanelItemMultiplier, 256 * m_DeskPanelItemMultiplier));
+		ImGui::ImageButton(name.c_str(), texture.ID, ImVec2(256 * m_DeskPanelItemMultiplier, 256 * m_DeskPanelItemMultiplier),ImVec2(0,1), ImVec2(1,0));
 
 		ImGui::SameLine(0.0f, padding);
 		xSpace += (256 * m_DeskPanelItemMultiplier) + padding;

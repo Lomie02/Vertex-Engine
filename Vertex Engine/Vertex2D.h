@@ -85,6 +85,8 @@ public:
 	glm::mat4 GetMatrixModel() { return m_ModelMatrix; }
 private:
 
+	void PrepareRender();
+
 	int m_CurrentDrawCallsInFrame = 0;
 	void CompletedDrawCall() { m_CurrentDrawCallsInFrame++; }
 
@@ -93,7 +95,7 @@ private:
 	std::vector<glm::vec2> m_Vertices;
 	Shader m_Shader;
 	Shader m_ParticleShader;
-	unsigned int m_quadVAO;
+	GLuint m_quadVAO;
 
 	void SetUpData();
 };
