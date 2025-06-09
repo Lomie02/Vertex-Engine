@@ -9,6 +9,7 @@ public:
 	SpriteRenderer();
 	Texture2D Sprite;
 	glm::vec4 Colour;
+	bool Transparent;
 
 	void RenderEditorDisplay() override;
 private:

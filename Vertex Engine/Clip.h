@@ -34,17 +34,17 @@ public:
 	void SetWrapMode(Wrapper _wrap) { m_WrapMode = _wrap; }
 	Wrapper GetWrapMode() { return m_WrapMode; }
 
-	glm::vec2 GetFrame(int _index);
-	glm::vec2 GetFrameSize(int _index);
+	glm::vec3 GetFrame(int _index);
+	glm::vec3 GetFrameSize(int _index);
 	glm::vec4 GetFrameColour(int _index);
 	float GetFrameRot(int _index);
 protected:
 
 	Wrapper m_WrapMode;
-	std::vector<glm::vec2> m_Frames;
-	std::vector<glm::vec2> m_FramesSizes;
+	std::vector<glm::vec3> m_Frames;
+	std::vector<glm::vec3> m_FramesSizes;
 	std::vector<glm::vec4> m_FramesColours;
-	std::vector<float> m_FramesRotations;
+	std::vector<glm::quat> m_FramesRotations;
 
 	float m_PlaySpeed = 1;
 	int m_ClipLength = 0;

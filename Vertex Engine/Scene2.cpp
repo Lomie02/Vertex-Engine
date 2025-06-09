@@ -108,10 +108,10 @@ void Scene2::Awake()
 	m_Sprite->material.m_KeepAspect = true;
 	m_Sprite->material.surface = Transparent;
 
-	m_Sprite->transform.position = glm::vec2(-18, -4);
+	m_Sprite->transform.position = glm::vec3(-18, -4, 0);
 
-	m_Sprite->transform.size.x = 5;
-	m_Sprite->transform.size.y = 5;
+	m_Sprite->transform.scale.x = 5;
+	m_Sprite->transform.scale.y = 5;
 	//======================================== Counter Text
 
 	//========================================
@@ -145,12 +145,12 @@ void Scene2::Awake()
 	m_Animation = new Animator();
 
 	m_Animation->SetMaster(m_Object2);
-	m_Object2->transform->position = glm::vec2(6, 0);
+	m_Object2->transform->position = glm::vec3(6, 0, 0);
 	m_Animation->AddKeyFrame();
-	m_Object2->transform->position = glm::vec2(1, 0);
+	m_Object2->transform->position = glm::vec3(1,0, 0);
 	m_Object2->material.colour.a = 0.1f;
 	m_Animation->AddKeyFrame();
-	m_Object2->transform->position = glm::vec2(6, 0);
+	m_Object2->transform->position = glm::vec3(6,0,0);
 	m_Object2->material.colour.a = 1.0f;
 	m_Animation->AddKeyFrame();
 
@@ -164,10 +164,10 @@ void Scene2::Awake()
 	m_BlockBody->material.AlbedoMap = ResourceManager::GetTexture("Egg");
 	m_BlockBody->material.AlbedoMap = ResourceManager::GetTexture("Egg");
 
-	m_Body->transform->position = glm::vec2(9, 0);
-	m_Decoy->transform->position = glm::vec2(2, 0);
+	m_Body->transform->position = glm::vec3(9,0, 0);
+	m_Decoy->transform->position = glm::vec3(2, 0,0);
 
-	m_BlockBody->transform->position = glm::vec2(6, -5);
+	m_BlockBody->transform->position = glm::vec3(6, -5, 0);
 
 	m_BlockBody->SetMass(0);
 	m_Body->SetMass(1);
@@ -176,7 +176,7 @@ void Scene2::Awake()
 	m_Decoy->transform->SetSize(2.0f, 2.0f);
 
 	m_Body->Init(new btBoxShape(btVector3(m_Body->transform->GetSize().x/ 2, m_Body->transform->GetSize().y / 2, 0.1f)), 1);
-	m_Decoy->Init(new btBoxShape(btVector3(m_Decoy->transform->GetSize().x * m_Decoy->transform->scale / 2, m_Decoy->transform->GetSize().y * m_Decoy->transform->scale / 2, 0.1f)), 1);
+	m_Decoy->Init(new btBoxShape(btVector3(m_Decoy->transform->GetSize().x * m_Decoy->transform->scale.z / 2, m_Decoy->transform->GetSize().y * m_Decoy->transform->scale.y / 2, 0.1f)), 1);
 	m_BlockBody->Init(new btBoxShape(btVector3(m_BlockBody->transform->GetSize().x / 2, m_BlockBody->transform->GetSize().y / 2, 0.1f)), 0);
 
 	m_Manager->Register(m_Body);
@@ -293,8 +293,8 @@ void Scene2::StartFlipbookSetUp()
 void Scene2::SetupButton()
 {
 
-	m_ButtonTest->transform->size.x = 10;
-	m_ButtonTest->transform->size.y = 3;
+	m_ButtonTest->transform->scale.x = 10;
+	m_ButtonTest->transform->scale.y = 3;
 
 	m_ButtonTest->transform->position.x = -5;
 	m_ButtonTest->SetOffset(glm::vec2(-1, 0.3f));

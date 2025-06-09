@@ -20,11 +20,11 @@ void Animator::SetMaster(GameObject* _master)
 void Animator::Play()
 {
 	if (!m_IsPlaying) {
-		m_IsPlaying = true;
+		/*m_IsPlaying = true;
 		m_Master->transform->position = m_AnimationClip.at(m_CurrentClip).GetFrame(0);
-		m_Master->transform->size = m_AnimationClip.at(m_CurrentClip).GetFrameSize(0);
+		m_Master->transform->scale = m_AnimationClip.at(m_CurrentClip).GetFrameSize(0);
 		m_Master->transform->rotation = m_AnimationClip.at(m_CurrentClip).GetFrameRot(0);
-		m_Master->material.colour = m_AnimationClip.at(m_CurrentClip).GetFrameColour(0);
+		m_Master->material.colour = m_AnimationClip.at(m_CurrentClip).GetFrameColour(0);*/
 	}
 }
 
@@ -37,12 +37,12 @@ void Animator::Stop()
 {
 	if (m_IsPlaying)
 	{
-		m_IsPlaying = false;
+		/*m_IsPlaying = false;
 		m_CurrentFrame = 0;
 		m_Master->transform->position = m_AnimationClip.at(m_CurrentClip).GetFrame(0);
-		m_Master->transform->size = m_AnimationClip.at(m_CurrentClip).GetFrameSize(0);
+		m_Master->transform->scale = m_AnimationClip.at(m_CurrentClip).GetFrameSize(0);
 		m_Master->transform->rotation = m_AnimationClip.at(m_CurrentClip).GetFrameRot(0);
-		m_Master->material.colour = m_AnimationClip.at(m_CurrentClip).GetFrameColour(0);
+		m_Master->material.colour = m_AnimationClip.at(m_CurrentClip).GetFrameColour(0);*/
 	}
 }
 
@@ -109,11 +109,11 @@ void Animator::Update(float delta)
 				m_CurrentFrame = 0;
 				if (m_Master->transform->GetParent() == nullptr)
 				{
-					m_Master->transform->position = m_AnimationClip.at(m_CurrentClip).GetFrame(0);
+					//m_Master->transform->position = m_AnimationClip.at(m_CurrentClip).GetFrame(0);
 				}
 				else
 				{
-					m_Master->transform->localPosition = m_AnimationClip.at(m_CurrentClip).GetFrame(0);
+					//m_Master->transform->localPosition = m_AnimationClip.at(m_CurrentClip).GetFrame(0);
 				}
 			}
 			else if (m_CurrentFrame >= m_AnimationClip.at(m_CurrentClip).Length() && m_AnimationClip.at(m_CurrentClip).GetWrapMode() == PingPong)
@@ -123,23 +123,23 @@ void Animator::Update(float delta)
 
 				if (m_Master->transform->GetParent() == nullptr)
 				{
-					m_Master->transform->position = m_AnimationClip.at(m_CurrentClip).GetFrame(m_AnimationClip.at(m_CurrentClip).Length() - 1);
+					//m_Master->transform->position = m_AnimationClip.at(m_CurrentClip).GetFrame(m_AnimationClip.at(m_CurrentClip).Length() - 1);
 				}
 				else
 				{
-					m_Master->transform->localPosition = m_AnimationClip.at(m_CurrentClip).GetFrame(m_AnimationClip.at(m_CurrentClip).Length() - 1);
+					//m_Master->transform->localPosition = m_AnimationClip.at(m_CurrentClip).GetFrame(m_AnimationClip.at(m_CurrentClip).Length() - 1);
 				}
 			}
 
 		}
 		else
 		{
-			if (m_CurrentFrame < m_AnimationClip.at(m_CurrentClip).Length() && !m_Reverse)
+			/*if (m_CurrentFrame < m_AnimationClip.at(m_CurrentClip).Length() && !m_Reverse)
 			{
 				if (m_Master->transform->GetParent() == nullptr)
 				{
 					m_Master->transform->position = glm::lerp(m_Master->transform->position, m_AnimationClip.at(m_CurrentClip).GetFrame(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * delta);
-					m_Master->transform->size = glm::lerp(m_Master->transform->size, m_AnimationClip.at(m_CurrentClip).GetFrameSize(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * delta);
+					m_Master->transform->scale = glm::lerp(m_Master->transform->scale, m_AnimationClip.at(m_CurrentClip).GetFrameSize(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * delta);
 					m_Master->transform->rotation = glm::lerp(m_Master->transform->rotation, m_AnimationClip.at(m_CurrentClip).GetFrameRot(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * delta);
 					m_Master->material.colour = glm::lerp(m_Master->material.colour, m_AnimationClip.at(m_CurrentClip).GetFrameColour(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * delta);
 					float distanceToFrame = glm::distance(m_Master->transform->position, m_AnimationClip.at(m_CurrentClip).GetFrame(m_CurrentFrame));
@@ -150,7 +150,7 @@ void Animator::Update(float delta)
 				}
 				else {
 					m_Master->transform->localPosition = glm::lerp(m_Master->transform->localPosition, m_AnimationClip.at(m_CurrentClip).GetFrame(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * delta);
-					m_Master->transform->size = glm::lerp(m_Master->transform->size, m_AnimationClip.at(m_CurrentClip).GetFrameSize(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * delta);
+					m_Master->transform->scale = glm::lerp(m_Master->transform->scale, m_AnimationClip.at(m_CurrentClip).GetFrameSize(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * delta);
 					m_Master->transform->rotation = glm::lerp(m_Master->transform->rotation, m_AnimationClip.at(m_CurrentClip).GetFrameRot(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * delta);
 					m_Master->material.colour = glm::lerp(m_Master->material.colour, m_AnimationClip.at(m_CurrentClip).GetFrameColour(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * delta);
 					float distanceToFrame = glm::distance(m_Master->transform->localPosition, m_AnimationClip.at(m_CurrentClip).GetFrame(m_CurrentFrame));
@@ -165,7 +165,7 @@ void Animator::Update(float delta)
 				if (m_Master->transform->GetParent() == nullptr)
 				{
 					m_Master->transform->position = glm::lerp(m_Master->transform->position, m_AnimationClip.at(m_CurrentClip).GetFrame(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * delta);
-					m_Master->transform->size = glm::lerp(m_Master->transform->size, m_AnimationClip.at(m_CurrentClip).GetFrameSize(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * delta);
+					m_Master->transform->scale = glm::lerp(m_Master->transform->scale, m_AnimationClip.at(m_CurrentClip).GetFrameSize(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * delta);
 					m_Master->transform->rotation = glm::lerp(m_Master->transform->rotation, m_AnimationClip.at(m_CurrentClip).GetFrameRot(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * delta);
 					m_Master->material.colour = glm::lerp(m_Master->material.colour, m_AnimationClip.at(m_CurrentClip).GetFrameColour(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * delta);
 					float distanceToFrame = glm::distance(m_Master->transform->position, m_AnimationClip.at(m_CurrentClip).GetFrame(m_CurrentFrame));
@@ -176,7 +176,7 @@ void Animator::Update(float delta)
 				}
 				else {
 					m_Master->transform->localPosition = glm::lerp(m_Master->transform->localPosition, m_AnimationClip.at(m_CurrentClip).GetFrame(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * delta);
-					m_Master->transform->size = glm::lerp(m_Master->transform->size, m_AnimationClip.at(m_CurrentClip).GetFrameSize(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * delta);
+					m_Master->transform->scale = glm::lerp(m_Master->transform->scale, m_AnimationClip.at(m_CurrentClip).GetFrameSize(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * delta);
 					m_Master->transform->rotation = glm::lerp(m_Master->transform->rotation, m_AnimationClip.at(m_CurrentClip).GetFrameRot(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * delta);
 					m_Master->material.colour = glm::lerp(m_Master->material.colour, m_AnimationClip.at(m_CurrentClip).GetFrameColour(m_CurrentFrame), m_AnimationClip.at(m_CurrentClip).GetPlaySpeed() * delta);
 					float distanceToFrame = glm::distance(m_Master->transform->localPosition, m_AnimationClip.at(m_CurrentClip).GetFrame(m_CurrentFrame));
@@ -185,7 +185,7 @@ void Animator::Update(float delta)
 						m_ReadyFrame = false;
 					}
 				}
-			}
+			}*/
 		}
 	}
 }

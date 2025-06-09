@@ -14,8 +14,6 @@
 #include "Volume.h"
 #include "Random.h"
 
-#include "NavAgent.h"
-#include "NavigationGrid.h"
 #include "AudioSource.h"
 #include "RigidBody.h"
 

@@ -12,8 +12,8 @@ void PhysicsScene::SyncGameObjectPositions(int _pass)
 
 			rotation.getEulerZYX(yaw, pitch, roll);
 
-			m_2dObjectsInWorld.at(i)->transform->position = glm::vec2(trans.getOrigin().x(), trans.getOrigin().y());;
-			m_2dObjectsInWorld.at(i)->transform->rotation = glm::degrees(yaw);
+			m_2dObjectsInWorld.at(i)->transform->position = glm::vec3(trans.getOrigin().x(), trans.getOrigin().y(), trans.getOrigin().z());
+			m_2dObjectsInWorld.at(i)->transform->rotation = glm::quat(glm::vec3(rotation.x(),rotation.y(), rotation.z()));
 
 		}
 	}

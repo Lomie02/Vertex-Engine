@@ -8,9 +8,9 @@
 
 struct Particle
 {
-	Particle() { m_Velocity = glm::vec2(0, 0); m_LifeTime = 0.0f; }
+	Particle() { m_Velocity = glm::vec3(0, 0, 0); m_LifeTime = 0.0f; }
 
-	glm::vec2 m_Velocity;
+	glm::vec3 m_Velocity;
 	float m_LifeTime;
 	Transform transform;
 	glm::vec4 material;
