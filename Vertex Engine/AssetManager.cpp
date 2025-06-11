@@ -277,7 +277,7 @@ void AssetManager::Register(vGameObject* _object)
 GameObject* AssetManager::RegisterGameObjectNew(GameObject* _parent, GameObject* _child)
 {
 	GameObject* temp = new GameObject("GameObject");
-	temp->material.AlbedoMap = ResourceManager::GetTexture("Girl_01");
+	temp->material.AlbedoMap = ResourceManager::GetTexture("UI_Button"); // Remove once materials are component only.
 	temp->transform->scale.x = 5;
 
 	if (_parent) {

@@ -18,6 +18,13 @@ void Transform::Reset()
 	rotation = glm::quat(glm::vec3(0,0,0));
 }
 
+void Transform::Scale(float _factor)
+{
+	m_LocalScaleFactor = _factor;
+	m_IsDirty = true;
+	ValidateDirtyTransforms();
+}
+
 glm::vec2 Transform::GetCenter()
 {
 	glm::vec2 Centre{};
@@ -89,6 +96,12 @@ void Transform::RenderEditorDisplay()
 		ImGui::InputFloat("##ScaleX", &this->scale.x);
 		ImGui::InputFloat("##ScaleY", &this->scale.y);
 		ImGui::InputFloat("##ScaleZ", &this->scale.z);
+
+		static float _scale = 1;
+		ImGui::Text("Scale XYZ");
+		if(ImGui::InputFloat("##ScaleALL", &_scale)) {
+			Scale(_scale);
+		}
 
 		ImGui::Text("Rotation");
 
@@ -218,9 +231,15 @@ void Transform::ValidateDirtyTransforms(bool _forceValidate)
 
 	//========================================================
 
+	glm::vec3 finalScale;
+
+	finalScale.x = scale.x * m_LocalScaleFactor;
+	finalScale.y = scale.y * m_LocalScaleFactor;
+	finalScale.z = scale.z * m_LocalScaleFactor;
+
 	glm::mat4 trans = glm::translate(glm::mat4(1.0f), position); // position
 	glm::mat4 rot = glm::toMat4(rotation); // Rotation
-	glm::mat4 Scale = glm::scale(glm::mat4(1.0f), scale); // Scale
+	glm::mat4 Scale = glm::scale(glm::mat4(1.0f), finalScale); // Scale
 
 	m_LocalModel = trans * rot * Scale;
 

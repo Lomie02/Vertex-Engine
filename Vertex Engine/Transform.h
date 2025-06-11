@@ -18,6 +18,8 @@ public:
 
 	void Reset();
 
+	void Scale(float _factor);
+
 	glm::vec2 GetCenter();
 	float GetSizeFromCentre(glm::vec2 _axis);
 
@@ -63,6 +65,7 @@ public:
 
 private:
 
+	float m_LocalScaleFactor = 1;
 	bool HasChanged();
 	void ValidateDirtyTransforms(bool _forceValidate = false);
 

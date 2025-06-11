@@ -26,6 +26,7 @@ private:
 	int m_CurrentObjectSelected;
 
 	GameObject* m_SelectedGameObject;
+	Texture2D m_SelectedTextureObject;
 
 	static bool DisplaySceneDrawer;
 	static const char* m_SceneList[MAX_SCENES];

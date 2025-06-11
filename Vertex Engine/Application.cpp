@@ -152,6 +152,8 @@ void Application::StartUp()
 	m_prevTime = (float)glfwGetTime();*/
 
 	Time::PrepareDeltaCalculations();
+	ExternalResources(); //Load External files.
+
 	FolderCreation();
 
 	m_TransitionScene = new VertexTransitions("Transitions");
@@ -192,7 +194,6 @@ void Application::StartUp()
 
 	std::cout << "Vertex Message: Start Up Succeded." << std::endl;
 
-	ExternalResources(); //Load External files.
 
 
 	m_SceneManager->EngineState(m_Mode);

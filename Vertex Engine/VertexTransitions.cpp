@@ -1,5 +1,6 @@
 #include "VertexTransitions.h"
 #include "RectTransform.h"
+#include "SpriteRenderer.h"
 /*
 	NOTE:
 		This is the test version for the Vertex Transition screens & will be updated in the future to support more transition images ontop of 1 gameobject.
@@ -41,13 +42,13 @@ void VertexTransitions::Awake()
 	m_MainCamera->AddComponent<Camera>();
 	m_CamComp = m_MainCamera->GetComponenet<Camera>();
 
-	m_TransitionObject->AddComponent<RectTransform>();
+	m_TransitionObject->AddComponent<SpriteRenderer>();
 
 	m_Transitions.push_back(m_TransitionObject);
 
 	ResourceManager::LoadTexture("Builds/Textures/VertexMainDisplay.png", "VertexMainDisplay");
 
-	m_Transitions.at(0)->material.AlbedoMap = ResourceManager::GetTexture("VertexMainDisplay");
+	m_Transitions.at(0)->GetComponenet<SpriteRenderer>()->SetSprite(ResourceManager::GetTexture("VertexMainDisplay"));
 	m_Transitions.at(0)->material.surface = Transparent;
 	m_TransitionSpeed = 2;
 
@@ -56,10 +57,7 @@ void VertexTransitions::Awake()
 
 	m_Manager->Register(m_TransitionObject);
 
-	m_TransitionObject->transform->scale.x = 1920;
-	m_TransitionObject->transform->scale.y = 1080;
-
-	m_CamComp->zoom = 100.0f;
+	m_CamComp->zoom = 9.0f;
 }
 
 void VertexTransitions::Start()
@@ -81,21 +79,23 @@ void VertexTransitions::Update(float delta)
 		}
 	}
 
-	if (m_LerpColour && m_Transitions.at(0)->material.colour.a >= 0)
+	if (m_LerpColour && m_Transitions.at(0)->GetComponenet<SpriteRenderer>()->Colour.a >= 0)
 	{
-		m_Transitions.at(0)->material.colour.a -= m_FadeDuration * Time::GetUnscaledDeltaTime();;
+		m_Transitions.at(0)->GetComponenet<SpriteRenderer>()->Colour.a -= m_FadeDuration * Time::GetUnscaledDeltaTime();;
 
-		if (m_Transitions.at(0)->material.colour.a < 0)
+		if (m_Transitions.at(0)->GetComponenet<SpriteRenderer>()->Colour.a < 0)
 		{
 			m_Timer = m_TransitionSpeed;
 			m_SceneManager->SetActiveScene(1);
 			m_LerpColour = false;
-			m_Transitions.at(0)->material.colour.a = 1;
+			m_Transitions.at(0)->GetComponenet<SpriteRenderer>()->Colour.a = 1;
 		}
 	}
 
 	if (Input::GetKeyDown(m_Window, GLFW_KEY_SPACE) && !m_LerpColour) {
 		m_LerpColour = true;
+		m_FadeDuration = 1;
+		m_TransitionSpeed = 5.0f;
 	}
 }
 

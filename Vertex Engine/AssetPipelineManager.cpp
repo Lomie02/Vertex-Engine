@@ -5,6 +5,7 @@ std::vector<std::string>  AssetPipelineManager::m_SupportedTextureExtensionTypes
 std::vector<std::string>  AssetPipelineManager::m_SupportedSoundTypes;
 std::vector<std::string>  AssetPipelineManager::m_Supported3dAssetTypes;
 std::vector<std::string>  AssetPipelineManager::m_TextureAssetsLoaded;
+bool AssetPipelineManager::m_HotReloadInProgress;
 
 AssetPipelineManager::AssetPipelineManager()
 {
@@ -33,5 +34,14 @@ void AssetPipelineManager::ScanFolderForTextures()
 			}
 		}
 	}
+	m_HotReloadInProgress = false;
+}
+
+void AssetPipelineManager::HotReload()
+{
+	m_HotReloadInProgress = true;
+	ResourceManager::Textures.clear();
+	ScanFolderForTextures();
+	VERTEX_LOG("Reloading Complete. ");
 }
 

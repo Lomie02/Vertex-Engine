@@ -12,7 +12,7 @@ public:
 
 	static void ScanFolderForTextures();
 	static void HotReload();
-
+	static bool IsReloadInProgress() { return m_HotReloadInProgress; }
 private:
 	AssetPipelineManager();
 	// File Types
@@ -23,5 +23,6 @@ private:
 	// Asset Holders.
 	static std::vector<std::string> m_TextureAssetsLoaded;
 	static bool m_HasBeenInit;
+	static bool m_HotReloadInProgress;
 };
 
