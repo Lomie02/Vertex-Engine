@@ -379,14 +379,14 @@ void Vertex2D::TensionInterfaceDraw(GameObject* _element, bool _IsColourPick) //
 
 	this->m_Shader.SetMatrix4("model", _element->GetComponenet<RectTransform>()->GetWorldMatrix());
 	this->m_Shader.SetInteger("picking", 0);
-	this->m_Shader.SetInteger("NoTexture", 1);
+	this->m_Shader.SetInteger("NoTexture", 0);
 
 	this->m_Shader.SetMatrix4("pro", glm::ortho(0.0f, static_cast<float>(1920), static_cast<float>(1080), 0.0f, -0.100f, 10.0f));
 	this->m_Shader.SetVector4f("idColour", colour);
-	this->m_Shader.SetVector4f("Colour", colour);
+	this->m_Shader.SetVector4f("Colour", _element->GetComponenet<SpriteRenderer>()->Colour);
 
 	glActiveTexture(GL_TEXTURE0);
-	_element->material.AlbedoMap.Bind();
+	_element->GetComponenet<SpriteRenderer>()->Sprite.Bind();
 
 	PrepareRender();
 }

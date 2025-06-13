@@ -21,7 +21,6 @@ void AssetPipelineManager::Init()
 	m_SupportedTextureExtensionTypes.push_back(".tga");
 	m_SupportedTextureExtensionTypes.push_back(".gif");
 	m_SupportedTextureExtensionTypes.push_back(".jpeg");
-
 }
 
 void AssetPipelineManager::ScanFolderForTextures()

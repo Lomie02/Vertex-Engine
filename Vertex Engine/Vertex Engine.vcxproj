@@ -215,6 +215,7 @@
     <ClCompile Include="VertexAccessExplorer.cpp" />
     <ClCompile Include="VertexComponent.cpp" />
     <ClCompile Include="VertexEngineEditor.cpp" />
+    <ClCompile Include="VertexEvent.cpp" />
     <ClCompile Include="VertexPrefs.cpp" />
     <ClCompile Include="VertexScene.cpp" />
     <ClCompile Include="VertexText2D.cpp" />
@@ -293,6 +294,7 @@
     <ClInclude Include="VertexAccessExplorer.h" />
     <ClInclude Include="VertexComponent.h" />
     <ClInclude Include="VertexEngineEditor.h" />
+    <ClInclude Include="VertexEvent.h" />
     <ClInclude Include="VertexGeneral.h" />
     <ClInclude Include="VertexPrefs.h" />
     <ClInclude Include="VertexRenderPackage.h" />

@@ -123,7 +123,7 @@ public:
 	GameObject* FindComponent(VertexComponent& _ref);
 
 	GLFWwindow* GetWindow() { return m_Window; }
-	void AssignMode(EditorMode _mode) { m_OperatingMode = _mode; }
+	void AssignMode(RunTimeMode* _mode) { m_OperatingMode = _mode; }
 
 	std::vector<Button*> GetButtonObjects() { return m_UiButtonObjects; }
 	std::vector<Text*> GetTextObjects() { return m_UiTextObjects; }
@@ -176,7 +176,7 @@ private:
 
 	std::vector<VertexComponent*> m_VertexComponentsList;
 	std::vector<GameObject*> m_TransParentList;
-	EditorMode m_OperatingMode;
+	RunTimeMode* m_OperatingMode;
 
 	char m_ScenesName[30] = "s";
 	irrklang::ISoundEngine* m_SoundSystem;

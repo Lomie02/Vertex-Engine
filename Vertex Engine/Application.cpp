@@ -18,6 +18,8 @@
 #include "VertexPrefs.h"
 #include "VertexAccessExplorer.h"
 #include "Time.h"
+#include "Input.h"
+
 #define GL_SILENCE_DEPRECATION
 #pragma warning(disable : 4996);
 
@@ -41,6 +43,12 @@ Application::~Application()
 		m_VertexEditor = nullptr;
 	}
 
+	if (m_Mode) {
+
+		delete m_Mode;
+		m_Mode = nullptr;
+	}
+
 }
 
 void Application::StartUp()
@@ -58,12 +66,15 @@ void Application::StartUp()
 
 	strcat(name, other);
 
+	// Create the engines runtime mode. This allows systems to know if the engine is in editor or play
+	m_Mode = new RunTimeMode();
+
 	if (FINAL_BUILD)
 	{
-		m_Mode = PLAY;
+		m_Mode->EditorMode = EditorMode::PLAY;
 	}
 
-	if (m_Mode == PLAY)
+	if (m_Mode->EditorMode == EditorMode::PLAY)
 	{
 		if (FULLSCREEN) {
 			GLFWmonitor* monitor;
@@ -114,7 +125,8 @@ void Application::StartUp()
 	int channels;
 	unsigned char* picture;
 
-	if (m_Mode == PLAY)
+
+	if (m_Mode)
 	{
 		picture = stbi_load(name1, &width, &height, &channels, 4);
 	}
@@ -152,9 +164,9 @@ void Application::StartUp()
 	m_prevTime = (float)glfwGetTime();*/
 
 	Time::PrepareDeltaCalculations();
-	ExternalResources(); //Load External files.
 
 	FolderCreation();
+	ExternalResources(); //Load External files.
 
 	m_TransitionScene = new VertexTransitions("Transitions");
 	m_SceneManager->AddScene(m_TransitionScene);
@@ -177,7 +189,7 @@ void Application::StartUp()
 		CREATE THE VERTEX EDITOR
 	*/
 
-	if (m_Mode == EDITOR && !FINAL_BUILD)
+	if (m_Mode->EditorMode == EditorMode::EDITOR && !FINAL_BUILD)
 	{
 		m_EditorFullScreen = false;
 		m_VertexEditor = new VertexEngineEditor();
@@ -203,6 +215,10 @@ void Application::StartUp()
 
 void Application::Start()
 {
+	Input::Init(m_GameWindow);
+
+	ExternalResources();
+
 	if (USE_VERTEX_WORK_SPACE) {
 		m_WorkSpaceEditor.SceneCreation();
 		SetUpWorkSpaceScenes(); // Set Up scenes from the workspace if being used.
@@ -218,19 +234,19 @@ void Application::Start()
 		m_SceneManager->m_SceneList.at(i)->GetAssets()->AssignSoundSystem(m_SoundManager);
 	}
 
-	switch (m_Mode) {
-	case PLAY:
+	switch (m_Mode->EditorMode) {
+	case EditorMode::PLAY:
 		m_SceneManager->SetActiveScene(0);
 		break;
 
-	case EDITOR:
+	case EditorMode::EDITOR:
 		m_SceneManager->SetActiveScene(1);
 		break;
 	}
 
 	m_SceneManager->StartUpScenes();
 
-	if (m_Mode == EDITOR) {
+	if (m_Mode->EditorMode == EditorMode::EDITOR) {
 		AssetPipelineManager::ScanFolderForTextures();
 		m_VertexEditor->PopulateDesk();
 	}
@@ -240,35 +256,13 @@ void Application::Start()
 
 void Application::Update()
 {
-	if (m_Mode == PLAY || m_Mode == EDITOR_PLAY) {
+	if (m_Mode->EditorMode == EditorMode::PLAY || m_Mode->EditorMode == EditorMode::EDITOR_PLAY) {
 
-		//double currTime = (float)glfwGetTime();
-		//m_UnScaledDelta = currTime - m_prevTime;
-		//m_prevTime = currTime;
-
-		//if (m_Mode == EDITOR_PLAY && Input::GetKeyDown(m_GameWindow, GLFW_KEY_ESCAPE))
-		//{
-		//	m_Mode = EDITOR_PLAY;
-		//	Cursor::Show(m_GameWindow);
-		//}
-
-		//// Calulate delta time
-		//m_frames++;
-		//m_fpsInterval += m_UnScaledDelta;
-		//if (m_fpsInterval >= 1.0f)
-		//{
-		//	m_ApplicationFramesPerSecond = m_frames;
-		//	m_frames = 0;
-		//	m_fpsInterval -= 1.0f;
-		//}
-
-		//static float fixedDelta = 0.0f;
-		//fixedDelta += m_UnScaledDelta * m_TimeScale;
-
-		//float unscaledDelta = m_UnScaledDelta;
-		//float deltaTime = m_UnScaledDelta * m_TimeScale;
-
+		// Calculate delta time.
 		Time::ConfigureDeltaTime();
+
+		// Update the input system before any other update occurs.
+		Input::UpdateInput();
 
 		if (m_FinishedSceneSetUpStage)
 			m_SceneManager->UpdateScenes(Time::GetDeltaTime()); // Update regular loop
@@ -286,18 +280,11 @@ void Application::Update()
 
 void Application::SetUpWorkSpaceScenes()
 {
+	// Adds scenes from the workspace to the scene manager.
 	for (int i = 0; i < m_WorkSpaceEditor.GrabWorkSpaceScenes().size(); i++) {
 
 		m_SceneManager->AddScene(m_WorkSpaceEditor.GrabWorkSpaceScenes().at(i));
 	}
-}
-
-void Application::EditorAnimation()
-{
-}
-
-void Application::EditorHud()
-{
 }
 
 void Application::EditorSpacer(int _spaces)
@@ -314,6 +301,7 @@ void Application::BeginSceneSystemAssigning()
 		ShutDown();
 	}
 
+	// Give alls scenes the current Runtime mode, glfw window & the scene manager itself.
 	for (int i = 0; i < m_SceneManager->m_SceneList.size(); i++)
 	{
 		m_SceneManager->m_SceneList.at(i)->GetAssets()->AssignMode(m_Mode);
@@ -331,12 +319,12 @@ void Application::RenderAll()
 
 	m_SceneManager->GetCurrentScene()->GetAssets()->ConfigureRenderSystems(m_Renderer);
 
-	if (m_Mode != PLAY)
+	if (m_Mode->EditorMode != EditorMode::PLAY)
 	{
 		m_SceneManager->GetCurrentScene()->GetAssets()->Gizmos(m_Renderer);
 	}
 
-	if (m_Mode == EDITOR && !m_EditorFullScreen || m_Mode == EDITOR_PLAY && !m_EditorFullScreen || m_Mode == EDITOR_PAUSED && !m_EditorFullScreen)
+	if (m_Mode->EditorMode == EditorMode::EDITOR && !m_EditorFullScreen || m_Mode->EditorMode == EditorMode::EDITOR_PLAY && !m_EditorFullScreen || m_Mode->EditorMode == EditorMode::EDITOR_PAUSED && !m_EditorFullScreen)
 	{
 		m_VertexEditor->RenderEditorDisplays();
 	}
@@ -364,7 +352,7 @@ void Application::SceneSetUp()
 
 void Application::ShutDown()
 {
-	if (m_Mode == EDITOR || m_Mode == EDITOR_PLAY)
+	if (m_Mode->EditorMode == EditorMode::EDITOR || m_Mode->EditorMode == EditorMode::EDITOR_PLAY)
 	{
 		m_VertexEditor->CleanUpGui();
 	}
@@ -394,6 +382,4 @@ void Application::FolderCreation()
 void Application::ExternalResources() // Load all your external files such as textures, fonts & audio files.
 {
 	AssetPipelineManager::Init();
-
-	ResourceManager::LoadTexture("Builds/Textures/UI_Button.png", "UI_Button");
 }

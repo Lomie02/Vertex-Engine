@@ -7,6 +7,10 @@
 #include "SpriteRenderer.h"
 #include <thread>
 
+VertexEngineEditor::~VertexEngineEditor()
+{
+}
+
 void VertexEngineEditor::CreateEditorLayout(GLFWwindow* _GameWindow, SceneManager* _scenesManager)
 {
 	IMGUI_CHECKVERSION();
@@ -72,7 +76,7 @@ void VertexEngineEditor::CleanUpGui()
 
 void VertexEngineEditor::UpdateEditorColours()
 {
-	if (m_EditorMode == EDITOR)
+	if (m_EditorMode->EditorMode == EditorMode::EDITOR)
 	{
 		ImGuiStyle* style = &ImGui::GetStyle();
 		style->Colors[ImGuiCol_WindowBg] = ImVec4(EDITOR_BACKGROUND);
@@ -85,7 +89,7 @@ void VertexEngineEditor::UpdateEditorColours()
 		style->Colors[ImGuiCol_ButtonHovered] = ImVec4(EDITOR_BUTTONS_SELECT);
 
 	}
-	else if (m_EditorMode == EDITOR_PLAY)
+	else if (m_EditorMode->EditorMode == EditorMode::EDITOR_PLAY)
 	{
 		ImGuiStyle* style1 = &ImGui::GetStyle();
 		style1->Colors[ImGuiCol_WindowBg] = ImVec4(PLAY_MODE_COLOUR);
@@ -308,6 +312,13 @@ void VertexEngineEditor::RenderEditorInspector()
 
 			}
 
+			if (ImGui::MenuItem("Button")) {
+
+				if (m_SelectedGameObject->GetComponenet<Button>() == nullptr)
+					m_SelectedGameObject->AddComponent<Button>();
+
+			}
+
 			// Camera
 			if (ImGui::MenuItem("Camera")) {
 				if (m_SelectedGameObject->GetComponenet<Camera>() == nullptr)
@@ -342,6 +353,7 @@ void VertexEngineEditor::RenderEditorInheritList()
 		if (ImGui::MenuItem("Empty UI Element")) {
 			GameObject* temp = m_ApplicationCentralSceneManager->m_SceneList.at(m_ApplicationCentralSceneManager->GetActiveScene())->GetAssets()->RegisterGameObjectNew();
 			temp->AddComponent<RectTransform>();
+			temp->AddComponent<SpriteRenderer>();
 		}
 
 		// Create a default camera
@@ -353,6 +365,19 @@ void VertexEngineEditor::RenderEditorInheritList()
 		if (ImGui::MenuItem("Sprite")) {
 			GameObject* temp = m_ApplicationCentralSceneManager->m_SceneList.at(m_ApplicationCentralSceneManager->GetActiveScene())->GetAssets()->RegisterGameObjectNew();
 			temp->AddComponent<SpriteRenderer>();
+		}
+
+		if (ImGui::MenuItem("Button")) {
+			// Create main button element.
+			GameObject* temp = m_ApplicationCentralSceneManager->m_SceneList.at(m_ApplicationCentralSceneManager->GetActiveScene())->GetAssets()->RegisterGameObjectNew();
+			temp->AddComponent<RectTransform>();
+			temp->AddComponent<SpriteRenderer>();
+			temp->AddComponent<Button>();
+
+			// Create the child which will hold the text for the button.
+			GameObject* child = m_ApplicationCentralSceneManager->m_SceneList.at(m_ApplicationCentralSceneManager->GetActiveScene())->GetAssets()->RegisterGameObjectNew();
+			child->AddComponent<RectTransform>();
+			child->GetComponenet<RectTransform>()->SetParent(temp, true);
 		}
 
 		ImGui::EndPopup();
@@ -457,32 +482,31 @@ void VertexEngineEditor::RenderDockingTaskBar()
 	ImGui::BeginMenuBar();
 
 
-
-	if (ImGui::ArrowButton("Play", ImGuiDir_Right) && m_EditorMode == EDITOR)
+	if (ImGui::ArrowButton("Play", ImGuiDir_Right) && m_EditorMode->EditorMode == EditorMode::EDITOR)
 	{
-		m_EditorMode = EDITOR_PLAY;
+		m_EditorMode->EditorMode = EditorMode::EDITOR_PLAY;
 		m_ApplicationCentralSceneManager->m_SceneList.at(m_ApplicationCentralSceneManager->GetActiveScene())->Start();
 		UpdateEditorColours();
 
 	}
 	if (ImGui::Button("PAUSE"))
 	{
-		if (m_EditorMode == EDITOR_PLAY)
+		if (m_EditorMode->EditorMode == EditorMode::EDITOR_PLAY)
 		{
-			m_EditorMode = EDITOR_PAUSED;
+			m_EditorMode->EditorMode = EditorMode::EDITOR_PAUSED;
 		}
-		else if (m_EditorMode == EDITOR_PAUSED)
+		else if (m_EditorMode->EditorMode == EditorMode::EDITOR_PAUSED)
 		{
-			m_EditorMode = EDITOR_PLAY;
+			m_EditorMode->EditorMode = EditorMode::EDITOR_PLAY;
 		}
 	}
 	if (ImGui::Button("STOP"))
 	{
 		VERTEX_LOG("Stop Test");
 
-		if (m_EditorMode == EDITOR_PLAY || m_EditorMode == EDITOR_PAUSED) {
+		if (m_EditorMode->EditorMode == EditorMode::EDITOR_PLAY || m_EditorMode->EditorMode == EditorMode::EDITOR_PAUSED) {
 
-			m_EditorMode = EDITOR;
+			m_EditorMode->EditorMode = EditorMode::EDITOR;
 			m_ApplicationCentralSceneManager->m_SceneList.at(m_ApplicationCentralSceneManager->GetActiveScene())->Start();
 			UpdateEditorColours();
 		}

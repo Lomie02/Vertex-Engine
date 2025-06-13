@@ -24,9 +24,6 @@ Scene2::~Scene2()
 	delete m_Camera01;
 	m_Camera01 = nullptr;
 
-	delete m_ButtonTest;
-	m_ButtonTest = nullptr;
-
 	delete m_Title;
 	m_Title = nullptr;
 
@@ -94,10 +91,6 @@ void Scene2::Awake()
 
 
 	m_Manager->Register(m_Camera01);
-
-	m_ButtonTest = new Button("Goofy Button");
-
-	m_Manager->Register(m_ButtonTest);
 
 	m_Title = new Text();
 	m_CounterText = new Text();
@@ -175,9 +168,9 @@ void Scene2::Awake()
 	m_BlockBody->transform->SetSize(20.0f, 2.0f);
 	m_Decoy->transform->SetSize(2.0f, 2.0f);
 
-	m_Body->Init(new btBoxShape(btVector3(m_Body->transform->GetSize().x/ 2, m_Body->transform->GetSize().y / 2, 0.1f)), 1);
-	m_Decoy->Init(new btBoxShape(btVector3(m_Decoy->transform->GetSize().x * m_Decoy->transform->scale.z / 2, m_Decoy->transform->GetSize().y * m_Decoy->transform->scale.y / 2, 0.1f)), 1);
-	m_BlockBody->Init(new btBoxShape(btVector3(m_BlockBody->transform->GetSize().x / 2, m_BlockBody->transform->GetSize().y / 2, 0.1f)), 0);
+	m_Body->Init(new btBoxShape(btVector3(m_Body->transform->GetSize().x/ 2, m_Body->transform->GetSize().y / 2, 2.0f)), 1);
+	m_Decoy->Init(new btBoxShape(btVector3(m_Decoy->transform->GetSize().x * m_Decoy->transform->scale.z / 2, m_Decoy->transform->GetSize().y * m_Decoy->transform->scale.y / 2, 2.0f)), 1);
+	m_BlockBody->Init(new btBoxShape(btVector3(m_BlockBody->transform->GetSize().x / 2, m_BlockBody->transform->GetSize().y / 2, 2.0f)), 0);
 
 	m_Manager->Register(m_Body);
 	m_Manager->Register(m_Decoy);
@@ -212,7 +205,6 @@ void Scene2::Awake()
 	std::cout << "Comp List: " << m_Object2->FindComponentsOfType<DebugComp>().size() << std::endl;
 
 	m_Manager->Register(m_Egg);
-	m_ButtonTest->SetActive(false);
 
 	m_Controller->AssignPlayer(m_Object0);
 	m_Manager->Register(m_Controller);
@@ -221,7 +213,7 @@ void Scene2::Awake()
 	m_Egg->material.m_KeepAspect = true;
 	m_Egg->material.TransparencyBlend = Alpha;
 
-	Time::SetTimeScale(2.0f);
+	Time::SetTimeScale(1.0f);
 
 	m_Animation->WrapMode(Loop);
 	m_Manager->Register(m_Animation);
@@ -247,10 +239,14 @@ void Scene2::Start()
 
 void Scene2::Update(float delta)
 {
-	if (glfwGetKey(m_Window, GLFW_KEY_W) == GLFW_PRESS) {
-		m_Body->ApplyForce(glm::vec3(0, 1, 0) * 10.0f);
+
+	if (Input::IsAxisMoved("Left Stick", 0.2f)) {
+
+		//m_Object0->transform->position += glm::vec3(Input::GetAxis("Left Stick"),0) * 10.0f;
+		m_Body->ApplyForce(glm::vec3(Input::GetAxis("Left Stick"), 0) * 10.0f);
 	}
-	if (glfwGetKey(m_Window, GLFW_KEY_S) == GLFW_PRESS) {
+	if (Input::GetKeyDown(GLFW_KEY_S)) {
+		VERTEX_LOG("Pressed S!");
 		m_Body->ApplyForce(glm::vec3(0, -1, 0) * 10.0f);
 	}
 	if (glfwGetKey(m_Window, GLFW_KEY_D) == GLFW_PRESS) {
@@ -260,9 +256,10 @@ void Scene2::Update(float delta)
 		m_Body->ApplyForce(glm::vec3(-1, 0, 0) * 10.0f);
 	}
 
-	if (glfwGetKey(m_Window, GLFW_KEY_SPACE) == GLFW_PRESS) {
+	if (Input::GetButtonDown(GLFW_GAMEPAD_BUTTON_A)) {
 		m_Body->ApplyForce(m_Body->GetForward() * 50.0f);
 	}
+
 
 	if (glfwGetKey(m_Window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 		glfwTerminate();
@@ -293,12 +290,5 @@ void Scene2::StartFlipbookSetUp()
 void Scene2::SetupButton()
 {
 
-	m_ButtonTest->transform->scale.x = 10;
-	m_ButtonTest->transform->scale.y = 3;
-
-	m_ButtonTest->transform->position.x = -5;
-	m_ButtonTest->SetOffset(glm::vec2(-1, 0.3f));
-
-	m_ButtonTest->text = "Vertex Ahh Button";
 }
 

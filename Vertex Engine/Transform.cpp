@@ -2,6 +2,8 @@
 #include "GameObject.h"
 #include "RectTransform.h"
 #include <ext.hpp>
+#include <gtx/orthonormalize.hpp>
+#include <gtx/matrix_decompose.hpp>
 
 void Transform::SetSize(float x, float y)
 {
@@ -15,7 +17,7 @@ void Transform::Reset()
 	position.y = 0;
 	position.z = 0;
 
-	rotation = glm::quat(glm::vec3(0,0,0));
+	rotation = glm::quat(glm::vec3(0, 0, 0));
 }
 
 void Transform::Scale(float _factor)
@@ -99,7 +101,7 @@ void Transform::RenderEditorDisplay()
 
 		static float _scale = 1;
 		ImGui::Text("Scale XYZ");
-		if(ImGui::InputFloat("##ScaleALL", &_scale)) {
+		if (ImGui::InputFloat("##ScaleALL", &_scale)) {
 			Scale(_scale);
 		}
 
@@ -108,19 +110,25 @@ void Transform::RenderEditorDisplay()
 		ImGui::Button("X");
 		ImGui::SameLine();
 		ImGui::SetNextItemWidth(50.0f);
-		ImGui::InputFloat("##rotX", &this->m_EulerAngle.x);
+		if (ImGui::InputFloat("##rotX", &this->rotation.x)) {
+			rotation = glm::normalize(rotation);
+		}
 
 		ImGui::Button("Y");
 		ImGui::SameLine();
 		ImGui::SetNextItemWidth(50.0f);
-		ImGui::InputFloat("##rotY", &this->m_EulerAngle.y);
+		if (ImGui::InputFloat("##rotY", &this->rotation.y)) {
+
+			rotation = glm::normalize(rotation);
+		}
 
 		ImGui::Button("Z");
 		ImGui::SameLine();
 		ImGui::SetNextItemWidth(50.0f);
-		ImGui::InputFloat("##rotZ", &this->m_EulerAngle.z);
+		if (ImGui::InputFloat("##rotZ", &this->rotation.z)) {
 
-		rotation = glm::quat(glm::radians(m_EulerAngle));
+			rotation = glm::normalize(rotation);
+		}
 
 	}
 	ImGui::PopStyleColor(2);
@@ -130,25 +138,58 @@ void Transform::SetParent(Transform* _parent)
 {
 	if (m_Parent == _parent) return;
 
+	glm::mat4 previousWorld = this->GetWorldModelMat();
+
+
 	if (m_Parent)
 	{
 		auto& sib = m_Parent->m_Children;
+
 		sib.erase(std::remove(sib.begin(), sib.end(), this), sib.end());
 	}
-
-	glm::mat4 previousWorld = this->GetWorldModelMat();
 
 	if (_parent) {
 		glm::mat4 parentWorld = _parent->GetWorldModelMat();
 
 		this->m_LocalModel = glm::inverse(parentWorld) * previousWorld;
+
+		glm::vec3 trans;
+		glm::vec3 scale;
+		glm::vec3 skew;
+		glm::vec4 pov;
+		glm::quat rot;
+		glm::decompose(m_LocalModel, scale, rot, trans, skew, pov);
+
 		this->m_Parent = _parent;
+		glm::quat parentRot = m_Parent->rotation;
+
+		this->position = trans;
+
+		this->rotation = rot;
+
+		this->scale = scale / m_LocalScaleFactor;
 	}
 	else {
+
 		m_LocalModel = previousWorld;
+
+		glm::vec3 trans;
+		glm::vec3 scale;
+		glm::vec3 skew;
+		glm::vec4 pov;
+		glm::quat rot;
+		glm::decompose(m_LocalModel, scale, rot, trans, skew, pov);
+
+		this->position = trans;
+
+		this->rotation = rot;
+
+		this->scale = scale / m_LocalScaleFactor;
+
 	}
 
-	m_IsDirty = true;
+	MarkDirty();
+	ValidateDirtyTransforms();
 
 	if (_parent)
 	{
@@ -164,11 +205,29 @@ void Transform::RemoveParent()
 		auto& sib = m_Parent->m_Children;
 		sib.erase(std::remove(sib.begin(), sib.end(), this), sib.end());
 
-		m_Parent = nullptr;
-		m_IsDirty = true;
-
 		m_LocalModel = previousWorld;
+		glm::vec3 trans;
+		glm::vec3 scale;
+		glm::vec3 skew;
+		glm::vec4 pov;
+		glm::quat rot;
 
+		if (glm::decompose(m_LocalModel, scale, rot, trans, skew, pov)) {
+
+			m_Parent = nullptr;
+
+			this->rotation = glm::normalize(rot);
+			this->rotation = rot;
+
+			glm::quat eul = glm::quat(glm::radians(m_EulerAngle));
+			eul = glm::normalize(eul);
+			this->rotation = eul;
+			this->rotation = glm::normalize(rotation);
+
+			this->scale = scale / m_LocalScaleFactor;
+		}
+		MarkDirty();
+		ValidateDirtyTransforms();
 	}
 }
 
@@ -208,17 +267,16 @@ void Transform::LateUpdate(float delta)
 bool Transform::HasChanged()
 {
 	if (m_LastPosition.x != position.x || m_LastPosition.y != position.y || m_LastPosition.z != position.z ||
-		m_LastRotation.x != rotation.x || m_LastRotation.y != rotation.y || m_LastRotation.z != rotation.z ||
+		m_LastRotation.x != rotation.x || m_LastRotation.y != rotation.y || m_LastRotation.z != rotation.z || m_LastRotation.w != rotation.w ||
 		m_LastSize.x != scale.x || m_LastSize.y != scale.y || m_LastSize.z != scale.z)
 	{
 		m_LastPosition = position;
 		m_LastRotation = rotation;
 		m_LastSize = scale;
 
-		m_IsDirty = true;
+		MarkDirty();
 		return true;
 	}
-
 
 	return false;
 }
@@ -238,17 +296,20 @@ void Transform::ValidateDirtyTransforms(bool _forceValidate)
 	finalScale.z = scale.z * m_LocalScaleFactor;
 
 	glm::mat4 trans = glm::translate(glm::mat4(1.0f), position); // position
-	glm::mat4 rot = glm::toMat4(rotation); // Rotation
+	glm::mat4 rot = glm::toMat4(glm::normalize(rotation)); // Rotation
 	glm::mat4 Scale = glm::scale(glm::mat4(1.0f), finalScale); // Scale
 
 	m_LocalModel = trans * rot * Scale;
 
-	if (m_Parent) {
-		//m_Parent->ValidateDirtyTransforms();
+	/*if (m_Parent) {
 		m_WorldMatrix = m_Parent->GetWorldModelMat() * m_LocalModel;
 	}
 	else {
 		m_WorldMatrix = m_LocalModel;
+	}*/
+
+	for (auto* child : m_Children) {
+		child->MarkDirty();
 	}
 
 	m_IsDirty = false;

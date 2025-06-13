@@ -21,11 +21,24 @@ public:
 	glm::mat4 GetWorldMatrix();
 	glm::mat4 GetLocalMatrix();
 
-	void SetParent(GameObject* _parent, bool _keepWorld);
 	void RenderEditorDisplay() override;
+	void SetParent(GameObject* _parent, bool _keepWorld);
+	void AddChild(GameObject* _child);
+	void RemoveChild(GameObject* _child);
 
-	RectTransform* Parent;
+	void MarkDirty() { m_IsDirty = true; }
+
 private:
+	std::vector<RectTransform*> m_Children;
+	RectTransform* Parent;
+
+	bool HasChanged();
+	void ValidateDirtyTransforms(bool _forceValidate = false);
+	glm::mat4 m_LocalMatrix;
+	glm::mat4 m_WorldMatrix;
+
+	bool m_IsDirty;
+
 	glm::mat4 m_PreviousWorld;
 };
 

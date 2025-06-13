@@ -92,7 +92,7 @@ void VertexTransitions::Update(float delta)
 		}
 	}
 
-	if (Input::GetKeyDown(m_Window, GLFW_KEY_SPACE) && !m_LerpColour) {
+	if (Input::GetKeyDown( GLFW_KEY_SPACE) && !m_LerpColour) {
 		m_LerpColour = true;
 		m_FadeDuration = 1;
 		m_TransitionSpeed = 5.0f;
