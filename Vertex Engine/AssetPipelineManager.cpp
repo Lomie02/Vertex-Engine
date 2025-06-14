@@ -5,6 +5,7 @@ std::vector<std::string>  AssetPipelineManager::m_SupportedTextureExtensionTypes
 std::vector<std::string>  AssetPipelineManager::m_SupportedSoundTypes;
 std::vector<std::string>  AssetPipelineManager::m_Supported3dAssetTypes;
 std::vector<std::string>  AssetPipelineManager::m_TextureAssetsLoaded;
+bool AssetPipelineManager::m_HotReloadInProgress;
 
 AssetPipelineManager::AssetPipelineManager()
 {
@@ -20,7 +21,6 @@ void AssetPipelineManager::Init()
 	m_SupportedTextureExtensionTypes.push_back(".tga");
 	m_SupportedTextureExtensionTypes.push_back(".gif");
 	m_SupportedTextureExtensionTypes.push_back(".jpeg");
-
 }
 
 void AssetPipelineManager::ScanFolderForTextures()
@@ -33,5 +33,14 @@ void AssetPipelineManager::ScanFolderForTextures()
 			}
 		}
 	}
+	m_HotReloadInProgress = false;
+}
+
+void AssetPipelineManager::HotReload()
+{
+	m_HotReloadInProgress = true;
+	ResourceManager::Textures.clear();
+	ScanFolderForTextures();
+	VERTEX_LOG("Reloading Complete. ");
 }
 

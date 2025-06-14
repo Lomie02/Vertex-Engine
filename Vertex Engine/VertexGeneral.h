@@ -19,12 +19,21 @@
 
 #include "vGameObject.h"
 #include "Time.h"
+#include "RectTransform.h"
+#include "Camera.h"
+#include "Transform.h"
+#include "SpriteRenderer.h"
 
-enum EditorMode {
+enum class EditorMode {
 	EDITOR = 0,
 	PLAY,
 	EDITOR_PLAY,
 	EDITOR_PAUSED,
+};
+
+struct RunTimeMode {
+public:
+	EditorMode EditorMode;
 };
 
 #define COLOUR_RED 1.0f,0.0f,0.0f

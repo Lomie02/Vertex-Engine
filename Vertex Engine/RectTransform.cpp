@@ -9,46 +9,23 @@
 
 glm::mat4 RectTransform::GetWorldMatrix()
 {
-	if (Parent) {
-		glm::mat4 parentWorld = Parent->GetWorldMatrix();
+	if (m_IsDirty) ValidateDirtyTransforms();
 
-		if (!glm::all(glm::isinf(parentWorld[0])) || !glm::all(glm::isinf(parentWorld[1])) || !glm::all(glm::isinf(parentWorld[2])) || !glm::all(glm::isinf(parentWorld[3]))) {
-			VERTEX_ERROR("Failed: Giving a fallback matrix");
-			return glm::mat4(1.0f);
-		}
-		return parentWorld * GetLocalMatrix();
+	if (Parent) {
+
+		m_WorldMatrix = Parent->GetWorldMatrix() * m_LocalMatrix;
+		return m_WorldMatrix;
 	}
 	else {
-		return GetLocalMatrix();
+
+		m_WorldMatrix = m_LocalMatrix;
+		return m_WorldMatrix;
 	}
 }
 
 glm::mat4 RectTransform::GetLocalMatrix()
 {
-	glm::vec2 parentSize;
-
-	if (Parent) {
-		parentSize = Parent->size;
-	}
-	else {
-		parentSize = glm::vec2(1920, 1080);
-	}
-
-	glm::vec2 anchorPos = glm::mix(anchoredMin * parentSize, anchoredMax * parentSize, 0.5f);
-
-	glm::vec2 OriginOffset = origin * size;
-
-	worldPosition = anchorPos + anchoredPosition - OriginOffset;
-
-	glm::mat4 model = glm::mat4(1.0f);
-
-	model = glm::translate(model, glm::vec3(worldPosition, 0.0f));
-	model = glm::translate(model, glm::vec3(OriginOffset, 0.0f));
-	model = glm::rotate(model, rotation, glm::vec3(0, 0, 1));
-	model = glm::translate(model, glm::vec3(-OriginOffset, 0));
-	model = glm::scale(model, glm::vec3(size * scale, 1));
-
-	return model;
+	return m_LocalMatrix;
 }
 
 void RectTransform::RenderEditorDisplay()
@@ -95,61 +72,76 @@ void RectTransform::RenderEditorDisplay()
 
 void RectTransform::SetParent(GameObject* _parent, bool _keepWorld)
 {
-	glm::mat4 oldWorld = GetLocalMatrix();
+	if (Parent->partner2d == _parent) return;
 
-	Parent = _parent->GetComponenet<RectTransform>();
-
-	if (_keepWorld && _parent) {
-
-		glm::mat4 newWorld = Parent ? Parent->GetWorldMatrix() : glm::mat4(1.0f);
-		glm::mat4 newLocal = glm::inverse(newWorld) * oldWorld;
-
-		glm::vec3 skey;
-		glm::vec3 trans;
-		glm::quat rot;
-		glm::vec3 Scale; 
-		glm::vec4 per;
-
-		if (glm::decompose(newLocal, Scale, rot, trans, skey, per)) {
-			rotation = glm::eulerAngles(rot).z;
-			scale = glm::vec2(Scale);
-
-			glm::vec2 parentSize;
-
-			if (Parent) {
-				parentSize = Parent->size;
-			}
-			else {
-				parentSize = glm::vec2(1920, 1080);
-			}
-
-			this->anchoredPosition = _parent->GetComponenet<RectTransform>()->anchoredPosition + parentSize * ((anchoredMin + anchoredMax) * 0.5f);
-
-
-			VERTEX_ERROR("Comp Success");
-		}
-		else {
-			VERTEX_ERROR("Failed to parent");
-		}
-
+	if (Parent)
+	{
+		auto& sib = Parent->m_Children;
+		sib.erase(std::remove(sib.begin(), sib.end(), this), sib.end());
 	}
-	else if (_parent == nullptr) {
 
-		glm::vec3 skey;
-		glm::vec3 trans;
-		glm::quat rot;
-		glm::vec3 Scale;
-		glm::vec4 per;
+	glm::mat4 previousWorld = this->GetWorldMatrix();
 
-		if (glm::decompose(oldWorld, Scale, rot, trans, skey, per)) {
-			rotation = glm::eulerAngles(rot).z;
-			scale = glm::vec2(Scale.x, Scale.y);
-			anchoredPosition = glm::vec2(trans.x, trans.y);
+	if (_parent) {
+		glm::mat4 parentWorld = _parent->GetComponenet<RectTransform>()->GetWorldMatrix();
 
-			worldPosition = anchoredPosition;
-		}
-		else {
-			VERTEX_ERROR("Failed to parent");
-		}
+		this->m_LocalMatrix = glm::inverse(parentWorld) * previousWorld;
+		this->Parent = _parent->GetComponenet<RectTransform>();
+	}
+	else {
+		m_LocalMatrix = previousWorld;
+	}
+
+	MarkDirty();
+
+	if (_parent)
+	{
+		Parent->m_Children.push_back(this);
+	}
+}
+
+void RectTransform::AddChild(GameObject* _child)
+{
+}
+
+void RectTransform::RemoveChild(GameObject* _child)
+{
+}
+
+void RectTransform::ValidateDirtyTransforms(bool _forceValidate)
+{
+	glm::vec2 parentSize;
+
+	if (Parent) {
+		parentSize = Parent->size;
+	}
+	else {
+		parentSize = glm::vec2(1920, 1080);
+	}
+
+	glm::vec2 anchorPos = glm::mix(anchoredMin * parentSize, anchoredMax * parentSize, 0.5f);
+
+	glm::vec2 OriginOffset = origin * size;
+
+	worldPosition = anchorPos + anchoredPosition - OriginOffset;
+
+	glm::mat4 model = glm::mat4(1.0f);
+
+	glm::mat4 trans = glm::translate(glm::mat4(1.0f), glm::vec3(worldPosition, 0.0f));
+	glm::mat4 Rot = glm::rotate(glm::mat4(1.0f), rotation, glm::vec3(0, 0, 1));
+	glm::mat4 Scal = glm::scale(glm::mat4(1.0f), glm::vec3(size * scale, 1));
+
+	m_LocalMatrix = trans * Rot * Scal;
+
+	if (Parent) {
+		//m_Parent->ValidateDirtyTransforms();
+		m_WorldMatrix = Parent->GetWorldMatrix() * m_LocalMatrix;
+	}
+	else {
+		m_WorldMatrix = m_LocalMatrix;
+	}
+
+	for (auto* child : m_Children) {
+		child->MarkDirty();
 	}
 }

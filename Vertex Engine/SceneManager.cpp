@@ -69,9 +69,9 @@ void SceneManager::SetActiveScene(const char _scene[])
 /// Sets the Engines current state such as if its in normal release mode or in editor testing modes.
 /// </summary>
 /// <param name="Editor Mode"></param>
-void SceneManager::EngineState(EditorMode _mode)
+void SceneManager::EngineState(RunTimeMode* _mode)
 {
-	if (_mode == PLAY || _mode == EDITOR_PLAY)
+	if (_mode->EditorMode == EditorMode::PLAY || _mode->EditorMode == EditorMode::EDITOR_PLAY)
 	{
 		m_IsAllowedToStartScenes = true;
 	}

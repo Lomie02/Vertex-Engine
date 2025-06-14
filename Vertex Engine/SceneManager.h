@@ -53,7 +53,7 @@ public:
 	/// Set the Engines runtime mode.
 	/// </summary>
 	/// <param name="_mode">Takes an EditorMode keyword</param>
-	void EngineState(EditorMode _mode);
+	void EngineState(RunTimeMode* _mode);
 	/// <summary>
 	/// Deletes all vertex scenes & clears the scene manager.
 	/// </summary>

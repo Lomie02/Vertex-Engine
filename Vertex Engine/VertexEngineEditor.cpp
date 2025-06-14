@@ -1,9 +1,15 @@
 ﻿#include "VertexEngineEditor.h"
 #include "DebugComp.h"
 #include <cstdint>
+#include "AssetPipelineManager.h"
 
 #include "RectTransform.h"
 #include "SpriteRenderer.h"
+#include <thread>
+
+VertexEngineEditor::~VertexEngineEditor()
+{
+}
 
 void VertexEngineEditor::CreateEditorLayout(GLFWwindow* _GameWindow, SceneManager* _scenesManager)
 {
@@ -70,7 +76,7 @@ void VertexEngineEditor::CleanUpGui()
 
 void VertexEngineEditor::UpdateEditorColours()
 {
-	if (m_EditorMode == EDITOR)
+	if (m_EditorMode->EditorMode == EditorMode::EDITOR)
 	{
 		ImGuiStyle* style = &ImGui::GetStyle();
 		style->Colors[ImGuiCol_WindowBg] = ImVec4(EDITOR_BACKGROUND);
@@ -83,7 +89,7 @@ void VertexEngineEditor::UpdateEditorColours()
 		style->Colors[ImGuiCol_ButtonHovered] = ImVec4(EDITOR_BUTTONS_SELECT);
 
 	}
-	else if (m_EditorMode == EDITOR_PLAY)
+	else if (m_EditorMode->EditorMode == EditorMode::EDITOR_PLAY)
 	{
 		ImGuiStyle* style1 = &ImGui::GetStyle();
 		style1->Colors[ImGuiCol_WindowBg] = ImVec4(PLAY_MODE_COLOUR);
@@ -240,7 +246,6 @@ void VertexEngineEditor::RenderEditorInspector()
 			ImGui::OpenPopup("Rename");
 		}
 
-
 		//TODO: causes name to change to a bunch of "?????"
 		if (ImGui::BeginPopup("Rename")) {
 
@@ -284,18 +289,6 @@ void VertexEngineEditor::RenderEditorInspector()
 			ImGui::OpenPopup("ComponentMenu");
 		}
 
-		// Texture Swapping.
-
-		if (ImGui::BeginDragDropTarget()) {
-			if (const ImGuiPayload* gameObjectPayload = ImGui::AcceptDragDropPayload("TEXTURE")) {
-				const char* texture = (const char*)gameObjectPayload->Data;
-
-				m_SelectedGameObject->material.AlbedoMap = ResourceManager::GetTexture(texture);
-
-			}
-			ImGui::EndDragDropTarget();
-		}
-
 		// Componenet Menu
 		if (ImGui::BeginPopup("ComponentMenu")) {
 			if (ImGui::MenuItem("Comp")) {
@@ -307,8 +300,8 @@ void VertexEngineEditor::RenderEditorInspector()
 			}
 
 			if (ImGui::MenuItem("Text")) {
-				if (m_SelectedGameObject->GetComponenet<RectTransform>() == nullptr)
-					m_SelectedGameObject->AddComponent<RectTransform>();
+				if (m_SelectedGameObject->GetComponenet<Text>() == nullptr)
+					m_SelectedGameObject->AddComponent<Text>();
 
 				m_SelectedGameObject->AddComponent<Text>();
 			}
@@ -316,6 +309,13 @@ void VertexEngineEditor::RenderEditorInspector()
 			if (ImGui::MenuItem("Sprite Renderer")) {
 				if (m_SelectedGameObject->GetComponenet<SpriteRenderer>() == nullptr)
 					m_SelectedGameObject->AddComponent<SpriteRenderer>();
+
+			}
+
+			if (ImGui::MenuItem("Button")) {
+
+				if (m_SelectedGameObject->GetComponenet<Button>() == nullptr)
+					m_SelectedGameObject->AddComponent<Button>();
 
 			}
 
@@ -329,9 +329,6 @@ void VertexEngineEditor::RenderEditorInspector()
 
 			ImGui::EndPopup();
 		}
-	}
-	else {
-		ImGui::Text("NO_SELECTION");
 	}
 
 	ImGui::End();
@@ -356,6 +353,7 @@ void VertexEngineEditor::RenderEditorInheritList()
 		if (ImGui::MenuItem("Empty UI Element")) {
 			GameObject* temp = m_ApplicationCentralSceneManager->m_SceneList.at(m_ApplicationCentralSceneManager->GetActiveScene())->GetAssets()->RegisterGameObjectNew();
 			temp->AddComponent<RectTransform>();
+			temp->AddComponent<SpriteRenderer>();
 		}
 
 		// Create a default camera
@@ -367,6 +365,19 @@ void VertexEngineEditor::RenderEditorInheritList()
 		if (ImGui::MenuItem("Sprite")) {
 			GameObject* temp = m_ApplicationCentralSceneManager->m_SceneList.at(m_ApplicationCentralSceneManager->GetActiveScene())->GetAssets()->RegisterGameObjectNew();
 			temp->AddComponent<SpriteRenderer>();
+		}
+
+		if (ImGui::MenuItem("Button")) {
+			// Create main button element.
+			GameObject* temp = m_ApplicationCentralSceneManager->m_SceneList.at(m_ApplicationCentralSceneManager->GetActiveScene())->GetAssets()->RegisterGameObjectNew();
+			temp->AddComponent<RectTransform>();
+			temp->AddComponent<SpriteRenderer>();
+			temp->AddComponent<Button>();
+
+			// Create the child which will hold the text for the button.
+			GameObject* child = m_ApplicationCentralSceneManager->m_SceneList.at(m_ApplicationCentralSceneManager->GetActiveScene())->GetAssets()->RegisterGameObjectNew();
+			child->AddComponent<RectTransform>();
+			child->GetComponenet<RectTransform>()->SetParent(temp, true);
 		}
 
 		ImGui::EndPopup();
@@ -410,35 +421,36 @@ void VertexEngineEditor::RenderEditorDesk()
 	ImVec2 spaceLeft = ImGui::GetContentRegionAvail();
 	float xSpace = 0.0f;
 
-	//======================================= Texture Displaying
-	for (const auto& [name, texture] : ResourceManager::Textures) {
+	if (!AssetPipelineManager::IsReloadInProgress()) {
 
-		if (xSpace + (256 * m_DeskPanelItemMultiplier) > spaceLeft.x) {
-			xSpace = 0;
-			ImGui::NewLine();
+
+		//======================================= Texture Displaying
+		for (const auto& [name, texture] : ResourceManager::Textures) {
+
+			if (xSpace + (256 * m_DeskPanelItemMultiplier) > spaceLeft.x) {
+				xSpace = 0;
+				ImGui::NewLine();
+			}
+
+			// Display Textures that the engine has registered
+
+			ImGui::ImageButton(name.c_str(), texture.ID, ImVec2(256 * m_DeskPanelItemMultiplier, 256 * m_DeskPanelItemMultiplier), ImVec2(0, 1), ImVec2(1, 0));
+
+			ImGui::SameLine(0.0f, padding);
+			xSpace += (256 * m_DeskPanelItemMultiplier) + padding;
+
+			// Drag & Drop texture Space.
+			if (ImGui::BeginDragDropSource()) {
+
+				ImGui::SetDragDropPayload("TEXTURE", name.c_str(), strlen(name.c_str()) + 1);
+				ImGui::Text("Dragging: %s", name.c_str());
+				ImGui::Image(texture.ID, ImVec2(64, 64));
+
+				ImGui::EndDragDropSource();
+			}
+
 		}
-
-		// Display Textures that the engine has registered
-
-		ImGui::ImageButton(name.c_str(), texture.ID, ImVec2(256 * m_DeskPanelItemMultiplier, 256 * m_DeskPanelItemMultiplier),ImVec2(0,1), ImVec2(1,0));
-
-		ImGui::SameLine(0.0f, padding);
-		xSpace += (256 * m_DeskPanelItemMultiplier) + padding;
-
-		// Drag & Drop texture Space.
-		if (ImGui::BeginDragDropSource()) {
-
-			ImGui::SetDragDropPayload("TEXTURE", name.c_str(), strlen(name.c_str()) + 1);
-			ImGui::Text("Dragging: %s", name.c_str());
-			ImGui::Image(texture.ID, ImVec2(64, 64));
-
-			ImGui::EndDragDropSource();
-		}
-
-
-
 	}
-
 	ImGui::End();
 }
 
@@ -470,35 +482,40 @@ void VertexEngineEditor::RenderDockingTaskBar()
 	ImGui::BeginMenuBar();
 
 
-
-	if (ImGui::ArrowButton("Play", ImGuiDir_Right) && m_EditorMode == EDITOR)
+	if (ImGui::ArrowButton("Play", ImGuiDir_Right) && m_EditorMode->EditorMode == EditorMode::EDITOR)
 	{
-		m_EditorMode = EDITOR_PLAY;
+		m_EditorMode->EditorMode = EditorMode::EDITOR_PLAY;
 		m_ApplicationCentralSceneManager->m_SceneList.at(m_ApplicationCentralSceneManager->GetActiveScene())->Start();
 		UpdateEditorColours();
 
 	}
 	if (ImGui::Button("PAUSE"))
 	{
-		if (m_EditorMode == EDITOR_PLAY)
+		if (m_EditorMode->EditorMode == EditorMode::EDITOR_PLAY)
 		{
-			m_EditorMode = EDITOR_PAUSED;
+			m_EditorMode->EditorMode = EditorMode::EDITOR_PAUSED;
 		}
-		else if (m_EditorMode == EDITOR_PAUSED)
+		else if (m_EditorMode->EditorMode == EditorMode::EDITOR_PAUSED)
 		{
-			m_EditorMode = EDITOR_PLAY;
+			m_EditorMode->EditorMode = EditorMode::EDITOR_PLAY;
 		}
 	}
 	if (ImGui::Button("STOP"))
 	{
 		VERTEX_LOG("Stop Test");
 
-		if (m_EditorMode == EDITOR_PLAY || m_EditorMode == EDITOR_PAUSED) {
+		if (m_EditorMode->EditorMode == EditorMode::EDITOR_PLAY || m_EditorMode->EditorMode == EditorMode::EDITOR_PAUSED) {
 
-			m_EditorMode = EDITOR;
+			m_EditorMode->EditorMode = EditorMode::EDITOR;
 			m_ApplicationCentralSceneManager->m_SceneList.at(m_ApplicationCentralSceneManager->GetActiveScene())->Start();
 			UpdateEditorColours();
 		}
+	}
+
+	if (ImGui::Button("Reload Pipeline"))
+	{
+		VERTEX_LOG("Reloading Pipeline. ");
+		AssetPipelineManager::HotReload();
 	}
 
 	ImGui::EndMenuBar();

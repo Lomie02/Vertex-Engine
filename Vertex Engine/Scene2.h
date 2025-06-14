@@ -56,7 +56,6 @@ private:
 	//User Interface
 	Text* m_Title;
 	Text* m_CounterText;
-	Button* m_ButtonTest;
 	Sprite* m_Sprite;
 
 	// Vertex Componenets

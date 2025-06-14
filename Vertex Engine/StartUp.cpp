@@ -13,18 +13,16 @@ int main()
 	std::cout << PROJECT_NAME << std::endl;
 	std::cout << "Made by: "<< PROJECT_DEVELOPER << std::endl << std::endl;
 
-	Application* App = new Application();
+	Application App;
 
-	App->StartUp();
-	App->Start();
+	App.StartUp();
+	App.Start();
 
-	while (!glfwWindowShouldClose(App->GetWindow()))
+	while (!glfwWindowShouldClose(App.GetWindow()))
 	{
-		App->Update();
-		App->RenderAll();
+		App.Update();
+		App.RenderAll();
 	}
-	App->ShutDown();
+	App.ShutDown();
 
-	delete App;
-	App = nullptr;
 }

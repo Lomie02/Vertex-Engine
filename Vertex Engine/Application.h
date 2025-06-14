@@ -88,8 +88,8 @@ public:
 	/// </summary>
 	void ShutDown();
 
-	EditorMode GetCurrentEditorMode() { return m_Mode; }
-	void SetEditorMode(EditorMode _mode) { m_Mode = _mode; };
+	RunTimeMode* GetCurrentEditorMode() { return m_Mode; }
+	void SetEditorMode(RunTimeMode* _mode) { m_Mode = _mode; };
 
 	// These functions will take care of the external packages that the engine will soon support.
 	void StartExternal();
@@ -112,7 +112,7 @@ private:
 	EditorSelection m_EditorSelectType = eSprite;
 
 	EditorWindow m_WindowMode = Main;
-	EditorMode m_Mode = EDITOR;
+	RunTimeMode* m_Mode;
 	bool m_EditorFullScreen = false;
 
 	// Basics

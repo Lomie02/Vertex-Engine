@@ -199,6 +199,7 @@
     <ClCompile Include="RenderTexture.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="RigidBody.cpp" />
+    <ClCompile Include="RigidBody2D.cpp" />
     <ClCompile Include="RuntimeAsset.cpp" />
     <ClCompile Include="Scene2.cpp" />
     <ClCompile Include="SceneManager.cpp" />
@@ -215,6 +216,7 @@
     <ClCompile Include="VertexAccessExplorer.cpp" />
     <ClCompile Include="VertexComponent.cpp" />
     <ClCompile Include="VertexEngineEditor.cpp" />
+    <ClCompile Include="VertexEvent.cpp" />
     <ClCompile Include="VertexPrefs.cpp" />
     <ClCompile Include="VertexScene.cpp" />
     <ClCompile Include="VertexText2D.cpp" />
@@ -278,6 +280,7 @@
     <ClInclude Include="resource1.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="RigidBody.h" />
+    <ClInclude Include="RigidBody2D.h" />
     <ClInclude Include="RuntimeAsset.h" />
     <ClInclude Include="Scene2.h" />
     <ClInclude Include="SceneManager.h" />
@@ -293,6 +296,7 @@
     <ClInclude Include="VertexAccessExplorer.h" />
     <ClInclude Include="VertexComponent.h" />
     <ClInclude Include="VertexEngineEditor.h" />
+    <ClInclude Include="VertexEvent.h" />
     <ClInclude Include="VertexGeneral.h" />
     <ClInclude Include="VertexPrefs.h" />
     <ClInclude Include="VertexRenderPackage.h" />

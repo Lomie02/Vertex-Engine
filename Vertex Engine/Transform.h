@@ -18,6 +18,8 @@ public:
 
 	void Reset();
 
+	void Scale(float _factor);
+
 	glm::vec2 GetCenter();
 	float GetSizeFromCentre(glm::vec2 _axis);
 
@@ -32,7 +34,31 @@ public:
 	glm::mat4 m_TransformModelMatrix = glm::mat4(1.0f);
 
 	void RenderEditorDisplay() override;
-
+	/// <summary>
+	/// Gets the forward direction of transform.
+	/// </summary>
+	/// <returns></returns>
+	glm::vec3 GetForward() { return rotation * glm::vec3(0, 0, -1); };
+	/// <summary>
+	/// Get the Up Direction of transform
+	/// </summary>
+	/// <returns></returns>
+	glm::vec3 GetUp() { return rotation * glm::vec3(0, 1, 0); };
+	/// <summary>
+	/// Get the down Direction of transform
+	/// </summary>
+	/// <returns></returns>
+	glm::vec3 GetDown() { return rotation * glm::vec3(0, -1, 0); };
+	/// <summary>
+	/// Get the right direction of the transform.
+	/// </summary>
+	/// <returns></returns>
+	glm::vec3 GetRight() { return rotation * glm::vec3(1, 0, 0); };
+	/// <summary>
+	/// Get the left Direction of the transform.
+	/// </summary>
+	/// <returns></returns>
+	glm::vec3 Getleft() { return rotation * glm::vec3(-1, 0, 0); };
 
 	glm::mat4 GetWorldModelMat()  {
 
@@ -61,8 +87,10 @@ public:
 	void LateUpdate(float delta) override;
 	std::vector<Transform*> GetChildren() { return m_Children; }
 
+	void MarkDirty() { m_IsDirty = true; }
 private:
 
+	float m_LocalScaleFactor = 1;
 	bool HasChanged();
 	void ValidateDirtyTransforms(bool _forceValidate = false);
 

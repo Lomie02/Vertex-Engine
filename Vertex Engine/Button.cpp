@@ -1,24 +1,74 @@
 #include "Button.h"
 
+Button::Button()
+{
+	Awake();
+}
+
 Button::~Button()
 {
-	delete m_Text;
-	m_Text = nullptr;
-
-	delete m_Text;
-	m_Text = nullptr;
+	if (m_SpriteRendererComp) {
+		delete m_SpriteRendererComp;
+		m_SpriteRendererComp = nullptr;
+	}
 }
 
-void Button::ConfigureCustoms(glm::mat4 _camera)
+void Button::Awake()
+{
+	
+}
+
+void Button::RenderEditorDisplay()
+{
+	ImGui::PushStyleColor(ImGuiCol_Header, ImVec4(0, 0.5f, 0, 1));
+	ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0, 0.5f, 0, 1));
+
+	if (ImGui::CollapsingHeader("Button", ImGuiTreeNodeFlags_DefaultOpen)) {
+
+		ImGui::Text("Normal Colour "); ImGui::SameLine();
+		ImGui::PushID(0);
+		ImGuiVec4(m_NormalColour);
+		ImGui::PopID();
+
+		ImGui::Text("Selected Colour: "); ImGui::SameLine();
+		ImGui::PushID(1);
+		ImGuiVec4(m_SelectedColour);
+		ImGui::PopID();
+	}
+	ImGui::PopStyleColor(2);
+}
+
+void Button::Update(float deltaTime)
+{
+
+}
+
+void Button::OnHoverEnter()
 {
 }
 
-void Button::SetOffset(glm::vec2 _offset)
+void Button::OnHoverExit()
 {
-	m_Offset = _offset;
 }
 
-void Button::BeginSetUp()
+void Button::OnClicked()
 {
-	material.AlbedoMap = ResourceManager::GetTexture("UI_Button");
+	onClick->Invoke();
+}
+
+void Button::OnSelected()
+{
+}
+
+void Button::ImGuiVec4(glm::vec4 _colourVec)
+{
+	ImGui::SetNextItemWidth(25.0f); 
+	ImGui::DragFloat("R:", &_colourVec.r, 1.0f, 0.0f, 255.0f);
+	ImGui::SetNextItemWidth(25.0f); ImGui::SameLine();
+	ImGui::DragFloat("G:", &_colourVec.g, 1.0f, 0.0f, 255.0f);
+	ImGui::SetNextItemWidth(25.0f); ImGui::SameLine();
+	ImGui::DragFloat("B:", &_colourVec.b, 1.0f, 0.0f, 255.0f);
+	ImGui::SetNextItemWidth(25.0f); ImGui::SameLine();
+	ImGui::DragFloat("A:", &_colourVec.a, 1.0f, 0.0f, 255.0f);
+
 }

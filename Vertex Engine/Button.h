@@ -1,53 +1,62 @@
 #pragma once
 #include "GameObject.h"
 #include <string>
-#include "VertexRenderPackage.h"
-#include "ResourceManager.h"
-#include "GameSettings.h"
+#include "VertexComponent.h"
+#include "VertexEvent.h"
 
-#include "Text.h"
-class Button : public GameObject
+#include "SpriteRenderer.h"
+class Button : public VertexComponent
 {
+	friend class AssetManager; // Only let the asset manager of the scene deal with input.
 public:
-	Button() : GameObject()
-	{ 
-
-		BeginSetUp();
-	}
-	Button(const char* Name) : GameObject(Name)
-	{ 
-
-		BeginSetUp();
-	}
-	Button(const char* Name, std::string _text) : GameObject(Name)
-	{
-
-		BeginSetUp();
-	}
-	Button(const char* Name, bool active) : GameObject(Name, active)
-	{ 
-
-		BeginSetUp();
-	}
-
+	// Default Constructor
+	Button();
+	// De-Constructor
 	~Button();
 
-	bool Pressed() { return m_WasPressed; }
+	void Awake() override;
 
-	void PressEvent() { m_WasPressed = true; };
-	void CloseEvent() { m_WasPressed = false; };
-	
-	void ConfigureCustoms(glm::mat4 _camera);
-	
-	std::string text = "Button";
-	float size = 1.0f;
+	/// <summary>
+	/// Callback for when the button is clicked on.
+	/// </summary>
+	VertexEvent* onClick;
 
-	void SetOffset(glm::vec2 _offset);
+	/// <summary>
+	/// Editor Display
+	/// </summary>
+	void RenderEditorDisplay() override;
 
-	Text* m_Text;
+	/// <summary>
+	/// Updates buttons colours
+	/// </summary>
+	/// <param name="deltaTime"></param>
+	void Update(float deltaTime) override;
+
+
 private:
-	glm::vec2 m_Offset = glm::vec2(0, 0);
-	void BeginSetUp();
-	bool m_WasPressed = false;
+
+	// Triggers when mouse is over 
+	void OnHoverEnter();
+	// Triggers when mouse exits
+	void OnHoverExit();
+	// triggered when clicked.
+	void OnClicked();
+	// Triggered when selected.
+	void OnSelected();
+
+	// Can the button be clicked
+	bool m_IsInteractable = true;
+
+	// Wrapper to make vec drag floats cleaner with imgui
+	void ImGuiVec4(glm::vec4 _colourVec);
+
+	glm::vec4 m_NormalColour; // Default Colour
+	glm::vec4 m_SelectedColour; // Selected Colour
+	glm::vec4 m_PressedColour; // Pressed Colour
+	glm::vec4 m_HoverColour; // Hover Colour
+	glm::vec4 m_DisabledColour; //Disabled Colour
+	
+	// Sprite renderer linked to the main gameobject.
+	SpriteRenderer* m_SpriteRendererComp;
 };
 

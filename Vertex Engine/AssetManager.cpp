@@ -277,7 +277,7 @@ void AssetManager::Register(vGameObject* _object)
 GameObject* AssetManager::RegisterGameObjectNew(GameObject* _parent, GameObject* _child)
 {
 	GameObject* temp = new GameObject("GameObject");
-	temp->material.AlbedoMap = ResourceManager::GetTexture("Girl_01");
+	temp->material.AlbedoMap = ResourceManager::GetTexture("UI_Button"); // Remove once materials are component only.
 	temp->transform->scale.x = 5;
 
 	if (_parent) {
@@ -401,11 +401,9 @@ void AssetManager::TensionRendering(Vertex2D* m_Renderer)
 			{
 				if (m_Objects.at(i)->GetActive())
 				{
-					if (m_Objects.at(i)->GetComponenet<RectTransform>())
+					if (m_Objects.at(i)->GetComponenet<RectTransform>() && m_Objects.at(i)->GetComponenet<SpriteRenderer>())
 						m_Renderer->TensionInterfaceDraw(m_Objects.at(i));
 
-					if (m_Objects.at(i)->GetComponenet<Text>())
-						m_Objects.at(i)->GetComponenet<Text>()->ConfigureRenderSystems(glm::ortho(0.0f, static_cast<float>(1920), static_cast<float>(1080), 0.0f, -0.100f, 10.0f));
 				}
 			}
 
@@ -736,7 +734,7 @@ void AssetManager::BeginColourPickInterface(Vertex2D* m_Renderer)
 	{
 		if (m_Objects.at(i)->GetActive())
 		{
-			if (m_Objects.at(i)->GetComponenet<RectTransform>())
+			if (m_Objects.at(i)->GetComponenet<RectTransform>() && m_Objects.at(i)->GetComponenet<SpriteRenderer>())
 				m_Renderer->TensionInterfaceDraw(m_Objects.at(i), true);
 
 		}
@@ -854,7 +852,7 @@ void AssetManager::ConfigureMouse() //TODO: FInd out how to convert the Y cords.
 
 		glfwGetCursorPos(m_Window, &Xpos, &Ypos);
 
-		if (m_OperatingMode == EDITOR) {
+		if (m_OperatingMode->EditorMode == EditorMode::EDITOR) {
 			ConvertedMouseCord.position = glm::unProject(glm::vec3(Xpos, Ypos, 1), glm::mat4(1.0f), m_Cameras.at(m_ActiveCamera)->GetProjection(), glm::vec4(299.973f, 349.968f, 1280, 720));
 		}
 		else {
