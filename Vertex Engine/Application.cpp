@@ -30,9 +30,6 @@ Application::Application() // Creates the sound manager.
 
 Application::~Application()
 {
-	delete m_SceneManager;
-	m_SceneManager = nullptr;
-
 	delete m_Renderer;
 
 	delete m_Settings;
