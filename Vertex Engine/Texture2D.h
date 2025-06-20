@@ -10,6 +10,8 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
+#include <string>
+
 enum TransparentMode {
     Alpha = 0,
     Additive,
@@ -21,6 +23,7 @@ enum TransparentMode {
 class Texture2D
 {
 public:
+    std::string GUID;
     // holds the ID of the texture object, used for all texture operations to reference to this particlar texture
     unsigned int ID;
     // texture image dimensions

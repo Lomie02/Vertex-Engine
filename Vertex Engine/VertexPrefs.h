@@ -3,46 +3,43 @@
 #include <ostream>
 #include <iostream>
 
-#include <vector>
-#include "GameObject.h"
-#include "Transform.h"
+#include <filesystem>
 #include <sstream>
 #include <cstdio>
 #include <direct.h>
 
-/*
-	Need to do a complete overhaul on the VertexPrefs system.
-*/
+#include <yaml-cpp/yaml.h>
+#include <string>
+
+#include <vector>
+
+// Yaml test
+struct ProjectSettings {
+	std::string m_ApplicationName;
+	std::string m_EngineEdition;
+	std::string m_Aurthor;
+
+	int m_WindowWidth = 1920;
+	int m_WindowHeight = 1080;
+	bool m_FullScreen = false;
+};
 
 class VertexPrefs
 {
 public:
-	static void GetFile(std::string _file, std::vector<GameObject*> _data);
-	static void SaveFile(std::string _file, std::vector<GameObject*> _data);
-	static void SaveTextfile(std::string _fileName, std::string _text);
-	static void OpenTextfile(std::string _fileName);
 
-	static void SaveTransform(GameObject* _target);
-	static Transform GetTransform(std::string _name);
+	void CreateConfig(const std::string& _filePath);
+	void LoadConfig(const std::string& _filePath);
 
-	static void SetFloat(std::string _key, float _target);
-	static float GetFloat(std::string _key);
 
-	static void SetInt(std::string _key, int _target);
-	static int GetInt(std::string _key);
+	void SaveProject(ProjectSettings& _proj, const std::string& _filePath);
+	ProjectSettings LoadProject(const std::string& _filePath);
 
-	static void SetString(std::string _key, std::string _target);
-	static std::string GetString(std::string _key);
-
-	static void SetBool(std::string _key, bool _target);
-	static bool Getbool(std::string _key);
-
-	static void DeleteKey(std::string _key);
-	static void DeleteAllKeys();
-
-	static bool CreateFolder(std::string _key);
-	static bool DeleteFolder(std::string _key);
+	//void SaveScene(VertexScene* _scene, const std::string& _filePath);
+	//std::shared_ptr<VertexScene> LoadScene(const std::string& _filePath);
 private:
-	VertexPrefs();
+
+	// Create a default project if one cant be loaded.
+	void CreateDefaultProjectSettings();
 };
 

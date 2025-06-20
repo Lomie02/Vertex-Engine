@@ -513,13 +513,6 @@ void AssetManager::ConfigSetup()
 //TODO: Remove this or improve it
 void AssetManager::ExecuteAll()
 {
-	for (int i = 0; i < m_Objects.size(); i++)
-	{
-		VertexPrefs::SetInt(m_Objects.at(i)->name, m_Objects.at(i)->layer);
-		VertexPrefs::SaveTransform(m_Objects.at(i));
-	}
-
-	//VertexPrefs::SaveFile("Scene_data", m_Objects);
 }
 
 /// <summary>

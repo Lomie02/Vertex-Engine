@@ -19,6 +19,8 @@
 #include "AssetPipelineManager.h"
 #include "Debug.h" 
 
+#include "VertexPrefs.h"
+
 using namespace irrklang;
 using Clock = std::chrono::high_resolution_clock;
 /// <summary>
@@ -29,6 +31,8 @@ enum EditorWindow {
 	Animation,
 	HudEditor,
 };
+
+
 
 //TODO: Find out if this is needed or not. Otherwise delete it.
 enum EditorSelection {
@@ -97,7 +101,7 @@ public:
 
 private:
 	VertexEngineEditor* m_VertexEditor = nullptr;
-
+	ProjectSettings m_SettingsTest;
 	void SetUpWorkSpaceScenes();
 
 	// Editor

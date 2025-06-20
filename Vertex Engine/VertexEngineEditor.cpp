@@ -238,7 +238,7 @@ void VertexEngineEditor::RenderEditorInspector()
 
 	if (m_SelectedGameObject) {
 
-		ImGui::Text(m_SelectedGameObject->name);
+		ImGui::Text(m_SelectedGameObject->name.c_str());
 		ImGui::SameLine();
 
 		if (ImGui::Button("Edit")) {
@@ -554,7 +554,8 @@ void VertexEngineEditor::RenderGameObjectNodes(Transform* _obj, GameObject*& sel
 	if (_obj->GetChildren().empty())
 		flags |= ImGuiTreeNodeFlags_Selected;
 
-	bool open = ImGui::TreeNodeEx((void*)_obj, flags, "%s", _obj->partner2d->name);
+
+	bool open = ImGui::TreeNodeEx((void*)_obj, flags, "%s", _obj->partner2d->name.c_str());
 
 	if (ImGui::IsItemClicked()) {
 		m_SelectedGameObject = _obj->partner2d;
@@ -591,10 +592,11 @@ void VertexEngineEditor::RenderGameObjectNodes(Transform* _obj, GameObject*& sel
 		ImGui::EndDragDropTarget();
 	}
 
+	// Drag & drop parenting
 	if (ImGui::BeginDragDropSource()) {
 
 		ImGui::SetDragDropPayload("OBJECT_RE_PARENT", &_obj->partner2d, sizeof(GameObject*));
-		ImGui::Text("Dragging: %s", _obj->partner2d->name);
+		ImGui::Text("Dragging: %s", _obj->partner2d->name.c_str());
 
 		ImGui::EndDragDropSource();
 	}

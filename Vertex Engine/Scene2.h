@@ -16,11 +16,11 @@ public:
 	Scene2(const char _name[]);
 	~Scene2();
 
-	virtual void Awake();
-	virtual void Start();
-	virtual void Update(float delta);
-	virtual void LateUpdate(float delta);
-	virtual void FixedUpdate(float fixedDelta);
+	virtual void Awake() override;
+	virtual void Start() override;
+	virtual void Update(float delta) override;
+	virtual void LateUpdate(float delta) override;
+	virtual void FixedUpdate(float fixedDelta) override;
 
 	void GiveWindow(GLFWwindow* window) { m_Window = window; }
 	AssetManager* GetAssets() { return m_Manager; }
