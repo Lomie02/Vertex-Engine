@@ -24,7 +24,7 @@ GameObject::GameObject()
 
 }
 
-GameObject::GameObject(const char* _Name, bool active)
+GameObject::GameObject(std::string _Name, bool active)
 {
 	GenerateIds();
 	name = _Name;
@@ -71,7 +71,7 @@ uint32_t GameObject::IdColourConversion(const glm::vec4& _col)
 	return (r) | (g << 8) | (b << 16);
 }
 
-GameObject::GameObject(const char* _Name)
+GameObject::GameObject(std::string _Name)
 {
 	GenerateIds();
 	name = _Name;

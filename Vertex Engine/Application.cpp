@@ -52,6 +52,16 @@ void Application::StartUp()
 {
 	const char* description = new char[512];
 
+	VertexPrefs pref;
+
+	m_SettingsTest = pref.LoadProject("Builds/vertex.vertproj");
+
+	/*m_SettingsTest.m_ApplicationName = "I was saved!";
+	m_SettingsTest.m_Aurthor = "untitled";
+	m_SettingsTest.m_EngineEdition = "Vertex Engine 2";*/
+
+
+
 	if (!glfwInit()) {
 		glfwGetError(&description);
 		std::cout << "Window Failed ERROR: " << description << std::endl;
@@ -84,7 +94,7 @@ void Application::StartUp()
 		}
 	}
 	else {
-		m_GameWindow = glfwCreateWindow(1920, 1080, name, nullptr, nullptr);
+		m_GameWindow = glfwCreateWindow(1920, 1080, m_SettingsTest.m_ApplicationName.c_str(), nullptr, nullptr);
 	}
 
 	if (!m_GameWindow) {
@@ -353,6 +363,10 @@ void Application::ShutDown()
 	{
 		m_VertexEditor->CleanUpGui();
 	}
+
+	VertexPrefs pref;
+
+	pref.SaveProject(m_SettingsTest,"Builds/vertex.vertproj");
 
 	Cursor::Show(m_GameWindow);
 

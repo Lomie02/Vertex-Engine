@@ -96,14 +96,8 @@
     <ClCompile Include="AssetManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Transform.cpp">
-      <Filter>GameObjects</Filter>
-    </ClCompile>
     <ClCompile Include="Button.cpp">
       <Filter>UI</Filter>
-    </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>GameObjects</Filter>
     </ClCompile>
     <ClCompile Include="VertexText2D.cpp">
       <Filter>Renderers</Filter>
@@ -132,9 +126,6 @@
     <ClCompile Include="Text.cpp">
       <Filter>UI</Filter>
     </ClCompile>
-    <ClCompile Include="Material.cpp">
-      <Filter>GameObjects</Filter>
-    </ClCompile>
     <ClCompile Include="Clip.cpp">
       <Filter>Animation</Filter>
     </ClCompile>
@@ -158,9 +149,6 @@
     </ClCompile>
     <ClCompile Include="Flipbook.cpp">
       <Filter>Components</Filter>
-    </ClCompile>
-    <ClCompile Include="AudioSource.cpp">
-      <Filter>GameObjects</Filter>
     </ClCompile>
     <ClCompile Include="Cursor.cpp">
       <Filter>Source Files</Filter>
@@ -240,9 +228,6 @@
     <ClCompile Include="Debug.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GameUniqueIdentityAsset.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="RectTransform.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -260,6 +245,18 @@
     </ClCompile>
     <ClCompile Include="RigidBody2D.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AudioSource.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Material.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -338,14 +335,8 @@
     <ClInclude Include="..\imgui\imstb_textedit.h">
       <Filter>imgui</Filter>
     </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>GameObjects</Filter>
-    </ClInclude>
     <ClInclude Include="Scene2.h">
       <Filter>Scenes\Chicken Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Transform.h">
-      <Filter>GameObjects</Filter>
     </ClInclude>
     <ClInclude Include="Text.h">
       <Filter>UI</Filter>
@@ -356,23 +347,11 @@
     <ClInclude Include="RigidBody.h">
       <Filter>Physics</Filter>
     </ClInclude>
-    <ClInclude Include="Material.h">
-      <Filter>GameObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="Clip.h">
-      <Filter>Animation</Filter>
-    </ClInclude>
-    <ClInclude Include="Animator.h">
-      <Filter>Animation</Filter>
-    </ClInclude>
     <ClInclude Include="VertexPrefs.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
     <ClInclude Include="Collider.h">
       <Filter>Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="TestComponent.h">
-      <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
@@ -386,23 +365,8 @@
     <ClInclude Include="BootUpContainer.h">
       <Filter>Game Settings</Filter>
     </ClInclude>
-    <ClInclude Include="Particle.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerController.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="VertexComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
     <ClInclude Include="VertexGeneral.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Flipbook.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="AudioSource.h">
-      <Filter>GameObjects</Filter>
     </ClInclude>
     <ClInclude Include="Cursor.h">
       <Filter>Header Files</Filter>
@@ -412,12 +376,6 @@
     </ClInclude>
     <ClInclude Include="Input.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AnimationClip.h">
-      <Filter>Animation</Filter>
-    </ClInclude>
-    <ClInclude Include="Mime.h">
-      <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="Canvas.h">
       <Filter>Header Files</Filter>
@@ -504,6 +462,45 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RigidBody2D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioSource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Flipbook.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Particle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerController.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Animator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TestComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Mime.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Clip.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationClip.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

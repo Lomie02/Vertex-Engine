@@ -15,8 +15,8 @@ class GameObject
 	friend class VertexEngineEditor;
 public:
 	GameObject();
-	GameObject(const char* _Name);
-	GameObject(const char* _Name, bool active);
+	GameObject(std::string _Name);
+	GameObject(std::string _Name, bool active);
 	~GameObject();
 
 	glm::vec4 ColourIDConversion(uint16_t _id);
@@ -28,7 +28,7 @@ public:
 	Material material;
 	Transform* transform;
 
-	const char* name = "GameObject";
+	std::string name = "GameObject";
 	bool m_Active;
 
 	void ConfigureSystems();

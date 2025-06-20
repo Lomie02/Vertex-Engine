@@ -188,7 +188,6 @@
     <ClCompile Include="DebugComp.cpp" />
     <ClCompile Include="Flipbook.cpp" />
     <ClCompile Include="GameObject.cpp" />
-    <ClCompile Include="GameUniqueIdentityAsset.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Material.cpp" />
