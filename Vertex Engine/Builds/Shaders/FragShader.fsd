@@ -1,0 +1,59 @@
+#version 450
+
+out vec4 FragColour;
+in vec2 _Uvs;
+in vec3 _worldNormals;
+
+in mat3 _TBNmat;
+uniform mat4 modelMatrix;
+in vec3 _WorldPosition;
+
+uniform vec3 Light1;
+uniform vec3 Light2;
+uniform vec3 CamPos;
+
+uniform sampler2D BaseTexture;
+uniform sampler2D NormalMap;
+uniform sampler2D SpecMap;
+
+void main()
+{
+	// Calulate Ambient Light.
+	
+	vec4 Ambient = texture(BaseTexture, _Uvs) * 0.1;
+	FragColour = Ambient;
+
+	// Calulate Normals.
+	
+	vec3 tangentSpaceNormals = texture(NormalMap, _Uvs).xyz * 2 - 1;
+	vec3 objectSpaceNormals = _TBNmat * tangentSpaceNormals;
+	vec3 worldSpaceNormals = (modelMatrix * vec4(objectSpaceNormals, 0.0)).xyz;
+	
+	// Light 1
+	
+	float lightVal = max(dot(worldSpaceNormals, Light1), 0.0);
+	vec4 Diffuse = texture(BaseTexture, _Uvs) * lightVal;
+	
+	float SpecPower = 32;
+	vec3 ReflectDir = reflect(Light1, worldSpaceNormals );
+	vec3 SurfaceToEye = normalize(CamPos - _WorldPosition);
+
+	float SpecTerm = pow(max(0.0, dot(ReflectDir, SurfaceToEye)), SpecPower);
+	vec4 Specular = texture(SpecMap, _Uvs).xyzw * SpecTerm;
+
+	FragColour += Diffuse + Specular;
+	
+	// Light 2
+	
+	 lightVal = max(dot(worldSpaceNormals, Light2), 0.0);
+	 Diffuse = texture(BaseTexture, _Uvs) * lightVal;
+	
+	 ReflectDir = reflect(Light2, worldSpaceNormals );
+	 SurfaceToEye = normalize(CamPos - _WorldPosition);
+
+	 SpecTerm = pow(max(0.0, dot(ReflectDir, SurfaceToEye)), SpecPower);
+	 Specular = texture(SpecMap, _Uvs).xyzw * SpecTerm;
+
+	FragColour += Diffuse + Specular;
+
+}

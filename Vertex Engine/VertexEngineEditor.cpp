@@ -475,12 +475,8 @@ void VertexEngineEditor::RenderDockingTaskBar()
 
 	ImGui::Begin("DockSpace", &dockOpen, window);
 
-	ImGui::Text("VERTEX ENGINE 2: EDITOR");
-	ImGui::SameLine();
-	ImGui::Text(PROJECT_NAME);
 
 	ImGui::BeginMenuBar();
-
 
 	if (ImGui::ArrowButton("Play", ImGuiDir_Right) && m_EditorMode->EditorMode == EditorMode::EDITOR)
 	{

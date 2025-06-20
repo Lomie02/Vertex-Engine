@@ -1,0 +1,11 @@
+Project:
+  AppName: Transparent Rendering Example
+  EngineEdition: Vertex Engine 2
+  Aurthor: company
+  WindowWidth: 1920
+  WindowHeight: 1080
+  Fullscreen: true
+  Framework: true
+  Scenes:
+    - Transitions.scene.scene
+    - My Other Scene.scene.scene

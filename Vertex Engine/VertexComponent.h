@@ -3,11 +3,21 @@
 class vGameObject;
 class GameObject;
 
+#include "yaml-cpp/yaml.h"
 #include "imgui.h"
+#include "GameUniqueIdentityAsset.h"
+
+
 class VertexComponent //base class for all Vertex custom scripts & componets.
 {
 public:
-	virtual ~VertexComponent() = default;
+	VertexComponent() {
+		m_ID = GameUniqueIdentityAsset::GenerateUniqueIdenityIndex();
+		partner2d = nullptr;
+		partner3d = nullptr;
+	}
+
+	//virtual ~VertexComponent() = default;
 
 	virtual void Awake(); // Called on creation.
 	virtual void Start(); // Called at Start of Frame (Once)
@@ -30,7 +40,16 @@ public:
 
 	virtual void OnCollision();
 
+	virtual YAML::Node SerializeComponent() const;
+	virtual void DeserializeComponent(const YAML::Node& _node);
+
 	vGameObject* partner3d;
+
 	GameObject* partner2d;
+
+	uint32_t GetUniqueId() { return m_ID; }
+protected:
+	uint32_t m_ID;
+
 };
 

@@ -4,6 +4,10 @@
 #include "VertexGeneral.h"
 #include <vector>
 #include <string.h>
+#include "Vertex.h"
+
+#include <assimp/Importer.hpp>
+
 class AssetPipelineManager
 {
 public:
@@ -13,6 +17,7 @@ public:
 	static void ScanFolderForTextures();
 	static void HotReload();
 	static bool IsReloadInProgress() { return m_HotReloadInProgress; }
+	static void ScanFolderForMesh();
 private:
 	AssetPipelineManager();
 	// File Types
@@ -21,6 +26,7 @@ private:
 	static std::vector<std::string> m_Supported3dAssetTypes; // 3D Models
 
 	// Asset Holders.
+	static std::unordered_map<std::string, std::shared_ptr<MeshData>> m_Models;
 	static std::vector<std::string> m_TextureAssetsLoaded;
 	static bool m_HasBeenInit;
 	static bool m_HotReloadInProgress;

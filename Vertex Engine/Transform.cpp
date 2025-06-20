@@ -264,6 +264,27 @@ void Transform::LateUpdate(float delta)
 {
 }
 
+YAML::Node Transform::SerializeComponent() const
+{
+	YAML::Node nodeData;
+
+	nodeData["positionX"] = position.x;
+	nodeData["positionY"] = position.y;
+	nodeData["positionZ"] = position.z;
+
+	if (m_Parent != nullptr)
+		nodeData["parent"] = m_Parent->GetUniqueId();
+	else
+		nodeData["parent"] = 0;
+
+
+	return nodeData;
+}
+
+void Transform::DeserializeComponent(const YAML::Node& _node)
+{
+}
+
 bool Transform::HasChanged()
 {
 	if (m_LastPosition.x != position.x || m_LastPosition.y != position.y || m_LastPosition.z != position.z ||

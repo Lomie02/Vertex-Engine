@@ -6,15 +6,18 @@
 class Transform : public VertexComponent {
 
 public:
+
+	Transform() { m_ID = GameUniqueIdentityAsset::GenerateUniqueIdenityIndex(); };
+
 	glm::vec3 position;
 	glm::vec3 pivot;
 
 	glm::vec3 scale;
-	
+
 	glm::quat rotation;
 
 	void SetSize(float x, float y);
-	glm::vec2 GetSize() {return scale;}
+	glm::vec2 GetSize() { return scale; }
 
 	void Reset();
 
@@ -30,7 +33,7 @@ public:
 	//==================================== New Transform Data
 	glm::mat4 GetModelMatrixEditable() { return m_TransformModelMatrix; }
 
-	glm::mat4 GetLocalModelMat() ;
+	glm::mat4 GetLocalModelMat();
 	glm::mat4 m_TransformModelMatrix = glm::mat4(1.0f);
 
 	void RenderEditorDisplay() override;
@@ -60,12 +63,12 @@ public:
 	/// <returns></returns>
 	glm::vec3 Getleft() { return rotation * glm::vec3(-1, 0, 0); };
 
-	glm::mat4 GetWorldModelMat()  {
+	glm::mat4 GetWorldModelMat() {
 
 		if (HasChanged()) ValidateDirtyTransforms();
 
 		if (m_Parent) {
-			
+
 			m_WorldMatrix = m_Parent->GetWorldModelMat() * m_LocalModel;
 			return m_WorldMatrix;
 		}
@@ -88,6 +91,12 @@ public:
 	std::vector<Transform*> GetChildren() { return m_Children; }
 
 	void MarkDirty() { m_IsDirty = true; }
+
+	YAML::Node SerializeComponent() const override;
+	void DeserializeComponent(const YAML::Node& _node) override;
+
+	
+
 private:
 
 	float m_LocalScaleFactor = 1;

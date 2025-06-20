@@ -1,10 +1,12 @@
 #include "Vertex2D.h"
 #include "RectTransform.h"
 #include "SpriteRenderer.h"
+#include "MeshRenderer.h"
 Vertex2D::Vertex2D(Shader& shader)
 {
 	DefaultSpriteMat = new Material("VertexDefaultSpriteMaterial");
 
+	this->m_DefaultVioletShader = ResourceManager::GetShader("3dModel");
 	this->m_Shader = shader;
 	this->SetUpData();
 }
@@ -389,6 +391,19 @@ void Vertex2D::TensionInterfaceDraw(GameObject* _element, bool _IsColourPick) //
 	_element->GetComponenet<SpriteRenderer>()->Sprite.Bind();
 
 	PrepareRender();
+}
+
+void Vertex2D::VioletDraw(GameObject* _element, glm::mat4 per)
+{
+	this->m_DefaultVioletShader.Use();
+
+	this->m_Shader.SetMatrix4("model", _element->transform->GetWorldModelMat());
+	this->m_DefaultVioletShader.SetMatrix4("pro", per);
+
+	glActiveTexture(GL_TEXTURE0);
+	_element->GetComponenet<MeshRenderer>()->GetMaterials()[0]->AlbedoMap.Bind();
+	
+	_element->GetComponenet<MeshRenderer>()->RenderMesh();
 }
 
 void Vertex2D::VertexEngineColourPickRender(GameObject* _object, glm::mat4 per)

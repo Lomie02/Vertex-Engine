@@ -21,6 +21,12 @@
 
 #include "Debug.h"
 
+#include "Vertex.h"
+
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+
 // A static singleton ResourceManager class that hosts several
 // functions to load Textures and Shaders. Each loaded texture
 // and/or shader is also stored for future reference by string
@@ -33,6 +39,7 @@ public:
 
 	static std::map<std::string, Shader>    Shaders;
 	static std::map<std::string, Texture2D> Textures;
+	static std::map<std::string, MeshData> Models;
 	
 	// loads (and generates) a shader program from file loading vertex, fragment (and geometry) shader's source code. If gShaderFile is not nullptr, it also loads a geometry shader
 	static Shader    LoadShader(const char* vShaderFile, const char* fShaderFile, const char* gShaderFile, std::string name);
@@ -49,6 +56,8 @@ public:
 	// Checks if a shader is registered.
 	static bool DoesShaderExist(const char* _shaderName);
 
+	static MeshData LoadModel(const char* _filePath, std::string _name);
+	static MeshData GetModel(std::string _name);
 	
 private:
 	// private constructor, that is we do not want any actual resource manager objects. Its members and functions should be publicly available (static).

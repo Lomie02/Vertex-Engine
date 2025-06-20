@@ -16,6 +16,8 @@
 
 #define PROJECT_ICON "PowerIcon.png"
 
+#define PROJECT_FILE_DIRECTORY "Builds/vertex.vproj.vertproj"
+
 // Change to true if your game is finished & the game will be put into play mode by itself.
 #define FINAL_BUILD false
 #define AUTO_DELETE_ASSET_POINTERS false

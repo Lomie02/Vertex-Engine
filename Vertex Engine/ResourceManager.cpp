@@ -17,7 +17,7 @@
 // Instantiate static variables
 std::map<std::string, Texture2D>    ResourceManager::Textures;
 std::map<std::string, Shader>       ResourceManager::Shaders;
-
+std::map<std::string, MeshData>		ResourceManager::Models;
 
 Shader ResourceManager::LoadShader(const char* vShaderFile, const char* fShaderFile, const char* gShaderFile, std::string name)
 {
@@ -57,6 +57,70 @@ bool ResourceManager::DoesShaderExist(const char* _shaderName)
 	else
 		return true;
 
+}
+
+MeshData ResourceManager::LoadModel(const char* _filePath, std::string _name)
+{
+	Assimp::Importer importer;
+	const aiScene* scene = importer.ReadFile(_filePath, aiProcess_Triangulate | aiProcess_JoinIdenticalVertices | aiProcess_CalcTangentSpace);
+
+	if (scene == nullptr) return MeshData();
+
+	MeshData MeshTemp;
+	aiMesh* mesh = *scene->mMeshes;
+
+	// gather all data for the mesh
+	for (unsigned int i = 0; i < mesh->mNumVertices; i++) {
+		Vertex vert;
+		// Vertices
+		vert.position.x = mesh->mVertices[i].x;
+		vert.position.y = mesh->mVertices[i].y;
+		vert.position.z = mesh->mVertices[i].z;
+
+		// Normals
+		vert.Normal.x = mesh->mNormals[i].x;
+		vert.Normal.y = mesh->mNormals[i].y;
+		vert.Normal.z = mesh->mNormals[i].z;
+
+		// Uvs 
+		for (unsigned int j = 0; j < mesh->GetNumUVChannels(); j++) {
+			vert.TexCoord.x = mesh->mTextureCoords[j][i].x;
+			vert.TexCoord.y = mesh->mTextureCoords[j][i].y;
+		}
+
+		// Tangents & Bi Tangents
+		if (mesh->HasTangentsAndBitangents()) {
+
+			vert.Tangent.x = mesh->mTangents[i].x;
+			vert.Tangent.y = mesh->mTangents[i].y;
+			vert.Tangent.z = mesh->mTangents[i].z;
+
+			vert.BitTangent.x = mesh->mBitangents[i].x;
+			vert.BitTangent.y = mesh->mBitangents[i].y;
+			vert.BitTangent.z = mesh->mBitangents[i].z;
+		}
+
+		MeshTemp.vertices.push_back(vert);
+	}
+
+	// Faces
+	if (mesh->HasFaces()) {
+		for (unsigned int i = 0; i < mesh->mNumFaces; i++) {
+			MeshTemp.indices.push_back((unsigned short) mesh->mFaces[i].mIndices[0]);
+			MeshTemp.indices.push_back((unsigned short) mesh->mFaces[i].mIndices[1]);
+			MeshTemp.indices.push_back((unsigned short) mesh->mFaces[i].mIndices[2]);
+		}
+	}
+
+	// Keep the loaded model stored in the resource manager for later use.
+	Models[_name] = MeshTemp;
+
+	return MeshTemp;
+}
+
+MeshData ResourceManager::GetModel(std::string _name)
+{
+	return Models[_name];
 }
 
 void ResourceManager::Clear()

@@ -11,7 +11,7 @@
 #define TEXTURE_H
 
 #include <string>
-
+#include "GameUniqueIdentityAsset.h"
 enum TransparentMode {
     Alpha = 0,
     Additive,
@@ -46,6 +46,12 @@ public:
     void Generate(unsigned int width, unsigned int height, unsigned char* data);
     // binds the texture as the current active GL_TEXTURE_2D texture object
     void Bind() const;
+
+    uint32_t GetUniqueID() { return m_ID; }
+
+private:
+
+    uint32_t m_ID;
 };
 
 #endif

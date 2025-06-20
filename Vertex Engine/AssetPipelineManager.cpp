@@ -14,8 +14,6 @@ AssetPipelineManager::AssetPipelineManager()
 void AssetPipelineManager::Init()
 {
 
-	// Assign basic default filetypes Supported.
-	// Assign basic default filetypes Supported.
 	m_SupportedTextureExtensionTypes.push_back(".png");
 	m_SupportedTextureExtensionTypes.push_back(".jpg");
 	m_SupportedTextureExtensionTypes.push_back(".tga");
@@ -44,3 +42,9 @@ void AssetPipelineManager::HotReload()
 	VERTEX_LOG("Reloading Complete. ");
 }
 
+void AssetPipelineManager::ScanFolderForMesh()
+{
+	
+
+
+}
