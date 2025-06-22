@@ -19,6 +19,9 @@ void AssetPipelineManager::Init()
 	m_SupportedTextureExtensionTypes.push_back(".tga");
 	m_SupportedTextureExtensionTypes.push_back(".gif");
 	m_SupportedTextureExtensionTypes.push_back(".jpeg");
+
+	m_Supported3dAssetTypes.push_back(".obj");
+	m_Supported3dAssetTypes.push_back(".fbx");
 }
 
 void AssetPipelineManager::ScanFolderForTextures()
@@ -44,7 +47,12 @@ void AssetPipelineManager::HotReload()
 
 void AssetPipelineManager::ScanFolderForMesh()
 {
-	
-
-
+	for (const auto& ent : std::filesystem::recursive_directory_iterator("Builds/")) {
+		if (ent.is_regular_file() && std::find(m_Supported3dAssetTypes.begin(), m_Supported3dAssetTypes.end(), ent.path().filename().extension().string()) != m_Supported3dAssetTypes.end()) {
+			if (!ResourceManager::DoesTextureExist(ent.path().stem().string().c_str())) {
+				std::string temp = std::string(ent.path().string().c_str());
+				ResourceManager::LoadModel(temp.c_str(), ent.path().stem().string().c_str());
+			}
+		}
+	}
 }

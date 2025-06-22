@@ -17,10 +17,8 @@
 
 #include "Texture2D.h"
 #include "shader.h"
-#include <vector>
 
 #include "Debug.h"
-
 #include "Vertex.h"
 
 #include <assimp/Importer.hpp>

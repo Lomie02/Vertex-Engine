@@ -110,23 +110,26 @@ void Transform::RenderEditorDisplay()
 		ImGui::Button("X");
 		ImGui::SameLine();
 		ImGui::SetNextItemWidth(50.0f);
-		if (ImGui::InputFloat("##rotX", &this->rotation.x)) {
+		if (ImGui::InputFloat("##rotX", &this->m_EulerAngle.x)) {
+
+			rotation = glm::quat(glm::radians(m_EulerAngle));
 			rotation = glm::normalize(rotation);
 		}
 
 		ImGui::Button("Y");
 		ImGui::SameLine();
 		ImGui::SetNextItemWidth(50.0f);
-		if (ImGui::InputFloat("##rotY", &this->rotation.y)) {
+		if (ImGui::InputFloat("##rotY", &this->m_EulerAngle.y)) {
 
+			rotation = glm::quat(glm::radians(m_EulerAngle));
 			rotation = glm::normalize(rotation);
 		}
 
 		ImGui::Button("Z");
 		ImGui::SameLine();
 		ImGui::SetNextItemWidth(50.0f);
-		if (ImGui::InputFloat("##rotZ", &this->rotation.z)) {
-
+		if (ImGui::InputFloat("##rotZ", &this->m_EulerAngle.z)) {
+			rotation = glm::quat(glm::radians(m_EulerAngle));
 			rotation = glm::normalize(rotation);
 		}
 

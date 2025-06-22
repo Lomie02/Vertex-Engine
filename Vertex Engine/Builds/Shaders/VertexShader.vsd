@@ -1,4 +1,4 @@
-#version 450
+#version 330 core
 
 //Attributes that we expect from the vertex buffer
 layout (location = 0) in vec3 Position;
@@ -20,14 +20,6 @@ uniform mat4 view;
 
 void main()
 {
-	_Normals = Normal;
-	
-	vec3 T = normalize(vec3(model * vec4(Tangents,   0.0)));
-   vec3 B = normalize(vec3(model * vec4(BiTangents, 0.0)));
-   vec3 N = normalize(vec3(model * vec4(Normal,    0.0)));
-   _TBNmat = mat3(T, B, N);
-	
-	_Uvs = vec2(Uvs.x, 1.0 - Uvs.y);
-	_worldNormals = (model * vec4(Normal, 0.0)).xyz;
+	_Uvs = vec2(Uvs.x, Uvs.y);
 	gl_Position = pro * model * vec4(Position, 1.0);
 }

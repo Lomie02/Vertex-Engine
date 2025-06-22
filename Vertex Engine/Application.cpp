@@ -107,6 +107,7 @@ void Application::StartUp()
 	ResourceManager::LoadShader("Builds/Shaders/sprite.vs", "Builds/Shaders/sprite.frag", nullptr, "sprite");
 	ResourceManager::LoadShader("Builds/Shaders/VertexShader.vsd", "Builds/Shaders/FragShader.fsd", nullptr, "3dModel");
 	ResourceManager::GetShader("sprite").Use().SetInteger("image", 0);
+	ResourceManager::GetShader("3dModel").Use().SetInteger("image", 0);
 
 	Shader Shader = ResourceManager::GetShader("sprite");
 	m_Renderer = new Vertex2D(Shader);
@@ -248,6 +249,7 @@ void Application::Start()
 
 	if (m_Mode->EditorMode == EditorMode::EDITOR) {
 		AssetPipelineManager::ScanFolderForTextures();
+		AssetPipelineManager::ScanFolderForMesh();
 		m_VertexEditor->PopulateDesk();
 	}
 

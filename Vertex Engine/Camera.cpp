@@ -45,17 +45,14 @@ glm::mat4 Camera::GetProjection()
 	}
 	else
 	{
-		m_CameraPos = glm::vec3(partner2d->transform->position);
-		glm::vec3 cameraDirection = glm::normalize(m_CameraPos - cameraTarget);
-
-		glm::vec3 cameraRight = glm::normalize(glm::cross(up, cameraDirection));
-		glm::vec3 cameraUp = glm::cross(cameraDirection, cameraRight);
-
 		m_ProjectionMat = glm::perspective(glm::radians(m_FieldofView), m_AspectRatio, nearClip, farClip);
 
-		m_ViewMat = glm::translate(m_ViewMat, partner2d->transform->position);
+		m_CameraPos = glm::vec3(partner2d->transform->position);
 
-		m_ViewMat = glm::lookAt(m_CameraPos, m_CameraPos + cameraFront, cameraUp);
+		glm::mat4 rotMat = glm::toMat4(partner2d->transform->rotation);
+		glm::mat4 transMat = glm::translate(glm::mat4(1.0f), -m_CameraPos);
+
+		m_ViewMat = rotMat * transMat;
 
 		m_ViewProjection = m_ProjectionMat * m_ViewMat;
 
@@ -94,6 +91,7 @@ void Camera::RenderEditorDisplay()
 		const char* lensModes[] = { "Ortho", "Projection" };
 		static int projectionMode = (int)this->GetLens();
 
+		ImGui::InputFloat("##fov", &this->m_FieldofView);
 		//Projection Mode
 		ImGui::Text("Lens Mode"); ImGui::SameLine();
 		if (ImGui::Combo("##lensMode", &projectionMode, lensModes, IM_ARRAYSIZE(lensModes))) {

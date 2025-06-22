@@ -11,7 +11,7 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
-
+#include <filesystem>
 #include "stb_image.h"
 
 // Instantiate static variables
@@ -62,13 +62,15 @@ bool ResourceManager::DoesShaderExist(const char* _shaderName)
 MeshData ResourceManager::LoadModel(const char* _filePath, std::string _name)
 {
 	Assimp::Importer importer;
+
+	if (!std::filesystem::exists(_filePath)) { VERTEX_ERROR("Failed to load Model: " + std::string(_filePath));   return MeshData(); }
+
 	const aiScene* scene = importer.ReadFile(_filePath, aiProcess_Triangulate | aiProcess_JoinIdenticalVertices | aiProcess_CalcTangentSpace);
 
 	if (scene == nullptr) return MeshData();
 
-	MeshData MeshTemp;
 	aiMesh* mesh = *scene->mMeshes;
-
+	MeshData MeshTemp;
 	// gather all data for the mesh
 	for (unsigned int i = 0; i < mesh->mNumVertices; i++) {
 		Vertex vert;
@@ -106,15 +108,14 @@ MeshData ResourceManager::LoadModel(const char* _filePath, std::string _name)
 	// Faces
 	if (mesh->HasFaces()) {
 		for (unsigned int i = 0; i < mesh->mNumFaces; i++) {
-			MeshTemp.indices.push_back((unsigned short) mesh->mFaces[i].mIndices[0]);
-			MeshTemp.indices.push_back((unsigned short) mesh->mFaces[i].mIndices[1]);
-			MeshTemp.indices.push_back((unsigned short) mesh->mFaces[i].mIndices[2]);
+			MeshTemp.indices.push_back((unsigned short)mesh->mFaces[i].mIndices[0]);
+			MeshTemp.indices.push_back((unsigned short)mesh->mFaces[i].mIndices[1]);
+			MeshTemp.indices.push_back((unsigned short)mesh->mFaces[i].mIndices[2]);
 		}
 	}
 
 	// Keep the loaded model stored in the resource manager for later use.
 	Models[_name] = MeshTemp;
-
 	return MeshTemp;
 }
 
