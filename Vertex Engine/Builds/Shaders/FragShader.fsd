@@ -1,0 +1,27 @@
+#version 330 core
+
+out vec4 FragColour;
+in vec2 _Uvs;
+in vec3 _worldNormals;
+
+in mat3 _TBNmat;
+uniform mat4 model;
+in vec3 _WorldPosition;
+
+uniform sampler2D image;
+uniform vec3 Light1;
+uniform vec3 Light2;
+uniform vec3 CamPos;
+
+uniform sampler2D BaseTexture;
+uniform sampler2D NormalMap;
+uniform sampler2D SpecMap;
+
+uniform int NoTexture;
+uniform vec4 Colour;
+
+void main()
+{
+
+	FragColour = texture(image, _Uvs);
+}

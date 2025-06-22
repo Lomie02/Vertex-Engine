@@ -54,24 +54,14 @@ void Application::StartUp()
 
 	VertexPrefs pref;
 
-	m_SettingsTest = pref.LoadProject("Builds/vertex.vertproj");
-
-	/*m_SettingsTest.m_ApplicationName = "I was saved!";
-	m_SettingsTest.m_Aurthor = "untitled";
-	m_SettingsTest.m_EngineEdition = "Vertex Engine 2";*/
-
-
+	// Load the Settings of the project.
+	m_SettingsTest = pref.LoadProject(PROJECT_FILE_DIRECTORY);
 
 	if (!glfwInit()) {
 		glfwGetError(&description);
 		std::cout << "Window Failed ERROR: " << description << std::endl;
 		ShutDown();
 	}
-	char other[] = PROJECT_NAME;
-
-	char name[150] = "Vertex Engine 2 | Editor | Project: ";
-
-	strcat(name, other);
 
 	// Create the engines runtime mode. This allows systems to know if the engine is in editor or play
 	m_Mode = new RunTimeMode();
@@ -80,6 +70,8 @@ void Application::StartUp()
 	{
 		m_Mode->EditorMode = EditorMode::PLAY;
 	}
+
+	std::string ApplicationTitle = m_SettingsTest.m_ApplicationName + " | " + m_SettingsTest.m_EngineEdition + " | Editor 2.0";
 
 	if (m_Mode->EditorMode == EditorMode::PLAY)
 	{
@@ -94,7 +86,7 @@ void Application::StartUp()
 		}
 	}
 	else {
-		m_GameWindow = glfwCreateWindow(1920, 1080, m_SettingsTest.m_ApplicationName.c_str(), nullptr, nullptr);
+		m_GameWindow = glfwCreateWindow(1920, 1080, ApplicationTitle.c_str(), nullptr, nullptr);
 	}
 
 	if (!m_GameWindow) {
@@ -111,9 +103,11 @@ void Application::StartUp()
 	}
 	m_IsRunning = true;
 
+	// Load Default Shaders
 	ResourceManager::LoadShader("Builds/Shaders/sprite.vs", "Builds/Shaders/sprite.frag", nullptr, "sprite");
-
+	ResourceManager::LoadShader("Builds/Shaders/VertexShader.vsd", "Builds/Shaders/FragShader.fsd", nullptr, "3dModel");
 	ResourceManager::GetShader("sprite").Use().SetInteger("image", 0);
+	ResourceManager::GetShader("3dModel").Use().SetInteger("image", 0);
 
 	Shader Shader = ResourceManager::GetShader("sprite");
 	m_Renderer = new Vertex2D(Shader);
@@ -255,8 +249,10 @@ void Application::Start()
 
 	if (m_Mode->EditorMode == EditorMode::EDITOR) {
 		AssetPipelineManager::ScanFolderForTextures();
+		AssetPipelineManager::ScanFolderForMesh();
 		m_VertexEditor->PopulateDesk();
 	}
+
 
 	std::cout << "Vertex Message: Start Succeded." << std::endl;
 }
@@ -291,13 +287,6 @@ void Application::SetUpWorkSpaceScenes()
 	for (int i = 0; i < m_WorkSpaceEditor.GrabWorkSpaceScenes().size(); i++) {
 
 		m_SceneManager->AddScene(m_WorkSpaceEditor.GrabWorkSpaceScenes().at(i));
-	}
-}
-
-void Application::EditorSpacer(int _spaces)
-{
-	for (int i = 0; i < _spaces; i++) {
-		ImGui::Spacing();
 	}
 }
 
@@ -364,10 +353,21 @@ void Application::ShutDown()
 		m_VertexEditor->CleanUpGui();
 	}
 
+	// Save project data
+
 	VertexPrefs pref;
+	m_SettingsTest.m_ApplicationName = PROJECT_NAME;
+	// Clear scenes list & update it.
+	m_SettingsTest.m_Scenes.clear();
 
-	pref.SaveProject(m_SettingsTest,"Builds/vertex.vertproj");
+	// Save scenes to project
+	for (int i = 0; i < m_SceneManager->m_SceneList.size(); i++) {
+		m_SettingsTest.m_Scenes.push_back(m_SceneManager->m_SceneList[i]->m_SceneName + ".scene.scene");
+	}
+	 
+	pref.SaveProject(m_SettingsTest, PROJECT_FILE_DIRECTORY);
 
+	// Reveal cursor
 	Cursor::Show(m_GameWindow);
 
 	m_SceneManager->CleanUpSceneManagerAssets();
@@ -385,7 +385,6 @@ void Application::FolderCreation()
 	success = mkdir("Builds/Shaders");
 	success = mkdir("Builds/Audio");
 	success = mkdir("Builds/Data");
-	success = mkdir("Builds/Data/0x021_0KAW");
 
 	std::cout << "Vertex Message: Completed file creation." << std::endl;
 }

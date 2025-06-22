@@ -75,7 +75,7 @@ public:
 	void TensionInterfaceDraw(GameObject* _element, bool _IsColourPick = false);
 	// Violet 3D Renderer
 
-	void VioletDraw();
+	void VioletDraw(GameObject* _element, glm::mat4 per);
 
 	// Vertex Colour Picking Buffer
 	void VertexEngineColourPickRender(GameObject* _object, glm::mat4 per);
@@ -96,6 +96,8 @@ private:
 	Shader m_Shader;
 	Shader m_ParticleShader;
 	GLuint m_quadVAO;
+
+	Shader m_DefaultVioletShader;
 
 	Material* DefaultSpriteMat;
 

@@ -52,3 +52,12 @@ void VertexComponent::OnCollision()
 {
 }
 
+YAML::Node VertexComponent::SerializeComponent() const
+{
+	return YAML::Node();
+}
+
+void VertexComponent::DeserializeComponent(const YAML::Node& _node)
+{
+}
+

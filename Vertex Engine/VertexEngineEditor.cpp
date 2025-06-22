@@ -6,6 +6,7 @@
 #include "RectTransform.h"
 #include "SpriteRenderer.h"
 #include <thread>
+#include "MeshRenderer.h"
 
 VertexEngineEditor::~VertexEngineEditor()
 {
@@ -319,6 +320,13 @@ void VertexEngineEditor::RenderEditorInspector()
 
 			}
 
+			if (ImGui::MenuItem("Mesh Renderer")) {
+
+				if (m_SelectedGameObject->GetComponenet<MeshRenderer>() == nullptr)
+					m_SelectedGameObject->AddComponent<MeshRenderer>();
+
+			}
+
 			// Camera
 			if (ImGui::MenuItem("Camera")) {
 				if (m_SelectedGameObject->GetComponenet<Camera>() == nullptr)
@@ -450,6 +458,22 @@ void VertexEngineEditor::RenderEditorDesk()
 			}
 
 		}
+
+		for (const auto& [name, model] : ResourceManager::Models) {
+
+			if (xSpace + (256 * m_DeskPanelItemMultiplier) > spaceLeft.x) {
+				xSpace = 0;
+				ImGui::NewLine();
+			}
+
+			// Display Textures that the engine has registered
+
+			ImGui::Text(name.c_str(), ImVec2(256 * m_DeskPanelItemMultiplier, 256 * m_DeskPanelItemMultiplier), ImVec2(0, 1), ImVec2(1, 0));
+
+			ImGui::SameLine(0.0f, padding);
+			xSpace += (256 * m_DeskPanelItemMultiplier) + padding;
+
+		}
 	}
 	ImGui::End();
 }
@@ -475,12 +499,8 @@ void VertexEngineEditor::RenderDockingTaskBar()
 
 	ImGui::Begin("DockSpace", &dockOpen, window);
 
-	ImGui::Text("VERTEX ENGINE 2: EDITOR");
-	ImGui::SameLine();
-	ImGui::Text(PROJECT_NAME);
 
 	ImGui::BeginMenuBar();
-
 
 	if (ImGui::ArrowButton("Play", ImGuiDir_Right) && m_EditorMode->EditorMode == EditorMode::EDITOR)
 	{

@@ -12,7 +12,7 @@
 #include "GameSettings.h"
 #include "RectTransform.h"
 #include "SpriteRenderer.h"
-
+#include "MeshRenderer.h"
 /*
 	The AssetManager is the engines way of knowing what exists in the game & what to do with the objects.
 	This system controls all major things such as:
@@ -366,7 +366,10 @@ void AssetManager::TensionRendering(Vertex2D* m_Renderer)
 			{
 				if (m_Opaque.at(i)->GetActive() && m_Opaque.at(i)->GetComponenet<RectTransform>() == nullptr)
 				{
-					m_Renderer->TensionDraw(m_Opaque.at(i), cams->GetProjection());
+					if (m_Opaque[i]->GetComponenet<SpriteRenderer>())
+						m_Renderer->TensionDraw(m_Opaque.at(i), cams->GetProjection());
+					else if(m_Opaque[i]->GetComponenet<MeshRenderer>())
+						m_Renderer->VioletDraw(m_Opaque.at(i), cams->GetProjection());
 				}
 			}
 
@@ -384,12 +387,12 @@ void AssetManager::TensionRendering(Vertex2D* m_Renderer)
 			{
 				if (m_Transparent.at(i)->GetActive() && m_Transparent.at(i)->GetComponenet<RectTransform>() == nullptr) {
 
-					m_Renderer->TensionDraw(m_Transparent.at(i),cams->GetProjection());
+					m_Renderer->TensionDraw(m_Transparent.at(i), cams->GetProjection());
 
 					if (m_Transparent.at(i)->GetMimes().size() > 1)
 					{
 						for (int m = 0; m < m_Transparent.at(i)->GetActiveMimesSize(); m++) {
-							m_Renderer->TensionDraw(m_Transparent.at(i),cams->GetProjection());
+							m_Renderer->TensionDraw(m_Transparent.at(i), cams->GetProjection());
 						}
 					}
 				}
@@ -700,7 +703,7 @@ void AssetManager::BeginColourPickEditor(Vertex2D* m_Renderer)
 	{
 		if (m_Opaque.at(i)->GetActive())
 		{
-			m_Renderer->VertexEngineColourPickRender(m_Opaque.at(i),m_EditorCamera->GetComponenet<Camera>()->GetProjection());
+			m_Renderer->VertexEngineColourPickRender(m_Opaque.at(i), m_EditorCamera->GetComponenet<Camera>()->GetProjection());
 		}
 	}
 
